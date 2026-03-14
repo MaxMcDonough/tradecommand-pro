@@ -678,58 +678,65 @@ a{color:var(--acc);text-decoration:none}
 
 <!-- ===== UPGRADE PROMPT MODAL ===== -->
 <div id="upgrade-prompt" class="hidden">
-  <div class="up-box">
+  <div class="up-box" style="max-width:700px">
     <div class="up-header">
       <div class="up-trial-pill">⏳ Free Trial Active &mdash; <span id="up-days-pill">7</span> days remaining</div>
-      <div class="up-title">Upgrade to Keep Full Access</div>
-      <div class="up-sub">Your trial includes everything. Choose a plan to continue after it ends — or keep exploring for now.</div>
+      <div class="up-title">Start free. Upgrade when ready.</div>
+      <div class="up-sub">All core features are free forever. Pro and Elite unlock advanced capabilities as you grow as a trader.</div>
     </div>
     <div class="up-cards">
-      <!-- Free Trial -->
+      <!-- FREE -->
       <div class="up-card">
-        <div class="up-card-name">Free Trial</div>
-        <div class="up-card-price">$0<sub>/trial</sub></div>
-        <div class="up-card-note" id="up-trial-note">7 days remaining</div>
+        <div class="up-card-name">Free</div>
+        <div class="up-card-price">$0<sub>/forever</sub></div>
+        <div class="up-card-note">No credit card needed</div>
         <ul class="up-feats">
-          <li><span class="up-chk">✓</span> Live market data</li>
-          <li><span class="up-chk">✓</span> AI analysis</li>
-          <li><span class="up-chk">✓</span> 15+ data feeds</li>
-          <li><span class="up-chk">✓</span> API keys included</li>
-          <li><span class="up-x">✗</span> After trial ends</li>
+          <li><span class="up-chk">✓</span> Full dashboard access</li>
+          <li><span class="up-chk">✓</span> Demo prices (no key needed)</li>
+          <li><span class="up-chk">✓</span> AI trade signals (8-factor)</li>
+          <li><span class="up-chk">✓</span> Sector heatmap</li>
+          <li><span class="up-x">✗</span> Live real-time prices</li>
+          <li><span class="up-x">✗</span> Options flow alerts</li>
+          <li><span class="up-x">✗</span> Unusual Whales data</li>
           <li><span class="up-x">✗</span> Priority support</li>
         </ul>
-        <button class="up-cta ghost" onclick="dismissUpgradePrompt()">Continue trial</button>
+        <button class="up-cta ghost" onclick="dismissUpgradePrompt()">Continue with trial</button>
       </div>
-      <!-- Monthly -->
+      <!-- PRO -->
       <div class="up-card">
-        <div class="up-card-name">Pro Monthly</div>
-        <div class="up-card-price">$12.99<sub>/mo</sub></div>
+        <div class="up-card-badge" style="background:var(--acc);color:#000">MOST POPULAR</div>
+        <div class="up-card-name">Pro</div>
+        <div class="up-card-price">$29<sub>/mo</sub></div>
         <div class="up-card-note">CAD &middot; cancel anytime</div>
         <ul class="up-feats">
-          <li><span class="up-chk">✓</span> Live market data</li>
-          <li><span class="up-chk">✓</span> AI analysis</li>
-          <li><span class="up-chk">✓</span> 15+ data feeds</li>
-          <li><span class="up-chk">✓</span> API keys included</li>
-          <li><span class="up-chk">✓</span> Unlimited access</li>
-          <li><span class="up-chk">✓</span> Priority support</li>
+          <li><span class="up-chk">✓</span> Everything in Free</li>
+          <li><span class="up-chk">✓</span> Live real-time prices (15s)</li>
+          <li><span class="up-chk">✓</span> Unlimited watchlist</li>
+          <li><span class="up-chk">✓</span> Full AI-powered analysis</li>
+          <li><span class="up-chk">✓</span> Scheduled briefings</li>
+          <li><span class="up-chk">✓</span> 15+ live data feeds</li>
+          <li><span class="up-x">✗</span> Options flow alerts</li>
+          <li><span class="up-x">✗</span> Unusual Whales data</li>
         </ul>
-        <a href="https://buy.stripe.com/YOUR_MONTHLY_LINK" target="_blank" class="up-cta outline">Subscribe Monthly</a>
+        <a href="https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200" target="_blank" class="up-cta outline">Upgrade to Pro</a>
       </div>
-      <!-- Annual -->
+      <!-- ELITE -->
       <div class="up-card best">
-        <div class="up-card-badge">BEST VALUE</div>
-        <div class="up-card-name">Pro Annual</div>
-        <div class="up-card-price">$9.17<sub>/mo</sub></div>
-        <div class="up-card-note">$109.99/yr CAD &middot; save 29%</div>
+        <div class="up-card-badge">ELITE</div>
+        <div class="up-card-name">Elite</div>
+        <div class="up-card-price">$79<sub>/mo</sub></div>
+        <div class="up-card-note">CAD &middot; institutional-grade edge</div>
         <ul class="up-feats">
-          <li><span class="up-chk">✓</span> Live market data</li>
-          <li><span class="up-chk">✓</span> AI analysis</li>
-          <li><span class="up-chk">✓</span> 15+ data feeds</li>
-          <li><span class="up-chk">✓</span> API keys included</li>
-          <li><span class="up-chk">✓</span> Unlimited access</li>
+          <li><span class="up-chk">✓</span> Everything in Pro</li>
+          <li><span class="up-chk">✓</span> Options flow alerts</li>
+          <li><span class="up-chk">✓</span> Unusual Whales integration</li>
+          <li><span class="up-chk">✓</span> Tick-level real-time data</li>
+          <li><span class="up-chk">✓</span> Dark pool indicators</li>
           <li><span class="up-chk">✓</span> Priority support</li>
+          <li><span class="up-chk">✓</span> Personal trade coach AI</li>
+          <li><span class="up-chk">✓</span> Early access to new features</li>
         </ul>
-        <a href="https://buy.stripe.com/YOUR_ANNUAL_LINK" target="_blank" class="up-cta accent">Subscribe Annual</a>
+        <a href="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201" target="_blank" class="up-cta accent">Upgrade to Elite</a>
       </div>
     </div>
     <div class="up-footer">
@@ -771,11 +778,11 @@ a{color:var(--acc);text-decoration:none}
         <p>All features unlocked. API keys included. Launch and start trading now.</p>
       </div>
       <div class="onboard-upgrade-cta">
-        <h3>🔒 Lock in your rate during your trial</h3>
-        <p>Subscribe now and save 29% with our annual plan.</p>
+        <h3>⚡ Upgrade anytime during your trial</h3>
+        <p>Pro at $29/mo for live data &amp; AI analysis. Elite at $79/mo for institutional-grade edge.</p>
         <div class="onboard-upgrade-btns">
-          <a href="https://buy.stripe.com/YOUR_MONTHLY_LINK" target="_blank" class="btn-up-mo">$12.99/mo CAD</a>
-          <a href="https://buy.stripe.com/YOUR_ANNUAL_LINK" target="_blank" class="btn-up-yr">$109.99/yr CAD</a>
+          <a href="https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200" target="_blank" class="btn-up-mo">Pro — $29/mo CAD</a>
+          <a href="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201" target="_blank" class="btn-up-yr">Elite — $79/mo CAD</a>
         </div>
       </div>
       <div class="onboard-actions">
