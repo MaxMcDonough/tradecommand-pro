@@ -469,6 +469,37 @@ a{color:var(--acc);text-decoration:none}
 .auth-forgot a{font-size:12px;color:var(--acc);text-decoration:none;cursor:pointer}
 .auth-forgot a:hover{text-decoration:underline}
 
+/* ===== UPGRADE PROMPT MODAL ===== */
+#upgrade-prompt{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;z-index:10001;backdrop-filter:blur(10px);padding:20px;overflow-y:auto}
+#upgrade-prompt.hidden{display:none}
+.up-box{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:36px 32px;max-width:640px;width:100%}
+.up-header{text-align:center;margin-bottom:26px}
+.up-trial-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);color:#f59e0b;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;margin-bottom:12px;letter-spacing:.3px}
+.up-title{font-size:22px;font-weight:800;color:var(--t1);margin-bottom:6px}
+.up-sub{font-size:13px;color:var(--t2);line-height:1.6}
+.up-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:22px}
+@media(max-width:540px){.up-cards{grid-template-columns:1fr}}
+.up-card{background:var(--bg2);border:1px solid var(--brd);border-radius:14px;padding:18px;text-align:center;position:relative;display:flex;flex-direction:column}
+.up-card.best{border-color:rgba(99,102,241,.6);background:rgba(99,102,241,.07)}
+.up-card-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--acc);color:#000;font-size:10px;font-weight:800;padding:3px 12px;border-radius:10px;white-space:nowrap;letter-spacing:.4px}
+.up-card-name{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.up-card-price{font-size:26px;font-weight:800;color:var(--t1);line-height:1}
+.up-card-price sub{font-size:12px;color:var(--t2);font-weight:400}
+.up-card-note{font-size:10px;color:var(--t3);margin:4px 0 14px}
+.up-feats{list-style:none;padding:0;margin:0 0 16px;text-align:left;flex:1}
+.up-feats li{font-size:11px;color:var(--t2);padding:5px 0;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.04)}
+.up-feats li:last-child{border:none}
+.up-chk{color:#10b981;font-size:11px;flex-shrink:0}
+.up-x{color:#ef4444;font-size:11px;flex-shrink:0}
+.up-cta{display:block;width:100%;padding:10px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;border:none;transition:opacity .15s}
+.up-cta:hover{opacity:.85}
+.up-cta.accent{background:var(--acc);color:#000}
+.up-cta.outline{background:transparent;color:var(--t1);border:1px solid var(--brd)}
+.up-cta.ghost{background:transparent;color:var(--t3);border:1px solid rgba(255,255,255,.07);font-size:11px}
+.up-footer{text-align:center}
+.up-skip{background:transparent;border:none;color:var(--t3);font-size:12px;cursor:pointer;padding:8px;text-decoration:underline;text-underline-offset:3px}
+.up-skip:hover{color:var(--t2)}
+
 /* ===== ONBOARDING MODAL ===== */
 #onboarding-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:10000;backdrop-filter:blur(8px);padding:20px}
 #onboarding-overlay.hidden{display:none}
@@ -641,6 +672,68 @@ a{color:var(--acc);text-decoration:none}
       </div>
       <button id="btn-signup" class="auth-submit" onclick="authSignUp()">Create Account</button>
       <button class="auth-google" onclick="authGoogle()">🔵 Sign up with Google</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== UPGRADE PROMPT MODAL ===== -->
+<div id="upgrade-prompt" class="hidden">
+  <div class="up-box">
+    <div class="up-header">
+      <div class="up-trial-pill">⏳ Free Trial Active &mdash; <span id="up-days-pill">7</span> days remaining</div>
+      <div class="up-title">Upgrade to Keep Full Access</div>
+      <div class="up-sub">Your trial includes everything. Choose a plan to continue after it ends — or keep exploring for now.</div>
+    </div>
+    <div class="up-cards">
+      <!-- Free Trial -->
+      <div class="up-card">
+        <div class="up-card-name">Free Trial</div>
+        <div class="up-card-price">$0<sub>/trial</sub></div>
+        <div class="up-card-note" id="up-trial-note">7 days remaining</div>
+        <ul class="up-feats">
+          <li><span class="up-chk">✓</span> Live market data</li>
+          <li><span class="up-chk">✓</span> AI analysis</li>
+          <li><span class="up-chk">✓</span> 15+ data feeds</li>
+          <li><span class="up-chk">✓</span> API keys included</li>
+          <li><span class="up-x">✗</span> After trial ends</li>
+          <li><span class="up-x">✗</span> Priority support</li>
+        </ul>
+        <button class="up-cta ghost" onclick="dismissUpgradePrompt()">Continue trial</button>
+      </div>
+      <!-- Monthly -->
+      <div class="up-card">
+        <div class="up-card-name">Pro Monthly</div>
+        <div class="up-card-price">$12.99<sub>/mo</sub></div>
+        <div class="up-card-note">CAD &middot; cancel anytime</div>
+        <ul class="up-feats">
+          <li><span class="up-chk">✓</span> Live market data</li>
+          <li><span class="up-chk">✓</span> AI analysis</li>
+          <li><span class="up-chk">✓</span> 15+ data feeds</li>
+          <li><span class="up-chk">✓</span> API keys included</li>
+          <li><span class="up-chk">✓</span> Unlimited access</li>
+          <li><span class="up-chk">✓</span> Priority support</li>
+        </ul>
+        <a href="https://buy.stripe.com/YOUR_MONTHLY_LINK" target="_blank" class="up-cta outline">Subscribe Monthly</a>
+      </div>
+      <!-- Annual -->
+      <div class="up-card best">
+        <div class="up-card-badge">BEST VALUE</div>
+        <div class="up-card-name">Pro Annual</div>
+        <div class="up-card-price">$9.17<sub>/mo</sub></div>
+        <div class="up-card-note">$109.99/yr CAD &middot; save 29%</div>
+        <ul class="up-feats">
+          <li><span class="up-chk">✓</span> Live market data</li>
+          <li><span class="up-chk">✓</span> AI analysis</li>
+          <li><span class="up-chk">✓</span> 15+ data feeds</li>
+          <li><span class="up-chk">✓</span> API keys included</li>
+          <li><span class="up-chk">✓</span> Unlimited access</li>
+          <li><span class="up-chk">✓</span> Priority support</li>
+        </ul>
+        <a href="https://buy.stripe.com/YOUR_ANNUAL_LINK" target="_blank" class="up-cta accent">Subscribe Annual</a>
+      </div>
+    </div>
+    <div class="up-footer">
+      <button class="up-skip" onclick="dismissUpgradePrompt()">Continue with <span id="up-days-footer">7</span> days remaining on trial →</button>
     </div>
   </div>
 </div>
@@ -1547,9 +1640,24 @@ async function submitTrialKeys() {
   }
 }
 
+// ===== UPGRADE PROMPT =====
+let _trialDaysLeft = 7;
+function showUpgradePrompt(daysLeft) {
+  _trialDaysLeft = daysLeft;
+  const d = `${daysLeft} day${daysLeft !== 1 ? 's' : ''}`;
+  document.querySelectorAll('#up-days-pill, #up-days-footer').forEach(el => el.textContent = daysLeft);
+  const noteEl = document.getElementById('up-trial-note');
+  if (noteEl) noteEl.textContent = `${d} remaining`;
+  document.getElementById('upgrade-prompt').classList.remove('hidden');
+}
+function dismissUpgradePrompt() {
+  document.getElementById('upgrade-prompt').classList.add('hidden');
+}
+
 // ===== ONBOARDING =====
 let onboardStep = 0;
 function showOnboarding(daysLeft) {
+  _trialDaysLeft = daysLeft;
   const overlay = document.getElementById('onboarding-overlay');
   if (!overlay) return;
   const daysEl = document.getElementById('onboard-trial-days');
@@ -1573,6 +1681,8 @@ async function finishOnboarding() {
   if (user) {
     try { await db.collection('users').doc(user.uid).update({ onboarded: true }); } catch(e) {}
   }
+  // After onboarding, immediately show upgrade prompt
+  setTimeout(() => showUpgradePrompt(_trialDaysLeft), 300);
 }
 
 async function handleAuthState(user) {
@@ -1650,9 +1760,12 @@ async function handleAuthState(user) {
           // Give trial users full pro API keys — no setup needed
           const adminKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
           D.fh = adminKeys.fh; D.av = adminKeys.av; D.na = adminKeys.na;
-          // Show onboarding for new users
+          // First-time users → onboarding (which chains into upgrade prompt)
+          // Returning trial users → upgrade prompt directly every login
           if (!userData.onboarded) {
             setTimeout(() => showOnboarding(daysLeft), 600);
+          } else {
+            setTimeout(() => showUpgradePrompt(daysLeft), 600);
           }
         }
       } else if(userData.plan === 'active' && userData.apiKeys) {
