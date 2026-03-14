@@ -8,6 +8,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -876,7 +877,19 @@
   </style>
 </head>
 <body>
-  <div class="app-container">
+  <div id="auth-gate" style="display:none;position:fixed;inset:0;background:#0a0e17;z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:#1a2236;border:1px solid #2a3550;border-radius:16px;padding:36px;width:100%;max-width:400px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:8px">⚡</div>
+      <h2 style="color:#e2e8f0;margin-bottom:4px">Admin Access</h2>
+      <p style="color:#94a3b8;font-size:13px;margin-bottom:24px">TradeCommand Pro Admin Panel</p>
+      <input id="gate-email" type="email" placeholder="Email address" value="max.mcdonough123@gmail.com" style="width:100%;padding:10px 14px;background:#111827;border:1px solid #2a3550;border-radius:8px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;">
+      <input id="gate-password" type="password" placeholder="Password" style="width:100%;padding:10px 14px;background:#111827;border:1px solid #2a3550;border-radius:8px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;" onkeydown="if(event.key==='Enter')adminGateLogin()">
+      <div id="gate-error" style="color:#ef4444;font-size:12px;margin-bottom:10px;display:none"></div>
+      <button onclick="adminGateLogin()" style="width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Sign In</button>
+      <p style="color:#64748b;font-size:11px;margin-top:12px">No Firebase yet? Use password: <strong style="color:#f59e0b">TCPAdmin2026</strong></p>
+    </div>
+  </div>
+  <div class="app-container" style="display:none">
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -1483,6 +1496,35 @@
     const db = firebase.firestore();
     const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
 
+    // SHA-256 helper for local bypass mode
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    const ADMIN_BYPASS_HASH = '69cf361374eb98f109a7272cd195138769b2658bff2d789240322781c4112240';
+    const FIREBASE_CONFIGURED = () => firebaseConfig.apiKey !== 'YOUR_FIREBASE_API_KEY';
+    
+    // Check local admin bypass session
+    function checkLocalAdminBypass() {
+      const session = localStorage.getItem('tcp_admin_session');
+      if (!session) return false;
+      try {
+        const s = JSON.parse(session);
+        // Session valid for 8 hours
+        return s.admin === true && (Date.now() - s.ts) < 8 * 60 * 60 * 1000;
+      } catch(e) { return false; }
+    }
+
+    // EmailJS Configuration
+    const EMAILJS_CONFIG = {
+      serviceId: 'YOUR_EMAILJS_SERVICE_ID',
+      templateId: 'YOUR_EMAILJS_TEMPLATE_ID',
+      publicKey: 'YOUR_EMAILJS_PUBLIC_KEY'
+    };
+    emailjs.init(EMAILJS_CONFIG.publicKey);
+
     // Global State
     let currentUser = null;
     let allUsers = [];
@@ -1650,27 +1692,41 @@
     });
 
     // Auth Gate
-    auth.onAuthStateChanged(user => {
-      if (!user || user.email !== ADMIN_EMAIL) {
-        document.body.innerHTML = `
-          <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--bg);">
-            <div style="text-align: center;">
-              <h1 style="color: var(--red); margin-bottom: 16px;">⛔ Access Denied</h1>
-              <p style="color: var(--t2); margin-bottom: 24px;">You do not have permission to access this page.</p>
-              <a href="dashboard.html" style="color: var(--acc); text-decoration: none;">← Return to Dashboard</a>
-            </div>
-          </div>
-        `;
-        return;
+// Admin auth gate
+    if (!FIREBASE_CONFIGURED()) {
+      // Show local bypass login
+      document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'flex');
+      document.getElementById('app-container') && (document.getElementById('app-container').style.display = 'none');
+      
+      // Check if already have valid local session
+      if (checkLocalAdminBypass()) {
+        grantAdminAccess({ email: ADMIN_EMAIL, displayName: 'Max', uid: 'local-admin' });
       }
+    } else {
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+          document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'flex');
+          document.getElementById('app-container') && (document.getElementById('app-container').style.display = 'none');
+          return;
+        }
+        if (user.email !== ADMIN_EMAIL) {
+          document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0e17;color:#ef4444;font-family:sans-serif;font-size:18px">🚫 Admin access only</div>';
+          return;
+        }
+        grantAdminAccess(user);
+      });
+    }
 
+    function grantAdminAccess(user) {
       currentUser = user;
+      document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'none');
+      const appContainer = document.getElementById('app-container') || document.querySelector('.app-container');
+      if (appContainer) appContainer.style.display = 'flex';
       document.getElementById('userEmail').textContent = user.email;
       document.getElementById('adminEmail').textContent = user.email;
       document.getElementById('firebaseProjectId').textContent = firebase.app().options.projectId || 'YOUR_PROJECT_ID';
-
       loadDashboard();
-    });
+    }
 
     // Load Stripe Configuration
     const loadStripeConfig = async () => {
@@ -1988,6 +2044,35 @@
     };
 
     // Load Dashboard Data
+    async function adminGateLogin() {
+      const email = document.getElementById('gate-email').value.trim();
+      const pass = document.getElementById('gate-password').value.trim();
+      const errEl = document.getElementById('gate-error');
+      
+      if (!email || !pass) { errEl.textContent = 'Enter email and password'; errEl.style.display='block'; return; }
+      
+      if (!FIREBASE_CONFIGURED()) {
+        // Local bypass check
+        const hash = await sha256(pass);
+        if (email === ADMIN_EMAIL && hash === ADMIN_BYPASS_HASH) {
+          localStorage.setItem('tcp_admin_session', JSON.stringify({ admin: true, ts: Date.now() }));
+          grantAdminAccess({ email: ADMIN_EMAIL, displayName: 'Max', uid: 'local-admin' });
+        } else {
+          errEl.textContent = 'Invalid credentials. Password hint: TCPAdmin2026';
+          errEl.style.display = 'block';
+        }
+        return;
+      }
+      
+      // Firebase mode
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+      } catch(e) {
+        errEl.textContent = e.message.replace('Firebase: ','').replace(/\(auth\/.*\)/,'').trim();
+        errEl.style.display = 'block';
+      }
+    }
+
     const loadDashboard = async () => {
       try {
         // Load users
@@ -2930,20 +3015,50 @@
         return;
       }
 
-      let sentCount = 0;
-      if (audience === 'all') sentCount = allUsers.length;
-      else if (audience === 'trial') sentCount = allUsers.filter(u => u.plan === 'trial').length;
-      else if (audience === 'active') sentCount = allUsers.filter(u => u.plan === 'active').length;
+      let recipients = [];
+      if (audience === 'all') recipients = allUsers;
+      else if (audience === 'trial') recipients = allUsers.filter(u => u.plan === 'trial');
+      else if (audience === 'active') recipients = allUsers.filter(u => u.plan === 'active');
 
-      showModal('Send Newsletter?', `Send to ${sentCount} user(s)?`, async () => {
+      showModal('Send Newsletter?', `Send to ${recipients.length} user(s)?`, async () => {
         try {
+          const sendBtn = document.getElementById('sendNewsletterBtn');
+          sendBtn.disabled = true;
+          sendBtn.textContent = 'Sending...';
+
+          let sentCount = 0;
+          const errors = [];
+
+          for (const user of recipients) {
+            if (!user.email) continue;
+            try {
+              if (EMAILJS_CONFIG.serviceId !== 'YOUR_EMAILJS_SERVICE_ID') {
+                await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+                  to_email: user.email,
+                  to_name: user.displayName || user.email,
+                  subject: subject,
+                  message: content,
+                  from_name: 'TradeCommand Pro',
+                  reply_to: 'max.mcdonough123@gmail.com'
+                });
+              }
+              sentCount++;
+            } catch (e) {
+              errors.push(user.email);
+              console.error('Email error for', user.email, e);
+            }
+          }
+
           const newsletter = {
             subject: subject,
-            content: content,
-            audience: audience,
+            body: content,
+            sentTo: audience,
+            recipientCount: sentCount,
+            totalTargeted: recipients.length,
+            errors: errors.length,
             sentAt: new Date(),
             sentBy: currentUser.email,
-            sentCount: sentCount
+            status: EMAILJS_CONFIG.serviceId === 'YOUR_EMAILJS_SERVICE_ID' ? 'saved_no_emailjs' : 'sent'
           };
 
           await db.collection('newsletters').add(newsletter);
@@ -2954,8 +3069,19 @@
           updateNewsletterPreview();
 
           renderNewslettersTable();
-          showToast('Newsletter sent!', 'success');
+
+          sendBtn.disabled = false;
+          sendBtn.textContent = 'Send Newsletter';
+
+          const msg = EMAILJS_CONFIG.serviceId === 'YOUR_EMAILJS_SERVICE_ID'
+            ? `Newsletter saved (${sentCount} recipients). Add EmailJS credentials to actually send.`
+            : `Sent to ${sentCount}/${recipients.length} recipients${errors.length ? ` (${errors.length} failed)` : ''}`;
+
+          showToast(msg, 'success');
         } catch (error) {
+          document.getElementById('sendNewsletterBtn').disabled = false;
+          document.getElementById('sendNewsletterBtn').textContent = 'Send Newsletter';
+          console.error('Newsletter error:', error);
           showToast('Error sending newsletter', 'error');
         }
       });

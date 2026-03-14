@@ -573,10 +573,11 @@ a{color:var(--acc);text-decoration:none}
         <label>Password</label>
         <input id="signin-password" type="password" placeholder="••••••••">
       </div>
-      <button class="auth-submit" onclick="authSignIn()">Sign In</button>
+      <button id="btn-signin" class="auth-submit" onclick="authSignIn()">Sign In</button>
       <button class="auth-google" onclick="authGoogle()">🔵 Sign in with Google</button>
       <div class="auth-forgot">
         <a onclick="showForgotForm()">Forgot password?</a>
+      <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--t3)">No Firebase yet? Admin key: <code style="color:var(--ylw)">TCPAdmin2026</code></div>
       </div>
     </div>
 
@@ -607,7 +608,7 @@ a{color:var(--acc);text-decoration:none}
         <label>Password</label>
         <input id="signup-password" type="password" placeholder="At least 6 characters">
       </div>
-      <button class="auth-submit" onclick="authSignUp()">Create Account</button>
+      <button id="btn-signup" class="auth-submit" onclick="authSignUp()">Create Account</button>
       <button class="auth-google" onclick="authGoogle()">🔵 Sign up with Google</button>
     </div>
   </div>
@@ -1217,6 +1218,16 @@ const db = firebase.firestore();
 
 const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
 
+// SHA-256 helper for local bypass mode
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+const ADMIN_BYPASS_HASH = '69cf361374eb98f109a7272cd195138769b2658bff2d789240322781c4112240';
+const FIREBASE_CONFIGURED = () => firebaseConfig.apiKey !== 'YOUR_FIREBASE_API_KEY';
+
 // ===== AUTH UI FUNCTIONS =====
 function showAuth() {
   document.getElementById('auth-overlay').classList.remove('hidden');
@@ -1266,30 +1277,63 @@ function showAuthError(formType, msg) {
 async function authSignIn() {
   const email = document.getElementById('signin-email').value.trim();
   const pass = document.getElementById('signin-password').value.trim();
-  if(!email || !pass) {
-    showAuthError('signin', 'Email and password required');
-    return;
+  if (!email || !pass) { showAuthError('signin', 'Email and password required'); return; }
+
+  if (!FIREBASE_CONFIGURED()) {
+    // LOCAL BYPASS MODE
+    if (email === ADMIN_EMAIL) {
+      const h = await sha256(pass);
+      if (h === ADMIN_BYPASS_HASH) {
+        localStorage.setItem('tcp_local_admin', '1');
+        hideAuth();
+        D.isAdmin = true;
+        D.name = 'Max';
+        document.getElementById('user-name') && (document.getElementById('user-name').textContent = '👤 Max');
+        const adminLink = document.getElementById('admin-link');
+        if (adminLink) adminLink.style.display = 'inline';
+        // Pre-fill form fields then launch
+        document.getElementById('k-fh').value = D.fh;
+        document.getElementById('k-av').value = D.av;
+        document.getElementById('k-na').value = D.na;
+        document.getElementById('p-name').value = 'Max';
+        document.getElementById('s-bal').value = D.bal;
+        document.getElementById('s-risk').value = D.risk;
+        setTimeout(launch, 50);
+        return;
+      } else {
+        showAuthError('signin', 'Invalid password. Bypass key: TCPAdmin2026');
+        return;
+      }
+    } else {
+      showAuthError('signin', 'Firebase not configured yet — only the admin can log in. Set up Firebase to enable user accounts.');
+      return;
+    }
   }
+
   try {
+    document.getElementById('btn-signin').textContent = 'Signing in...';
     await auth.signInWithEmailAndPassword(email, pass);
   } catch(e) {
-    showAuthError('signin', e.message);
+    showAuthError('signin', e.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim());
+  } finally {
+    const btn = document.getElementById('btn-signin');
+    if (btn) btn.textContent = 'Sign In';
   }
 }
-
 async function authSignUp() {
   const name = document.getElementById('signup-name').value.trim();
   const email = document.getElementById('signup-email').value.trim();
   const pass = document.getElementById('signup-password').value.trim();
-  if(!name || !email || !pass) {
-    showAuthError('signup', 'All fields required');
+  if (!name || !email || !pass) { showAuthError('signup', 'All fields required'); return; }
+  if (pass.length < 6) { showAuthError('signup', 'Password must be at least 6 characters'); return; }
+
+  if (!FIREBASE_CONFIGURED()) {
+    showAuthError('signup', 'Account creation requires Firebase to be configured. Check the Setup Guide.');
     return;
   }
-  if(pass.length < 6) {
-    showAuthError('signup', 'Password must be at least 6 characters');
-    return;
-  }
+
   try {
+    document.getElementById('btn-signup').textContent = 'Creating account...';
     const result = await auth.createUserWithEmailAndPassword(email, pass);
     const user = result.user;
     await db.collection('users').doc(user.uid).set({
@@ -1307,19 +1351,25 @@ async function authSignUp() {
       disabled: false
     });
   } catch(e) {
-    showAuthError('signup', e.message);
+    showAuthError('signup', e.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim());
+  } finally {
+    const btn = document.getElementById('btn-signup');
+    if (btn) btn.textContent = 'Create Account';
   }
 }
-
 async function authGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
+  if (!FIREBASE_CONFIGURED()) {
+    showAuthError('signin', 'Google sign-in requires Firebase to be configured. Use email login with bypass key for now.');
+    return;
+  }
   try {
+    const provider = new firebase.auth.GoogleAuthProvider();
     const result = await auth.signInWithPopup(provider);
     const user = result.user;
-    const doc = await db.collection('users').doc(user.uid).get();
-    if(!doc.exists) {
+    const docSnap = await db.collection('users').doc(user.uid).get();
+    if (!docSnap.exists) {
       await db.collection('users').doc(user.uid).set({
-        email: user.email, displayName: user.displayName || 'User',
+        email: user.email, displayName: user.displayName || user.email,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         trialStart: Date.now(),
         trialEnds: Date.now() + 7*24*60*60*1000,
@@ -1327,17 +1377,14 @@ async function authGoogle() {
         apiKeys: { fh:'', av:'', na:'' },
         lastActive: Date.now(),
         loginCount: 1,
-        sectorsUsed: [],
-        tickersViewed: [],
-        totalTrades: 0,
-        disabled: false
+        sectorsUsed: [], tickersViewed: [],
+        totalTrades: 0, disabled: false
       });
     }
   } catch(e) {
-    showAuthError('signin', e.message);
+    showAuthError('signin', e.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim());
   }
 }
-
 async function authForgot() {
   const email = document.getElementById('forgot-email').value.trim();
   if(!email) {
@@ -1359,6 +1406,7 @@ async function authForgot() {
 }
 
 function authSignOut() {
+  localStorage.removeItem('tcp_local_admin');
   auth.signOut().then(() => {
     D.isAdmin = false;
     showAuth();
@@ -1576,7 +1624,25 @@ function clearSaved(){
   document.getElementById('saved-banner').classList.remove('show');
 }
 // Auto-launch on page open — pre-fill form fields from D defaults then launch
-window.addEventListener('DOMContentLoaded',()=>{
+window.addEventListener('DOMContentLoaded', () => {
+  // Check local admin bypass first (for when Firebase isn't configured)
+  if (!FIREBASE_CONFIGURED() && localStorage.getItem('tcp_local_admin') === '1') {
+    hideAuth();
+    D.isAdmin = true;
+    D.name = 'Max';
+    document.getElementById('k-fh').value = D.fh;
+    document.getElementById('k-av').value = D.av;
+    document.getElementById('k-na').value = D.na;
+    document.getElementById('p-name').value = 'Max';
+    document.getElementById('s-bal').value = D.bal;
+    document.getElementById('s-risk').value = D.risk;
+    const nameEl = document.getElementById('user-name');
+    if (nameEl) nameEl.textContent = '👤 Max';
+    const adminLink = document.getElementById('admin-link');
+    if (adminLink) adminLink.style.display = 'inline';
+    setTimeout(launch, 50);
+    return;
+  }
   // Handle payment return params
   handlePaymentReturn();
   // Render pricing cards in modals

@@ -2657,7 +2657,19 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="auth-gate" style="display:none;position:fixed;inset:0;background:#0a0e17;z-index:9999;align-items:center;justify-content:center;">
+      <div style="background:#1a2236;border:1px solid #2a3550;border-radius:16px;padding:36px;width:100%;max-width:400px;text-align:center;">
+        <div style="font-size:32px;margin-bottom:8px">⚡</div>
+        <h2 style="color:#e2e8f0;margin-bottom:4px">Business Command Center</h2>
+        <p style="color:#94a3b8;font-size:13px;margin-bottom:24px">TradeCommand Pro Business Panel</p>
+        <input id="gate-email" type="email" placeholder="Email address" value="max.mcdonough123@gmail.com" style="width:100%;padding:10px 14px;background:#111827;border:1px solid #2a3550;border-radius:8px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;">
+        <input id="gate-password" type="password" placeholder="Password" style="width:100%;padding:10px 14px;background:#111827;border:1px solid #2a3550;border-radius:8px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;" onkeydown="if(event.key==='Enter')adminGateLogin()">
+        <div id="gate-error" style="color:#ef4444;font-size:12px;margin-bottom:10px;display:none"></div>
+        <button onclick="adminGateLogin()" style="width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Sign In</button>
+        <p style="color:#64748b;font-size:11px;margin-top:12px">No Firebase yet? Use password: <strong style="color:#f59e0b">TCPAdmin2026</strong></p>
+      </div>
+    </div>
+    <div class="container" style="display:none">
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -4126,7 +4138,7 @@ The TC Pro Team</textarea>
                     <!-- Executive Summary -->
                     <div class="plan-section">
                         <h3>Executive Summary</h3>
-                        <textarea class="plan-textarea" id="execSummary">TradeCommand Pro is a SaaS platform that provides AI-powered stock trading signals and technical analysis for retail day traders. We focus on removing the complexity of technical analysis and helping traders identify high-probability trading setups in real-time.
+                        <textarea class="plan-textarea" id="execSummary" onblur="savePlanSection('execSummary')">TradeCommand Pro is a SaaS platform that provides AI-powered stock trading signals and technical analysis for retail day traders. We focus on removing the complexity of technical analysis and helping traders identify high-probability trading setups in real-time.
 
 Mission: Democratize professional trading tools for every retail trader
 Vision: Become the #1 trusted trading signals platform by 2028
@@ -4136,7 +4148,7 @@ Value Proposition: Get verified trading signals + professional-grade analysis fo
                     <!-- Product Description -->
                     <div class="plan-section">
                         <h3>Product Description</h3>
-                        <textarea class="plan-textarea" id="productDesc">TradeCommand Pro features:
+                        <textarea class="plan-textarea" id="productDesc" onblur="savePlanSection('productDesc')">TradeCommand Pro features:
 • Real-time trading signal alerts
 • Technical indicator scanner (20+ indicators)
 • Backtesting engine for strategy validation
@@ -4156,7 +4168,7 @@ Differentiators:
                     <!-- Target Market -->
                     <div class="plan-section">
                         <h3>Target Market</h3>
-                        <textarea class="plan-textarea" id="targetMarket">Ideal Customer Profile:
+                        <textarea class="plan-textarea" id="targetMarket" onblur="savePlanSection('targetMarket')">Ideal Customer Profile:
 Age: 25-45
 Income: $50k-150k
 Technical level: Beginner to intermediate traders
@@ -4170,7 +4182,7 @@ Serviceable Obtainable Market (SOM): $2.1M Year 1 (5k customers at $35 ARPU)</te
                     <!-- Revenue Model -->
                     <div class="plan-section">
                         <h3>Revenue Model</h3>
-                        <textarea class="plan-textarea" id="revenueModel">Pricing Tiers:
+                        <textarea class="plan-textarea" id="revenueModel" onblur="savePlanSection('revenueModel')">Pricing Tiers:
 Pro Monthly: $29/month (most popular - 68% of users)
 Pro Annual: $290/year = $24.17/month (20% discount, 32% of users)
 
@@ -4190,7 +4202,7 @@ Expansion Revenue Opportunities:
                     <!-- Go-to-Market Strategy -->
                     <div class="plan-section">
                         <h3>Go-to-Market Strategy</h3>
-                        <textarea class="plan-textarea" id="gtmStrategy">Distribution Channels (by effectiveness):
+                        <textarea class="plan-textarea" id="gtmStrategy" onblur="savePlanSection('gtmStrategy')">Distribution Channels (by effectiveness):
 1. Reddit (r/daytrading, r/stocks, r/investing) - 35% of signups, $0 cost
 2. Twitter/X (trading community) - 28% of signups
 3. Organic search (SEO) - 22% of signups, compounding
@@ -4213,7 +4225,7 @@ Months 7-12: Paid ads + influencer partnerships</textarea>
                     <!-- Competitive Analysis -->
                     <div class="plan-section">
                         <h3>Competitive Analysis</h3>
-                        <textarea class="plan-textarea" id="competitive">Direct Competitors:
+                        <textarea class="plan-textarea" id="competitive" onblur="savePlanSection('competitive')">Direct Competitors:
 1. TradingView (Premium): $15-45/month, 30M users, strong community
 2. Thinkorswim: Free, professional tools, steep learning curve
 3. MarketWatch Alerts: Free basic, $200+ pro
@@ -4233,7 +4245,7 @@ Threats: Competition increasing, market saturation, regulation</textarea>
                     <!-- Financial Projections -->
                     <div class="plan-section">
                         <h3>Financial Projections (12 months)</h3>
-                        <textarea class="plan-textarea" id="financialProj">Revenue Forecast:
+                        <textarea class="plan-textarea" id="financialProj" onblur="savePlanSection('financialProj')">Revenue Forecast:
 Month 1-3: $4.2k/month (42 customers)
 Month 4-6: $6.8k/month (68 customers, +60%)
 Month 7-9: $9.2k/month (92 customers, +35%)
@@ -4862,41 +4874,163 @@ LOW:
     <script>
         // Firebase Config Placeholder
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForDevelopment",
-            authDomain: "trade-command-pro.firebaseapp.com",
-            projectId: "trade-command-pro",
-            storageBucket: "trade-command-pro.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abcdef1234567890"
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
-        // Initialize Firebase (if credentials provided)
-        let db = null;
-        let currentUser = null;
-
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    currentUser = user;
-                    checkAdminAccess();
-                } else {
-                    window.location.href = 'admin.html';
-                }
-            });
-        } catch (e) {
-            console.log("Firebase not fully configured - using demo mode");
+        // SHA-256 helper for local bypass mode
+        async function sha256(message) {
+          const msgBuffer = new TextEncoder().encode(message);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        const ADMIN_BYPASS_HASH = '69cf361374eb98f109a7272cd195138769b2658bff2d789240322781c4112240';
+        const FIREBASE_CONFIGURED = () => firebaseConfig.apiKey !== 'YOUR_FIREBASE_API_KEY';
+        const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
+        
+        // Check local admin bypass session
+        function checkLocalAdminBypass() {
+          const session = localStorage.getItem('tcp_admin_session');
+          if (!session) return false;
+          try {
+            const s = JSON.parse(session);
+            // Session valid for 8 hours
+            return s.admin === true && (Date.now() - s.ts) < 8 * 60 * 60 * 1000;
+          } catch(e) { return false; }
         }
 
-        // Admin access check
-        function checkAdminAccess() {
-            if (currentUser && currentUser.email === 'max.mcdonough123@gmail.com') {
-                // Admin access granted
+        // Initialize Firebase (if credentials provided)
+        let app, auth, db;
+        let currentUser = null;
+
+        if (!FIREBASE_CONFIGURED()) {
+          // Show auth gate for local bypass
+          document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'flex');
+          document.getElementById('container') && (document.getElementById('container').style.display = 'none');
+          
+          // Check if already have valid local session
+          if (checkLocalAdminBypass()) {
+            grantAdminAccess({ email: ADMIN_EMAIL, displayName: 'Max', uid: 'local-admin' });
+          }
+        } else {
+          try {
+            if (!firebase.apps.length) {
+                app = firebase.initializeApp(firebaseConfig);
             } else {
+                app = firebase.apps[0];
+            }
+            auth = firebase.auth();
+            db = firebase.firestore();
+            
+            auth.onAuthStateChanged((user) => {
+                if (user && user.email === ADMIN_EMAIL) {
+                    currentUser = user;
+                    grantAdminAccess(user);
+                } else {
+                    document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'flex');
+                    document.getElementById('container') && (document.getElementById('container').style.display = 'none');
+                }
+            });
+          } catch (e) {
+              console.warn('Firebase not configured — running in demo mode');
+              db = null;
+              auth = null;
+          }
+        }
+
+        function grantAdminAccess(user) {
+          currentUser = user;
+          document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'none');
+          const container = document.getElementById('container') || document.querySelector('.container');
+          if (container) container.style.display = 'flex';
+          loadAllData();
+        } else {
                 console.warn("Admin access denied");
                 window.location.href = 'admin.html';
+            }
+        }
+
+        // Load data from Firestore
+        async function adminGateLogin() {
+          const email = document.getElementById('gate-email').value.trim();
+          const pass = document.getElementById('gate-password').value.trim();
+          const errEl = document.getElementById('gate-error');
+          
+          if (!email || !pass) { errEl.textContent = 'Enter email and password'; errEl.style.display='block'; return; }
+          
+          if (!FIREBASE_CONFIGURED()) {
+            // Local bypass check
+            const hash = await sha256(pass);
+            if (email === ADMIN_EMAIL && hash === ADMIN_BYPASS_HASH) {
+              localStorage.setItem('tcp_admin_session', JSON.stringify({ admin: true, ts: Date.now() }));
+              grantAdminAccess({ email: ADMIN_EMAIL, displayName: 'Max', uid: 'local-admin' });
+            } else {
+              errEl.textContent = 'Invalid credentials. Password hint: TCPAdmin2026';
+              errEl.style.display = 'block';
+            }
+            return;
+          }
+          
+          // Firebase mode
+          try {
+            await auth.signInWithEmailAndPassword(email, pass);
+          } catch(e) {
+            errEl.textContent = e.message.replace('Firebase: ','').replace(/\(auth\/.*\)/,'').trim();
+            errEl.style.display = 'block';
+          }
+        }
+
+        async function loadAllData() {
+            if (!db) return; // demo mode, use mock data
+            try {
+                // Load deals
+                const dealsSnap = await db.collection('deals').orderBy('createdAt', 'desc').get();
+                if (!dealsSnap.empty) {
+                    allDeals = dealsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderKanban(); // re-render kanban
+                }
+                
+                // Load leads
+                const leadsSnap = await db.collection('leads').orderBy('createdAt', 'desc').get();
+                if (!leadsSnap.empty) {
+                    allLeads = leadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderLeads(); // or equivalent render function
+                }
+                
+                // Load campaigns
+                const campaignsSnap = await db.collection('campaigns').orderBy('createdAt', 'desc').get();
+                if (!campaignsSnap.empty) {
+                    // re-render campaigns table if needed
+                }
+                
+                // Load business plan sections
+                const planSnap = await db.collection('business_plan').get();
+                if (!planSnap.empty) {
+                    planSnap.docs.forEach(doc => {
+                        const el = document.getElementById(doc.id);
+                        if (el) el.value = doc.data().content || '';
+                    });
+                }
+                
+                // Load expenses
+                const expSnap = await db.collection('expenses').orderBy('createdAt', 'desc').get();
+                if (!expSnap.empty) {
+                    // Handle expenses if needed
+                }
+                
+                // Load prospects
+                const prospSnap = await db.collection('prospects').orderBy('createdAt', 'desc').get();
+                if (!prospSnap.empty) {
+                    // Handle prospects if needed
+                }
+                
+            } catch(e) {
+                console.warn('Error loading data from Firestore:', e);
             }
         }
 
@@ -5304,6 +5438,11 @@ LOW:
                         const deal = allDeals.find(d => d.id === dealId);
                         if (deal) {
                             deal.stage = newStage;
+                            // Update in Firestore if available
+                            if (db && deal.id && typeof deal.id === 'string') {
+                                db.collection('deals').doc(deal.id).update({ stage: newStage })
+                                    .catch(err => console.error('Error updating deal stage:', err));
+                            }
                             renderKanban();
                             showToast(`Deal moved to ${newStage}`, 'success');
                         }
@@ -5353,7 +5492,7 @@ LOW:
                         <button class="btn btn-primary" style="width: 100%; justify-content: center;">💬 Add Note</button>
                         <button class="btn btn-secondary" style="width: 100%; justify-content: center;">📞 Log Call</button>
                         <button class="btn btn-secondary" style="width: 100%; justify-content: center;">📧 Send Email</button>
-                        <button class="btn btn-danger" style="width: 100%; justify-content: center;">🗑️ Delete Deal</button>
+                        <button class="btn btn-danger" style="width: 100%; justify-content: center;" onclick="deleteDeal('${deal.id}')">🗑️ Delete Deal</button>
                     </div>
                 </div>
             `;
@@ -5361,6 +5500,23 @@ LOW:
             document.getElementById('panelDealName').textContent = deal.name;
             document.getElementById('panelContent').innerHTML = html;
             document.getElementById('dealPanel').classList.add('active');
+        }
+
+        function deleteDeal(dealId) {
+            if (!confirm('Are you sure you want to delete this deal?')) return;
+            
+            // Remove from local array
+            allDeals = allDeals.filter(d => d.id !== dealId);
+            
+            // Delete from Firestore if available
+            if (db && typeof dealId === 'string') {
+                db.collection('deals').doc(dealId).delete()
+                    .catch(err => console.error('Error deleting deal:', err));
+            }
+            
+            renderKanban();
+            closeSlidePanel();
+            showToast('Deal deleted', 'success');
         }
 
         function closeSlidePanel() {
@@ -5474,7 +5630,7 @@ LOW:
                     <td>
                         <div class="table-actions">
                             <button class="btn btn-sm btn-primary" onclick="showLeadDetail(${l.id})">👁️</button>
-                            <button class="btn btn-sm btn-danger">🗑️</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteLead('${l.id}')">🗑️</button>
                         </div>
                     </td>
                 </tr>
@@ -5714,7 +5870,6 @@ LOW:
         // Form submissions
         function saveDeal() {
             const deal = {
-                id: allDeals.length + 1,
                 name: document.getElementById('dealContact').value,
                 company: document.getElementById('dealCompany').value,
                 value: parseInt(document.getElementById('dealValue').value),
@@ -5724,16 +5879,37 @@ LOW:
                 lastActivity: 'Just now'
             };
 
-            allDeals.push(deal);
-            renderKanban();
-            closeModal('addDealModal');
-            document.getElementById('dealForm').reset();
-            showToast('Deal added successfully!', 'success');
+            if (db) {
+                const dealData = { ...deal, createdAt: firebase.firestore.FieldValue.serverTimestamp(), uid: currentUser?.uid || 'admin' };
+                db.collection('deals').add(dealData).then(docRef => {
+                    deal.id = docRef.id;
+                    allDeals.push(deal);
+                    renderKanban();
+                    closeModal('addDealModal');
+                    document.getElementById('dealForm').reset();
+                    showToast('Deal saved!', 'success');
+                }).catch(err => {
+                    console.error('Error saving deal:', err);
+                    // Fallback: save locally anyway
+                    deal.id = allDeals.length + 1;
+                    allDeals.push(deal);
+                    renderKanban();
+                    closeModal('addDealModal');
+                    document.getElementById('dealForm').reset();
+                    showToast('Deal saved locally (Firebase error)', 'warning');
+                });
+            } else {
+                deal.id = allDeals.length + 1;
+                allDeals.push(deal);
+                renderKanban();
+                closeModal('addDealModal');
+                document.getElementById('dealForm').reset();
+                showToast('Deal saved (demo mode)', 'info');
+            }
         }
 
         function saveLead() {
             const lead = {
-                id: allLeads.length + 1,
                 name: document.getElementById('leadName').value,
                 email: document.getElementById('leadEmail').value,
                 company: document.getElementById('leadCompany').value,
@@ -5743,17 +5919,78 @@ LOW:
                 value: parseInt(document.getElementById('leadValue').value) || 100
             };
 
-            allLeads.push(lead);
-            renderLeads();
-            closeModal('addLeadModal');
-            document.getElementById('leadForm').reset();
-            showToast('Lead added successfully!', 'success');
+            if (db) {
+                db.collection('leads').add({ ...lead, createdAt: firebase.firestore.FieldValue.serverTimestamp(), uid: currentUser?.uid || 'admin' })
+                    .then(docRef => { 
+                        lead.id = docRef.id; 
+                        allLeads.push(lead); 
+                        renderLeads();
+                        closeModal('addLeadModal');
+                        document.getElementById('leadForm').reset();
+                        showToast('Lead saved!', 'success');
+                    })
+                    .catch(err => { 
+                        console.error('Error saving lead:', err);
+                        lead.id = allLeads.length + 1;
+                        allLeads.push(lead);
+                        renderLeads();
+                        closeModal('addLeadModal');
+                        document.getElementById('leadForm').reset();
+                        showToast('Lead saved locally (Firebase error)', 'warning');
+                    });
+            } else {
+                lead.id = allLeads.length + 1;
+                allLeads.push(lead);
+                renderLeads();
+                closeModal('addLeadModal');
+                document.getElementById('leadForm').reset();
+                showToast('Lead saved (demo mode)', 'info');
+            }
         }
 
         function saveCampaign() {
-            showToast('Campaign created successfully!', 'success');
-            closeModal('addCampaignModal');
-            document.getElementById('campaignForm').reset();
+            const campaign = {
+                name: document.getElementById('campaignName')?.value || 'New Campaign',
+                type: document.getElementById('campaignType')?.value || 'email',
+                status: 'draft'
+            };
+
+            if (db) {
+                db.collection('campaigns').add({ ...campaign, createdAt: firebase.firestore.FieldValue.serverTimestamp(), uid: currentUser?.uid || 'admin' })
+                    .then(docRef => {
+                        campaign.id = docRef.id;
+                        showToast('Campaign saved!', 'success');
+                        closeModal('addCampaignModal');
+                        document.getElementById('campaignForm').reset();
+                    })
+                    .catch(err => {
+                        console.error('Error saving campaign:', err);
+                        showToast('Campaign saved locally (Firebase error)', 'warning');
+                        closeModal('addCampaignModal');
+                        document.getElementById('campaignForm').reset();
+                    });
+            } else {
+                showToast('Campaign created (demo mode)', 'info');
+                closeModal('addCampaignModal');
+                document.getElementById('campaignForm').reset();
+            }
+        }
+
+        // Save business plan section
+        function savePlanSection(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (!el) return;
+            
+            if (db) {
+                db.collection('business_plan').doc(sectionId).set({
+                    content: el.value,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => showToast('Saved', 'success'))
+                  .catch(e => {
+                      console.error('Error saving plan section:', e);
+                      showToast('Saved locally', 'info');
+                  });
+            }
         }
 
         // Filter functions
@@ -5765,7 +6002,25 @@ LOW:
         }
 
         function showLeadDetail(leadId) {
+            const lead = allLeads.find(l => l.id === leadId);
+            if (!lead) return;
             showToast('Lead detail view opening...', 'info');
+        }
+
+        function deleteLead(leadId) {
+            if (!confirm('Are you sure you want to delete this lead?')) return;
+            
+            // Remove from local array
+            allLeads = allLeads.filter(l => l.id !== leadId);
+            
+            // Delete from Firestore if available
+            if (db && typeof leadId === 'string') {
+                db.collection('leads').doc(leadId).delete()
+                    .catch(err => console.error('Error deleting lead:', err));
+            }
+            
+            renderLeads();
+            showToast('Lead deleted', 'success');
         }
 
         // Toast notifications
