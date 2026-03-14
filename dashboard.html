@@ -469,6 +469,37 @@ a{color:var(--acc);text-decoration:none}
 .auth-forgot a{font-size:12px;color:var(--acc);text-decoration:none;cursor:pointer}
 .auth-forgot a:hover{text-decoration:underline}
 
+/* ===== ONBOARDING MODAL ===== */
+#onboarding-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:10000;backdrop-filter:blur(8px);padding:20px}
+#onboarding-overlay.hidden{display:none}
+.onboard-box{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:36px;max-width:500px;width:100%;text-align:center}
+.onboard-step{display:none}.onboard-step.active{display:block}
+.onboard-icon{font-size:48px;margin-bottom:14px}
+.onboard-title{font-size:22px;font-weight:700;color:var(--t1);margin-bottom:10px}
+.onboard-text{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:20px}
+.onboard-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;text-align:left}
+.onboard-feature{background:var(--bg2);border-radius:10px;padding:12px;font-size:12px;color:var(--t2)}
+.onboard-feature strong{display:block;color:var(--t1);margin-bottom:3px;font-size:13px}
+.onboard-progress{display:flex;gap:7px;justify-content:center;margin-bottom:24px}
+.onboard-dot{width:8px;height:8px;border-radius:50%;background:var(--brd);transition:background .2s}
+.onboard-dot.active{background:var(--acc)}
+.onboard-actions{display:flex;gap:10px;justify-content:center;align-items:center}
+.btn-onboard-next{background:var(--acc);color:#000;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn-onboard-next:hover{opacity:.85}
+.btn-onboard-skip{background:transparent;color:var(--t3);border:none;padding:10px 14px;font-size:12px;cursor:pointer;text-decoration:underline}
+.onboard-trial-highlight{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:10px;padding:14px;margin-bottom:18px}
+.onboard-trial-highlight strong{color:#f59e0b;font-size:17px;display:block;margin-bottom:4px}
+.onboard-trial-highlight p{font-size:12px;color:var(--t2);margin:0}
+.onboard-upgrade-cta{background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(16,185,129,.1));border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:18px;margin-bottom:18px}
+.onboard-upgrade-cta h3{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.onboard-upgrade-cta p{font-size:12px;color:var(--t2);margin-bottom:12px}
+.onboard-upgrade-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn-up-mo{background:var(--acc);color:#000;border:none;padding:9px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.btn-up-yr{background:var(--bg2);color:var(--t1);border:1px solid var(--brd);padding:9px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+.onboard-steps-list{display:grid;gap:10px;margin-bottom:22px;text-align:left}
+.onboard-step-item{background:var(--bg2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--t2)}
+.onboard-step-item strong{display:block;color:var(--t1);font-size:13px;margin-bottom:2px}
+
 /* ===== TRIAL EXPIRED SCREEN ===== */
 #trial-expired{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9998;overflow-y:auto;padding:20px}
 #trial-expired.hidden{display:none}
@@ -610,6 +641,82 @@ a{color:var(--acc);text-decoration:none}
       </div>
       <button id="btn-signup" class="auth-submit" onclick="authSignUp()">Create Account</button>
       <button class="auth-google" onclick="authGoogle()">🔵 Sign up with Google</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ONBOARDING MODAL ===== -->
+<div id="onboarding-overlay" class="hidden">
+  <div class="onboard-box">
+    <div class="onboard-progress">
+      <div class="onboard-dot active" id="dot-0"></div>
+      <div class="onboard-dot" id="dot-1"></div>
+      <div class="onboard-dot" id="dot-2"></div>
+      <div class="onboard-dot" id="dot-3"></div>
+    </div>
+    <!-- Step 1: Welcome -->
+    <div class="onboard-step active" id="onboard-step-0">
+      <div class="onboard-icon">⚡</div>
+      <div class="onboard-title">Welcome to TradeCommand Pro</div>
+      <div class="onboard-text">Your all-in-one day trading intelligence center. Real-time data, AI analysis, and 15+ live market feeds — everything you need to trade smarter.</div>
+      <div class="onboard-features">
+        <div class="onboard-feature"><strong>📈 Live Data</strong>15+ real-time market feeds</div>
+        <div class="onboard-feature"><strong>🤖 AI Analysis</strong>Sector & momentum insights</div>
+        <div class="onboard-feature"><strong>📰 News Feed</strong>Breaking market news</div>
+        <div class="onboard-feature"><strong>🌐 Global</strong>Pre-market & world data</div>
+      </div>
+      <div class="onboard-actions">
+        <button class="btn-onboard-next" onclick="onboardNext()">Get Started →</button>
+      </div>
+    </div>
+    <!-- Step 2: Trial is active -->
+    <div class="onboard-step" id="onboard-step-1">
+      <div class="onboard-icon">🎁</div>
+      <div class="onboard-title">Your Free Trial Is Active</div>
+      <div class="onboard-trial-highlight">
+        <strong id="onboard-trial-days">7 days</strong> of full Pro access — no credit card needed
+        <p>All features unlocked. API keys included. Launch and start trading now.</p>
+      </div>
+      <div class="onboard-upgrade-cta">
+        <h3>🔒 Lock in your rate during your trial</h3>
+        <p>Subscribe now and save 29% with our annual plan.</p>
+        <div class="onboard-upgrade-btns">
+          <a href="https://buy.stripe.com/YOUR_MONTHLY_LINK" target="_blank" class="btn-up-mo">$12.99/mo CAD</a>
+          <a href="https://buy.stripe.com/YOUR_ANNUAL_LINK" target="_blank" class="btn-up-yr">$109.99/yr CAD</a>
+        </div>
+      </div>
+      <div class="onboard-actions">
+        <button class="btn-onboard-next" onclick="onboardNext()">Continue →</button>
+        <button class="btn-onboard-skip" onclick="skipOnboarding()">Skip for now</button>
+      </div>
+    </div>
+    <!-- Step 3: How it works -->
+    <div class="onboard-step" id="onboard-step-2">
+      <div class="onboard-icon">🧭</div>
+      <div class="onboard-title">How It Works</div>
+      <div class="onboard-text">TradeCommand Pro pulls live data the moment you launch. Here's how to get the most out of it:</div>
+      <div class="onboard-steps-list">
+        <div class="onboard-step-item"><strong>1️⃣ Set your name & balance</strong>Personalize your dashboard on the setup screen</div>
+        <div class="onboard-step-item"><strong>2️⃣ Choose your sectors</strong>Select which market sectors to monitor</div>
+        <div class="onboard-step-item"><strong>3️⃣ Hit Launch</strong>Your full intelligence dashboard loads in seconds</div>
+        <div class="onboard-step-item"><strong>4️⃣ Trade smarter</strong>Use AI insights and live feeds to time your entries</div>
+      </div>
+      <div class="onboard-actions">
+        <button class="btn-onboard-next" onclick="onboardNext()">Got it →</button>
+      </div>
+    </div>
+    <!-- Step 4: Launch -->
+    <div class="onboard-step" id="onboard-step-3">
+      <div class="onboard-icon">🚀</div>
+      <div class="onboard-title">You're Ready to Trade</div>
+      <div class="onboard-text">Everything is set up and ready. We've included Pro API keys during your trial — no configuration needed.</div>
+      <div class="onboard-trial-highlight" style="margin-bottom:20px">
+        <strong>Full Pro access included</strong>
+        <p>Upgrade anytime to keep access after your trial ends.</p>
+      </div>
+      <div class="onboard-actions">
+        <button class="btn-onboard-next" onclick="finishOnboarding()" style="font-size:15px;padding:14px 32px;">🚀 Launch Dashboard</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1440,6 +1547,34 @@ async function submitTrialKeys() {
   }
 }
 
+// ===== ONBOARDING =====
+let onboardStep = 0;
+function showOnboarding(daysLeft) {
+  const overlay = document.getElementById('onboarding-overlay');
+  if (!overlay) return;
+  const daysEl = document.getElementById('onboard-trial-days');
+  if (daysEl) daysEl.textContent = `${daysLeft} day${daysLeft !== 1 ? 's' : ''}`;
+  overlay.classList.remove('hidden');
+}
+function onboardNext() {
+  const total = 4;
+  if (onboardStep < total - 1) {
+    document.getElementById(`onboard-step-${onboardStep}`).classList.remove('active');
+    document.getElementById(`dot-${onboardStep}`).classList.remove('active');
+    onboardStep++;
+    document.getElementById(`onboard-step-${onboardStep}`).classList.add('active');
+    document.getElementById(`dot-${onboardStep}`).classList.add('active');
+  }
+}
+function skipOnboarding() { finishOnboarding(); }
+async function finishOnboarding() {
+  document.getElementById('onboarding-overlay').classList.add('hidden');
+  const user = auth.currentUser;
+  if (user) {
+    try { await db.collection('users').doc(user.uid).update({ onboarded: true }); } catch(e) {}
+  }
+}
+
 async function handleAuthState(user) {
   if(!user) {
     showAuth();
@@ -1509,8 +1644,15 @@ async function handleAuthState(user) {
           const daysLeft = Math.ceil((userData.trialEnds - now) / (24*60*60*1000));
           const badge = document.getElementById('trial-badge');
           if(badge) {
-            badge.textContent = `⏳ Trial: ${daysLeft} days left`;
+            badge.textContent = `⏳ Trial: ${daysLeft}d left`;
             badge.style.display = 'inline-flex';
+          }
+          // Give trial users full pro API keys — no setup needed
+          const adminKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
+          D.fh = adminKeys.fh; D.av = adminKeys.av; D.na = adminKeys.na;
+          // Show onboarding for new users
+          if (!userData.onboarded) {
+            setTimeout(() => showOnboarding(daysLeft), 600);
           }
         }
       } else if(userData.plan === 'active' && userData.apiKeys) {
