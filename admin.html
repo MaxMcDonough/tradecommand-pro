@@ -2491,15 +2491,6 @@
       document.getElementById('userPanel').classList.remove('active');
     };
 
-    const changePlan = async (userId) => {
-      const user = allUsers.find(u => u.id === userId);
-      const newPlan = user.plan === 'trial' ? 'active' : 'trial';
-      await db.collection('users').doc(userId).update({ plan: newPlan });
-      showToast(`Plan changed to ${newPlan}`, 'success');
-      loadDashboard();
-      document.getElementById('userPanel').classList.remove('active');
-    };
-
     // Batch Actions
     document.getElementById('batchDisable').addEventListener('click', async () => {
       showModal('Disable Accounts?', `Disable ${selectedUsers.size} account(s)?`, async () => {

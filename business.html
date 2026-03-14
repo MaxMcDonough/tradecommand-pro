@@ -4949,10 +4949,6 @@ LOW:
           const container = document.getElementById('container') || document.querySelector('.container');
           if (container) container.style.display = 'flex';
           loadAllData();
-        } else {
-                console.warn("Admin access denied");
-                window.location.href = 'admin.html';
-            }
         }
 
         // Load data from Firestore
