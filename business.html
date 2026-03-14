@@ -4982,117 +4982,94 @@ LOW:
         }
 
         async function loadAllData() {
-            if (!db) return; // demo mode, use mock data
+            if (!db) {
+                // No Firebase — just render empty states
+                renderMetricsGrid();
+                renderDashboard();
+                renderKanban();
+                renderLeads();
+                renderProspects();
+                renderProspectingChannels();
+                initRevenueChart();
+                initLeadsSourceChart();
+                return;
+            }
             try {
                 // Load deals
                 const dealsSnap = await db.collection('deals').orderBy('createdAt', 'desc').get();
-                if (!dealsSnap.empty) {
-                    allDeals = dealsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    renderKanban(); // re-render kanban
-                }
-                
+                allDeals = dealsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
                 // Load leads
                 const leadsSnap = await db.collection('leads').orderBy('createdAt', 'desc').get();
-                if (!leadsSnap.empty) {
-                    allLeads = leadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    renderLeads(); // or equivalent render function
-                }
-                
+                allLeads = leadsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
                 // Load campaigns
                 const campaignsSnap = await db.collection('campaigns').orderBy('createdAt', 'desc').get();
-                if (!campaignsSnap.empty) {
-                    // re-render campaigns table if needed
-                }
-                
-                // Load business plan sections
-                const planSnap = await db.collection('business_plan').get();
-                if (!planSnap.empty) {
-                    planSnap.docs.forEach(doc => {
-                        const el = document.getElementById(doc.id);
-                        if (el) el.value = doc.data().content || '';
-                    });
-                }
-                
-                // Load expenses
-                const expSnap = await db.collection('expenses').orderBy('createdAt', 'desc').get();
-                if (!expSnap.empty) {
-                    // Handle expenses if needed
-                }
-                
+                allCampaigns = campaignsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
                 // Load prospects
                 const prospSnap = await db.collection('prospects').orderBy('createdAt', 'desc').get();
-                if (!prospSnap.empty) {
-                    // Handle prospects if needed
-                }
-                
+                allProspects = prospSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Load expenses
+                const expSnap = await db.collection('expenses').orderBy('createdAt', 'desc').get();
+                allExpenses = expSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Load users & payments for metrics
+                const usersSnap = await db.collection('users').get();
+                allUsers = usersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                const paymentsSnap = await db.collection('payments').orderBy('createdAt', 'desc').get();
+                allPayments = paymentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Load activity feed
+                const actSnap = await db.collection('activity').orderBy('timestamp', 'desc').limit(50).get();
+                allActivity = actSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Load business plan
+                const planSnap = await db.collection('business_plan').get();
+                planSnap.docs.forEach(doc => {
+                    const el = document.getElementById(doc.id);
+                    if (el) el.value = doc.data().content || '';
+                });
+
             } catch(e) {
-                console.warn('Error loading data from Firestore:', e);
+                console.warn('Error loading from Firestore:', e);
             }
+
+            // Always render after load (even if some failed)
+            renderMetricsGrid();
+            renderDashboard();
+            renderKanban();
+            renderLeads();
+            renderProspects();
+            renderProspectingChannels();
+            initRevenueChart();
+            initLeadsSourceChart();
         }
 
-        // Mock data
-        const mockMetrics = {
-            totalRevenue: 125000,
-            mrr: 12500,
-            customers: 350,
-            activeSubscribers: 280,
-            conversionRate: 18.5,
-            churnRate: 2.1,
-            arpu: 44.64,
-            clv: 2136
-        };
-
-        const mockDeals = [
-            { id: 1, name: 'TradeCorp Inc', company: 'TradeCorp', value: 5000, stage: 'lead', days: 3, priority: 'high', lastActivity: '2 min ago' },
-            { id: 2, name: 'Sarah Johnson', company: 'Trading Solutions', value: 8000, stage: 'demo', days: 7, priority: 'high', lastActivity: '1 hour ago' },
-            { id: 3, name: 'Mike Chen', company: 'Invest Hub', value: 3500, stage: 'qualified', days: 5, priority: 'medium', lastActivity: '3 hours ago' },
-            { id: 4, name: 'Emily Davis', company: 'Day Trade Pro', value: 6500, stage: 'proposal', days: 12, priority: 'high', lastActivity: '30 min ago' },
-            { id: 5, name: 'James Wilson', company: 'Market Traders', value: 7200, stage: 'negotiation', days: 15, priority: 'medium', lastActivity: '2 hours ago' },
-            { id: 6, name: 'Lisa Anderson', company: 'Trading Academy', value: 4800, stage: 'won', days: 21, priority: 'low', lastActivity: '1 day ago' },
-            { id: 7, name: 'Robert Taylor', company: 'Fintech Corp', value: 5500, stage: 'lost', days: 30, priority: 'low', lastActivity: '3 days ago' }
-        ];
-
-        const mockLeads = [
-            { id: 1, name: 'Alex Martinez', email: 'alex@trading.com', company: 'Trading Systems', source: 'reddit', stage: 'trial', score: 85, value: 500 },
-            { id: 2, name: 'Jessica Lee', email: 'jessica@daytraders.com', company: 'Day Traders Inc', source: 'twitter', stage: 'active', score: 72, value: 400 },
-            { id: 3, name: 'David Brown', email: 'david@stocks.net', company: 'Stock Pros', source: 'referral', stage: 'signup', score: 55, value: 200 },
-            { id: 4, name: 'Jennifer White', email: 'jen@trading.io', company: 'Trade Tech', source: 'organic', stage: 'visitor', score: 35, value: 100 }
-        ];
+        // Live data (populated from Firestore)
+        // No mock data — starts empty, filled from Firestore on login
 
         const prospectingSources = ['Reddit', 'Twitter/X', 'YouTube', 'Discord', 'LinkedIn', 'SEO/Blog', 'Paid Ads', 'Partnerships'];
 
-        const marketingTemplates = [
-            { name: 'Product Launch', views: 2400, uses: 12 },
-            { name: 'Welcome Sequence', views: 1900, uses: 25 },
-            { name: 'Trial Expiry', views: 1600, uses: 18 },
-            { name: 'Re-engagement', views: 1200, uses: 9 }
-        ];
-
         // UI State
         let currentSection = 'dashboard';
-        let allDeals = [...mockDeals];
-        let allLeads = [...mockLeads];
+        let allDeals = [];
+        let allLeads = [];
+        let allCampaigns = [];
+        let allProspects = [];
+        let allExpenses = [];
+        let allActivity = [];
+        let allUsers = [];
+        let allPayments = [];
         let currentDealPanel = null;
         let revenueChartInstance = null;
         let leadsSourceChartInstance = null;
 
-        // Initialize App
+        // Initialize App — setupEventListeners only; data loads after auth via grantAdminAccess → loadAllData
         document.addEventListener('DOMContentLoaded', () => {
             setupEventListeners();
-            renderMetricsGrid();
-            renderDashboard();
-            renderKanban();
-            renderProspectingChannels();
-            renderProspects();
-            renderLeads();
-            renderLeadFunnel();
-            renderMarketingMetrics();
-            renderMarketingAssets();
-            renderSocialMedia();
-            renderSEO();
-            renderCampaigns();
-            initRevenueChart();
-            initLeadsSourceChart();
         });
 
         // Event Listeners
@@ -5193,17 +5170,30 @@ LOW:
             }
         }
 
-        // Metrics Grid
+        // Metrics Grid — computed from real Firestore data
         function renderMetricsGrid() {
+            const totalUsers = allUsers.length;
+            const proUsers = allUsers.filter(u => u.plan === 'pro_monthly' || u.plan === 'pro_annual');
+            const cancelledUsers = allUsers.filter(u => u.plan === 'cancelled').length;
+            const mrr = proUsers.filter(u => u.plan === 'pro_monthly').length * 12.99
+                      + proUsers.filter(u => u.plan === 'pro_annual').length * (109.99 / 12);
+            const totalRevenue = allPayments.filter(p => p.status === 'succeeded').reduce((s, p) => s + (p.amount || 0), 0);
+            const arpu = proUsers.length > 0 ? (mrr / proUsers.length) : 0;
+            const clv = arpu > 0 ? (arpu / Math.max(0.01, cancelledUsers / Math.max(1, totalUsers))) : 0;
+            const expiredTrials = allUsers.filter(u => u.plan === 'trial' && (u.trialEnds || 0) < Date.now()).length;
+            const convRate = (expiredTrials + proUsers.length) > 0
+                ? (proUsers.length / (expiredTrials + proUsers.length) * 100) : 0;
+            const churnRate = totalUsers > 0 ? (cancelledUsers / totalUsers * 100) : 0;
+
             const metrics = [
-                { label: 'Total Revenue', value: '$' + mockMetrics.totalRevenue.toLocaleString(), icon: '💵', trend: '+12%' },
-                { label: 'Monthly Revenue', value: '$' + mockMetrics.mrr.toLocaleString(), icon: '📈', trend: '+5%' },
-                { label: 'Total Customers', value: mockMetrics.customers, icon: '👥', trend: '+8%' },
-                { label: 'Active Subscribers', value: mockMetrics.activeSubscribers, icon: '⭐', trend: '+3%' },
-                { label: 'Conversion Rate', value: mockMetrics.conversionRate.toFixed(1) + '%', icon: '🎯', trend: '+1.2%' },
-                { label: 'Churn Rate', value: mockMetrics.churnRate.toFixed(1) + '%', icon: '📉', trend: '-0.5%', trendDown: true },
-                { label: 'ARPU', value: '$' + mockMetrics.arpu.toFixed(2), icon: '💰', trend: '+$2.50' },
-                { label: 'Customer Lifetime Value', value: '$' + mockMetrics.clv.toLocaleString(), icon: '🎁', trend: '+$150' }
+                { label: 'Total Revenue', value: '$' + totalRevenue.toFixed(2), icon: '💵', trend: totalRevenue > 0 ? 'All time' : 'No payments yet' },
+                { label: 'Monthly Recurring Revenue', value: '$' + mrr.toFixed(2), icon: '📈', trend: 'CAD' },
+                { label: 'Total Users', value: totalUsers || '—', icon: '👥', trend: totalUsers > 0 ? 'Registered' : 'No users yet' },
+                { label: 'Active Subscribers', value: proUsers.length || '—', icon: '⭐', trend: proUsers.length > 0 ? 'Pro accounts' : 'None yet' },
+                { label: 'Conversion Rate', value: convRate.toFixed(1) + '%', icon: '🎯', trend: 'Trial → Pro' },
+                { label: 'Churn Rate', value: churnRate.toFixed(1) + '%', icon: '📉', trend: 'Cancelled / Total', trendDown: churnRate > 5 },
+                { label: 'ARPU', value: '$' + arpu.toFixed(2), icon: '💰', trend: 'Per pro user / mo' },
+                { label: 'Open Deals', value: allDeals.filter(d => !['won','lost'].includes(d.stage)).length || '—', icon: '🤝', trend: '$' + allDeals.filter(d => !['won','lost'].includes(d.stage)).reduce((s,d) => s + (d.value||0), 0).toLocaleString() + ' pipeline' }
             ];
 
             const html = metrics.map(m => `
@@ -5226,36 +5216,58 @@ LOW:
             renderPipelineSummary();
         }
 
+        function timeAgo(ts) {
+            const secs = Math.floor((Date.now() - (ts?.toDate ? ts.toDate() : new Date(ts || 0))) / 1000);
+            if (secs < 60) return secs + 's ago';
+            if (secs < 3600) return Math.floor(secs/60) + 'm ago';
+            if (secs < 86400) return Math.floor(secs/3600) + 'h ago';
+            return Math.floor(secs/86400) + 'd ago';
+        }
+
         function renderActivityFeed() {
-            const activities = [
-                { type: 'signup', text: 'New signup from John Doe', icon: '🆕', time: '2 min ago' },
-                { type: 'payment', text: 'Payment received - $499 from TradeCorp Inc', icon: '💳', time: '15 min ago' },
-                { type: 'email', text: 'Email campaign sent to 250 contacts', icon: '📧', time: '1 hour ago' },
-                { type: 'deal', text: 'Deal moved to negotiation: $8,500 - Sarah Johnson', icon: '🤝', time: '2 hours ago' },
-                { type: 'lead', text: 'New lead: Alex Martinez (Reddit)', icon: '🎣', time: '3 hours ago' },
-                { type: 'update', text: 'Feature update: New charting library deployed', icon: '⚙️', time: '5 hours ago' },
-                { type: 'email', text: 'Email open rate: 42% (up from 38%)', icon: '📊', time: '1 day ago' }
-            ];
+            const el = document.getElementById('activityFeed');
+            if (!el) return;
 
-            const html = activities.map(a => `
-                <div class="activity-item">
-                    <div class="activity-icon">${a.icon}</div>
+            if (allActivity.length === 0) {
+                el.innerHTML = '<div style="text-align:center;color:#64748b;padding:24px;font-size:13px">No activity yet — activity from your dashboard will appear here once users start signing up and trading.</div>';
+                return;
+            }
+
+            const iconMap = { sector_view:'📊', ticker_view:'📈', trade:'💰', login:'👤', signup:'🆕', payment:'💳' };
+            const html = allActivity.slice(0, 20).map(a => {
+                const icon = iconMap[a.type] || '•';
+                const text = a.type === 'trade' ? `Trade: ${a.data?.action || ''} ${a.data?.sym || ''} ($${a.data?.invested || 0})`
+                           : a.type === 'sector_view' ? `Sector viewed: ${a.data?.sector || ''}`
+                           : a.type === 'ticker_view' ? `Ticker viewed: ${a.data?.ticker || ''}`
+                           : a.type === 'login' ? `User signed in: ${a.email || ''}`
+                           : `${a.type}: ${JSON.stringify(a.data || {}).slice(0, 60)}`;
+                return `<div class="activity-item">
+                    <div class="activity-icon">${icon}</div>
                     <div class="activity-content">
-                        <div class="activity-text">${a.text}</div>
-                        <div class="activity-time">${a.time}</div>
+                        <div class="activity-text">${text}</div>
+                        <div class="activity-time">${a.email ? a.email + ' · ' : ''}${timeAgo(a.timestamp)}</div>
                     </div>
-                </div>
-            `).join('');
-
-            document.getElementById('activityFeed').innerHTML = html;
+                </div>`;
+            }).join('');
+            el.innerHTML = html;
         }
 
         function renderPipelineSummary() {
+            const openDeals = allDeals.filter(d => !['won', 'lost'].includes(d.stage));
+            const openValue = openDeals.reduce((sum, d) => sum + (d.value || 0), 0);
+            const thisWeekLeads = allLeads.filter(l => {
+                const d = l.createdAt?.toDate ? l.createdAt.toDate() : new Date(l.createdAt || 0);
+                return d > new Date(Date.now() - 7 * 86400000);
+            });
+            const emailsThisMonth = allPayments.filter(p => {
+                const d = p.createdAt?.toDate ? p.createdAt.toDate() : new Date(p.createdAt || 0);
+                return d.getMonth() === new Date().getMonth() && d.getFullYear() === new Date().getFullYear();
+            }).length;
             const summary = [
-                { label: 'Open Deals', value: allDeals.filter(d => !['won', 'lost'].includes(d.stage)).length, subvalue: '$' + allDeals.filter(d => !['won', 'lost'].includes(d.stage)).reduce((sum, d) => sum + d.value, 0).toLocaleString(), icon: '🎯' },
-                { label: 'Leads This Week', value: allLeads.length, subvalue: 'Active', icon: '🎣' },
-                { label: 'Emails This Month', value: 1250, subvalue: 'Sent', icon: '📧' },
-                { label: 'Meetings Scheduled', value: 8, subvalue: 'Upcoming', icon: '📅' }
+                { label: 'Open Deals', value: openDeals.length || '—', subvalue: openDeals.length ? '$' + openValue.toLocaleString() + ' pipeline' : 'No deals yet', icon: '🎯' },
+                { label: 'New Leads This Week', value: thisWeekLeads.length || '—', subvalue: allLeads.length + ' total leads', icon: '🎣' },
+                { label: 'Payments This Month', value: emailsThisMonth || '—', subvalue: 'Successful payments', icon: '💳' },
+                { label: 'Total Users', value: allUsers.length || '—', subvalue: allUsers.filter(u=>u.plan==='pro_monthly'||u.plan==='pro_annual').length + ' pro subscribers', icon: '👥' }
             ];
 
             const html = summary.map(s => `
@@ -5270,16 +5282,30 @@ LOW:
             document.getElementById('pipelineSummary').innerHTML = html;
         }
 
-        // Charts
+        // Charts — built from real Firestore data
         function initRevenueChart() {
             const ctx = document.getElementById('revenueChart');
             if (!ctx) return;
+            if (revenueChartInstance) { revenueChartInstance.destroy(); revenueChartInstance = null; }
+
+            // Build last 12 months from real payments
+            const months = [];
+            for (let i = 11; i >= 0; i--) {
+                const d = new Date(); d.setMonth(d.getMonth() - i);
+                months.push({ year: d.getFullYear(), month: d.getMonth(), label: d.toLocaleString('default', { month: 'short', year: '2-digit' }) });
+            }
+            const revenueByMonth = months.map(m =>
+                allPayments.filter(p => {
+                    const d = p.createdAt?.toDate ? p.createdAt.toDate() : new Date(p.createdAt || 0);
+                    return d.getFullYear() === m.year && d.getMonth() === m.month && p.status === 'succeeded';
+                }).reduce((sum, p) => sum + (p.amount || 0), 0)
+            );
 
             const data = {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: months.map(m => m.label),
                 datasets: [{
-                    label: 'Monthly Revenue',
-                    data: [8500, 9200, 10100, 10800, 11500, 12000, 12300, 12200, 12500, 12800, 13200, 12500],
+                    label: 'Monthly Revenue (CAD)',
+                    data: revenueByMonth,
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     borderWidth: 3,
@@ -5323,10 +5349,14 @@ LOW:
         function initLeadsSourceChart() {
             const ctx = document.getElementById('leadsSourceChart');
             if (!ctx) return;
+            if (leadsSourceChartInstance) { leadsSourceChartInstance.destroy(); leadsSourceChartInstance = null; }
 
-            const sources = ['Organic', 'Reddit', 'Twitter', 'Referral', 'Paid Ads', 'LinkedIn'];
-            const counts = [42, 38, 31, 29, 25, 18];
-            const colors = ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6', '#06b6d4'];
+            // Count from real leads data
+            const sourceMap = {};
+            allLeads.forEach(l => { const s = l.source || 'Organic'; sourceMap[s] = (sourceMap[s] || 0) + 1; });
+            const sources = Object.keys(sourceMap).length > 0 ? Object.keys(sourceMap) : ['No leads yet'];
+            const counts = Object.keys(sourceMap).length > 0 ? Object.values(sourceMap) : [1];
+            const colors = ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'];
 
             leadsSourceChartInstance = new Chart(ctx, {
                 type: 'doughnut',
@@ -5378,14 +5408,16 @@ LOW:
                             <div class="kanban-badge">${dealsInStage.length}</div>
                         </div>
                         <div class="kanban-cards" data-stage="${stage.id}">
-                            ${dealsInStage.map(deal => `
-                                <div class="deal-card" draggable="true" data-deal-id="${deal.id}" onclick="openDealPanel(${deal.id})">
-                                    <div class="deal-name">${deal.name}</div>
-                                    <div class="deal-company">${deal.company}</div>
-                                    <div class="deal-value">$${deal.value.toLocaleString()}</div>
+                            ${dealsInStage.length === 0
+                                ? `<div style="text-align:center;color:#475569;font-size:11px;padding:12px">No deals</div>`
+                                : dealsInStage.map(deal => `
+                                <div class="deal-card" draggable="true" data-deal-id="${deal.id}" onclick="openDealPanel('${deal.id}')">
+                                    <div class="deal-name">${deal.name || deal.contact || '—'}</div>
+                                    <div class="deal-company">${deal.company || '—'}</div>
+                                    <div class="deal-value">$${(deal.value || 0).toLocaleString()}</div>
                                     <div class="deal-meta">
-                                        <span>${deal.days}d in stage</span>
-                                        <span>${deal.priority}</span>
+                                        <span>${deal.days || 0}d in stage</span>
+                                        <span>${deal.priority || 'medium'}</span>
                                     </div>
                                 </div>
                             `).join('')}
@@ -5613,46 +5645,53 @@ LOW:
 
         // Leads
         function renderLeads() {
-            const html = allLeads.map(l => `
-                <tr>
-                    <td><strong style="color: ${l.score >= 80 ? 'var(--ylw)' : l.score >= 50 ? 'var(--acc)' : 'var(--red)'}; font-size: 18px;">${l.score}</strong></td>
-                    <td>${l.name}</td>
-                    <td style="color: var(--acc);">${l.email}</td>
-                    <td>${l.company || '-'}</td>
-                    <td><span class="badge badge-info">${l.source}</span></td>
-                    <td><span class="badge badge-success">${l.stage}</span></td>
-                    <td>$${l.value}</td>
-                    <td>1 hour ago</td>
-                    <td>
-                        <div class="table-actions">
-                            <button class="btn btn-sm btn-primary" onclick="showLeadDetail(${l.id})">👁️</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteLead('${l.id}')">🗑️</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+            const tbody = document.getElementById('leadsTableBody');
+            if (!tbody) return;
 
-            document.getElementById('leadsTableBody').innerHTML = html;
+            if (allLeads.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#64748b;padding:24px">No leads yet. Add your first lead using the button above.</td></tr>';
+            } else {
+                tbody.innerHTML = allLeads.map(l => `
+                    <tr>
+                        <td><strong style="color: ${(l.score||0) >= 80 ? 'var(--ylw)' : (l.score||0) >= 50 ? 'var(--acc)' : 'var(--red)'}; font-size: 18px;">${l.score || 0}</strong></td>
+                        <td>${l.name || '—'}</td>
+                        <td style="color: var(--acc);">${l.email || '—'}</td>
+                        <td>${l.company || '—'}</td>
+                        <td><span class="badge badge-info">${l.source || 'organic'}</span></td>
+                        <td><span class="badge badge-success">${l.stage || 'new'}</span></td>
+                        <td>$${l.value || 0}</td>
+                        <td>${timeAgo(l.createdAt)}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-sm btn-danger" onclick="deleteLead('${l.id}')">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
 
             // Update lead stats
-            const hotLeads = allLeads.filter(l => l.score > 80).length;
-            const warmLeads = allLeads.filter(l => l.score >= 50 && l.score <= 80).length;
-            const coldLeads = allLeads.filter(l => l.score < 50).length;
-
-            document.getElementById('totalLeads').textContent = allLeads.length;
-            document.getElementById('hotLeads').textContent = hotLeads;
-            document.getElementById('warmLeads').textContent = warmLeads;
-            document.getElementById('coldLeads').textContent = coldLeads;
-            document.getElementById('leadConversionRate').textContent = ((warmLeads + hotLeads) / allLeads.length * 100).toFixed(0) + '%';
+            const hotLeads = allLeads.filter(l => (l.score||0) > 80).length;
+            const warmLeads = allLeads.filter(l => (l.score||0) >= 50 && (l.score||0) <= 80).length;
+            const coldLeads = allLeads.filter(l => (l.score||0) < 50).length;
+            const setT = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+            setT('totalLeads', allLeads.length || '—');
+            setT('hotLeads', hotLeads);
+            setT('warmLeads', warmLeads);
+            setT('coldLeads', coldLeads);
+            setT('leadConversionRate', allLeads.length > 0 ? (((warmLeads + hotLeads) / allLeads.length) * 100).toFixed(0) + '%' : '—');
         }
 
         function renderLeadFunnel() {
+            const totalUsers = allUsers.length;
+            const trialUsers = allUsers.filter(u => u.plan === 'trial' && (u.trialEnds||0) > Date.now()).length;
+            const proUsers = allUsers.filter(u => u.plan === 'pro_monthly' || u.plan === 'pro_annual').length;
+            const activeUsers = allUsers.filter(u => u.plan === 'active').length;
             const funnelData = [
-                { stage: 'Visitors', count: 5200, conversion: '100%' },
-                { stage: 'Signups', count: 680, conversion: '13.1%' },
-                { stage: 'Trial Active', count: 350, conversion: '51.5%' },
-                { stage: 'Active Paid', count: 280, conversion: '80%' },
-                { stage: 'Pro Tier', count: 45, conversion: '16.1%' }
+                { stage: 'Total Signups', count: totalUsers || 0, conversion: '100%' },
+                { stage: 'Active Trials', count: trialUsers || 0, conversion: totalUsers > 0 ? ((trialUsers/totalUsers)*100).toFixed(1)+'%' : '—' },
+                { stage: 'Own API Keys', count: activeUsers || 0, conversion: totalUsers > 0 ? ((activeUsers/totalUsers)*100).toFixed(1)+'%' : '—' },
+                { stage: 'Pro Subscribers', count: proUsers || 0, conversion: totalUsers > 0 ? ((proUsers/totalUsers)*100).toFixed(1)+'%' : '—' }
             ];
 
             const html = funnelData.map((step, idx) => {
