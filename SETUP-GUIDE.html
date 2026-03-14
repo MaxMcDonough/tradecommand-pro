@@ -2,77 +2,179 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TradeCommand Pro — Setup Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0e17; color: #e2e8f0; max-width: 700px; margin: 40px auto; padding: 20px; line-height: 1.8; }
-  h1 { background: linear-gradient(135deg, #3b82f6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  h2 { color: #3b82f6; margin-top: 32px; border-bottom: 1px solid #2a3550; padding-bottom: 8px; }
-  a { color: #3b82f6; }
-  code { background: #1a2236; padding: 2px 8px; border-radius: 4px; font-size: 14px; }
-  .step { background: #1a2236; border: 1px solid #2a3550; border-radius: 10px; padding: 20px; margin: 16px 0; }
-  .step-num { display: inline-block; width: 28px; height: 28px; background: #3b82f6; color: #fff; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700; font-size: 14px; margin-right: 10px; }
-  .warning { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 16px; margin: 16px 0; }
-  .warning strong { color: #f59e0b; }
+:root{--bg:#0a0e17;--bg2:#111827;--card:#1a2236;--brd:#2a3550;--t1:#e2e8f0;--t2:#94a3b8;--acc:#3b82f6;--grn:#10b981;--red:#ef4444;--ylw:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;padding:40px 20px}
+.container{max-width:800px;margin:0 auto}
+h1{font-size:32px;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.sub{color:var(--t2);margin-bottom:40px;font-size:14px}
+.step{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:24px;margin-bottom:20px}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--acc);color:#fff;border-radius:50%;font-weight:700;font-size:14px;margin-right:10px}
+.step h2{display:inline;font-size:18px;vertical-align:middle}
+.step p{color:var(--t2);margin:12px 0;font-size:14px;line-height:1.7}
+.step ol,.step ul{color:var(--t2);margin:12px 0 12px 20px;font-size:14px;line-height:2}
+.step a{color:var(--acc)}
+code{background:var(--bg2);padding:2px 8px;border-radius:4px;font-size:13px;color:var(--ylw)}
+pre{background:var(--bg2);padding:16px;border-radius:8px;overflow-x:auto;margin:12px 0;font-size:13px;line-height:1.6;color:var(--t2)}
+pre code{background:none;padding:0}
+.tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;margin-left:6px;vertical-align:middle}
+.tag-req{background:rgba(239,68,68,.15);color:var(--red)}
+.tag-opt{background:rgba(245,158,11,.15);color:var(--ylw)}
+.tag-free{background:rgba(16,185,129,.15);color:var(--grn)}
+.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:12px 16px;margin:12px 0;font-size:13px;color:var(--ylw)}
+.nav{display:flex;gap:12px;margin-bottom:30px;flex-wrap:wrap}
+.nav a{padding:8px 16px;background:var(--card);border:1px solid var(--brd);border-radius:8px;color:var(--t2);font-size:12px;font-weight:600;text-decoration:none}
+.nav a:hover{border-color:var(--acc);color:var(--acc)}
 </style>
 </head>
 <body>
-<h1>⚡ TradeCommand Pro — Setup Guide</h1>
-<p>Get your day trading dashboard running in under 2 minutes.</p>
+<div class="container">
+<h1>⚡ TradeCommand Pro Setup Guide</h1>
+<p class="sub">Complete setup for Firebase auth, Stripe payments, and the business command center.</p>
 
-<h2>Quick Start</h2>
+<div class="nav">
+<a href="dashboard.html">📊 Dashboard</a>
+<a href="admin.html">🔧 Admin Panel</a>
+<a href="business.html">🚀 Business Center</a>
+</div>
+
 <div class="step">
-  <p><span class="step-num">1</span><strong>Get a Free Finnhub API Key</strong></p>
-  <p>Go to <a href="https://finnhub.io/register" target="_blank">finnhub.io/register</a> and create a free account. Your API key will be on the dashboard immediately after signup.</p>
-  <p>Free tier includes: 60 API calls/minute, real-time US stock data, WebSocket streaming, and market news.</p>
+<span class="step-num">1</span><h2>Create a Firebase Project</h2> <span class="tag tag-req">Required</span>
+<ol>
+<li>Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a></li>
+<li>Click <strong>"Create a project"</strong> — name it <code>tradecommand-pro</code></li>
+<li>Disable Google Analytics (optional, not needed)</li>
+<li>Once created, click the <strong>Web icon (&lt;/&gt;)</strong> to register a web app</li>
+<li>Name it <code>TradeCommand Pro</code> and click Register</li>
+<li>You'll see a config object — <strong>copy these values</strong>:</li>
+</ol>
+<pre><code>const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "tradecommand-pro.firebaseapp.com",
+  projectId: "tradecommand-pro",
+  storageBucket: "tradecommand-pro.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123"
+};</code></pre>
+<p>Paste these values into <strong>3 files</strong>: <code>dashboard.html</code>, <code>admin.html</code>, and <code>business.html</code>. Search for <code>YOUR_FIREBASE_API_KEY</code> and replace each placeholder.</p>
 </div>
+
 <div class="step">
-  <p><span class="step-num">2</span><strong>Open the Dashboard</strong></p>
-  <p>Open <code>dashboard.html</code> in any modern web browser (Chrome, Firefox, Safari, Edge).</p>
+<span class="step-num">2</span><h2>Enable Authentication</h2> <span class="tag tag-req">Required</span>
+<ol>
+<li>In Firebase Console, go to <strong>Authentication → Sign-in method</strong></li>
+<li>Enable <strong>Email/Password</strong> — toggle it on, click Save</li>
+<li>Enable <strong>Google</strong> — select your project support email, click Save</li>
+<li>Go to <strong>Settings → Authorized domains</strong></li>
+<li>Add <code>maxmcdonough.github.io</code> to the authorized domains list</li>
+</ol>
 </div>
+
 <div class="step">
-  <p><span class="step-num">3</span><strong>Enter Your Settings</strong></p>
-  <p>On the setup screen, enter your Finnhub API key, starting account balance, and max risk percentage per trade.</p>
-  <p>Click <strong>"Launch Dashboard"</strong> and you're live!</p>
+<span class="step-num">3</span><h2>Set Up Firestore Database</h2> <span class="tag tag-req">Required</span>
+<ol>
+<li>In Firebase Console, go to <strong>Firestore Database → Create database</strong></li>
+<li>Choose <strong>"Start in test mode"</strong> (you'll lock it down later)</li>
+<li>Select region <code>us-west1</code> (closest to Vancouver)</li>
+<li>Click Enable</li>
+</ol>
+<div class="warn">⚠️ Test mode allows open access for 30 days. Before going live, update your Firestore rules (see below).</div>
+<p>Production security rules:</p>
+<pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    match /{document=**} {
+      allow read, write: if request.auth != null
+        && request.auth.token.email == 'max.mcdonough123@gmail.com';
+    }
+    match /activity/{doc} {
+      allow create: if request.auth != null;
+      allow read: if request.auth.token.email == 'max.mcdonough123@gmail.com';
+    }
+  }
+}</code></pre>
 </div>
+
 <div class="step">
-  <p><span class="step-num">4</span><strong>Demo Mode (No API Key)</strong></p>
-  <p>Leave the API key blank and click Launch to run in demo mode with simulated data. Great for exploring the dashboard before connecting live data.</p>
+<span class="step-num">4</span><h2>Set Up Stripe Payments</h2> <span class="tag tag-req">Required for Pro subscriptions</span>
+<ol>
+<li>Go to <a href="https://dashboard.stripe.com" target="_blank">dashboard.stripe.com</a> and create an account</li>
+<li>Go to <strong>Products → Add product</strong></li>
+<li>Create <strong>"TC Pro Monthly"</strong> — Price: $12.99 CAD, Recurring monthly</li>
+<li>Create <strong>"TC Pro Annual"</strong> — Price: $109.99 CAD, Recurring yearly</li>
+<li>For each product, click <strong>"Create payment link"</strong></li>
+<li>Set the Success URL to: <code>https://maxmcdonough.github.io/tradecommand-pro/dashboard.html?payment=success</code></li>
+<li>Set the Cancel URL to: <code>https://maxmcdonough.github.io/tradecommand-pro/dashboard.html?payment=cancel</code></li>
+<li>Copy each payment link URL</li>
+<li>Go to <strong>Settings → Customer portal</strong>, enable it, copy the portal link</li>
+<li>Paste all three URLs into <code>dashboard.html</code> in the <code>STRIPE_CONFIG</code> section</li>
+</ol>
+<pre><code>const STRIPE_CONFIG = {
+  monthlyLink: 'https://buy.stripe.com/your_monthly_link',
+  annualLink: 'https://buy.stripe.com/your_annual_link',
+  customerPortal: 'https://billing.stripe.com/p/login/your_portal',
+  monthlyPrice: 12.99,
+  annualPrice: 109.99,
+  currency: 'CAD'
+};</code></pre>
 </div>
 
-<h2>Dashboard Features</h2>
-<p><strong>Live Watchlist</strong> — Track your favorite stocks with real-time prices and quick buy/sell/hold signals. Add any ticker symbol.</p>
-<p><strong>Price Charts</strong> — Interactive charts with 1D, 5D, 1M, and 3M timeframes. Click any stock in your watchlist to view its chart.</p>
-<p><strong>AI Trade Signals</strong> — Algorithmic analysis using RSI, MACD, Bollinger Bands, SMA/EMA crossovers, VWAP, and volume confirmation. Signals include entry, stop loss, target, and risk/reward ratio.</p>
-<p><strong>Technical Indicators</strong> — Real-time RSI, MACD, SMA 20, EMA 9, VWAP, ATR, Bollinger Bands, and volume analysis for the selected stock.</p>
-<p><strong>Market Sentiment</strong> — Fear & Greed gauge, put/call ratio, VIX, and advance/decline breadth.</p>
-<p><strong>Sector Heatmap</strong> — Visual overview of which sectors are hot and which are not.</p>
-<p><strong>Position Calculator</strong> — Enter your entry and stop loss to automatically calculate position size, risk amount, reward, and risk/reward ratio based on your account settings.</p>
-<p><strong>Market News</strong> — Live financial news with automated sentiment analysis (bullish/bearish/neutral).</p>
-<p><strong>Trade Journal</strong> — Log your trades to track performance over time.</p>
-<p><strong>Trading Rules</strong> — Built-in risk management rules to keep you disciplined.</p>
-
-<h2>How the Signal Engine Works</h2>
-<p>The signal engine scores each stock on a multi-factor technical analysis model:</p>
-<p><strong>RSI (Relative Strength Index)</strong> — Oversold (&lt;30) = bullish, Overbought (&gt;70) = bearish</p>
-<p><strong>MACD</strong> — Positive crossover = bullish, negative = bearish</p>
-<p><strong>Moving Averages</strong> — Price above SMA20/EMA9 = bullish</p>
-<p><strong>Bollinger Bands</strong> — At lower band = potential bounce, upper band = potential reversal</p>
-<p><strong>VWAP</strong> — Above = institutional buying pressure</p>
-<p><strong>Volume</strong> — High volume confirms the direction of the move</p>
-<p>Each factor is weighted and combined into a composite score that generates BUY, SELL, or WATCH signals with confidence levels.</p>
-
-<div class="warning">
-  <p><strong>⚠️ Important Disclaimer</strong></p>
-  <p>This dashboard is for <strong>educational and informational purposes only</strong>. It does not constitute financial advice. Day trading involves substantial risk of loss. Past performance does not guarantee future results. Always do your own research and consider consulting a licensed financial advisor.</p>
-  <p>The recommended approach: <strong>Paper trade for at least 3 months</strong> before using real money.</p>
+<div class="step">
+<span class="step-num">5</span><h2>Stripe Webhooks (Optional)</h2> <span class="tag tag-opt">Advanced</span>
+<p>For automatic plan updates when payments succeed, set up a Firebase Cloud Function webhook. Without this, plans update client-side on redirect and can be set manually in the Admin panel.</p>
+<ol>
+<li>Install Firebase CLI: <code>npm install -g firebase-tools</code></li>
+<li>Run <code>firebase init functions</code> in your project folder</li>
+<li>Create a webhook that listens for <code>checkout.session.completed</code></li>
+<li>The webhook updates the user's Firestore doc with <code>plan: 'pro_monthly'</code> or <code>pro_annual'</code></li>
+<li>Add the webhook URL in Stripe → Developers → Webhooks</li>
+</ol>
 </div>
 
-<h2>Tips for Success</h2>
-<p><strong>Start small.</strong> Never risk more than 1-2% of your account on a single trade.</p>
-<p><strong>Always use stop losses.</strong> No exceptions. Ever.</p>
-<p><strong>Aim for 2:1 risk/reward minimum.</strong> The position calculator helps you stay disciplined.</p>
-<p><strong>Trade the first 2 hours and last hour.</strong> That's where the volume and volatility are.</p>
-<p><strong>Keep a trade journal.</strong> Use the built-in journal to review what's working and what isn't.</p>
-<p><strong>Never revenge trade.</strong> If you hit 3 losses in a day, stop. Come back tomorrow.</p>
+<div class="step">
+<span class="step-num">6</span><h2>Trading API Keys</h2> <span class="tag tag-free">All Free Tier</span>
+<p>Your admin account uses hardcoded keys. Pro subscribers can use your keys or enter their own.</p>
+<ul>
+<li><strong>Finnhub:</strong> <a href="https://finnhub.io/register" target="_blank">finnhub.io/register</a> — 60 calls/min free</li>
+<li><strong>Alpha Vantage:</strong> <a href="https://www.alphavantage.co/support/#api-key" target="_blank">alphavantage.co</a> — 25 calls/day free</li>
+<li><strong>NewsAPI:</strong> <a href="https://newsapi.org/register" target="_blank">newsapi.org/register</a> — 100 calls/day (dev only)</li>
+</ul>
+</div>
+
+<div class="step">
+<span class="step-num">7</span><h2>Deploy</h2>
+<p>After filling in all config values:</p>
+<pre><code>cd ~/CLAUDE\ OS/DayTrading-Dashboard
+git add -A
+git commit -m "Configure Firebase and Stripe credentials"
+git push origin main</code></pre>
+<p>Your live pages:</p>
+<ul>
+<li><strong>Landing:</strong> <a href="https://maxmcdonough.github.io/tradecommand-pro/">maxmcdonough.github.io/tradecommand-pro</a></li>
+<li><strong>Dashboard:</strong> <a href="https://maxmcdonough.github.io/tradecommand-pro/dashboard.html">.../dashboard.html</a></li>
+<li><strong>Admin:</strong> <a href="https://maxmcdonough.github.io/tradecommand-pro/admin.html">.../admin.html</a></li>
+<li><strong>Business Center:</strong> <a href="https://maxmcdonough.github.io/tradecommand-pro/business.html">.../business.html</a></li>
+</ul>
+</div>
+
+<div class="step">
+<span class="step-num">✓</span><h2>Project Files</h2>
+<ul>
+<li><code>index.html</code> — Public landing page with social sharing</li>
+<li><code>dashboard.html</code> (3,180 lines) — Trading dashboard with auth, trial, Stripe, 12 sectors</li>
+<li><code>admin.html</code> (3,185 lines) — Admin panel: users, analytics, newsletters, subscriptions, promos</li>
+<li><code>business.html</code> (5,800+ lines) — Full business ops: CRM, prospecting, leads, marketing, email campaigns, revenue, AI advisor, business plan</li>
+<li><code>SETUP-GUIDE.html</code> — This guide</li>
+<li><code>social-preview.png</code> — Social sharing image (1280x640)</li>
+</ul>
+</div>
+</div>
 </body>
 </html>
