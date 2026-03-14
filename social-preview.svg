@@ -1,0 +1,89 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0e17"/>
+      <stop offset="100%" style="stop-color:#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="blur1">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Glow blobs -->
+  <circle cx="200" cy="200" r="300" fill="#3b82f6" opacity="0.07" filter="url(#blur1)"/>
+  <circle cx="1000" cy="450" r="250" fill="#06b6d4" opacity="0.07" filter="url(#blur1)"/>
+
+  <!-- Grid lines -->
+  <line x1="0" y1="210" x2="1200" y2="210" stroke="#2a3550" stroke-width="1" opacity="0.5"/>
+  <line x1="0" y1="420" x2="1200" y2="420" stroke="#2a3550" stroke-width="1" opacity="0.5"/>
+  <line x1="300" y1="0" x2="300" y2="630" stroke="#2a3550" stroke-width="1" opacity="0.5"/>
+  <line x1="600" y1="0" x2="600" y2="630" stroke="#2a3550" stroke-width="1" opacity="0.5"/>
+  <line x1="900" y1="0" x2="900" y2="630" stroke="#2a3550" stroke-width="1" opacity="0.5"/>
+
+  <!-- Top accent bar -->
+  <rect width="1200" height="4" fill="url(#accent)"/>
+
+  <!-- Mock chart line -->
+  <polyline points="60,420 160,390 220,410 300,360 380,340 440,370 500,310 570,280 640,300 700,260 780,240 860,260 920,220 1000,200 1080,180 1140,160" fill="none" stroke="url(#accent)" stroke-width="2.5" opacity="0.4"/>
+  <polyline points="60,420 160,390 220,410 300,360 380,340 440,370 500,310 570,280 640,300 700,260 780,240 860,260 920,220 1000,200 1080,180 1140,160 1140,630 60,630" fill="url(#accent)" opacity="0.05"/>
+
+  <!-- Mock signal cards in background -->
+  <rect x="820" y="80" width="180" height="64" rx="8" fill="#1a2236" opacity="0.8"/>
+  <rect x="820" y="80" width="4" height="64" rx="2" fill="#10b981"/>
+  <text x="836" y="106" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="11" font-weight="700" fill="#94a3b8">NVDA</text>
+  <text x="836" y="124" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="13" font-weight="800" fill="#10b981">STRONG BUY</text>
+
+  <rect x="1010" y="80" width="160" height="64" rx="8" fill="#1a2236" opacity="0.8"/>
+  <rect x="1010" y="80" width="4" height="64" rx="2" fill="#3b82f6"/>
+  <text x="1026" y="106" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="11" font-weight="700" fill="#94a3b8">AMD</text>
+  <text x="1026" y="124" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="13" font-weight="800" fill="#3b82f6">BUY</text>
+
+  <rect x="820" y="158" width="180" height="64" rx="8" fill="#1a2236" opacity="0.8"/>
+  <rect x="820" y="158" width="4" height="64" rx="2" fill="#ef4444"/>
+  <text x="836" y="184" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="11" font-weight="700" fill="#94a3b8">TSLA</text>
+  <text x="836" y="202" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="13" font-weight="800" fill="#ef4444">SELL</text>
+
+  <!-- Main content -->
+  <!-- Lightning bolt icon -->
+  <text x="80" y="195" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="56">⚡</text>
+
+  <!-- Title -->
+  <text x="80" y="280" font-family="'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif" font-size="62" font-weight="800" fill="#f1f5f9" letter-spacing="-1">TradeCommand Pro</text>
+
+  <!-- Gradient underline -->
+  <rect x="80" y="294" width="580" height="3" rx="2" fill="url(#accent)"/>
+
+  <!-- Tagline -->
+  <text x="80" y="350" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="26" font-weight="400" fill="#94a3b8">Day trading intelligence. 15+ live data sources.</text>
+  <text x="80" y="385" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="26" font-weight="400" fill="#94a3b8">AI signals. Sector portfolios. Free to start.</text>
+
+  <!-- Feature pills -->
+  <rect x="80" y="430" width="130" height="32" rx="16" fill="rgba(16,185,129,0.15)"/>
+  <text x="145" y="451" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="12" font-weight="700" fill="#10b981" text-anchor="middle">🟢 AI Signals</text>
+
+  <rect x="222" y="430" width="148" height="32" rx="16" fill="rgba(59,130,246,0.15)"/>
+  <text x="296" y="451" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="12" font-weight="700" fill="#3b82f6" text-anchor="middle">📊 12 Sectors</text>
+
+  <rect x="382" y="430" width="168" height="32" rx="16" fill="rgba(6,182,212,0.15)"/>
+  <text x="466" y="451" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="12" font-weight="700" fill="#06b6d4" text-anchor="middle">⚡ Live Quotes</text>
+
+  <rect x="562" y="430" width="170" height="32" rx="16" fill="rgba(139,92,246,0.15)"/>
+  <text x="647" y="451" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="12" font-weight="700" fill="#8b5cf6" text-anchor="middle">🤖 Reddit Intel</text>
+
+  <!-- URL -->
+  <text x="80" y="550" font-family="'SF Mono', 'Fira Code', monospace" font-size="16" fill="#3b82f6" opacity="0.8">maxmcdonough.github.io/tradecommand-pro</text>
+
+  <!-- Bottom border -->
+  <rect x="0" y="626" width="1200" height="4" fill="url(#accent)"/>
+</svg>
