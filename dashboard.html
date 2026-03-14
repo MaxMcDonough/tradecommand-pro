@@ -28,6 +28,10 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 <style>
 :root{--bg:#0a0e17;--bg2:#111827;--card:#1a2236;--card2:#1f2a42;--brd:#2a3550;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--acc:#3b82f6;--grn:#10b981;--grn2:rgba(16,185,129,.12);--red:#ef4444;--red2:rgba(239,68,68,.12);--ylw:#f59e0b;--ylw2:rgba(245,158,11,.12);--pur:#8b5cf6;--pur2:rgba(139,92,246,.12);--cyn:#06b6d4;--cyn2:rgba(6,182,212,.12);--org:#f97316;--org2:rgba(249,115,22,.12)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -437,9 +441,223 @@ a{color:var(--acc);text-decoration:none}
 /* ===== SESSION BAR PORTFOLIO BTN ===== */
 .sb-port-btn{padding:4px 12px;background:rgba(59,130,246,.15);border:1px solid var(--acc);color:var(--acc);border-radius:6px;cursor:pointer;font-size:10px;font-weight:700;white-space:nowrap;margin-left:8px}
 .sb-port-btn:hover{background:var(--acc);color:#fff}
+
+/* ===== AUTH OVERLAY ===== */
+#auth-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:9999;opacity:1;transition:opacity .3s}
+#auth-overlay.hidden{display:none}
+.auth-box{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:36px;max-width:420px;width:100%}
+.auth-header{text-align:center;margin-bottom:24px}
+.auth-logo{font-size:28px;font-weight:700;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.auth-title{font-size:20px;font-weight:700;color:var(--t1)}
+.auth-subtitle{font-size:12px;color:var(--t2);margin-top:4px}
+.auth-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--brd)}
+.auth-tab{flex:1;padding:12px;text-align:center;font-size:14px;font-weight:600;color:var(--t3);background:transparent;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.auth-tab.active{color:var(--acc);border-bottom-color:var(--acc)}
+.auth-form{display:none}
+.auth-form.active{display:block}
+.auth-field{margin-bottom:14px}
+.auth-field label{display:block;font-size:12px;font-weight:600;color:var(--t3);margin-bottom:6px}
+.auth-field input{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;outline:none}
+.auth-field input:focus{border-color:var(--acc)}
+.auth-error{display:none;margin-bottom:12px;padding:10px 12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:6px;color:var(--red);font-size:12px}
+.auth-error.show{display:block}
+.auth-submit{width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:12px}
+.auth-submit:hover{box-shadow:0 4px 16px rgba(59,130,246,.3)}
+.auth-google{width:100%;padding:12px;background:var(--bg2);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.auth-google:hover{border-color:var(--acc)}
+.auth-forgot{text-align:center;margin-top:12px}
+.auth-forgot a{font-size:12px;color:var(--acc);text-decoration:none;cursor:pointer}
+.auth-forgot a:hover{text-decoration:underline}
+
+/* ===== TRIAL EXPIRED SCREEN ===== */
+#trial-expired{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9998;overflow-y:auto;padding:20px}
+#trial-expired.hidden{display:none}
+.trial-box{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:36px;max-width:500px;width:100%}
+.trial-header{text-align:center;margin-bottom:24px}
+.trial-header h1{font-size:24px;font-weight:700;color:var(--t1);margin-bottom:8px}
+.trial-header p{font-size:13px;color:var(--t2);line-height:1.6}
+.trial-keys{margin:20px 0}
+.trial-key-group{margin-bottom:16px}
+.trial-key-group label{display:block;font-size:12px;font-weight:600;color:var(--t3);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.trial-key-group label a{color:var(--acc);text-decoration:underline}
+.trial-key-group input{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;outline:none}
+.trial-key-group input:focus{border-color:var(--acc)}
+.trial-keys-note{font-size:11px;color:var(--t3);margin:16px 0;text-align:center}
+.trial-submit{width:100%;padding:14px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+.trial-submit:hover{box-shadow:0 4px 20px rgba(16,185,129,.3)}
+
+/* ===== TRIAL BADGE ===== */
+.trial-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:6px;font-size:11px;font-weight:600;color:var(--ylw)}
+
+/* ===== UPGRADE MODAL & PRICING ===== */
+#upgrade-modal{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:20px}
+#upgrade-modal.show{display:flex}
+.upgrade-box{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:36px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto}
+.upgrade-header{text-align:center;margin-bottom:28px}
+.upgrade-header h2{font-size:28px;font-weight:700;color:var(--t1);margin-bottom:8px}
+.upgrade-header p{font-size:14px;color:var(--t2);line-height:1.6}
+.close-upgrade{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--t2);font-size:24px;cursor:pointer}
+.close-upgrade:hover{color:var(--t1)}
+.pricing-container{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px}
+@media(max-width:768px){.pricing-container{grid-template-columns:1fr}}
+.pricing-card{background:linear-gradient(135deg,var(--card2),rgba(30,42,66,.5));border:2px solid var(--brd);border-radius:14px;padding:28px;position:relative;transition:all .3s}
+.pricing-card:hover{border-color:var(--acc);box-shadow:0 0 30px rgba(59,130,246,.2)}
+.pricing-card.popular{border-color:var(--grn);background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(30,42,66,.5))}
+.pricing-ribbon{position:absolute;top:-12px;right:20px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#000;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.3px}
+.pricing-plan{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:8px}
+.pricing-price{font-size:36px;font-weight:800;color:var(--t1);margin-bottom:4px;font-variant-numeric:tabular-nums}
+.pricing-period{font-size:13px;color:var(--t2);margin-bottom:24px}
+.pricing-save{font-size:12px;color:var(--grn);font-weight:600;margin-bottom:16px}
+.pricing-features{list-style:none;margin-bottom:24px}
+.pricing-features li{font-size:13px;color:var(--t2);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.pricing-features li:before{content:'✓';color:var(--grn);font-weight:700;font-size:14px}
+.btn-subscribe{width:100%;padding:14px;border-radius:10px;border:none;font-weight:700;font-size:14px;cursor:pointer;transition:all .3s;color:#fff}
+.btn-subscribe.monthly{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.btn-subscribe.monthly:hover{box-shadow:0 4px 24px rgba(59,130,246,.4);transform:translateY(-2px)}
+.btn-subscribe.annual{background:linear-gradient(135deg,#10b981,#059669)}
+.btn-subscribe.annual:hover{box-shadow:0 4px 24px rgba(16,185,129,.4);transform:translateY(-2px)}
+.pricing-note{text-align:center;font-size:12px;color:var(--t3);margin-top:20px}
+.features-grid{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:20px}
+.features-grid h4{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:16px}
+.features-grid ul{display:grid;grid-template-columns:1fr 1fr;gap:12px;list-style:none}
+@media(max-width:768px){.features-grid ul{grid-template-columns:1fr}}
+.features-grid li{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px}
+.features-grid li:before{content:'•';color:var(--acc);font-weight:700}
+.trial-expired-content{text-align:center;margin-bottom:28px}
+.trial-expired-heading{font-size:24px;font-weight:700;color:var(--t1);margin-bottom:8px}
+.trial-expired-text{font-size:13px;color:var(--t2);line-height:1.6}
+.upgrade-options{display:grid;grid-template-columns:1fr;gap:24px;margin-bottom:24px}
+.upgrade-option{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:20px}
+.upgrade-option h3{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.upgrade-option.primary h3{color:var(--grn)}
+.upgrade-option.primary{border-color:var(--grn)}
+.upgrade-toggle{cursor:pointer;user-select:none;padding:12px;background:var(--card2);border-radius:8px;border:1px solid var(--brd)}
+.upgrade-toggle-text{font-size:13px;color:var(--t1)}
+.upgrade-content{display:none;margin-top:12px}
+.upgrade-content.show{display:block}
+.pro-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.4);border-radius:4px;font-size:10px;font-weight:600;color:var(--grn)}
+
+/* ===== ADMIN LINK ===== */
+#admin-link a{color:var(--acc);font-weight:600;font-size:11px;text-decoration:none}
+#admin-link a:hover{text-decoration:underline}
+
+/* ===== SIGN OUT BUTTON ===== */
+.btn-signout{padding:5px 11px;background:var(--card2);border:1px solid var(--brd);border-radius:6px;color:var(--t2);font-size:11px;font-weight:600;cursor:pointer}
+.btn-signout:hover{border-color:var(--red);color:var(--red)}
 </style>
 </head>
 <body>
+
+<!-- ===== AUTH OVERLAY ===== -->
+<div id="auth-overlay">
+  <div class="auth-box">
+    <div class="auth-header">
+      <div class="auth-logo">⚡</div>
+      <div class="auth-title">TradeCommand Pro</div>
+      <div class="auth-subtitle">Sign in to continue</div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="signin">Sign In</button>
+      <button class="auth-tab" data-tab="signup">Create Account</button>
+    </div>
+
+    <!-- SIGN IN FORM -->
+    <div id="form-signin" class="auth-form active">
+      <div class="auth-error" id="signin-error"></div>
+      <div class="auth-field">
+        <label>Email</label>
+        <input id="signin-email" type="email" placeholder="you@example.com">
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input id="signin-password" type="password" placeholder="••••••••">
+      </div>
+      <button class="auth-submit" onclick="authSignIn()">Sign In</button>
+      <button class="auth-google" onclick="authGoogle()">🔵 Sign in with Google</button>
+      <div class="auth-forgot">
+        <a onclick="showForgotForm()">Forgot password?</a>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD FORM -->
+    <div id="form-forgot" class="auth-form">
+      <div class="auth-error" id="forgot-error"></div>
+      <p style="font-size:13px;color:var(--t2);margin-bottom:16px">Enter your email to reset your password:</p>
+      <div class="auth-field">
+        <label>Email</label>
+        <input id="forgot-email" type="email" placeholder="you@example.com">
+      </div>
+      <button class="auth-submit" onclick="authForgot()">Send Reset Email</button>
+      <button class="auth-submit" style="background:var(--card2);color:var(--t2);margin-top:8px" onclick="showSignInForm()">Back to Sign In</button>
+    </div>
+
+    <!-- SIGN UP FORM -->
+    <div id="form-signup" class="auth-form">
+      <div class="auth-error" id="signup-error"></div>
+      <div class="auth-field">
+        <label>Display Name</label>
+        <input id="signup-name" type="text" placeholder="Your name">
+      </div>
+      <div class="auth-field">
+        <label>Email</label>
+        <input id="signup-email" type="email" placeholder="you@example.com">
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input id="signup-password" type="password" placeholder="At least 6 characters">
+      </div>
+      <button class="auth-submit" onclick="authSignUp()">Create Account</button>
+      <button class="auth-google" onclick="authGoogle()">🔵 Sign up with Google</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TRIAL EXPIRED SCREEN ===== -->
+<div id="trial-expired" class="hidden">
+  <div class="trial-box">
+    <div class="trial-expired-content">
+      <div class="trial-expired-heading">Your 7-Day Trial Has Ended</div>
+      <div class="trial-expired-text">Choose how you'd like to continue:</div>
+    </div>
+
+    <div class="upgrade-options">
+      <!-- OPTION A: UPGRADE TO PRO -->
+      <div class="upgrade-option primary">
+        <h3>⚡ Option A: Upgrade to Pro</h3>
+        <div id="trial-pricing-container" class="pricing-container">
+          <!-- Pricing cards rendered by JS -->
+        </div>
+        <div class="pricing-note" style="margin-top:12px">Prices shown in CAD. USD equivalent charged for US customers.</div>
+      </div>
+
+      <!-- OPTION B: USE YOUR OWN KEYS -->
+      <div class="upgrade-option">
+        <div class="upgrade-toggle" onclick="toggleCustomKeys()">
+          <div class="upgrade-toggle-text">Or use your own API keys (free)</div>
+        </div>
+        <div id="custom-keys-section" class="upgrade-content">
+          <div class="trial-keys" style="margin-top:12px">
+            <div class="trial-key-group">
+              <label>Finnhub API Key <a href="https://finnhub.io" target="_blank">(Get free key)</a></label>
+              <input id="trial-fh" type="text" placeholder="e.g., d6qkh2hr01qhcr...">
+            </div>
+            <div class="trial-key-group">
+              <label>Alpha Vantage API Key <a href="https://www.alphavantage.co" target="_blank">(Get free key)</a></label>
+              <input id="trial-av" type="text" placeholder="e.g., WGIEYOIJEINA74F8">
+            </div>
+            <div class="trial-key-group">
+              <label>NewsAPI Key <a href="https://newsapi.org" target="_blank">(Get free key)</a></label>
+              <input id="trial-na" type="text" placeholder="e.g., fb90a7d7e29d42f3">
+            </div>
+          </div>
+          <p class="trial-keys-note">All keys are stored securely and only transmitted for API calls. No data is shared with third parties.</p>
+          <button class="trial-submit" onclick="submitTrialKeys()">Activate with Keys</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ===== SETUP ===== -->
 <div id="setup">
@@ -516,10 +734,15 @@ a{color:var(--acc);text-decoration:none}
   <div class="tickers" id="tickers"></div>
   <div class="top-r">
     <span id="user-name" style="color:var(--grn);font-weight:600;display:none"></span>
+    <span id="trial-badge" style="display:none" class="trial-badge"></span>
+    <button id="btn-upgrade" onclick="showUpgradeModal()" style="display:none;padding:5px 11px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#000;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">⚡ Upgrade</button>
+    <button id="btn-manage-sub" onclick="openCustomerPortal()" style="display:none;padding:5px 11px;background:var(--card2);border:1px solid var(--grn);border-radius:6px;color:var(--grn);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">Manage Plan</button>
+    <span id="admin-link" style="display:none"><a href="admin.html">🔧 Admin</a></span>
     <span><span class="dot" id="m-dot"></span><span id="m-st">--</span></span>
     <span id="clock" style="font-variant-numeric:tabular-nums">--:--</span>
     <span style="color:var(--t3)" id="src-ct">0 sources</span>
     <button onclick="openSettings()" style="padding:3px 9px;background:var(--card2);border:1px solid var(--brd);border-radius:5px;color:var(--t2);font-size:11px;cursor:pointer" title="Settings">⚙️</button>
+    <button id="btn-signout" onclick="authSignOut()" class="btn-signout" style="display:none">Sign Out</button>
   </div>
 </div>
 
@@ -979,6 +1202,321 @@ a{color:var(--acc);text-decoration:none}
 </div>
 
 <script>
+// ===== FIREBASE CONFIG =====
+const firebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
+
+// ===== AUTH UI FUNCTIONS =====
+function showAuth() {
+  document.getElementById('auth-overlay').classList.remove('hidden');
+  document.getElementById('setup').style.display = 'none';
+}
+
+function hideAuth() {
+  document.getElementById('auth-overlay').classList.add('hidden');
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById(`form-${tab}`).classList.add('active');
+}
+
+document.querySelectorAll('.auth-tab').forEach(tab => {
+  tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
+});
+
+function showForgotForm() {
+  document.getElementById('form-signin').classList.remove('active');
+  document.getElementById('form-forgot').classList.add('active');
+}
+
+function showSignInForm() {
+  document.getElementById('form-forgot').classList.remove('active');
+  document.getElementById('form-signin').classList.add('active');
+}
+
+function clearAuthErrors() {
+  document.getElementById('signin-error').classList.remove('show');
+  document.getElementById('signup-error').classList.remove('show');
+  document.getElementById('forgot-error').classList.remove('show');
+}
+
+function showAuthError(formType, msg) {
+  clearAuthErrors();
+  const errorEl = document.getElementById(`${formType}-error`);
+  if(errorEl) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('show');
+  }
+}
+
+async function authSignIn() {
+  const email = document.getElementById('signin-email').value.trim();
+  const pass = document.getElementById('signin-password').value.trim();
+  if(!email || !pass) {
+    showAuthError('signin', 'Email and password required');
+    return;
+  }
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    showAuthError('signin', e.message);
+  }
+}
+
+async function authSignUp() {
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-password').value.trim();
+  if(!name || !email || !pass) {
+    showAuthError('signup', 'All fields required');
+    return;
+  }
+  if(pass.length < 6) {
+    showAuthError('signup', 'Password must be at least 6 characters');
+    return;
+  }
+  try {
+    const result = await auth.createUserWithEmailAndPassword(email, pass);
+    const user = result.user;
+    await db.collection('users').doc(user.uid).set({
+      email, displayName: name,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      trialStart: Date.now(),
+      trialEnds: Date.now() + 7*24*60*60*1000,
+      plan: 'trial',
+      apiKeys: { fh:'', av:'', na:'' },
+      lastActive: Date.now(),
+      loginCount: 1,
+      sectorsUsed: [],
+      tickersViewed: [],
+      totalTrades: 0,
+      disabled: false
+    });
+  } catch(e) {
+    showAuthError('signup', e.message);
+  }
+}
+
+async function authGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+    const doc = await db.collection('users').doc(user.uid).get();
+    if(!doc.exists) {
+      await db.collection('users').doc(user.uid).set({
+        email: user.email, displayName: user.displayName || 'User',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        trialStart: Date.now(),
+        trialEnds: Date.now() + 7*24*60*60*1000,
+        plan: 'trial',
+        apiKeys: { fh:'', av:'', na:'' },
+        lastActive: Date.now(),
+        loginCount: 1,
+        sectorsUsed: [],
+        tickersViewed: [],
+        totalTrades: 0,
+        disabled: false
+      });
+    }
+  } catch(e) {
+    showAuthError('signin', e.message);
+  }
+}
+
+async function authForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  if(!email) {
+    showAuthError('forgot', 'Email required');
+    return;
+  }
+  try {
+    await auth.sendPasswordResetEmail(email);
+    document.getElementById('forgot-error').classList.remove('show');
+    const msg = document.getElementById('forgot-error');
+    msg.textContent = 'Password reset email sent! Check your inbox.';
+    msg.style.background = 'rgba(16,185,129,.1)';
+    msg.style.borderColor = 'rgba(16,185,129,.3)';
+    msg.style.color = 'var(--grn)';
+    msg.classList.add('show');
+  } catch(e) {
+    showAuthError('forgot', e.message);
+  }
+}
+
+function authSignOut() {
+  auth.signOut().then(() => {
+    D.isAdmin = false;
+    showAuth();
+  }).catch(e => console.error(e));
+}
+
+async function submitTrialKeys() {
+  const fh = document.getElementById('trial-fh').value.trim();
+  const av = document.getElementById('trial-av').value.trim();
+  const na = document.getElementById('trial-na').value.trim();
+  if(!fh || !av || !na) {
+    alert('All API keys required');
+    return;
+  }
+  const user = auth.currentUser;
+  if(!user) return;
+  try {
+    await db.collection('users').doc(user.uid).update({
+      apiKeys: { fh, av, na },
+      plan: 'active',
+      lastActive: Date.now()
+    });
+    D.fh = fh;
+    D.av = av;
+    D.na = na;
+    document.getElementById('trial-expired').classList.add('hidden');
+    document.getElementById('setup').style.display = 'flex';
+    launch();
+  } catch(e) {
+    alert('Error saving keys: ' + e.message);
+  }
+}
+
+async function handleAuthState(user) {
+  if(!user) {
+    showAuth();
+    return;
+  }
+  try {
+    const docSnap = await db.collection('users').doc(user.uid).get();
+    const userData = docSnap.data();
+    if(user.email === ADMIN_EMAIL) {
+      D.isAdmin = true;
+      const adminLink = document.getElementById('admin-link');
+      if(adminLink) adminLink.style.display = 'inline';
+    } else {
+      D.isAdmin = false;
+    }
+    if(!userData) {
+      const newUserData = {
+        email: user.email, displayName: user.displayName || 'User',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        trialStart: Date.now(),
+        trialEnds: Date.now() + 7*24*60*60*1000,
+        plan: 'trial',
+        apiKeys: { fh:'', av:'', na:'' },
+        lastActive: Date.now(),
+        loginCount: 1,
+        sectorsUsed: [],
+        tickersViewed: [],
+        totalTrades: 0,
+        disabled: false
+      };
+      await db.collection('users').doc(user.uid).set(newUserData);
+      handleAuthState(user);
+      return;
+    }
+    if(!D.isAdmin) {
+      // Check Pro subscription status
+      if(userData.plan === 'pro_monthly' || userData.plan === 'pro_annual') {
+        const subscriptionEnd = userData.subscriptionEnd ? new Date(userData.subscriptionEnd) : null;
+        if(subscriptionEnd && new Date() > subscriptionEnd) {
+          // Subscription expired
+          document.getElementById('trial-expired').classList.remove('hidden');
+          document.getElementById('setup').style.display = 'none';
+          return;
+        } else {
+          // Active Pro subscription
+          const badge = document.getElementById('trial-badge');
+          if(badge) {
+            badge.textContent = '⚡ Pro';
+            badge.style.display = 'inline-flex';
+            badge.style.background = 'rgba(16,185,129,.15)';
+            badge.style.borderColor = 'rgba(16,185,129,.3)';
+            badge.style.color = 'var(--grn)';
+          }
+          // Use admin keys for Pro users
+          const adminKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
+          D.fh = adminKeys.fh;
+          D.av = adminKeys.av;
+          D.na = adminKeys.na;
+        }
+      } else if(userData.plan === 'trial') {
+        const now = Date.now();
+        if(now > userData.trialEnds) {
+          document.getElementById('trial-expired').classList.remove('hidden');
+          document.getElementById('setup').style.display = 'none';
+          return;
+        } else {
+          const daysLeft = Math.ceil((userData.trialEnds - now) / (24*60*60*1000));
+          const badge = document.getElementById('trial-badge');
+          if(badge) {
+            badge.textContent = `⏳ Trial: ${daysLeft} days left`;
+            badge.style.display = 'inline-flex';
+          }
+        }
+      } else if(userData.plan === 'active' && userData.apiKeys) {
+        D.fh = userData.apiKeys.fh || D.fh;
+        D.av = userData.apiKeys.av || D.av;
+        D.na = userData.apiKeys.na || D.na;
+      }
+    }
+    D.name = userData.displayName || 'User';
+    document.getElementById('user-name').textContent = `👤 ${D.name}`;
+    document.getElementById('user-name').style.display = 'inline';
+    
+    // Show/hide upgrade and manage buttons based on plan
+    const upgradeBtn = document.getElementById('btn-upgrade');
+    const manageBtn = document.getElementById('btn-manage-sub');
+    if (!D.isAdmin) {
+      if (userData.plan === 'pro_monthly' || userData.plan === 'pro_annual') {
+        if (upgradeBtn) upgradeBtn.style.display = 'none';
+        if (manageBtn) manageBtn.style.display = 'block';
+      } else {
+        if (upgradeBtn) upgradeBtn.style.display = 'block';
+        if (manageBtn) manageBtn.style.display = 'none';
+      }
+    } else {
+      if (upgradeBtn) upgradeBtn.style.display = 'none';
+      if (manageBtn) manageBtn.style.display = 'none';
+    }
+    
+    const signOutBtn = document.getElementById('btn-signout');
+    if(signOutBtn) signOutBtn.style.display = 'block';
+    await db.collection('users').doc(user.uid).update({
+      lastActive: Date.now(),
+      loginCount: firebase.firestore.FieldValue.increment(1)
+    }, { merge: true });
+    hideAuth();
+    document.getElementById('setup').style.display = 'flex';
+    setTimeout(launch, 50);
+  } catch(e) {
+    console.error('Auth state error:', e);
+  }
+}
+
+function trackActivity(type, data) {
+  const user = auth.currentUser;
+  if(!user) return;
+  db.collection('activity').add({
+    uid: user.uid,
+    email: user.email,
+    type: type,
+    data: data,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(e => console.error('Activity tracking error:', e));
+}
+
 // ===== STATE =====
 const D = {
   fh:'d6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0',
@@ -998,7 +1536,8 @@ const D = {
     realized: 0,       // closed P&L
     positions: [],     // [{sym, shares, entry, stop, target, invested, status:'open'/'closed', pnl}]
     tradeCount: 0
-  }
+  },
+  isAdmin: false       // set by Firebase auth handler for admin users
 };
 
 // ===== PERSISTENCE =====
@@ -1038,30 +1577,13 @@ function clearSaved(){
 }
 // Auto-launch on page open — pre-fill form fields from D defaults then launch
 window.addEventListener('DOMContentLoaded',()=>{
-  // Fill form with hardcoded/saved values
-  document.getElementById('k-fh').value = D.fh;
-  document.getElementById('k-av').value = D.av;
-  document.getElementById('k-na').value = D.na;
-  document.getElementById('p-name').value = D.name;
-  document.getElementById('s-bal').value = D.bal;
-  document.getElementById('s-risk').value = D.risk;
-
-  // Check localStorage for any overrides (e.g. if user changed settings)
-  try{
-    const raw=localStorage.getItem('tcp_v2');
-    if(raw){
-      const p=JSON.parse(raw);
-      if(p.fh){document.getElementById('k-fh').value=p.fh;}
-      if(p.av){document.getElementById('k-av').value=p.av;}
-      if(p.na){document.getElementById('k-na').value=p.na;}
-      if(p.name){document.getElementById('p-name').value=p.name;}
-      if(p.bal){document.getElementById('s-bal').value=p.bal;}
-      if(p.risk){document.getElementById('s-risk').value=p.risk;}
-    }
-  }catch(e){}
-
-  // Auto-launch immediately — skip the setup screen
-  setTimeout(launch, 50);
+  // Handle payment return params
+  handlePaymentReturn();
+  // Render pricing cards in modals
+  renderPricingCards('trial-pricing-container');
+  renderPricingCards('upgrade-modal-pricing');
+  // Firebase auth state listener handles everything
+  auth.onAuthStateChanged(handleAuthState);
 });
 
 // ===== SESSION TRACKER =====
@@ -1306,6 +1828,9 @@ function commitPosition() {
   const shares = Math.max(1, Math.floor(_investAmt / price));
   const invested = shares * price;
   const maxLoss = shares * Math.abs(price - stop);
+
+  // Track activity
+  trackActivity('trade', {sym: _investSym, action: isBuy ? 'BUY' : 'SELL', shares, price, invested});
 
   // Add to session
   D.session.positions.push({sym:_investSym, shares, entry:price, stop, target, invested, status:'open', pnl:0});
@@ -1712,6 +2237,9 @@ async function openStock(sym) {
   M_SYM = sym;
   document.getElementById('modal-bg').style.display = 'block';
   document.body.style.overflow = 'hidden';
+
+  // Track activity
+  trackActivity('ticker_view', {ticker: sym});
 
   // Set initial state from existing data
   const s = D.sd[sym] || {};
@@ -2219,6 +2747,9 @@ function setSector(id, el) {
   _activeSector = id;
   const sec = SECTORS[id];
 
+  // Track activity
+  trackActivity('sector_view', {sector: id});
+
   // Update sector nav active state
   document.querySelectorAll('.sec-btn').forEach(b => b.classList.remove('on'));
   if (el) el.classList.add('on');
@@ -2470,6 +3001,180 @@ function mkSources(){
   document.getElementById('src-ct').textContent=ct+' sources live';
   document.getElementById('src-list').innerHTML=srcs.map(s=>`<span class="src-badge" style="background:${s.live?'var(--grn2)':'rgba(100,116,139,.12)'};color:${s.live?'var(--grn)':'var(--t3)'}${s.live?'':';opacity:.6'}">${s.live?'✓':''} ${s.n}: ${s.d}</span>`).join('');
 }
+
+// ===== STRIPE CONFIG =====
+const STRIPE_CONFIG = {
+  monthlyLink: 'https://buy.stripe.com/YOUR_MONTHLY_LINK',
+  annualLink: 'https://buy.stripe.com/YOUR_ANNUAL_LINK',
+  customerPortal: 'https://billing.stripe.com/p/login/YOUR_PORTAL_LINK',
+  monthlyPrice: 12.99,
+  annualPrice: 109.99,
+  currency: 'CAD'
+};
+
+// ===== PAYMENT & SUBSCRIPTION =====
+function openCheckout(plan) {
+  const user = firebase.auth().currentUser;
+  if (!user) return;
+  
+  const link = plan === 'annual' ? STRIPE_CONFIG.annualLink : STRIPE_CONFIG.monthlyLink;
+  const url = new URL(link);
+  url.searchParams.set('client_reference_id', user.uid);
+  url.searchParams.set('prefilled_email', user.email);
+  window.open(url.toString(), '_blank');
+}
+
+function openCustomerPortal() {
+  const user = firebase.auth().currentUser;
+  if (!user) return;
+  
+  const url = new URL(STRIPE_CONFIG.customerPortal);
+  url.searchParams.set('prefilled_email', user.email);
+  window.open(url.toString(), '_blank');
+}
+
+function showUpgradeModal() {
+  document.getElementById('upgrade-modal').classList.add('show');
+  renderPricingCards('upgrade-modal-pricing');
+}
+
+function hideUpgradeModal() {
+  document.getElementById('upgrade-modal').classList.remove('show');
+}
+
+function toggleCustomKeys() {
+  const section = document.getElementById('custom-keys-section');
+  section.classList.toggle('show');
+}
+
+function renderPricingCards(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  const monthlyPrice = STRIPE_CONFIG.monthlyPrice.toFixed(2);
+  const annualPrice = STRIPE_CONFIG.annualPrice.toFixed(2);
+  const annualSavings = ((STRIPE_CONFIG.monthlyPrice * 12) - STRIPE_CONFIG.annualPrice).toFixed(2);
+  
+  container.innerHTML = `
+    <div class="pricing-card">
+      <div class="pricing-plan">Monthly</div>
+      <div class="pricing-price">$${monthlyPrice}</div>
+      <div class="pricing-period">per month, billed monthly</div>
+      <ul class="pricing-features">
+        <li>All 12 sectors</li>
+        <li>Unlimited signals</li>
+        <li>Priority data feeds</li>
+        <li>No API key hassle</li>
+      </ul>
+      <button class="btn-subscribe monthly" onclick="openCheckout('monthly')">Subscribe Now</button>
+    </div>
+    
+    <div class="pricing-card popular">
+      <div class="pricing-ribbon">SAVE $${annualSavings}</div>
+      <div class="pricing-plan">Annual</div>
+      <div class="pricing-price">$${annualPrice}</div>
+      <div class="pricing-period">per year, billed once</div>
+      <div class="pricing-save">Save $${annualSavings} vs monthly</div>
+      <ul class="pricing-features">
+        <li>All 12 sectors</li>
+        <li>Unlimited signals</li>
+        <li>Priority data feeds</li>
+        <li>No API key hassle</li>
+      </ul>
+      <button class="btn-subscribe annual" onclick="openCheckout('annual')">Subscribe Now</button>
+    </div>
+  `;
+}
+
+function checkSubscription() {
+  const user = firebase.auth().currentUser;
+  if (!user) return;
+  
+  const userDoc = firebase.firestore().collection('users').doc(user.uid);
+  userDoc.get().then(doc => {
+    if (!doc.exists) return;
+    
+    const data = doc.data();
+    const plan = data.plan || 'trial';
+    const subscriptionEnd = data.subscriptionEnd ? new Date(data.subscriptionEnd) : null;
+    
+    // Check if subscription has expired
+    if (subscriptionEnd && new Date() > subscriptionEnd && plan.startsWith('pro_')) {
+      // Update to expired
+      userDoc.update({ plan: 'expired', keys: {} });
+      showTrialExpired();
+      return;
+    }
+    
+    // Show appropriate badge
+    if (plan === 'pro_monthly' || plan === 'pro_annual') {
+      document.getElementById('trial-badge').textContent = '⚡ Pro';
+      document.getElementById('trial-badge').style.display = 'inline-flex';
+      document.getElementById('trial-badge').style.background = 'rgba(16,185,129,.15)';
+      document.getElementById('trial-badge').style.borderColor = 'rgba(16,185,129,.3)';
+      document.getElementById('trial-badge').style.color = 'var(--grn)';
+    } else if (plan === 'trial') {
+      document.getElementById('trial-badge').textContent = '⏰ Trial';
+      document.getElementById('trial-badge').style.display = 'inline-flex';
+    } else if (plan === 'active') {
+      // Own keys
+      document.getElementById('trial-badge').style.display = 'none';
+    }
+  });
+}
+
+function handlePaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    showToast('✅ Welcome to Pro! Your subscription is active.', 'green');
+    const user = firebase.auth().currentUser;
+    if (user) {
+      // Client-side update (should be done via webhook in production)
+      const plan = params.get('plan') || 'pro_monthly';
+      firebase.firestore().collection('users').doc(user.uid).update({
+        plan: plan,
+        subscriptionStart: new Date(),
+        subscriptionEnd: new Date(new Date().getTime() + (plan === 'pro_annual' ? 365 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000))
+      });
+      checkSubscription();
+    }
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else if (params.get('payment') === 'cancel') {
+    showToast('Payment cancelled. You can upgrade anytime.', 'info');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+}
+
+</script>
+
+<!-- ===== UPGRADE MODAL ===== -->
+<div id="upgrade-modal">
+  <div class="upgrade-box">
+    <button class="close-upgrade" onclick="hideUpgradeModal()">×</button>
+    <div class="upgrade-header">
+      <h2>Upgrade to Pro</h2>
+      <p>Unlock all 12 sectors and unlimited signals. No API key setup required.</p>
+    </div>
+    <div id="upgrade-modal-pricing" class="pricing-container">
+      <!-- Pricing cards rendered by renderPricingCards() -->
+    </div>
+    <div class="pricing-note">Prices shown in CAD. USD equivalent charged for US customers.</div>
+    <div class="features-grid">
+      <h4>What You Get with Pro:</h4>
+      <ul>
+        <li>All 12 sectors (Energy, Healthcare, Tech, Finance, etc.)</li>
+        <li>Unlimited AI trade signals</li>
+        <li>Priority data feeds with no rate limits</li>
+        <li>No API key setup or management</li>
+        <li>5x daily market briefings</li>
+        <li>Reddit sentiment analysis</li>
+        <li>Real-time session tracking</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 </script>
 </body>
 </html>
