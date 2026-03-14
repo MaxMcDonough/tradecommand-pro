@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TradeCommand Pro — Setup Guide</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0e17; color: #e2e8f0; max-width: 700px; margin: 40px auto; padding: 20px; line-height: 1.8; }
+  h1 { background: linear-gradient(135deg, #3b82f6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  h2 { color: #3b82f6; margin-top: 32px; border-bottom: 1px solid #2a3550; padding-bottom: 8px; }
+  a { color: #3b82f6; }
+  code { background: #1a2236; padding: 2px 8px; border-radius: 4px; font-size: 14px; }
+  .step { background: #1a2236; border: 1px solid #2a3550; border-radius: 10px; padding: 20px; margin: 16px 0; }
+  .step-num { display: inline-block; width: 28px; height: 28px; background: #3b82f6; color: #fff; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700; font-size: 14px; margin-right: 10px; }
+  .warning { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); border-radius: 8px; padding: 16px; margin: 16px 0; }
+  .warning strong { color: #f59e0b; }
+</style>
+</head>
+<body>
+<h1>⚡ TradeCommand Pro — Setup Guide</h1>
+<p>Get your day trading dashboard running in under 2 minutes.</p>
+
+<h2>Quick Start</h2>
+<div class="step">
+  <p><span class="step-num">1</span><strong>Get a Free Finnhub API Key</strong></p>
+  <p>Go to <a href="https://finnhub.io/register" target="_blank">finnhub.io/register</a> and create a free account. Your API key will be on the dashboard immediately after signup.</p>
+  <p>Free tier includes: 60 API calls/minute, real-time US stock data, WebSocket streaming, and market news.</p>
+</div>
+<div class="step">
+  <p><span class="step-num">2</span><strong>Open the Dashboard</strong></p>
+  <p>Open <code>dashboard.html</code> in any modern web browser (Chrome, Firefox, Safari, Edge).</p>
+</div>
+<div class="step">
+  <p><span class="step-num">3</span><strong>Enter Your Settings</strong></p>
+  <p>On the setup screen, enter your Finnhub API key, starting account balance, and max risk percentage per trade.</p>
+  <p>Click <strong>"Launch Dashboard"</strong> and you're live!</p>
+</div>
+<div class="step">
+  <p><span class="step-num">4</span><strong>Demo Mode (No API Key)</strong></p>
+  <p>Leave the API key blank and click Launch to run in demo mode with simulated data. Great for exploring the dashboard before connecting live data.</p>
+</div>
+
+<h2>Dashboard Features</h2>
+<p><strong>Live Watchlist</strong> — Track your favorite stocks with real-time prices and quick buy/sell/hold signals. Add any ticker symbol.</p>
+<p><strong>Price Charts</strong> — Interactive charts with 1D, 5D, 1M, and 3M timeframes. Click any stock in your watchlist to view its chart.</p>
+<p><strong>AI Trade Signals</strong> — Algorithmic analysis using RSI, MACD, Bollinger Bands, SMA/EMA crossovers, VWAP, and volume confirmation. Signals include entry, stop loss, target, and risk/reward ratio.</p>
+<p><strong>Technical Indicators</strong> — Real-time RSI, MACD, SMA 20, EMA 9, VWAP, ATR, Bollinger Bands, and volume analysis for the selected stock.</p>
+<p><strong>Market Sentiment</strong> — Fear & Greed gauge, put/call ratio, VIX, and advance/decline breadth.</p>
+<p><strong>Sector Heatmap</strong> — Visual overview of which sectors are hot and which are not.</p>
+<p><strong>Position Calculator</strong> — Enter your entry and stop loss to automatically calculate position size, risk amount, reward, and risk/reward ratio based on your account settings.</p>
+<p><strong>Market News</strong> — Live financial news with automated sentiment analysis (bullish/bearish/neutral).</p>
+<p><strong>Trade Journal</strong> — Log your trades to track performance over time.</p>
+<p><strong>Trading Rules</strong> — Built-in risk management rules to keep you disciplined.</p>
+
+<h2>How the Signal Engine Works</h2>
+<p>The signal engine scores each stock on a multi-factor technical analysis model:</p>
+<p><strong>RSI (Relative Strength Index)</strong> — Oversold (&lt;30) = bullish, Overbought (&gt;70) = bearish</p>
+<p><strong>MACD</strong> — Positive crossover = bullish, negative = bearish</p>
+<p><strong>Moving Averages</strong> — Price above SMA20/EMA9 = bullish</p>
+<p><strong>Bollinger Bands</strong> — At lower band = potential bounce, upper band = potential reversal</p>
+<p><strong>VWAP</strong> — Above = institutional buying pressure</p>
+<p><strong>Volume</strong> — High volume confirms the direction of the move</p>
+<p>Each factor is weighted and combined into a composite score that generates BUY, SELL, or WATCH signals with confidence levels.</p>
+
+<div class="warning">
+  <p><strong>⚠️ Important Disclaimer</strong></p>
+  <p>This dashboard is for <strong>educational and informational purposes only</strong>. It does not constitute financial advice. Day trading involves substantial risk of loss. Past performance does not guarantee future results. Always do your own research and consider consulting a licensed financial advisor.</p>
+  <p>The recommended approach: <strong>Paper trade for at least 3 months</strong> before using real money.</p>
+</div>
+
+<h2>Tips for Success</h2>
+<p><strong>Start small.</strong> Never risk more than 1-2% of your account on a single trade.</p>
+<p><strong>Always use stop losses.</strong> No exceptions. Ever.</p>
+<p><strong>Aim for 2:1 risk/reward minimum.</strong> The position calculator helps you stay disciplined.</p>
+<p><strong>Trade the first 2 hours and last hour.</strong> That's where the volume and volatility are.</p>
+<p><strong>Keep a trade journal.</strong> Use the built-in journal to review what's working and what isn't.</p>
+<p><strong>Never revenge trade.</strong> If you hit 3 losses in a day, stop. Come back tomorrow.</p>
+</body>
+</html>
