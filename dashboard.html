@@ -649,6 +649,74 @@ a{color:var(--acc);text-decoration:none}
 /* Step header common */
 .onboard-actions{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
 
+/* ===== ONBOARDING — PERSONALIZATION ===== */
+/* Step 1 – Profile */
+.ob-profile-title{text-align:center;margin-bottom:28px}
+.ob-profile-title h2{font-size:30px;font-weight:800;color:#fff;margin-bottom:8px}
+.ob-profile-title p{font-size:14px;color:rgba(255,255,255,.45)}
+.ob-profile-sections{display:flex;flex-direction:column;gap:26px;margin-bottom:28px}
+.ob-profile-sections>div>label{display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px}
+.ob-name-input{width:100%;max-width:400px;display:block;margin:0 auto;padding:14px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:16px;outline:none;text-align:center;font-weight:600}
+.ob-name-input:focus{border-color:var(--acc)}
+.ob-name-input::placeholder{color:rgba(255,255,255,.2);font-weight:400}
+.ob-balance-presets{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px}
+.ob-balance-btn{padding:8px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(255,255,255,.55);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.ob-balance-btn:hover{border-color:rgba(255,255,255,.25);color:#fff}
+.ob-balance-btn.selected{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.5);color:#f59e0b}
+.ob-balance-custom{display:flex;align-items:center;gap:8px;justify-content:center}
+.ob-balance-custom span{color:rgba(255,255,255,.4);font-size:13px}
+.ob-balance-custom input{width:140px;padding:8px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-size:13px;outline:none;text-align:center}
+.ob-balance-custom input:focus{border-color:var(--acc)}
+.ob-risk-cards{display:flex;gap:12px;justify-content:center}
+.ob-risk-card{flex:1;max-width:200px;padding:16px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;text-align:center;cursor:pointer;transition:all .2s}
+.ob-risk-card:hover{border-color:rgba(255,255,255,.2)}
+.ob-risk-card.selected{border-color:var(--acc);background:rgba(245,158,11,.08)}
+.ob-risk-icon{font-size:28px;margin-bottom:8px}
+.ob-risk-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
+.ob-risk-desc{font-size:11px;color:rgba(255,255,255,.4);line-height:1.4}
+/* Step 2 – Focus */
+.ob-focus-title{text-align:center;margin-bottom:22px}
+.ob-focus-title h2{font-size:30px;font-weight:800;color:#fff;margin-bottom:8px}
+.ob-focus-title p{font-size:14px;color:rgba(255,255,255,.45)}
+.ob-focus-cards{display:flex;gap:12px;margin-bottom:18px;justify-content:center}
+.ob-focus-card{flex:1;max-width:250px;padding:18px 14px;background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.08);border-radius:16px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.ob-focus-card:hover{border-color:rgba(255,255,255,.2)}
+.ob-focus-card.selected{border-color:var(--acc);background:rgba(245,158,11,.08)}
+.ob-focus-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--acc),#10b981);color:#000;font-size:9px;font-weight:800;padding:3px 12px;border-radius:100px;white-space:nowrap;letter-spacing:.8px}
+.ob-focus-icon{font-size:28px;margin-bottom:8px}
+.ob-focus-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
+.ob-focus-desc{font-size:11px;color:rgba(255,255,255,.4);line-height:1.45}
+/* Sector grid */
+.ob-sector-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:8px}
+.ob-panel-label{font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.ob-sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:7px}
+.ob-sector-btn{padding:8px 10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:rgba(255,255,255,.5);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:center;gap:6px}
+.ob-sector-btn:hover{border-color:rgba(255,255,255,.2);color:#fff}
+.ob-sector-btn.selected{background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.4);color:#818cf8}
+/* AI picks panel */
+.ob-ai-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:8px}
+.ob-ai-intro{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:12px;line-height:1.6}
+.ob-ai-picks{display:flex;flex-wrap:wrap;gap:8px}
+.ob-ai-pick{padding:8px 14px;background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:8px;font-size:13px;font-weight:700;color:#34d399;text-align:center}
+/* Ticker chips */
+.ob-ticker-panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:8px}
+.ob-ticker-input-row{display:flex;gap:8px;margin-bottom:12px}
+.ob-ticker-input{flex:1;padding:9px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-size:13px;outline:none;text-transform:uppercase}
+.ob-ticker-input:focus{border-color:var(--acc)}
+.ob-ticker-input::placeholder{text-transform:none;color:rgba(255,255,255,.2)}
+.btn-ob-add-ticker{padding:9px 16px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:8px;color:#f59e0b;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ob-chips{display:flex;flex-wrap:wrap;gap:7px}
+.ob-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:6px;font-size:12px;font-weight:700;color:#818cf8;cursor:pointer;user-select:none;transition:all .2s}
+.ob-chip:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#f87171}
+.ob-chip-x{font-size:10px;opacity:.65}
+/* Step 5 – Personalized Launch summary */
+.ob-launch-summary{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 22px;margin:0 auto 26px;max-width:440px;text-align:left}
+.ob-launch-summary-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.ob-launch-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}
+.ob-launch-row:last-child{border-bottom:none}
+.ob-launch-row-lbl{color:rgba(255,255,255,.4)}
+.ob-launch-row-val{font-weight:700;color:#fff}
+
 /* ===== TRIAL EXPIRED SCREEN ===== */
 #trial-expired{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9998;overflow-y:auto;padding:20px}
 #trial-expired.hidden{display:none}
@@ -948,6 +1016,8 @@ a{color:var(--acc);text-decoration:none}
       <div class="onboard-dot" id="dot-1"></div>
       <div class="onboard-dot" id="dot-2"></div>
       <div class="onboard-dot" id="dot-3"></div>
+      <div class="onboard-dot" id="dot-4"></div>
+      <div class="onboard-dot" id="dot-5"></div>
     </div>
 
     <!-- ── Step 1: Welcome ── -->
@@ -986,8 +1056,183 @@ a{color:var(--acc);text-decoration:none}
       </div>
     </div>
 
-    <!-- ── Step 2: Plan Comparison ── -->
+    <!-- ── Step 2: Your Profile ── -->
     <div class="onboard-step" id="onboard-step-1">
+      <div class="ob-profile-title">
+        <h2>Let's Build Your Profile</h2>
+        <p>Personalize your dashboard — we'll configure everything to match your trading style.</p>
+      </div>
+      <div class="ob-profile-sections">
+        <div>
+          <label>Your name</label>
+          <input class="ob-name-input" id="ob-name-input" placeholder="What should we call you?" oninput="obUpdateName(this.value)">
+        </div>
+        <div>
+          <label>Starting account balance</label>
+          <div class="ob-balance-presets">
+            <button class="ob-balance-btn" onclick="obSetBalance(5000,this)">$5K</button>
+            <button class="ob-balance-btn" onclick="obSetBalance(10000,this)">$10K</button>
+            <button class="ob-balance-btn selected" onclick="obSetBalance(25000,this)">$25K</button>
+            <button class="ob-balance-btn" onclick="obSetBalance(50000,this)">$50K</button>
+            <button class="ob-balance-btn" onclick="obSetBalance(100000,this)">$100K</button>
+          </div>
+          <div class="ob-balance-custom">
+            <span>or enter custom:</span>
+            <input type="number" id="ob-balance-custom" placeholder="e.g. 35000" min="100" max="10000000" onchange="obSetBalance(+this.value,null)">
+          </div>
+        </div>
+        <div>
+          <label>Risk tolerance</label>
+          <div class="ob-risk-cards">
+            <div class="ob-risk-card" id="ob-risk-0" onclick="obSetRisk(0)">
+              <div class="ob-risk-icon">🛡️</div>
+              <div class="ob-risk-name">Conservative</div>
+              <div class="ob-risk-desc">0.5–1% risk per trade. Protect capital first.</div>
+            </div>
+            <div class="ob-risk-card selected" id="ob-risk-1" onclick="obSetRisk(1)">
+              <div class="ob-risk-icon">⚖️</div>
+              <div class="ob-risk-name">Balanced</div>
+              <div class="ob-risk-desc">1–2% risk per trade. Growth with guardrails.</div>
+            </div>
+            <div class="ob-risk-card" id="ob-risk-2" onclick="obSetRisk(2)">
+              <div class="ob-risk-icon">🔥</div>
+              <div class="ob-risk-name">Aggressive</div>
+              <div class="ob-risk-desc">2–4% risk per trade. Max momentum plays.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="onboard-actions">
+        <button class="btn-ob-primary" onclick="onboardNext()">Continue <span style="font-size:18px">→</span></button>
+      </div>
+    </div>
+
+    <!-- ── Step 3: Choose Your Focus ── -->
+    <div class="onboard-step" id="onboard-step-2">
+      <div class="ob-focus-title">
+        <h2>Choose Your Focus</h2>
+        <p>How do you want TradeCommand to prioritize your trading intelligence?</p>
+      </div>
+      <div class="ob-focus-cards">
+        <div class="ob-focus-card selected" id="ob-focus-ai" onclick="obSetFocus('ai')">
+          <div class="ob-focus-badge">RECOMMENDED</div>
+          <div class="ob-focus-icon">🤖</div>
+          <div class="ob-focus-name">AI Weekly Picks</div>
+          <div class="ob-focus-desc">Let our AI analyze this week's market momentum and surface the top opportunities for you.</div>
+        </div>
+        <div class="ob-focus-card" id="ob-focus-sector" onclick="obSetFocus('sector')">
+          <div class="ob-focus-icon">🏭</div>
+          <div class="ob-focus-name">Sector Focus</div>
+          <div class="ob-focus-desc">Specialize in one or more sectors — tech, energy, biotech, space, agriculture and more.</div>
+        </div>
+        <div class="ob-focus-card" id="ob-focus-custom" onclick="obSetFocus('custom')">
+          <div class="ob-focus-icon">📋</div>
+          <div class="ob-focus-name">Custom Watchlist</div>
+          <div class="ob-focus-desc">Build your own ticker list from scratch or start from our suggested high-momentum picks.</div>
+        </div>
+      </div>
+      <!-- AI Picks panel (default) -->
+      <div id="ob-ai-panel" class="ob-ai-panel">
+        <div class="ob-panel-label">🤖 This Week's AI Top Picks</div>
+        <div class="ob-ai-intro">Based on current market momentum, options flow, and sector rotation — these are our highest-conviction setups heading into the week.</div>
+        <div class="ob-ai-picks">
+          <div class="ob-ai-pick">NVDA ↑</div>
+          <div class="ob-ai-pick">META ↑</div>
+          <div class="ob-ai-pick">AMD ↑</div>
+          <div class="ob-ai-pick">TSLA ⚡</div>
+          <div class="ob-ai-pick">SPY 📊</div>
+          <div class="ob-ai-pick">AMZN ↑</div>
+        </div>
+      </div>
+      <!-- Sector panel (hidden by default) -->
+      <div id="ob-sector-panel" class="ob-sector-panel" style="display:none">
+        <div class="ob-panel-label">Select your sectors</div>
+        <div class="ob-sector-grid">
+          <button class="ob-sector-btn" onclick="obSetSector('tech',this)">💻 Technology</button>
+          <button class="ob-sector-btn" onclick="obSetSector('energy',this)">⚡ Energy</button>
+          <button class="ob-sector-btn" onclick="obSetSector('biotech',this)">🧬 Biotech</button>
+          <button class="ob-sector-btn" onclick="obSetSector('finance',this)">🏦 Finance</button>
+          <button class="ob-sector-btn" onclick="obSetSector('crypto',this)">₿ Crypto</button>
+          <button class="ob-sector-btn" onclick="obSetSector('space',this)">🚀 Space</button>
+          <button class="ob-sector-btn" onclick="obSetSector('ev',this)">🔋 EVs</button>
+          <button class="ob-sector-btn" onclick="obSetSector('agriculture',this)">🌾 Agriculture</button>
+          <button class="ob-sector-btn" onclick="obSetSector('defense',this)">🛡️ Defense</button>
+          <button class="ob-sector-btn" onclick="obSetSector('realestate',this)">🏠 Real Estate</button>
+          <button class="ob-sector-btn" onclick="obSetSector('consumer',this)">🛒 Consumer</button>
+          <button class="ob-sector-btn" onclick="obSetSector('healthcare',this)">🏥 Healthcare</button>
+        </div>
+      </div>
+      <!-- Custom ticker panel (hidden by default) -->
+      <div id="ob-ticker-panel" class="ob-ticker-panel" style="display:none">
+        <div class="ob-panel-label">Build your watchlist</div>
+        <div class="ob-ticker-input-row">
+          <input class="ob-ticker-input" id="ob-ticker-input" placeholder="Add a ticker (e.g. AAPL)" maxlength="10" onkeydown="if(event.key==='Enter')obAddTicker()">
+          <button class="btn-ob-add-ticker" onclick="obAddTicker()">+ Add</button>
+        </div>
+        <div class="ob-chips" id="ob-ticker-chips"></div>
+      </div>
+      <div class="onboard-actions" style="margin-top:16px">
+        <button class="btn-ob-primary" onclick="onboardNext()">Continue <span style="font-size:18px">→</span></button>
+      </div>
+    </div>
+
+    <!-- ── Step 4: How It Works ── -->
+    <div class="onboard-step" id="onboard-step-3">
+      <div class="ob-hiw-header">
+        <h2>How It Works</h2>
+        <p>Live data + AI analysis in one dashboard. Here's what you're getting access to:</p>
+      </div>
+      <div class="hiw-stats">
+        <div class="hiw-stat">
+          <div class="hiw-stat-val">15+</div>
+          <div class="hiw-stat-lbl">Live data feeds</div>
+        </div>
+        <div class="hiw-stat">
+          <div class="hiw-stat-val">8</div>
+          <div class="hiw-stat-lbl">AI scoring factors</div>
+        </div>
+        <div class="hiw-stat">
+          <div class="hiw-stat-val">15s</div>
+          <div class="hiw-stat-lbl">Refresh rate</div>
+        </div>
+      </div>
+      <div class="hiw-grid">
+        <div class="hiw-card">
+          <div class="hiw-num c1">1</div>
+          <div class="hiw-card-text">
+            <strong>Your profile is set</strong>
+            <span>Balance, risk tolerance &amp; watchlist are loaded — the dashboard is already tuned to you.</span>
+          </div>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num c2">2</div>
+          <div class="hiw-card-text">
+            <strong>Live data fires up</strong>
+            <span>All 15+ data feeds connect instantly. Real prices, news, and sector data go live.</span>
+          </div>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num c3">3</div>
+          <div class="hiw-card-text">
+            <strong>AI scans for setups</strong>
+            <span>8-factor momentum scoring runs across your watchlist every 15 seconds.</span>
+          </div>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num c4">4</div>
+          <div class="hiw-card-text">
+            <strong>You trade with an edge</strong>
+            <span>AI signals + live context = better entries, tighter stops, and more confident exits.</span>
+          </div>
+        </div>
+      </div>
+      <div class="onboard-actions">
+        <button class="btn-ob-primary" onclick="onboardNext()">See your plan <span style="font-size:18px">→</span></button>
+      </div>
+    </div>
+
+    <!-- ── Step 5: Plan Comparison ── -->
+    <div class="onboard-step" id="onboard-step-4">
       <div class="ob-plans-header">
         <h2>Choose Your Edge</h2>
         <p>You're on a full-access trial right now. Here's what happens after it ends.</p>
@@ -1055,74 +1300,38 @@ a{color:var(--acc);text-decoration:none}
       </div>
     </div>
 
-    <!-- ── Step 3: How It Works ── -->
-    <div class="onboard-step" id="onboard-step-2">
-      <div class="ob-hiw-header">
-        <h2>How It Works</h2>
-        <p>Live data + AI analysis in one dashboard. Here's what you're getting access to:</p>
-      </div>
-      <div class="hiw-stats">
-        <div class="hiw-stat">
-          <div class="hiw-stat-val">15+</div>
-          <div class="hiw-stat-lbl">Live data feeds</div>
-        </div>
-        <div class="hiw-stat">
-          <div class="hiw-stat-val">8</div>
-          <div class="hiw-stat-lbl">AI scoring factors</div>
-        </div>
-        <div class="hiw-stat">
-          <div class="hiw-stat-val">15s</div>
-          <div class="hiw-stat-lbl">Refresh rate</div>
-        </div>
-      </div>
-      <div class="hiw-grid">
-        <div class="hiw-card">
-          <div class="hiw-num c1">1</div>
-          <div class="hiw-card-text">
-            <strong>Set your profile</strong>
-            <span>Enter your name, account balance & risk tolerance. The dashboard personalizes to you.</span>
-          </div>
-        </div>
-        <div class="hiw-card">
-          <div class="hiw-num c2">2</div>
-          <div class="hiw-card-text">
-            <strong>Pick your sectors</strong>
-            <span>Choose which market sectors to track. Tech, energy, crypto, biotech — your call.</span>
-          </div>
-        </div>
-        <div class="hiw-card">
-          <div class="hiw-num c3">3</div>
-          <div class="hiw-card-text">
-            <strong>Hit Launch</strong>
-            <span>All 15+ live data feeds load instantly. Real prices, news, and AI signals fire up.</span>
-          </div>
-        </div>
-        <div class="hiw-card">
-          <div class="hiw-num c4">4</div>
-          <div class="hiw-card-text">
-            <strong>Trade with an edge</strong>
-            <span>AI momentum scoring + live data gives you the context to time every entry and exit.</span>
-          </div>
-        </div>
-      </div>
-      <div class="onboard-actions">
-        <button class="btn-ob-primary" onclick="onboardNext()">I'm ready <span style="font-size:18px">→</span></button>
-      </div>
-    </div>
-
-    <!-- ── Step 4: Launch ── -->
-    <div class="onboard-step" id="onboard-step-3">
+    <!-- ── Step 6: Personalized Launch ── -->
+    <div class="onboard-step" id="onboard-step-5">
       <div class="ob-launch">
         <div class="ob-launch-glow">
           <span class="ob-launch-rocket">🚀</span>
         </div>
-        <div class="ob-launch-title">You're Ready to Trade</div>
-        <div class="ob-launch-sub">Everything is live and loaded. We've set up Pro-level API keys for your trial — no configuration, no setup, no friction.</div>
+        <div class="ob-launch-title" id="ob-launch-greeting">You're Ready to Trade</div>
+        <div class="ob-launch-sub">Your personalized trading intelligence dashboard is configured and ready. Everything is live — no setup required.</div>
+        <div class="ob-launch-summary">
+          <div class="ob-launch-summary-title">Your Setup</div>
+          <div class="ob-launch-row">
+            <span class="ob-launch-row-lbl">Account balance</span>
+            <span class="ob-launch-row-val" id="ob-sum-balance">$25,000</span>
+          </div>
+          <div class="ob-launch-row">
+            <span class="ob-launch-row-lbl">Risk profile</span>
+            <span class="ob-launch-row-val" id="ob-sum-risk">⚖️ Balanced</span>
+          </div>
+          <div class="ob-launch-row">
+            <span class="ob-launch-row-lbl">Focus</span>
+            <span class="ob-launch-row-val" id="ob-sum-focus">🤖 AI Weekly Picks</span>
+          </div>
+          <div class="ob-launch-row">
+            <span class="ob-launch-row-lbl">Watchlist</span>
+            <span class="ob-launch-row-val" id="ob-sum-watchlist">NVDA, META, AMD + 3 more</span>
+          </div>
+        </div>
         <div>
           <span class="ob-launch-pill">✅ Full Pro access active · Trial started</span>
         </div>
         <div class="onboard-actions">
-          <button class="btn-ob-launch" onclick="finishOnboarding()">🚀 Launch Dashboard</button>
+          <button class="btn-ob-launch" onclick="finishOnboarding()">🚀 Launch My Dashboard</button>
         </div>
       </div>
     </div>
@@ -2046,6 +2255,104 @@ async function acceptTermsAndProceed() {
 
 // ===== ONBOARDING =====
 let onboardStep = 0;
+// Personalization state (persisted to Firestore as traderProfile)
+let _obName = '';
+let _obBalance = 25000;
+let _obRisk = 1;       // 0=conservative, 1=balanced, 2=aggressive
+let _obFocus = 'ai';   // 'ai', 'sector', 'custom'
+let _obSector = null;
+let _obTickers = ['NVDA','TSLA','META','AMD','SPY','AMZN'];
+
+function obUpdateName(val) {
+  _obName = val.trim();
+}
+function obSetBalance(val, btn) {
+  if (!val || isNaN(val)) return;
+  _obBalance = val;
+  document.querySelectorAll('.ob-balance-btn').forEach(b => b.classList.remove('selected'));
+  if (btn) btn.classList.add('selected');
+}
+function obSetRisk(idx) {
+  _obRisk = idx;
+  document.querySelectorAll('.ob-risk-card').forEach((c, i) => {
+    c.classList.toggle('selected', i === idx);
+  });
+}
+function obSetFocus(focus) {
+  _obFocus = focus;
+  document.querySelectorAll('.ob-focus-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById(`ob-focus-${focus}`)?.classList.add('selected');
+  const aiPanel = document.getElementById('ob-ai-panel');
+  const sectorPanel = document.getElementById('ob-sector-panel');
+  const tickerPanel = document.getElementById('ob-ticker-panel');
+  if (aiPanel) aiPanel.style.display = focus === 'ai' ? 'block' : 'none';
+  if (sectorPanel) sectorPanel.style.display = focus === 'sector' ? 'block' : 'none';
+  if (tickerPanel) tickerPanel.style.display = focus === 'custom' ? 'block' : 'none';
+  // Reset tickers to AI defaults when switching back
+  if (focus === 'ai') _obTickers = ['NVDA','TSLA','META','AMD','SPY','AMZN'];
+}
+function obSetSector(sector, btn) {
+  _obSector = sector;
+  document.querySelectorAll('.ob-sector-btn').forEach(b => b.classList.remove('selected'));
+  if (btn) btn.classList.add('selected');
+  const sectorTickers = {
+    tech:       ['NVDA','AMD','MSFT','GOOGL','META'],
+    energy:     ['XOM','CVX','OXY','SLB','HAL'],
+    biotech:    ['MRNA','BNTX','REGN','GILD','BIIB'],
+    finance:    ['JPM','GS','BAC','MS','WFC'],
+    crypto:     ['COIN','MSTR','RIOT','MARA','HUT'],
+    space:      ['RKLB','BA','LMT','NOC','SPCE'],
+    ev:         ['TSLA','RIVN','LCID','NIO','XPEV'],
+    agriculture:['ADM','BG','MOS','CF','NTR'],
+    defense:    ['LMT','RTX','NOC','GD','HII'],
+    realestate: ['SPG','AMT','PLD','CBRE','VTR'],
+    consumer:   ['AMZN','WMT','TGT','COST','HD'],
+    healthcare: ['JNJ','UNH','PFE','ABBV','MRK']
+  };
+  _obTickers = sectorTickers[sector] || _obTickers;
+}
+function obToggleTicker(sym) {
+  const idx = _obTickers.indexOf(sym);
+  if (idx >= 0) _obTickers.splice(idx, 1);
+  obRenderChips();
+}
+function obAddTicker() {
+  const input = document.getElementById('ob-ticker-input');
+  if (!input) return;
+  const sym = input.value.trim().toUpperCase().replace(/[^A-Z]/g, '');
+  if (sym && !_obTickers.includes(sym) && _obTickers.length < 20) {
+    _obTickers.push(sym);
+    obRenderChips();
+  }
+  input.value = '';
+}
+function obRenderChips() {
+  const container = document.getElementById('ob-ticker-chips');
+  if (!container) return;
+  container.innerHTML = _obTickers.map(sym =>
+    `<div class="ob-chip" onclick="obToggleTicker('${sym}')">${sym} <span class="ob-chip-x">✕</span></div>`
+  ).join('');
+}
+function obPopulateLaunch() {
+  const name = _obName || D.name || '';
+  const greeting = document.getElementById('ob-launch-greeting');
+  if (greeting) greeting.textContent = name ? `You're Ready, ${name}!` : "You're Ready to Trade";
+  const sumBalance = document.getElementById('ob-sum-balance');
+  if (sumBalance) sumBalance.textContent = '$' + (_obBalance || 25000).toLocaleString();
+  const riskLabels = ['🛡️ Conservative', '⚖️ Balanced', '🔥 Aggressive'];
+  const sumRisk = document.getElementById('ob-sum-risk');
+  if (sumRisk) sumRisk.textContent = riskLabels[_obRisk] || '⚖️ Balanced';
+  const focusLabels = { ai: '🤖 AI Weekly Picks', sector: '🏭 Sector Focus', custom: '📋 Custom Watchlist' };
+  const sumFocus = document.getElementById('ob-sum-focus');
+  if (sumFocus) sumFocus.textContent = focusLabels[_obFocus] || '🤖 AI Weekly Picks';
+  const sumWatchlist = document.getElementById('ob-sum-watchlist');
+  if (sumWatchlist) {
+    const shown = _obTickers.slice(0, 3).join(', ');
+    const extra = _obTickers.length > 3 ? ` + ${_obTickers.length - 3} more` : '';
+    sumWatchlist.textContent = shown + extra || 'None selected';
+  }
+}
+
 function showOnboarding(daysLeft) {
   _trialDaysLeft = daysLeft || _trialDaysLeft || 7;
   const overlay = document.getElementById('onboarding-overlay');
@@ -2060,25 +2367,55 @@ function showOnboarding(daysLeft) {
   }
   const daysEl = document.getElementById('onboard-trial-days');
   if (daysEl) daysEl.textContent = `${_trialDaysLeft} day${_trialDaysLeft !== 1 ? 's' : ''}`;
+  // Pre-fill name from Firebase display name
+  const nameInput = document.getElementById('ob-name-input');
+  if (nameInput && D.name && D.name !== 'User') {
+    nameInput.value = D.name;
+    _obName = D.name;
+  }
+  // Render default ticker chips for custom panel
+  obRenderChips();
   overlay.classList.remove('hidden');
 }
 function onboardNext() {
-  const total = 4;
+  const total = 6;
   if (onboardStep < total - 1) {
     document.getElementById(`onboard-step-${onboardStep}`).classList.remove('active');
     document.getElementById(`dot-${onboardStep}`).classList.remove('active');
     onboardStep++;
     document.getElementById(`onboard-step-${onboardStep}`).classList.add('active');
     document.getElementById(`dot-${onboardStep}`).classList.add('active');
+    // When reaching the launch step, populate the summary card
+    if (onboardStep === 5) obPopulateLaunch();
   }
 }
 function skipOnboarding() { finishOnboarding(); }
 async function finishOnboarding() {
   document.getElementById('onboarding-overlay').classList.add('hidden');
   _holdForOnboarding = false;
+  // Apply trader profile to live state
+  if (_obBalance) D.bal = _obBalance;
+  if (_obName) D.name = _obName;
+  if (_obTickers && _obTickers.length > 0) D.wl = [..._obTickers];
+  const riskMultipliers = [0.7, 1.4, 2.5];
+  D.risk = riskMultipliers[_obRisk] ?? 1.4;
   const user = auth.currentUser;
   if (user) {
-    try { await db.collection('users').doc(user.uid).update({ onboarded: true }); } catch(e) {}
+    const traderProfile = {
+      name: _obName || D.name,
+      balance: _obBalance,
+      risk: _obRisk,
+      riskMultiplier: riskMultipliers[_obRisk] ?? 1.4,
+      focus: _obFocus,
+      sector: _obSector,
+      watchlist: _obTickers
+    };
+    try {
+      await db.collection('users').doc(user.uid).update({
+        onboarded: true,
+        traderProfile: traderProfile
+      });
+    } catch(e) { console.warn('Could not save trader profile:', e); }
   }
   // Make sure inputs are pre-filled with our keys before launch reads them
   const kfhEl = document.getElementById('k-fh');
@@ -2089,8 +2426,6 @@ async function finishOnboarding() {
   if (knaEl && D.na) knaEl.value = D.na;
   // Launch the dashboard — first time user sees it, clean with no flash
   launch();
-  // Do NOT show upgrade prompt on first login — only show on days 6 and under
-  // (handled by showUpgradePrompt's day check)
 }
 
 async function handleAuthState(user) {
@@ -2192,6 +2527,20 @@ async function handleAuthState(user) {
       }
     }
     D.name = userData.displayName || 'User';
+    // ── Restore trader profile for returning users ──
+    if (userData.traderProfile) {
+      const tp = userData.traderProfile;
+      if (tp.balance && tp.balance > 0) D.bal = tp.balance;
+      if (tp.riskMultiplier) D.risk = tp.riskMultiplier;
+      if (tp.watchlist && tp.watchlist.length > 0) D.wl = [...tp.watchlist];
+      // Restore onboarding state vars so they're accurate if user revisits
+      if (tp.balance) _obBalance = tp.balance;
+      if (typeof tp.risk === 'number') _obRisk = tp.risk;
+      if (tp.focus) _obFocus = tp.focus;
+      if (tp.sector) _obSector = tp.sector;
+      if (tp.watchlist && tp.watchlist.length > 0) _obTickers = [...tp.watchlist];
+      if (tp.name) D.name = tp.name;
+    }
     document.getElementById('user-name').textContent = `👤 ${D.name}`;
     document.getElementById('user-name').style.display = 'inline';
     
