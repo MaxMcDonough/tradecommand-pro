@@ -941,6 +941,8 @@
       <div class="content-body">
         <!-- Dashboard Page -->
         <div class="page active" id="dashboard-page">
+          <!-- Firebase status banner — shown when no data is loaded -->
+          <div id="db-status-banner" style="display:none;align-items:flex-start;gap:12px;padding:14px 18px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:10px;margin-bottom:20px;font-size:13px;color:var(--t2);line-height:1.6"></div>
           <div class="stat-grid">
             <div class="stat-card">
               <div class="stat-label">Total Users</div>
@@ -2943,6 +2945,17 @@
       safe(renderSubscriptionsTable, 'renderSubscriptionsTable');
       safe(updateSubscriptionsPage,  'updateSubscriptionsPage');
       safe(renderRevenueTrendChart,  'renderRevenueTrendChart');
+
+      // Show status banner if no data loaded
+      const statusBanner = document.getElementById('db-status-banner');
+      if (statusBanner) {
+        if (allUsers.length === 0) {
+          statusBanner.style.display = 'flex';
+          statusBanner.innerHTML = `<span style="font-size:18px">⚠️</span><div><strong style="color:var(--ylw)">No Firestore data loaded.</strong> The <code>users</code> collection may be empty, or your Firestore security rules may be blocking admin reads. <a href="https://console.firebase.google.com/project/tradecommand-pro/firestore" target="_blank" style="color:var(--acc)">Open Firebase Console →</a></div>`;
+        } else {
+          statusBanner.style.display = 'none';
+        }
+      }
     };
 
     // Update Dashboard Stats
@@ -2964,11 +2977,12 @@
         return trialEnds < now;
       }).length;
 
-      document.getElementById('totalUsers').textContent = totalUsersCount;
-      document.getElementById('activeToday').textContent = activeTodayCount;
-      document.getElementById('trialUsers').textContent = trialUsersCount;
-      document.getElementById('activeUsers').textContent = activeUsersCount;
-      document.getElementById('expiredTrials').textContent = expiredTrialsCount;
+      const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setVal('totalUsers',    totalUsersCount);
+      setVal('activeToday',   activeTodayCount);
+      setVal('trialUsers',    trialUsersCount);
+      setVal('activeUsers',   activeUsersCount);
+      setVal('expiredTrials', expiredTrialsCount);
 
       // Charts
       renderSignupsChart();
@@ -3100,6 +3114,11 @@
     // Render Users Table
     const renderUsersTable = () => {
       const tbody = document.getElementById('usersTableBody');
+      if (!tbody) return;
+      if (allUsers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--t3);font-size:13px">No users found — Firestore may be empty or security rules may be blocking access</td></tr>';
+        return;
+      }
       tbody.innerHTML = allUsers.map(user => {
         const subscriptionPlan = user.plan === 'pro_monthly' ? 'Pro Monthly' : user.plan === 'pro_annual' ? 'Pro Annual' : user.plan === 'trial' ? 'Trial' : 'Free';
         const userRevenue = allPayments.filter(p => p.uid === user.id && p.status === 'succeeded').reduce((sum, p) => sum + (p.amount || 0), 0);
@@ -4794,15 +4813,26 @@
         (Math.min(paid,10)/10)*40 +
         (mrr>=500?30:mrr>=100?15:0)
       ));
-      const hsEl = document.getElementById('advisor-health');
-      if (hsEl) {
-        const color = score>=70?'var(--grn)':score>=40?'var(--ylw)':'var(--red)';
-        hsEl.innerHTML = `<div style="font-size:42px;font-weight:800;color:${color}">${score}</div>
-          <div style="font-size:12px;color:var(--t3);margin-top:4px">Business Health Score</div>
-          <div style="height:6px;background:var(--brd);border-radius:3px;overflow:hidden;margin-top:8px">
-            <div style="height:100%;width:${score}%;background:${color};border-radius:3px"></div>
-          </div>`;
-      }
+      const color = score>=70?'var(--grn)':score>=40?'var(--ylw)':'var(--red)';
+      const label = score>=70?'Healthy — keep shipping 🚀':score>=40?'Needs attention — focus on conversion':'Early stage — grow your user base first';
+      const scoreEl  = document.getElementById('health-score');
+      const labelEl  = document.getElementById('health-label');
+      const factorsEl = document.getElementById('health-factors');
+      if (scoreEl)  { scoreEl.textContent = score; scoreEl.style.color = color; }
+      if (labelEl)   labelEl.textContent = label;
+      if (factorsEl) factorsEl.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--brd)">
+          <span style="font-size:13px;color:var(--t2)">👥 Total users</span>
+          <span style="font-size:13px;font-weight:600;color:${total>=10?'var(--grn)':'var(--ylw)'}">${total} users · ${Math.round((Math.min(total,20)/20)*30)}/30 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--brd)">
+          <span style="font-size:13px;color:var(--t2)">💳 Paid users</span>
+          <span style="font-size:13px;font-weight:600;color:${paid>=5?'var(--grn)':paid>0?'var(--ylw)':'var(--red)'}">${paid} paid · ${Math.round((Math.min(paid,10)/10)*40)}/40 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
+          <span style="font-size:13px;color:var(--t2)">💰 MRR</span>
+          <span style="font-size:13px;font-weight:600;color:${mrr>=500?'var(--grn)':mrr>0?'var(--ylw)':'var(--red)'}">$${mrr}/mo · ${mrr>=500?30:mrr>=100?15:0}/30 pts</span>
+        </div>`;
 
       listEl.innerHTML = actions.map(a=>`
         <div style="padding:16px;background:var(--card);border:1px solid var(--brd);border-radius:10px">
