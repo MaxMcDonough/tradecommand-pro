@@ -1938,6 +1938,8 @@ async function submitTrialKeys() {
 let _trialDaysLeft = 7;
 function showUpgradePrompt(daysLeft) {
   _trialDaysLeft = daysLeft;
+  // Only show on days 6 and under — not on day 7 (first login / just finished onboarding)
+  if (daysLeft >= 7) return;
   const d = `${daysLeft} day${daysLeft !== 1 ? 's' : ''}`;
   document.querySelectorAll('#up-days-pill, #up-days-footer').forEach(el => el.textContent = daysLeft);
   const noteEl = document.getElementById('up-trial-note');
@@ -1947,6 +1949,12 @@ function showUpgradePrompt(daysLeft) {
 function dismissUpgradePrompt() {
   document.getElementById('upgrade-prompt').classList.add('hidden');
 }
+
+// ===== FLOW CONTROL =====
+// When true: skip auto-launch after auth — T&C gate or onboarding will call launch() themselves
+let _holdForOnboarding = false;
+// When true: keys were auto-provided (trial/paid), skip setup panel
+let _autoKeys = false;
 
 // ===== TERMS GATE =====
 function showTermsGate() {
@@ -2010,12 +2018,22 @@ function onboardNext() {
 function skipOnboarding() { finishOnboarding(); }
 async function finishOnboarding() {
   document.getElementById('onboarding-overlay').classList.add('hidden');
+  _holdForOnboarding = false;
   const user = auth.currentUser;
   if (user) {
     try { await db.collection('users').doc(user.uid).update({ onboarded: true }); } catch(e) {}
   }
-  // After onboarding, immediately show upgrade prompt
-  setTimeout(() => showUpgradePrompt(_trialDaysLeft), 300);
+  // Make sure inputs are pre-filled with our keys before launch reads them
+  const kfhEl = document.getElementById('k-fh');
+  const kavEl = document.getElementById('k-av');
+  const knaEl = document.getElementById('k-na');
+  if (kfhEl && D.fh) kfhEl.value = D.fh;
+  if (kavEl && D.av) kavEl.value = D.av;
+  if (knaEl && D.na) knaEl.value = D.na;
+  // Launch the dashboard — first time user sees it, clean with no flash
+  launch();
+  // Do NOT show upgrade prompt on first login — only show on days 6 and under
+  // (handled by showUpgradePrompt's day check)
 }
 
 async function handleAuthState(user) {
@@ -2076,6 +2094,7 @@ async function handleAuthState(user) {
           D.fh = adminKeys.fh;
           D.av = adminKeys.av;
           D.na = adminKeys.na;
+          _autoKeys = true;
         }
       } else if(userData.plan === 'trial') {
         const now = Date.now();
@@ -2093,16 +2112,20 @@ async function handleAuthState(user) {
           // Give trial users full pro API keys — no setup needed
           const adminKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
           D.fh = adminKeys.fh; D.av = adminKeys.av; D.na = adminKeys.na;
-          // New users: show T&C gate first, then onboarding
-          // Returning users without T&C: show T&C gate, then upgrade prompt
-          // Returning users with T&C: show upgrade prompt
+          _autoKeys = true;
           _trialDaysLeft = daysLeft;
           if (!userData.acceptedTerms) {
-            setTimeout(() => showTermsGate(), 600);
+            // New user: hold launch until T&C → onboarding → finishOnboarding() calls launch()
+            _holdForOnboarding = true;
+            setTimeout(() => showTermsGate(), 300);
           } else if (!userData.onboarded) {
-            setTimeout(() => showOnboarding(daysLeft), 600);
+            // Accepted T&C but not onboarded yet
+            _holdForOnboarding = true;
+            setTimeout(() => showOnboarding(daysLeft), 300);
           } else {
-            setTimeout(() => showUpgradePrompt(daysLeft), 600);
+            // Fully onboarded returning trial user — launch then show upgrade prompt
+            _holdForOnboarding = false;
+            setTimeout(() => showUpgradePrompt(daysLeft), 800);
           }
         }
       } else if(userData.plan === 'active' && userData.apiKeys) {
@@ -2138,7 +2161,7 @@ async function handleAuthState(user) {
       loginCount: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     hideAuth();
-    // Pre-fill API key inputs with admin/trial keys set above so launch() reads them correctly
+    // Always pre-fill input fields with whatever keys/name we have
     const kfhEl = document.getElementById('k-fh');
     const kavEl = document.getElementById('k-av');
     const knaEl = document.getElementById('k-na');
@@ -2147,8 +2170,16 @@ async function handleAuthState(user) {
     if (kavEl && D.av) kavEl.value = D.av;
     if (knaEl && D.na) knaEl.value = D.na;
     if (pnameEl && D.name && D.name !== 'User') pnameEl.value = D.name;
-    document.getElementById('setup').style.display = 'flex';
-    setTimeout(launch, 50);
+    if (_holdForOnboarding) {
+      // T&C gate / onboarding is showing — keep setup + dash hidden.
+      // finishOnboarding() will call launch() when the user is done.
+    } else if (_autoKeys) {
+      // Paid/trial user with auto-provided keys: skip setup panel entirely, launch direct
+      launch();
+    } else {
+      // Free/custom key user: show setup panel so they can enter their own keys
+      document.getElementById('setup').style.display = 'flex';
+    }
   } catch(e) {
     console.error('Auth state error:', e);
   }
