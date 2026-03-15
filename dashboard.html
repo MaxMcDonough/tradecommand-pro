@@ -250,7 +250,7 @@ a{color:var(--acc);text-decoration:none}
 .cbtn{padding:3px 8px;font-size:10px;background:var(--bg2);border:1px solid var(--brd);color:var(--t3);border-radius:4px;cursor:pointer}
 .cbtn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 /* SYMBOL SELECTOR */
-#sym-selector{display:flex;gap:5px;padding:5px 0 4px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap;min-height:32px}
+#sym-selector{display:flex;gap:5px;padding:5px 0 4px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap;min-height:32px;max-width:100%;width:0;min-width:100%}
 #sym-selector::-webkit-scrollbar{display:none}
 .sym-pill{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;background:var(--card2);border:1px solid var(--brd);border-radius:5px;cursor:pointer;white-space:nowrap;transition:border-color .12s,background .12s;font-size:10px;flex-shrink:0}
 .sym-pill:hover{border-color:var(--acc);background:rgba(99,102,241,.1)}
@@ -1660,7 +1660,7 @@ a{color:var(--acc);text-decoration:none}
 
 <!-- PAGE: TRADING -->
 <div class="page on" id="p-trading">
-<div class="g g3" style="margin-bottom:12px">
+<div class="g" style="margin-bottom:12px;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)">
   <div class="c">
     <div class="ch"><span class="ct">📋 Watchlist</span><span class="badge" style="background:var(--grn2);color:var(--grn)" id="wl-ct">0</span></div>
     <div class="wl-header">
@@ -3788,7 +3788,37 @@ function connectWS(){if(!D.fh)return;try{D.ws=new WebSocket(`wss://ws.finnhub.io
 async function fetchCrypto(){const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&sparkline=false');if(r.ok){D.cc=await r.json();mkCrypto();}}
 async function fetchCFG(){const r=await fetch('https://api.alternative.me/fng/?limit=1');if(r.ok){const d=await r.json();mkCFG(d.data[0]);}}
 async function fetchCTrend(){const r=await fetch('https://api.coingecko.com/api/v3/search/trending');if(r.ok){const d=await r.json();mkCTrend(d.coins||[]);}}
-async function fetchFG(){const r=await fetch('https://api.alternative.me/fng/?limit=1');if(r.ok){const d=await r.json();const v=parseInt(d.data[0].value);let col=v<=25?'var(--red)':v<=45?'#f97316':v<=55?'var(--ylw)':v<=75?'#84cc16':'var(--grn)';let lb=v<=25?'Extreme Fear':v<=45?'Fear':v<=55?'Neutral':v<=75?'Greed':'Extreme Greed';document.getElementById('fg-v').textContent=v;document.getElementById('fg-v').style.color=col;document.getElementById('fg-l').textContent=lb;document.getElementById('fg-l').style.color=col;document.getElementById('fg-p').style.left=v+'%';}}
+async function fetchFG(){
+  try{
+    const r=await fetch('https://api.alternative.me/fng/?limit=1');
+    if(r.ok){
+      const d=await r.json();
+      const v=parseInt(d.data[0].value);
+      renderFG(v, 'alternative.me');
+      return;
+    }
+  }catch(e){}
+  // Fallback: estimate from SPY price action + watchlist momentum
+  const spy=D.sd['SPY'],qqq=D.sd['QQQ'];
+  const spyPct=spy?.pct||0, qqqPct=qqq?.pct||0;
+  const bullCount=D.sigs.filter(s=>s.tp==='buy').length;
+  const bearCount=D.sigs.filter(s=>s.tp==='sell').length;
+  const sigScore=(bullCount-bearCount)/(bullCount+bearCount+1);
+  const mktScore=(spyPct+qqqPct)/2;
+  const est=Math.min(95,Math.max(5,Math.round(50+sigScore*25+mktScore*3)));
+  renderFG(est,'estimated');
+}
+function renderFG(v, src){
+  const col=v<=25?'var(--red)':v<=45?'#f97316':v<=55?'var(--ylw)':v<=75?'#84cc16':'var(--grn)';
+  const lb=v<=25?'Extreme Fear':v<=45?'Fear':v<=55?'Neutral':v<=75?'Greed':'Extreme Greed';
+  document.getElementById('fg-v').textContent=v;
+  document.getElementById('fg-v').style.color=col;
+  document.getElementById('fg-l').textContent=lb;
+  document.getElementById('fg-l').style.color=col;
+  document.getElementById('fg-p').style.left=v+'%';
+  const srcEl=document.querySelector('.gs');
+  if(srcEl) srcEl.textContent=`Fear & Greed (${src==='estimated'?'estimated from signals':'alternative.me'})`;
+}
 
 // ===== APEWISDOM (FREE) =====
 async function fetchApe(){const r=await fetch('https://apewisdom.io/api/v1.0/filter/all-stocks/page/1');if(r.ok){const d=await r.json();D.ment=(d.results||[]).slice(0,25);mkMent();}}
