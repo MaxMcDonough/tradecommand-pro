@@ -672,14 +672,18 @@ a{color:var(--acc);text-decoration:none}
 .ob-name-input{width:100%;max-width:400px;display:block;margin:0 auto;padding:14px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:16px;outline:none;text-align:center;font-weight:600}
 .ob-name-input:focus{border-color:var(--acc)}
 .ob-name-input::placeholder{color:rgba(255,255,255,.2);font-weight:400}
-.ob-balance-presets{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px}
-.ob-balance-btn{padding:8px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(255,255,255,.55);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
-.ob-balance-btn:hover{border-color:rgba(255,255,255,.25);color:#fff}
-.ob-balance-btn.selected{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.5);color:#f59e0b}
-.ob-balance-custom{display:flex;align-items:center;gap:8px;justify-content:center}
-.ob-balance-custom span{color:rgba(255,255,255,.4);font-size:13px}
-.ob-balance-custom input{width:140px;padding:8px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-size:13px;outline:none;text-align:center}
-.ob-balance-custom input:focus{border-color:var(--acc)}
+.ob-balance-entry{display:flex;align-items:center;gap:6px;justify-content:center;margin-bottom:6px}
+.ob-bal-prefix{font-size:22px;font-weight:700;color:rgba(255,255,255,.4)}
+.ob-balance-input{width:180px;padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:20px;font-weight:700;outline:none;text-align:center}
+.ob-balance-input:focus{border-color:var(--acc)}
+.ob-balance-input::-webkit-inner-spin-button,.ob-balance-input::-webkit-outer-spin-button{opacity:.5;height:28px}
+.ob-balance-hint{font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:4px}
+/* Onboard nav row (back + continue) */
+.ob-nav-row{display:flex;align-items:center;gap:10px}
+.ob-nav-row .btn-ob-primary{flex:1}
+.btn-ob-back{padding:12px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:rgba(255,255,255,.4);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-ob-back:hover{border-color:rgba(255,255,255,.2);color:#fff}
+.ob-step-error{font-size:12px;color:#f87171;text-align:center;min-height:18px;margin-bottom:6px}
 .ob-risk-cards{display:flex;gap:12px;justify-content:center}
 .ob-risk-card{flex:1;max-width:200px;padding:16px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;text-align:center;cursor:pointer;transition:all .2s}
 .ob-risk-card:hover{border-color:rgba(255,255,255,.2)}
@@ -722,6 +726,33 @@ a{color:var(--acc);text-decoration:none}
 .ob-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:6px;font-size:12px;font-weight:700;color:#818cf8;cursor:pointer;user-select:none;transition:all .2s}
 .ob-chip:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#f87171}
 .ob-chip-x{font-size:10px;opacity:.65}
+/* AI pick rows */
+.ob-ai-pick-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.ob-ai-pick-row:last-child{border-bottom:none}
+.ob-ai-pick-sym{font-size:13px;font-weight:800;color:#34d399;min-width:52px}
+.ob-ai-pick-dir{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(16,185,129,.1);color:#34d399;white-space:nowrap;margin-top:1px}
+.ob-ai-pick-why{font-size:11px;color:rgba(255,255,255,.38);line-height:1.5;flex:1}
+/* Settings page */
+#p-settings{max-width:760px;margin:0 auto;padding:0 0 40px}
+.settings-section{background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:20px 24px;margin-bottom:16px}
+.settings-section h3{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);gap:16px;flex-wrap:wrap}
+.settings-row:last-child{border-bottom:none;padding-bottom:0}
+.settings-row-lbl{font-size:13px;color:var(--t2);flex-shrink:0}
+.settings-row-val{font-size:12px;color:var(--t3);margin-top:2px}
+.settings-input{padding:7px 11px;background:var(--bg2);border:1px solid var(--brd);border-radius:7px;color:var(--t1);font-size:13px;outline:none;min-width:180px;max-width:280px;width:100%}
+.settings-input:focus{border-color:var(--acc)}
+.settings-input-group{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn-settings-save{padding:7px 16px;background:linear-gradient(135deg,var(--acc),#10b981);border:none;border-radius:7px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-settings-secondary{padding:7px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:7px;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-settings-secondary:hover{border-color:rgba(255,255,255,.2);color:var(--t1)}
+.btn-settings-danger{padding:7px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:7px;color:#f87171;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-settings-danger:hover{background:rgba(239,68,68,.18)}
+.stg-toggle{width:36px;height:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;cursor:pointer;position:relative;transition:all .2s;flex-shrink:0}
+.stg-toggle.on{background:var(--acc);border-color:var(--acc)}
+.stg-toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s}
+.stg-toggle.on::after{transform:translateX(16px)}
+.stg-msg{font-size:11px;color:var(--grn);margin-top:8px;min-height:16px}
 /* Step 5 – Personalized Launch summary */
 .ob-launch-summary{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 22px;margin:0 auto 26px;max-width:440px;text-align:left}
 .ob-launch-summary-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
@@ -1082,17 +1113,14 @@ a{color:var(--acc);text-decoration:none}
         </div>
         <div>
           <label>Starting account balance</label>
-          <div class="ob-balance-presets">
-            <button class="ob-balance-btn" onclick="obSetBalance(5000,this)">$5K</button>
-            <button class="ob-balance-btn" onclick="obSetBalance(10000,this)">$10K</button>
-            <button class="ob-balance-btn selected" onclick="obSetBalance(25000,this)">$25K</button>
-            <button class="ob-balance-btn" onclick="obSetBalance(50000,this)">$50K</button>
-            <button class="ob-balance-btn" onclick="obSetBalance(100000,this)">$100K</button>
+          <div class="ob-balance-entry">
+            <span class="ob-bal-prefix">$</span>
+            <input type="number" class="ob-balance-input" id="ob-balance-input"
+              placeholder="5000" min="500" max="10000000" step="500"
+              oninput="obSetBalance(+this.value)"
+              onchange="obSnapBalance(this)">
           </div>
-          <div class="ob-balance-custom">
-            <span>or enter custom:</span>
-            <input type="number" id="ob-balance-custom" placeholder="e.g. 35000" min="100" max="10000000" onchange="obSetBalance(+this.value,null)">
-          </div>
+          <div class="ob-balance-hint">Use ▲ ▼ arrows to step in $500 increments</div>
         </div>
         <div>
           <label>Risk tolerance</label>
@@ -1116,7 +1144,11 @@ a{color:var(--acc);text-decoration:none}
         </div>
       </div>
       <div class="onboard-actions">
-        <button class="btn-ob-primary" onclick="onboardNext()">Continue <span style="font-size:18px">→</span></button>
+        <div class="ob-step-error" id="ob-step1-error"></div>
+        <div class="ob-nav-row">
+          <button class="btn-ob-back" onclick="onboardBack()">← Back</button>
+          <button class="btn-ob-primary" onclick="onboardNext()">Continue <span style="font-size:18px">→</span></button>
+        </div>
       </div>
     </div>
 
@@ -1146,33 +1178,30 @@ a{color:var(--acc);text-decoration:none}
       </div>
       <!-- AI Picks panel (default) -->
       <div id="ob-ai-panel" class="ob-ai-panel">
-        <div class="ob-panel-label">🤖 This Week's AI Top Picks</div>
-        <div class="ob-ai-intro">Based on current market momentum, options flow, and sector rotation — these are our highest-conviction setups heading into the week.</div>
-        <div class="ob-ai-picks">
-          <div class="ob-ai-pick">NVDA ↑</div>
-          <div class="ob-ai-pick">META ↑</div>
-          <div class="ob-ai-pick">AMD ↑</div>
-          <div class="ob-ai-pick">TSLA ⚡</div>
-          <div class="ob-ai-pick">SPY 📊</div>
-          <div class="ob-ai-pick">AMZN ↑</div>
-        </div>
+        <div class="ob-panel-label">🤖 This Week's AI Top Picks — here's why</div>
+        <div class="ob-ai-pick-row"><div><div class="ob-ai-pick-sym">NVDA ↑</div><div class="ob-ai-pick-dir">LONG</div></div><div class="ob-ai-pick-why">Datacenter AI chip demand accelerating. Options flow heavily bullish. Leading sector momentum score this week.</div></div>
+        <div class="ob-ai-pick-row"><div><div class="ob-ai-pick-sym">META ↑</div><div class="ob-ai-pick-dir">LONG</div></div><div class="ob-ai-pick-why">Ad revenue beat expectations + Llama AI integration driving re-rating. Strong institutional buying.</div></div>
+        <div class="ob-ai-pick-row"><div><div class="ob-ai-pick-sym">AMD ↑</div><div class="ob-ai-pick-dir">LONG</div></div><div class="ob-ai-pick-why">Gaining GPU market share vs Intel. MI300X server chip demand rising. Discounted vs NVDA on AI exposure.</div></div>
+        <div class="ob-ai-pick-row"><div><div class="ob-ai-pick-sym">TSLA ⚡</div><div class="ob-ai-pick-dir">MOMENTUM</div></div><div class="ob-ai-pick-why">High-beta momentum play. Wide range, heavy options volume — ideal for intraday setups on news-driven moves.</div></div>
+        <div class="ob-ai-pick-row"><div><div class="ob-ai-pick-sym">SPY 📊</div><div class="ob-ai-pick-dir">ANCHOR</div></div><div class="ob-ai-pick-why">Broad market hedge. Used as the macro anchor for signal context — tracks S&amp;P 500 trend and sector rotation.</div></div>
+        <div class="ob-ai-pick-row"><div><div class="ob-ai-pick-sym">AMZN ↑</div><div class="ob-ai-pick-dir">LONG</div></div><div class="ob-ai-pick-why">AWS cloud growth + Prime flywheel undervalued relative to AI peers. Analyst upgrades this week.</div></div>
       </div>
       <!-- Sector panel (hidden by default) -->
       <div id="ob-sector-panel" class="ob-sector-panel" style="display:none">
-        <div class="ob-panel-label">Select your sectors</div>
+        <div class="ob-panel-label">Select your sectors — tap to toggle, choose one or more</div>
         <div class="ob-sector-grid">
-          <button class="ob-sector-btn" onclick="obSetSector('tech',this)">💻 Technology</button>
-          <button class="ob-sector-btn" onclick="obSetSector('energy',this)">⚡ Energy</button>
-          <button class="ob-sector-btn" onclick="obSetSector('biotech',this)">🧬 Biotech</button>
-          <button class="ob-sector-btn" onclick="obSetSector('finance',this)">🏦 Finance</button>
-          <button class="ob-sector-btn" onclick="obSetSector('crypto',this)">₿ Crypto</button>
-          <button class="ob-sector-btn" onclick="obSetSector('space',this)">🚀 Space</button>
-          <button class="ob-sector-btn" onclick="obSetSector('ev',this)">🔋 EVs</button>
-          <button class="ob-sector-btn" onclick="obSetSector('agriculture',this)">🌾 Agriculture</button>
-          <button class="ob-sector-btn" onclick="obSetSector('defense',this)">🛡️ Defense</button>
-          <button class="ob-sector-btn" onclick="obSetSector('realestate',this)">🏠 Real Estate</button>
-          <button class="ob-sector-btn" onclick="obSetSector('consumer',this)">🛒 Consumer</button>
-          <button class="ob-sector-btn" onclick="obSetSector('healthcare',this)">🏥 Healthcare</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('tech',this)">💻 Technology</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('energy',this)">⚡ Energy</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('biotech',this)">🧬 Biotech</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('finance',this)">🏦 Finance</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('crypto',this)">₿ Crypto</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('space',this)">🚀 Space</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('ev',this)">🔋 EVs</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('agriculture',this)">🌾 Agriculture</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('defense',this)">🛡️ Defense</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('realestate',this)">🏠 Real Estate</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('consumer',this)">🛒 Consumer</button>
+          <button class="ob-sector-btn" onclick="obToggleSector('healthcare',this)">🏥 Healthcare</button>
         </div>
       </div>
       <!-- Custom ticker panel (hidden by default) -->
@@ -1185,7 +1214,11 @@ a{color:var(--acc);text-decoration:none}
         <div class="ob-chips" id="ob-ticker-chips"></div>
       </div>
       <div class="onboard-actions" style="margin-top:16px">
-        <button class="btn-ob-primary" onclick="onboardNext()">Continue <span style="font-size:18px">→</span></button>
+        <div class="ob-step-error" id="ob-step2-error"></div>
+        <div class="ob-nav-row">
+          <button class="btn-ob-back" onclick="onboardBack()">← Back</button>
+          <button class="btn-ob-primary" onclick="onboardNext()">Continue <span style="font-size:18px">→</span></button>
+        </div>
       </div>
     </div>
 
@@ -1240,7 +1273,10 @@ a{color:var(--acc);text-decoration:none}
         </div>
       </div>
       <div class="onboard-actions">
-        <button class="btn-ob-primary" onclick="onboardNext()">See your plan <span style="font-size:18px">→</span></button>
+        <div class="ob-nav-row">
+          <button class="btn-ob-back" onclick="onboardBack()">← Back</button>
+          <button class="btn-ob-primary" onclick="onboardNext()">See your plan <span style="font-size:18px">→</span></button>
+        </div>
       </div>
     </div>
 
@@ -1308,7 +1344,8 @@ a{color:var(--acc);text-decoration:none}
           <a href="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201" target="_blank" class="ob-tier-btn ob-accent">Upgrade to Elite →</a>
         </div>
       </div>
-      <div class="ob-continue-row">
+      <div class="ob-continue-row" style="display:flex;align-items:center;gap:12px;justify-content:center">
+        <button class="btn-ob-back" onclick="onboardBack()">← Back</button>
         <button class="btn-ob-ghost" onclick="onboardNext()">I'll decide later — continue trial</button>
       </div>
     </div>
@@ -1344,7 +1381,10 @@ a{color:var(--acc);text-decoration:none}
           <span class="ob-launch-pill">✅ Full Pro access active · Trial started</span>
         </div>
         <div class="onboard-actions">
-          <button class="btn-ob-launch" onclick="finishOnboarding()">🚀 Launch My Dashboard</button>
+          <div class="ob-nav-row" style="justify-content:center;gap:12px">
+            <button class="btn-ob-back" onclick="onboardBack()">← Back</button>
+            <button class="btn-ob-launch" onclick="finishOnboarding()">🚀 Launch My Dashboard</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1565,6 +1605,7 @@ a{color:var(--acc);text-decoration:none}
   <button onclick="pg('brief',this)">📋 Briefings</button>
   <button onclick="pg('learn',this)">📚 Trading 101</button>
   <button onclick="pg('tools',this)">🛠 Tools</button>
+  <button onclick="pg('settings',this)">⚙️ Settings</button>
 </div>
 
 <!-- SECTOR NAVIGATION -->
@@ -1826,6 +1867,118 @@ a{color:var(--acc);text-decoration:none}
 </div>
 
 <div class="disclaimer">⚠️ <b>DISCLAIMER:</b> Educational only. Not financial advice. Day trading involves substantial loss risk. Sources: Finnhub · CoinGecko · ApeWisdom · Reddit · alternative.me · Google News RSS · SEC EDGAR · TradingView</div>
+</div>
+
+<!-- PAGE: SETTINGS -->
+<div class="page" id="p-settings">
+<div id="stg-saved-msg" class="stg-msg" style="text-align:center;margin-bottom:8px"></div>
+
+<!-- Profile -->
+<div class="settings-section">
+  <h3>👤 Profile</h3>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Display name</div></div>
+    <div class="settings-input-group">
+      <input class="settings-input" id="stg-name" placeholder="Your name">
+      <button class="btn-settings-save" onclick="stgSaveProfile()">Save</button>
+    </div>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Account balance</div><div class="settings-row-val">Used for position sizing</div></div>
+    <div class="settings-input-group">
+      <input class="settings-input" id="stg-bal" type="number" min="500" step="500" placeholder="25000">
+      <button class="btn-settings-save" onclick="stgSaveProfile()">Save</button>
+    </div>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Max risk per trade</div><div class="settings-row-val">Percentage of account</div></div>
+    <div class="settings-input-group">
+      <input class="settings-input" id="stg-risk" type="number" min="0.1" max="10" step="0.1" placeholder="1" style="min-width:80px;max-width:100px">
+      <span style="font-size:13px;color:var(--t2)">%</span>
+      <button class="btn-settings-save" onclick="stgSaveProfile()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- API Keys -->
+<div class="settings-section">
+  <h3>🔑 API Keys</h3>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Finnhub <span style="font-size:10px;color:var(--t3)">(real-time quotes)</span></div><div class="settings-row-val"><a href="https://finnhub.io/register" target="_blank" style="color:var(--acc)">Get free key →</a></div></div>
+    <div class="settings-input-group">
+      <input class="settings-input" id="stg-fh" type="password" placeholder="d6qkh2hr01...">
+      <button class="btn-settings-secondary" onclick="stgToggleKeyVis('stg-fh',this)">Show</button>
+      <button class="btn-settings-save" onclick="stgSaveKeys()">Save</button>
+    </div>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Alpha Vantage <span style="font-size:10px;color:var(--t3)">(fundamentals)</span></div><div class="settings-row-val"><a href="https://www.alphavantage.co/support/#api-key" target="_blank" style="color:var(--acc)">Get free key →</a></div></div>
+    <div class="settings-input-group">
+      <input class="settings-input" id="stg-av" type="password" placeholder="WGIEYOI...">
+      <button class="btn-settings-secondary" onclick="stgToggleKeyVis('stg-av',this)">Show</button>
+      <button class="btn-settings-save" onclick="stgSaveKeys()">Save</button>
+    </div>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">NewsAPI <span style="font-size:10px;color:var(--t3)">(headlines)</span></div><div class="settings-row-val"><a href="https://newsapi.org/register" target="_blank" style="color:var(--acc)">Get free key →</a></div></div>
+    <div class="settings-input-group">
+      <input class="settings-input" id="stg-na" type="password" placeholder="fb90a7d7...">
+      <button class="btn-settings-secondary" onclick="stgToggleKeyVis('stg-na',this)">Show</button>
+      <button class="btn-settings-save" onclick="stgSaveKeys()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Preferences -->
+<div class="settings-section">
+  <h3>⚡ Preferences</h3>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Show demo banner</div><div class="settings-row-val">Banner when running on demo prices</div></div>
+    <div class="stg-toggle on" id="stg-tog-demo" onclick="stgToggle('stg-tog-demo')"></div>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Auto-refresh data</div><div class="settings-row-val">Every 15 seconds when live key is set</div></div>
+    <div class="stg-toggle on" id="stg-tog-refresh" onclick="stgToggle('stg-tog-refresh')"></div>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Next-pick toasts</div><div class="settings-row-val">AI suggestions after each trade</div></div>
+    <div class="stg-toggle on" id="stg-tog-toasts" onclick="stgToggle('stg-tog-toasts')"></div>
+  </div>
+</div>
+
+<!-- Account -->
+<div class="settings-section">
+  <h3>🔐 Account</h3>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Email</div><div class="settings-row-val" id="stg-email-val">—</div></div>
+    <div></div>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Plan</div><div class="settings-row-val" id="stg-plan-val">Trial</div></div>
+    <button class="btn-settings-secondary" onclick="showUpgradeModal()">Upgrade →</button>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Password</div><div class="settings-row-val">Send a reset link to your email</div></div>
+    <button class="btn-settings-secondary" id="stg-pwd-btn" onclick="stgSendPasswordReset()">Send reset email</button>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Sign out</div><div class="settings-row-val">End your current session</div></div>
+    <button class="btn-settings-danger" onclick="authSignOut()">Sign Out</button>
+  </div>
+</div>
+
+<!-- Danger Zone -->
+<div class="settings-section" style="border-color:rgba(239,68,68,.2)">
+  <h3 style="color:#f87171">⚠ Danger Zone</h3>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Clear local data</div><div class="settings-row-val">Removes all locally cached data and preferences</div></div>
+    <button class="btn-settings-danger" onclick="stgClearLocal()">Clear</button>
+  </div>
+  <div class="settings-row">
+    <div><div class="settings-row-lbl">Delete account</div><div class="settings-row-val">Permanently deletes your account and all data</div></div>
+    <button class="btn-settings-danger" onclick="stgDeleteAccount()">Delete Account</button>
+  </div>
+</div>
 </div>
 
 <!-- ===== PORTFOLIO MODAL ===== -->
@@ -2295,17 +2448,24 @@ let _obName = '';
 let _obBalance = 25000;
 let _obRisk = 1;       // 0=conservative, 1=balanced, 2=aggressive
 let _obFocus = 'ai';   // 'ai', 'sector', 'custom'
-let _obSector = null;
+let _obSector = null;  // kept for back-compat (first of _obSectors)
+let _obSectors = [];   // multi-sector selection
 let _obTickers = ['NVDA','TSLA','META','AMD','SPY','AMZN'];
 
 function obUpdateName(val) {
   _obName = val.trim();
+  const err = document.getElementById('ob-step1-error');
+  if (err && _obName) err.textContent = '';
 }
-function obSetBalance(val, btn) {
-  if (!val || isNaN(val)) return;
+function obSetBalance(val) {
+  if (!val || isNaN(val) || val < 500) return;
   _obBalance = val;
-  document.querySelectorAll('.ob-balance-btn').forEach(b => b.classList.remove('selected'));
-  if (btn) btn.classList.add('selected');
+}
+function obSnapBalance(input) {
+  if (!input.value || +input.value < 500) { input.value = 500; _obBalance = 500; return; }
+  const snapped = Math.round(+input.value / 500) * 500;
+  input.value = snapped;
+  _obBalance = snapped;
 }
 function obSetRisk(idx) {
   _obRisk = idx;
@@ -2325,26 +2485,41 @@ function obSetFocus(focus) {
   if (tickerPanel) tickerPanel.style.display = focus === 'custom' ? 'block' : 'none';
   // Reset tickers to AI defaults when switching back
   if (focus === 'ai') _obTickers = ['NVDA','TSLA','META','AMD','SPY','AMZN'];
+  const err = document.getElementById('ob-step2-error');
+  if (err) err.textContent = '';
 }
-function obSetSector(sector, btn) {
-  _obSector = sector;
-  document.querySelectorAll('.ob-sector-btn').forEach(b => b.classList.remove('selected'));
-  if (btn) btn.classList.add('selected');
-  const sectorTickers = {
-    tech:       ['NVDA','AMD','MSFT','GOOGL','META'],
-    energy:     ['XOM','CVX','OXY','SLB','HAL'],
-    biotech:    ['MRNA','BNTX','REGN','GILD','BIIB'],
-    finance:    ['JPM','GS','BAC','MS','WFC'],
-    crypto:     ['COIN','MSTR','RIOT','MARA','HUT'],
-    space:      ['RKLB','BA','LMT','NOC','SPCE'],
-    ev:         ['TSLA','RIVN','LCID','NIO','XPEV'],
-    agriculture:['ADM','BG','MOS','CF','NTR'],
-    defense:    ['LMT','RTX','NOC','GD','HII'],
-    realestate: ['SPG','AMT','PLD','CBRE','VTR'],
-    consumer:   ['AMZN','WMT','TGT','COST','HD'],
-    healthcare: ['JNJ','UNH','PFE','ABBV','MRK']
-  };
-  _obTickers = sectorTickers[sector] || _obTickers;
+const _OB_SECTOR_TICKERS = {
+  tech:       ['NVDA','AMD','MSFT','GOOGL','META'],
+  energy:     ['XOM','CVX','OXY','SLB','HAL'],
+  biotech:    ['MRNA','BNTX','REGN','GILD','BIIB'],
+  finance:    ['JPM','GS','BAC','MS','WFC'],
+  crypto:     ['COIN','MSTR','RIOT','MARA','HUT'],
+  space:      ['RKLB','BA','LMT','NOC','SPCE'],
+  ev:         ['TSLA','RIVN','LCID','NIO','XPEV'],
+  agriculture:['ADM','BG','MOS','CF','NTR'],
+  defense:    ['LMT','RTX','NOC','GD','HII'],
+  realestate: ['SPG','AMT','PLD','CBRE','VTR'],
+  consumer:   ['AMZN','WMT','TGT','COST','HD'],
+  healthcare: ['JNJ','UNH','PFE','ABBV','MRK']
+};
+function obToggleSector(sector, btn) {
+  const idx = _obSectors.indexOf(sector);
+  if (idx === -1) {
+    _obSectors.push(sector);
+    if (btn) btn.classList.add('selected');
+  } else {
+    _obSectors.splice(idx, 1);
+    if (btn) btn.classList.remove('selected');
+  }
+  _obSector = _obSectors[0] || null; // keep compat field
+  // Merge tickers from all selected sectors (dedup)
+  const merged = [];
+  _obSectors.forEach(s => {
+    (_OB_SECTOR_TICKERS[s] || []).forEach(t => { if (!merged.includes(t)) merged.push(t); });
+  });
+  _obTickers = merged.length > 0 ? merged : ['NVDA','TSLA','META','AMD','SPY','AMZN'];
+  const err = document.getElementById('ob-step2-error');
+  if (err && _obSectors.length > 0) err.textContent = '';
 }
 function obToggleTicker(sym) {
   const idx = _obTickers.indexOf(sym);
@@ -2414,14 +2589,46 @@ function showOnboarding(daysLeft) {
 }
 function onboardNext() {
   const total = 6;
+  // ── Step validation ──
+  if (onboardStep === 1) {
+    // Must have a name
+    if (!_obName || !_obName.trim()) {
+      const nameInput = document.getElementById('ob-name-input');
+      if (nameInput) nameInput.focus();
+      const err = document.getElementById('ob-step1-error');
+      if (err) err.textContent = 'Please enter your name to continue.';
+      return;
+    }
+    // Must have a balance
+    if (!_obBalance || _obBalance < 500) {
+      const balInput = document.getElementById('ob-balance-input');
+      if (balInput) balInput.focus();
+      const err = document.getElementById('ob-step1-error');
+      if (err) err.textContent = 'Please enter a starting balance of at least $500.';
+      return;
+    }
+  }
+  if (onboardStep === 2 && _obFocus === 'sector' && _obSectors.length === 0) {
+    const err = document.getElementById('ob-step2-error');
+    if (err) err.textContent = 'Please select at least one sector.';
+    return;
+  }
   if (onboardStep < total - 1) {
     document.getElementById(`onboard-step-${onboardStep}`).classList.remove('active');
     document.getElementById(`dot-${onboardStep}`).classList.remove('active');
     onboardStep++;
     document.getElementById(`onboard-step-${onboardStep}`).classList.add('active');
     document.getElementById(`dot-${onboardStep}`).classList.add('active');
-    // When reaching the launch step, populate the summary card
     if (onboardStep === 5) obPopulateLaunch();
+  }
+}
+function onboardBack() {
+  if (onboardStep > 0) {
+    document.getElementById(`onboard-step-${onboardStep}`).classList.remove('active');
+    document.getElementById(`dot-${onboardStep}`).classList.remove('active');
+    onboardStep--;
+    document.getElementById(`onboard-step-${onboardStep}`).classList.add('active');
+    document.getElementById(`dot-${onboardStep}`).classList.add('active');
   }
 }
 function skipOnboarding() { finishOnboarding(); }
@@ -2442,7 +2649,8 @@ async function finishOnboarding() {
       risk: _obRisk,
       riskMultiplier: riskMultipliers[_obRisk] ?? 1.4,
       focus: _obFocus,
-      sector: _obSector,
+      sector: _obSectors[0] || _obSector || null,
+      sectors: [..._obSectors],
       watchlist: _obTickers
     };
     try {
@@ -2611,6 +2819,10 @@ async function handleAuthState(user) {
     if (kavEl && D.av) kavEl.value = D.av;
     if (knaEl && D.na) knaEl.value = D.na;
     if (pnameEl && D.name && D.name !== 'User') pnameEl.value = D.name;
+    const sbalEl = document.getElementById('s-bal');
+    const sriskEl = document.getElementById('s-risk');
+    if (sbalEl && D.bal && D.bal !== 25000) sbalEl.value = D.bal;
+    if (sriskEl && D.risk) sriskEl.value = D.risk;
     if (_holdForOnboarding) {
       // T&C gate / onboarding is showing — keep setup + dash hidden.
       // finishOnboarding() will call launch() when the user is done.
@@ -2732,9 +2944,8 @@ let _investAmt = 0; // currently selected investment amount
 let _investSym = null; // symbol being sized
 
 function initSession() {
-  if (!D.session.start) {
-    D.session.start = D.bal;
-  }
+  // Always sync session start to current balance (picks up profile-loaded value)
+  D.session.start = D.bal;
   renderSessionBar();
   document.getElementById('session-bar').classList.add('show');
 }
@@ -3004,26 +3215,129 @@ function commitPosition() {
   try { const raw = localStorage.getItem('tcp_v2') || '{}'; const p = JSON.parse(raw); p.session = D.session; localStorage.setItem('tcp_v2', JSON.stringify(p)); } catch(e) {}
 }
 
-// ===== SETTINGS TOGGLE =====
+// ===== SETTINGS PAGE =====
 function openSettings(){
-  // Pre-fill current values
-  document.getElementById('k-fh').value=D.fh;
-  document.getElementById('k-av').value=D.av;
-  document.getElementById('k-na').value=D.na;
-  document.getElementById('p-name').value=D.name;
-  document.getElementById('s-bal').value=D.bal;
-  document.getElementById('s-risk').value=D.risk;
-  // Show setup screen as overlay
-  const s=document.getElementById('setup');
-  s.style.display='flex';
-  s.style.position='fixed';
-  s.style.top='0';s.style.left='0';
-  s.style.width='100%';s.style.height='100%';
-  s.style.zIndex='9999';
-  s.style.background='rgba(10,14,23,.95)';
-  // Change button text
-  const btn=s.querySelector('.btn-go');
-  if(btn)btn.textContent='💾 Save & Relaunch →';
+  // Navigate to the settings page using the nav button
+  const btn = document.querySelector('.nav button[onclick*="settings"]');
+  if (btn) pg('settings', btn);
+}
+function stgOpen() {
+  // Pre-fill settings fields from live state
+  const stgName = document.getElementById('stg-name');
+  const stgBal = document.getElementById('stg-bal');
+  const stgRisk = document.getElementById('stg-risk');
+  const stgFh = document.getElementById('stg-fh');
+  const stgAv = document.getElementById('stg-av');
+  const stgNa = document.getElementById('stg-na');
+  const stgEmail = document.getElementById('stg-email-val');
+  const stgPlan = document.getElementById('stg-plan-val');
+  if (stgName) stgName.value = D.name && D.name !== 'User' ? D.name : '';
+  if (stgBal) stgBal.value = D.bal || 25000;
+  if (stgRisk) stgRisk.value = D.risk || 1;
+  if (stgFh) stgFh.value = D.fh || '';
+  if (stgAv) stgAv.value = D.av || '';
+  if (stgNa) stgNa.value = D.na || '';
+  const user = auth.currentUser;
+  if (stgEmail && user) stgEmail.textContent = user.email || '—';
+  // Plan badge
+  if (stgPlan) {
+    if (D.isAdmin) stgPlan.textContent = '👑 Admin';
+    else {
+      const badge = document.getElementById('trial-badge');
+      stgPlan.textContent = badge ? badge.textContent : 'Trial';
+    }
+  }
+}
+function stgShowMsg(msg, color) {
+  const el = document.getElementById('stg-saved-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = color || 'var(--grn)';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.textContent = '', 3000);
+}
+async function stgSaveProfile() {
+  const name = document.getElementById('stg-name').value.trim();
+  const bal = parseFloat(document.getElementById('stg-bal').value) || D.bal;
+  const risk = parseFloat(document.getElementById('stg-risk').value) || D.risk;
+  if (name) D.name = name;
+  D.bal = bal;
+  D.risk = risk;
+  // Update live UI
+  const nameEl = document.getElementById('user-name');
+  if (nameEl) nameEl.textContent = '👤 ' + D.name;
+  document.getElementById('s-bal').value = D.bal;
+  document.getElementById('s-risk').value = D.risk;
+  document.getElementById('p-name').value = D.name;
+  document.getElementById('pc-r').value = D.risk;
+  document.getElementById('rr-pct').textContent = D.risk + '%';
+  savePref();
+  // Persist to Firestore
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      await db.collection('users').doc(user.uid).update({
+        'traderProfile.name': D.name,
+        'traderProfile.balance': D.bal,
+        'traderProfile.riskMultiplier': D.risk
+      });
+    } catch(e) {}
+  }
+  stgShowMsg('✅ Profile saved');
+}
+async function stgSaveKeys() {
+  const fh = document.getElementById('stg-fh').value.trim();
+  const av = document.getElementById('stg-av').value.trim();
+  const na = document.getElementById('stg-na').value.trim();
+  if (fh) D.fh = fh;
+  if (av) D.av = av;
+  if (na) D.na = na;
+  document.getElementById('k-fh').value = D.fh;
+  document.getElementById('k-av').value = D.av;
+  document.getElementById('k-na').value = D.na;
+  savePref();
+  stgShowMsg('✅ API keys saved — reload to apply live data');
+}
+function stgToggleKeyVis(id, btn) {
+  const inp = document.getElementById(id);
+  if (!inp) return;
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+}
+function stgToggle(id) {
+  document.getElementById(id)?.classList.toggle('on');
+}
+async function stgSendPasswordReset() {
+  const user = auth.currentUser;
+  if (!user || !user.email) { stgShowMsg('No email found on account.', 'var(--red)'); return; }
+  const btn = document.getElementById('stg-pwd-btn');
+  if (btn) btn.textContent = 'Sending...';
+  try {
+    await auth.sendPasswordResetEmail(user.email);
+    stgShowMsg('✅ Reset email sent to ' + user.email);
+  } catch(e) {
+    stgShowMsg('Error: ' + e.message, 'var(--red)');
+  } finally {
+    if (btn) btn.textContent = 'Send reset email';
+  }
+}
+function stgClearLocal() {
+  if (!confirm('Clear all local data? Your Firestore profile is untouched.')) return;
+  try { localStorage.removeItem('tcp_v2'); } catch(e) {}
+  stgShowMsg('✅ Local data cleared');
+}
+async function stgDeleteAccount() {
+  if (!confirm('⚠ This will permanently delete your account. This cannot be undone. Continue?')) return;
+  if (!confirm('Are you absolutely sure? All your data will be lost.')) return;
+  const user = auth.currentUser;
+  if (!user) return;
+  try {
+    await db.collection('users').doc(user.uid).delete();
+    await user.delete();
+    location.reload();
+  } catch(e) {
+    stgShowMsg('Could not delete: ' + e.message + ' (re-login may be required)', 'var(--red)');
+  }
 }
 
 // ===== DEMO BANNER + LIVE KEY =====
@@ -3224,10 +3538,11 @@ function pg(id, btn) {
   btn.classList.add('on');
   _activePage = id;
   // Hide sector nav + context bar on pages where sectors are irrelevant
-  const noSector = ['learn', 'tools'];
+  const noSector = ['learn', 'tools', 'settings'];
   const sn = document.getElementById('sector-nav');
   if (sn) sn.style.display = noSector.includes(id) ? 'none' : 'flex';
   updateSectorCtxBar(id);
+  if (id === 'settings') stgOpen();
   // Re-render current page's content with active sector filter
   if (id === 'intel') { genEmerging(); mkInsider(); }
   if (id === 'news') mkFhNews();
