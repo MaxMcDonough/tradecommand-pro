@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You asked about TradeCommand Pro ⚡</title>
+  <style>
+    body { margin: 0; padding: 0; background: #f0f2f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 32px rgba(0,0,0,0.10); }
+
+    /* Header */
+    .header { background: linear-gradient(160deg, #0a0e17 0%, #111827 55%, #1e1b4b 100%); padding: 44px 44px 36px; text-align: center; }
+    .logo { font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 20px; }
+    .logo span { color: #3b82f6; }
+    .header-badge { display: inline-block; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.35); color: #93c5fd; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 16px; border-radius: 20px; margin-bottom: 18px; }
+    .header-title { font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.2; margin-bottom: 10px; letter-spacing: -0.5px; }
+    .header-sub { font-size: 15px; color: #94a3b8; line-height: 1.6; }
+
+    /* Body */
+    .body { padding: 44px; }
+    p { font-size: 16px; color: #374151; line-height: 1.75; margin: 0 0 20px; }
+    .name-greeting { font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 6px; }
+
+    /* What it is section */
+    .what-box { background: #f8faff; border: 1px solid #dbeafe; border-radius: 12px; padding: 24px 28px; margin: 28px 0; }
+    .what-box .what-title { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 16px; }
+    .feat-row { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .feat-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .feat-text { font-size: 14px; color: #374151; line-height: 1.55; }
+    .feat-text strong { color: #111827; }
+
+    /* Plan callout */
+    .plan-box { border-radius: 12px; padding: 24px 28px; margin: 28px 0; }
+    .plan-box.pro { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #bfdbfe; }
+    .plan-box.elite { background: linear-gradient(135deg, #f5f3ff, #ede9fe); border: 1px solid #c4b5fd; }
+    .plan-box.trial { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #bbf7d0; }
+    .plan-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+    .plan-box.pro .plan-eyebrow { color: #1d4ed8; }
+    .plan-box.elite .plan-eyebrow { color: #6d28d9; }
+    .plan-box.trial .plan-eyebrow { color: #15803d; }
+    .plan-name { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 4px; }
+    .plan-price { font-size: 15px; color: #6b7280; margin-bottom: 12px; }
+    .plan-price strong { color: #111827; }
+    .plan-feats { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .plan-feats li { font-size: 13px; color: #374151; display: flex; align-items: center; gap: 8px; }
+    .plan-feats li::before { content: '✓'; font-weight: 700; color: #10b981; flex-shrink: 0; }
+
+    /* CTA */
+    .cta-wrap { text-align: center; margin: 32px 0 24px; }
+    .cta-btn { display: inline-block; background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff; font-size: 16px; font-weight: 700; padding: 15px 44px; border-radius: 10px; text-decoration: none; letter-spacing: 0.3px; box-shadow: 0 4px 20px rgba(59,130,246,0.35); }
+    .cta-btn.elite { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 20px rgba(139,92,246,0.35); }
+    .cta-btn.trial { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 20px rgba(16,185,129,0.35); }
+    .cta-sub { font-size: 13px; color: #9ca3af; margin-top: 10px; }
+
+    /* Divider */
+    .divider { border: none; border-top: 1px solid #e5e7eb; margin: 32px 0; }
+
+    /* Social proof */
+    .proof-row { display: flex; gap: 16px; margin: 20px 0; }
+    .proof-stat { flex: 1; text-align: center; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 10px; }
+    .proof-num { font-size: 22px; font-weight: 800; color: #111827; }
+    .proof-lbl { font-size: 11px; color: #6b7280; margin-top: 3px; }
+
+    /* Signature */
+    .sig { font-size: 15px; color: #374151; margin-top: 28px; }
+    .sig strong { color: #111827; }
+
+    /* Footer */
+    .footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 28px 44px; text-align: center; }
+    .footer-logo { font-size: 15px; font-weight: 700; color: #374151; margin-bottom: 10px; }
+    .footer-logo span { color: #3b82f6; }
+    .footer p { font-size: 12px; color: #9ca3af; margin: 0 0 6px; line-height: 1.6; }
+    .footer a { color: #6b7280; text-decoration: none; }
+    .footer a:hover { color: #374151; }
+
+    @media (max-width: 600px) {
+      .body { padding: 30px 22px; }
+      .header { padding: 36px 22px 30px; }
+      .header-title { font-size: 23px; }
+      .footer { padding: 22px; }
+      .what-box { padding: 18px; }
+      .plan-box { padding: 18px; }
+      .proof-row { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">⚡ Trade<span>Command</span> Pro</div>
+      <div class="header-badge">👋 Thanks for your interest</div>
+      <div class="header-title">Here's everything you need to know.</div>
+      <div class="header-sub">You asked about TradeCommand Pro. Here's what it is, what it does, and how to get started today.</div>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+      <div class="name-greeting">Hey {{to_name}},</div>
+      <p>Thanks for your interest in TradeCommand Pro. I built this because I was frustrated with how expensive, fragmented, and complicated trading tools are — especially for retail traders who just want clear signals and a smart way to manage their risk.</p>
+      <p>Here's a quick rundown of what you're getting:</p>
+
+      <!-- What it is -->
+      <div class="what-box">
+        <div class="what-title">What TradeCommand Pro actually does:</div>
+        <div class="feat-row">
+          <div class="feat-icon">🤖</div>
+          <div class="feat-text"><strong>AI Trade Signals.</strong> Our 8-factor model scores every setup with a confidence rating and full reasoning — so you know <em>why</em> a trade is flagged, not just that it is.</div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">🗞️</div>
+          <div class="feat-text"><strong>5× Daily Market Briefings.</strong> Pre-market, mid-morning, lunch, power hour, and end of day. Each one is concise, actionable, and built for traders — not financial advisors.</div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">📋</div>
+          <div class="feat-text"><strong>Trade Plan Builder.</strong> Calculates your exact entry, stop loss, target, and position size based on your account and risk tolerance. Plan every trade before you take it.</div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">📊</div>
+          <div class="feat-text"><strong>Reddit Radar + News Feed.</strong> Real-time sentiment from the trading communities that actually move stocks, plus a curated news feed filtered for what matters right now.</div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">₿</div>
+          <div class="feat-text"><strong>Crypto Dashboard + TSX.</strong> Full coverage including Canadian markets and Wealthsimple-compatible tickers. Not just US stocks.</div>
+        </div>
+      </div>
+
+      <!-- Plan section — EmailJS replaces {{plan_section}} with the right block,
+           OR keep all three and use conditional logic in your template -->
+      <p>Your trial gives you full access to everything for 7 days — no credit card required. After that, here's what's available:</p>
+
+      <!-- FREE TRIAL -->
+      <div class="plan-box trial">
+        <div class="plan-eyebrow">Start Here</div>
+        <div class="plan-name">7-Day Free Trial</div>
+        <div class="plan-price">No credit card · everything unlocked</div>
+        <ul class="plan-feats">
+          <li>AI Trade Signals + full reasoning</li>
+          <li>5× Daily Briefings</li>
+          <li>Trade Plan Builder</li>
+          <li>Reddit Radar + News Feed</li>
+          <li>Crypto + TSX + Wealthsimple</li>
+          <li>Session Tracker</li>
+        </ul>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-box pro">
+        <div class="plan-eyebrow">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><strong>$29/month</strong> CAD · cancel anytime</div>
+        <ul class="plan-feats">
+          <li>Everything in Free</li>
+          <li>Live real-time prices (15s refresh)</li>
+          <li>Unlimited watchlist</li>
+          <li>Full AI-powered analysis</li>
+          <li>All 15+ live data feeds</li>
+          <li>Pre-market scanner</li>
+        </ul>
+      </div>
+
+      <!-- ELITE -->
+      <div class="plan-box elite">
+        <div class="plan-eyebrow">Maximum Edge</div>
+        <div class="plan-name">Elite</div>
+        <div class="plan-price"><strong>$79/month</strong> CAD · institutional-grade tools</div>
+        <ul class="plan-feats">
+          <li>Everything in Pro</li>
+          <li>Options flow alerts</li>
+          <li>Unusual Whales feed</li>
+          <li>Dark pool data</li>
+          <li>Tick-level real-time prices</li>
+          <li>Personal Trade Coach AI</li>
+          <li>Priority support + early access</li>
+        </ul>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-wrap">
+        <a href="https://tradecommand.pro/dashboard.html?tab=signup" class="cta-btn">Start Your Free Trial →</a>
+        <div class="cta-sub">No credit card needed · takes 60 seconds · cancel anytime</div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Social proof stats -->
+      <div class="proof-row">
+        <div class="proof-stat">
+          <div class="proof-num">5×</div>
+          <div class="proof-lbl">Daily briefings</div>
+        </div>
+        <div class="proof-stat">
+          <div class="proof-num">8</div>
+          <div class="proof-lbl">Signal factors</div>
+        </div>
+        <div class="proof-stat">
+          <div class="proof-num">15+</div>
+          <div class="proof-lbl">Live data feeds</div>
+        </div>
+        <div class="proof-stat">
+          <div class="proof-num">$0</div>
+          <div class="proof-lbl">To get started</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <p>If you have any questions before signing up, just reply to this email. I'm the one answering it — I built this thing and I actually want to hear from you.</p>
+
+      <div class="sig">
+        Talk soon,<br>
+        <strong>Max McDonough</strong><br>
+        <span style="font-size:13px;color:#9ca3af;">Founder &amp; Developer, TradeCommand Pro</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-logo">⚡ Trade<span>Command</span> Pro</div>
+      <p style="font-size:13px;color:#6b7280;font-weight:600;margin-bottom:8px;">Max McDonough — Founder &amp; Developer, TradeCommand Pro</p>
+      <p>You're receiving this because you expressed interest at <a href="https://tradecommand.pro">tradecommand.pro</a>.</p>
+      <p>
+        <a href="https://tradecommand.pro/dashboard.html?tab=signup">Sign Up Now</a> ·
+        <a href="https://tradecommand.pro/privacy.html">Privacy Policy</a> ·
+        <a href="#">Unsubscribe</a>
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
