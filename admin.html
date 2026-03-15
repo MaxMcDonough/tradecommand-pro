@@ -1729,37 +1729,6 @@
         </div>
         <!-- ===== END CHANGELOG PAGE ===== -->
 
-      </div>
-    </div>
-  </div>
-
-  <!-- User Detail Panel -->
-  <div class="slide-panel" id="userPanel">
-    <div class="slide-panel-header">
-      <div class="slide-panel-title">User Details</div>
-      <button class="close-panel" id="closeUserPanel">✕</button>
-    </div>
-    <div class="slide-panel-content" id="userPanelContent">
-      <!-- Populated dynamically -->
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <h2 class="modal-title" id="modalTitle"></h2>
-      <div class="modal-body" id="modalBody"></div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" id="modalCancel">Cancel</button>
-        <button class="btn btn-danger" id="modalConfirm">Confirm</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Container -->
-  <div class="toast-container" id="toastContainer"></div>
-
-
         <!-- === BIZ: DASHBOARD === -->
 <!-- ═══════════════════════════════════════════════════
      BIZ: DASHBOARD
@@ -2269,6 +2238,36 @@
     </div>
   </div>
 </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- User Detail Panel -->
+  <div class="slide-panel" id="userPanel">
+    <div class="slide-panel-header">
+      <div class="slide-panel-title">User Details</div>
+      <button class="close-panel" id="closeUserPanel">✕</button>
+    </div>
+    <div class="slide-panel-content" id="userPanelContent">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+        <button class="btn btn-danger" id="modalConfirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
 
 
   <script>
@@ -4838,7 +4837,7 @@
     function bizHandleFileUpload(inp){ showToast('File upload coming soon', 'info'); }
     function bizFilterFiles(q)   { showToast('Filter: '+q, 'info'); }
     function bizSaveSettings()   {
-      const co = document.getElementById('biz-co-name')?.value;
+      const co = document.getElementById('biz-name')?.value;
       const we = document.getElementById('biz-website')?.value;
       if (co) { showToast('Settings saved', 'success'); } else { showToast('Enter a company name', 'error'); }
     }
