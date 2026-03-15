@@ -95,6 +95,43 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 .kanban-card .name{font-size:13px;font-weight:600;color:var(--t1)}
 .kanban-card .meta{font-size:11px;color:var(--t2);margin-top:4px}
 
+/* Loading skeleton */
+.skeleton{background:linear-gradient(90deg,var(--brd) 25%,rgba(99,102,241,.1) 50%,var(--brd) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;display:inline-block;min-width:40px;color:transparent}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Fade in */
+.page{animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* Stat hover */
+.stat{transition:border-color .2s,transform .15s}
+.stat:hover{border-color:var(--acc);transform:translateY(-2px)}
+/* Card hover */
+.card{transition:border-color .2s}
+.card:hover{border-color:rgba(99,102,241,.2)}
+/* Table row highlight */
+tr{transition:background .15s}
+/* Kanban card hover */
+.kanban-card{transition:transform .15s,border-color .15s;cursor:pointer}
+.kanban-card:hover{transform:translateY(-2px);border-color:var(--acc)}
+/* Live pulse */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+/* Button hover */
+.btn{transition:transform .1s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.btn:active{transform:translateY(0)}
+/* Badge glow for hot scores */
+.badge-hot{background:rgba(16,185,129,.15);color:#10b981;box-shadow:0 0 8px rgba(16,185,129,.2)}
+/* Table row hover */
+tbody tr:hover{background:rgba(99,102,241,.04)}
+/* Progress bar animation */
+@keyframes growBar{from{width:0}to{width:var(--w)}}
+.bar-anim{animation:growBar .6s ease-out forwards}
+/* Scrollbar styling */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(99,102,241,.3)}
+
 @media(max-width:768px){
   .sidebar{position:fixed;left:-220px;z-index:999;height:100%;transition:left .2s}
   .sidebar.open{left:0}
@@ -158,19 +195,65 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 <!-- ═══ DASHBOARD ═══ -->
 <div class="page active" id="dashboard-page">
   <div class="stats">
-    <div class="stat"><div class="stat-label">Total Users</div><div class="stat-val" id="d-users">—</div></div>
-    <div class="stat"><div class="stat-label">Active Subscriptions</div><div class="stat-val" id="d-subs">—</div></div>
-    <div class="stat"><div class="stat-label">MRR</div><div class="stat-val" id="d-mrr">—</div></div>
-    <div class="stat"><div class="stat-label">Newsletter Subs</div><div class="stat-val" id="d-news">—</div></div>
+    <div class="stat"><div class="stat-label">Total Users</div><div class="stat-val" id="d-users"><span class="skeleton">--</span></div></div>
+    <div class="stat"><div class="stat-label">Active Subscriptions</div><div class="stat-val" id="d-subs"><span class="skeleton">--</span></div></div>
+    <div class="stat"><div class="stat-label">MRR</div><div class="stat-val" id="d-mrr"><span class="skeleton">--</span></div></div>
+    <div class="stat"><div class="stat-label">Leads Pipeline</div><div class="stat-val" id="d-leads">50</div></div>
   </div>
+
+  <!-- Quick Actions -->
   <div class="card">
-    <h3>Recent Users</h3>
-    <table><thead><tr><th>Email</th><th>Plan</th><th>Joined</th></tr></thead>
-    <tbody id="d-recent"><tr><td colspan="3" class="empty-msg">Loading...</td></tr></tbody></table>
+    <h3>Quick Actions</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+      <button class="btn btn-primary" onclick="document.querySelector('[data-page=users]').click()">Manage Users</button>
+      <button class="btn btn-ghost" onclick="document.querySelector('[data-page=promos]').click()">Create Promo</button>
+      <button class="btn btn-ghost" onclick="document.querySelector('[data-page=analytics]').click()">View Analytics</button>
+      <button class="btn btn-ghost" onclick="document.querySelector('[data-page=\"biz-leads\"]').click()">Open Leads</button>
+      <button class="btn btn-ghost" onclick="exportUsers()">Export Users CSV</button>
+    </div>
   </div>
-  <div class="card">
-    <h3>System Status</h3>
-    <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--grn);display:inline-block"></span><span style="font-size:13px">All systems operational</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <!-- MRR Chart -->
+    <div class="card">
+      <h3>Revenue Overview</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+        <div class="lp-field"><div class="lp-field-label">MRR</div><div style="font-size:20px;font-weight:800;color:var(--grn)" id="d-mrr2">$0</div></div>
+        <div class="lp-field"><div class="lp-field-label">ARR</div><div style="font-size:20px;font-weight:800;color:var(--acc)" id="d-arr">$0</div></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:12px">
+        <div style="flex:1"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Pro ($29/mo)</div><div style="height:8px;background:var(--brd);border-radius:4px;overflow:hidden"><div id="d-pro-bar" style="height:100%;background:var(--acc);border-radius:4px;width:0%;transition:width .5s"></div></div><div style="font-size:11px;color:var(--t2);margin-top:2px" id="d-pro-count">0 users</div></div>
+        <div style="flex:1"><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Elite ($79/mo)</div><div style="height:8px;background:var(--brd);border-radius:4px;overflow:hidden"><div id="d-elite-bar" style="height:100%;background:var(--grn);border-radius:4px;width:0%;transition:width .5s"></div></div><div style="font-size:11px;color:var(--t2);margin-top:2px" id="d-elite-count">0 users</div></div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="card">
+      <h3>Recent Activity</h3>
+      <div id="d-activity" style="display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto">
+        <div class="empty-msg" style="padding:20px">Loading activity...</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:0">
+    <!-- Recent Users -->
+    <div class="card">
+      <h3>Recent Users</h3>
+      <table><thead><tr><th>Email</th><th>Plan</th><th>Joined</th></tr></thead>
+      <tbody id="d-recent"><tr><td colspan="3" class="empty-msg">Loading...</td></tr></tbody></table>
+    </div>
+
+    <!-- System Status -->
+    <div class="card">
+      <h3>System Status</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--grn);display:inline-block"></span><span style="font-size:13px">Firebase</span><span style="font-size:11px;color:var(--grn);margin-left:auto">Connected</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--grn);display:inline-block"></span><span style="font-size:13px">Stripe</span><span style="font-size:11px;color:var(--grn);margin-left:auto">Active</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--grn);display:inline-block"></span><span style="font-size:13px">GitHub Pages</span><span style="font-size:11px;color:var(--grn);margin-left:auto">Deployed</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--acc);display:inline-block"></span><span style="font-size:13px">Leads Pipeline</span><span style="font-size:11px;color:var(--acc);margin-left:auto">50 leads</span></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -565,13 +648,23 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 <div class="page" id="biz-dashboard-page">
   <div class="stats">
     <div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val" id="bd-leads">50</div></div>
-    <div class="stat"><div class="stat-label">Pipeline Value</div><div class="stat-val" id="bd-pipeline">$24,500</div></div>
-    <div class="stat"><div class="stat-label">Deals Won</div><div class="stat-val" id="bd-won">0</div></div>
-    <div class="stat"><div class="stat-label">Active Campaigns</div><div class="stat-val">3</div></div>
+    <div class="stat"><div class="stat-label">Contacted</div><div class="stat-val" id="bd-contacted">0</div></div>
+    <div class="stat"><div class="stat-label">Interested</div><div class="stat-val" id="bd-interested">0</div></div>
+    <div class="stat"><div class="stat-label">Converted</div><div class="stat-val" id="bd-converted">0</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card">
+      <h3>Lead Pipeline</h3>
+      <div id="bd-funnel" style="display:flex;flex-direction:column;gap:8px;margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h3>Geo Distribution</h3>
+      <div id="bd-geo" style="display:flex;flex-direction:column;gap:6px;margin-top:8px"></div>
+    </div>
   </div>
   <div class="card">
     <h3>Top Leads</h3>
-    <table><thead><tr><th>Name</th><th>Score</th><th>Type</th><th>Location</th></tr></thead>
+    <table><thead><tr><th>Name</th><th>Score</th><th>Type</th><th>Location</th><th></th></tr></thead>
     <tbody id="bd-top-leads"></tbody></table>
   </div>
 </div>
@@ -579,16 +672,16 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 <!-- ═══ CRM & PIPELINE ═══ -->
 <div class="page" id="biz-crm-page">
   <div class="stats">
-    <div class="stat"><div class="stat-label">New</div><div class="stat-val">50</div></div>
-    <div class="stat"><div class="stat-label">Contacted</div><div class="stat-val">0</div></div>
-    <div class="stat"><div class="stat-label">Interested</div><div class="stat-val">0</div></div>
-    <div class="stat"><div class="stat-label">Converted</div><div class="stat-val">0</div></div>
+    <div class="stat"><div class="stat-label">New</div><div class="stat-val" id="crm-new">50</div></div>
+    <div class="stat"><div class="stat-label">Contacted</div><div class="stat-val" id="crm-contacted">0</div></div>
+    <div class="stat"><div class="stat-label">Interested</div><div class="stat-val" id="crm-interested">0</div></div>
+    <div class="stat"><div class="stat-label">Converted</div><div class="stat-val" id="crm-converted">0</div></div>
   </div>
   <div class="kanban">
-    <div class="kanban-col"><h4>🆕 New</h4><div id="k-new"></div></div>
-    <div class="kanban-col"><h4>📨 Contacted</h4><div id="k-contacted"><div class="empty-msg" style="padding:20px">Move leads here after outreach</div></div></div>
-    <div class="kanban-col"><h4>🔥 Interested</h4><div id="k-interested"><div class="empty-msg" style="padding:20px">Leads who replied positively</div></div></div>
-    <div class="kanban-col"><h4>✅ Converted</h4><div id="k-converted"><div class="empty-msg" style="padding:20px">Paying customers</div></div></div>
+    <div class="kanban-col"><h4>New</h4><div id="k-new"></div></div>
+    <div class="kanban-col"><h4>Contacted</h4><div id="k-contacted"></div></div>
+    <div class="kanban-col"><h4>Interested</h4><div id="k-interested"></div></div>
+    <div class="kanban-col"><h4>Converted</h4><div id="k-converted"></div></div>
   </div>
 </div>
 
@@ -616,14 +709,18 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 <div class="page" id="biz-leads-page">
   <div class="stats">
     <div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val" id="leads-total">50</div></div>
-    <div class="stat"><div class="stat-label">🔥 Hot Leads</div><div class="stat-val" id="leads-hot">—</div></div>
-    <div class="stat"><div class="stat-label">☀️ Warm Leads</div><div class="stat-val" id="leads-warm">—</div></div>
+    <div class="stat"><div class="stat-label">Hot Leads</div><div class="stat-val" id="leads-hot">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Warm Leads</div><div class="stat-val" id="leads-warm">&mdash;</div></div>
     <div class="stat"><div class="stat-label">Conversion Rate</div><div class="stat-val" id="leads-conv">0%</div></div>
   </div>
   <div class="table-wrap">
     <div class="table-bar">
       <h3>All Leads</h3>
-      <input type="text" class="search-box" placeholder="Search leads..." oninput="filterLeads(this.value)">
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" class="search-box" placeholder="Search leads..." oninput="filterLeads(this.value)">
+        <button class="btn btn-primary" onclick="exportLeads()">Export CSV</button>
+        <button class="btn btn-ghost" onclick="copyAllDMs()">Copy All DMs</button>
+      </div>
     </div>
     <table>
       <thead><tr><th>Score</th><th>Name</th><th>Role</th><th>Status</th><th>Priority</th><th>Type</th><th></th></tr></thead>
@@ -684,12 +781,21 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 <div class="page" id="biz-analytics-page">
   <div class="stats">
     <div class="stat"><div class="stat-label">Lead Score Avg</div><div class="stat-val" id="ba-avg">—</div></div>
-    <div class="stat"><div class="stat-label">Pipeline Health</div><div class="stat-val" style="color:var(--grn)">Good</div></div>
-    <div class="stat"><div class="stat-label">Top Source</div><div class="stat-val" style="font-size:16px">LinkedIn</div></div>
-    <div class="stat"><div class="stat-label">Outreach Pending</div><div class="stat-val">50</div></div>
+    <div class="stat"><div class="stat-label">Pipeline Health</div><div class="stat-val" id="ba-health" style="color:var(--grn)">Good</div></div>
+    <div class="stat"><div class="stat-label">Top Source</div><div class="stat-val" style="font-size:16px" id="ba-source">LinkedIn</div></div>
+    <div class="stat"><div class="stat-label">Outreach Pending</div><div class="stat-val" id="ba-pending">50</div></div>
   </div>
-  <div class="card"><h3>Lead Score Distribution</h3>
-    <div style="display:flex;gap:16px;margin-top:12px" id="ba-dist"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card"><h3>Lead Score Distribution</h3>
+      <div style="display:flex;gap:16px;margin-top:12px" id="ba-dist"></div>
+    </div>
+    <div class="card"><h3>Lead Types</h3>
+      <div id="ba-types" style="display:flex;flex-direction:column;gap:8px;margin-top:12px"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Source Breakdown</h3>
+    <div id="ba-sources" style="display:flex;gap:16px;margin-top:12px"></div>
   </div>
 </div>
 
@@ -697,18 +803,28 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 <div class="page" id="biz-advisor-page">
   <div class="card">
     <h3>🤖 AI Growth Advisor</h3>
-    <p style="color:var(--t2);font-size:13px;margin-bottom:16px">Ask questions about your leads, pipeline, and growth strategy.</p>
+    <p style="color:var(--t2);font-size:13px;margin-bottom:16px">Data-driven insights from your leads, pipeline, users, and revenue. All analysis uses live data.</p>
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
       <button class="btn btn-ghost" onclick="aiAdvise('Which leads should I contact first?')">🎯 Priority leads</button>
       <button class="btn btn-ghost" onclick="aiAdvise('What\'s my best outreach strategy?')">📨 Outreach strategy</button>
       <button class="btn btn-ghost" onclick="aiAdvise('How can I improve conversion?')">📈 Improve conversion</button>
       <button class="btn btn-ghost" onclick="aiAdvise('Analyze my pipeline health')">💪 Pipeline health</button>
     </div>
-    <div id="ai-chat" style="background:var(--bg);border:1px solid var(--brd);border-radius:10px;padding:16px;min-height:200px;font-size:13px;color:var(--t2)">
-      Click a question above or type your own below.
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding-top:8px;border-top:1px solid var(--brd)">
+      <button class="btn btn-ghost" onclick="aiAdvise('What markets should I focus on?')">📍 Market analysis</button>
+      <button class="btn btn-ghost" onclick="aiAdvise('Revenue forecast')">💰 Revenue forecast</button>
+      <button class="btn btn-ghost" onclick="aiAdvise('Weekly action plan')">📋 Weekly plan</button>
+      <button class="btn btn-ghost" onclick="aiAdvise('Compare lead segments')">🔍 Segment analysis</button>
+    </div>
+    <div id="ai-chat" style="background:var(--bg);border:1px solid var(--brd);border-radius:10px;padding:16px;min-height:280px;max-height:500px;overflow-y:auto;font-size:13px;color:var(--t2)">
+      <div style="text-align:center;padding:40px 20px">
+        <div style="font-size:28px;margin-bottom:8px">🤖</div>
+        <div style="font-weight:600;color:var(--t1);margin-bottom:4px">Growth Advisor Ready</div>
+        <div style="font-size:12px">Click a question above or type your own below. All responses use your real lead, user, and pipeline data.</div>
+      </div>
     </div>
     <div style="display:flex;gap:8px;margin-top:8px">
-      <input type="text" class="search-box" style="flex:1" id="ai-input" placeholder="Ask the AI advisor...">
+      <input type="text" class="search-box" style="flex:1" id="ai-input" placeholder="Ask anything about leads, pipeline, revenue, strategy..." onkeydown="if(event.key==='Enter')aiAdvise(this.value)">
       <button class="btn btn-primary" onclick="aiAdvise(document.getElementById('ai-input').value)">Send</button>
     </div>
   </div>
@@ -960,21 +1076,56 @@ function loadPage(page) {
 
 async function loadDashboard() {
   try {
-    const snap = await db.collection('users').limit(200).get().catch(()=>({docs:[]}));
-    allUsers = snap.docs.map(d=>({id:d.id,...d.data()}));
-    const s = id => { const el=document.getElementById(id); return el; };
-    s('d-users').textContent = allUsers.length;
-    const paid = allUsers.filter(u=>u.plan&&u.plan!=='free');
-    s('d-subs').textContent = paid.length;
-    const pro = allUsers.filter(u=>u.plan==='pro').length;
-    const elite = allUsers.filter(u=>u.plan==='elite').length;
-    s('d-mrr').textContent = '$' + (pro*29 + elite*79);
-    s('d-news').textContent = allUsers.filter(u=>u.newsletter).length || '—';
+    var snap = await db.collection('users').limit(500).get().catch(function(){return {docs:[]};});
+    allUsers = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+    var pro = allUsers.filter(function(u){return u.plan==='pro';}).length;
+    var elite = allUsers.filter(function(u){return u.plan==='elite';}).length;
+    var paid = pro+elite;
+    var mrr = pro*29+elite*79;
+    s('d-users', allUsers.length);
+    s('d-subs', paid);
+    s('d-mrr', '$'+mrr);
+    s('d-leads', SEED_LEADS.length);
+    s('d-mrr2', '$'+mrr);
+    s('d-arr', '$'+(mrr*12));
+    s('d-pro-count', pro+' users');
+    s('d-elite-count', elite+' users');
+    // Plan bars
+    var total = allUsers.length||1;
+    var proBar = document.getElementById('d-pro-bar');
+    var eliteBar = document.getElementById('d-elite-bar');
+    if(proBar) proBar.style.width = Math.round(pro/total*100)+'%';
+    if(eliteBar) eliteBar.style.width = Math.round(elite/total*100)+'%';
+
     // Recent users
-    const recent = allUsers.slice(0,5);
-    const tbody = document.getElementById('d-recent');
+    var sorted = allUsers.slice().sort(function(a,b){
+      var da = a.createdAt&&a.createdAt.toDate?a.createdAt.toDate():new Date(0);
+      var db2 = b.createdAt&&b.createdAt.toDate?b.createdAt.toDate():new Date(0);
+      return db2-da;
+    });
+    var recent = sorted.slice(0,5);
+    var tbody = document.getElementById('d-recent');
     if (recent.length) {
-      tbody.innerHTML = recent.map(u => `<tr><td style="font-size:13px">${u.email||'—'}</td><td><span class="badge badge-indigo">${u.plan||'free'}</span></td><td style="font-size:12px;color:var(--t3)">${u.createdAt?.toDate?.()?.toLocaleDateString?.() || '—'}</td></tr>`).join('');
+      tbody.innerHTML = recent.map(function(u){
+        return '<tr><td style="font-size:13px">'+(u.email||'\u2014')+'</td><td><span class="badge '+(u.plan==='elite'?'badge-green':u.plan==='pro'?'badge-indigo':'badge-yellow')+'">'+(u.plan||'free')+'</span></td><td style="font-size:12px;color:var(--t3)">'+fmtDate(u.createdAt)+'</td></tr>';
+      }).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="3" class="empty-msg">No users yet</td></tr>';
+    }
+
+    // Activity feed
+    var actEl = document.getElementById('d-activity');
+    var activities = [];
+    sorted.slice(0,8).forEach(function(u){
+      activities.push({text:(u.email||'User')+' signed up', plan:u.plan||'free', date:u.createdAt});
+    });
+    if(activities.length) {
+      actEl.innerHTML = activities.map(function(a){
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(255,255,255,.02);border-radius:6px"><div style="display:flex;align-items:center;gap:8px"><span style="width:6px;height:6px;border-radius:50%;background:var(--grn);flex-shrink:0"></span><span style="font-size:12px;color:var(--t2)">'+a.text+'</span></div><span class="badge badge-indigo" style="font-size:10px">'+a.plan+'</span></div>';
+      }).join('');
+    } else {
+      actEl.innerHTML = '<div class="empty-msg" style="padding:20px">No recent activity</div>';
     }
   } catch(e) { console.warn('Dashboard load:', e); }
 }
@@ -1465,60 +1616,308 @@ function saveSettings() {
 }
 
 // ═══ BIZ PAGE LOADERS ═══
+function getLeadStatuses() {
+  var statuses = {new:0,contacted:0,interested:0,converted:0,lost:0};
+  SEED_LEADS.forEach(function(l,i){
+    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    var st = saved.status||l.status||'new';
+    if(statuses[st]!==undefined) statuses[st]++;
+  });
+  return statuses;
+}
+
 function loadBizDash() {
-  const top5 = SEED_LEADS.slice(0,5);
-  document.getElementById('bd-top-leads').innerHTML = top5.map(l => `<tr>
-    <td style="font-weight:600;font-size:13px">${l.name}</td>
-    <td><span style="font-weight:700;color:${l.score>=80?'var(--grn)':l.score>=50?'var(--ylw)':'var(--red)'}">${l.score}</span></td>
-    <td style="font-size:12px;color:var(--t2)">${l.type}</td>
-    <td style="font-size:12px;color:var(--t3)">${l.location}</td>
-  </tr>`).join('');
+  var statuses = getLeadStatuses();
+  var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+  s('bd-leads', SEED_LEADS.length);
+  s('bd-contacted', statuses.contacted);
+  s('bd-interested', statuses.interested);
+  s('bd-converted', statuses.converted);
+
+  // Pipeline funnel
+  var funnel = document.getElementById('bd-funnel');
+  var stages = [
+    {l:'New',n:statuses.new,c:'var(--acc)'},{l:'Contacted',n:statuses.contacted,c:'var(--ylw)'},
+    {l:'Interested',n:statuses.interested,c:'var(--grn)'},{l:'Converted',n:statuses.converted,c:'#10b981'}
+  ];
+  var maxN = Math.max.apply(null, stages.map(function(x){return x.n;}))||1;
+  funnel.innerHTML = stages.map(function(st){
+    var w = Math.max(8, Math.round(st.n/maxN*100));
+    return '<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>'+st.l+'</span><span style="color:var(--t3)">'+st.n+'</span></div><div style="height:8px;background:var(--brd);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:'+st.c+';border-radius:4px;transition:width .5s"></div></div></div>';
+  }).join('');
+
+  // Geo distribution
+  var geo = {};
+  SEED_LEADS.forEach(function(l){
+    var loc = (l.location||'Unknown').split(',').pop().trim();
+    geo[loc] = (geo[loc]||0)+1;
+  });
+  var geoArr = Object.keys(geo).map(function(k){return {l:k,n:geo[k]};}).sort(function(a,b){return b.n-a.n;}).slice(0,6);
+  var geoEl = document.getElementById('bd-geo');
+  var geoMax = geoArr[0]?geoArr[0].n:1;
+  geoEl.innerHTML = geoArr.map(function(g){
+    var w = Math.round(g.n/geoMax*100);
+    return '<div><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span style="color:var(--t2)">'+g.l+'</span><span style="color:var(--t3)">'+g.n+'</span></div><div style="height:6px;background:var(--brd);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:var(--acc);border-radius:3px"></div></div></div>';
+  }).join('');
+
+  // Top leads
+  var top5 = SEED_LEADS.filter(function(l){return l.score>=80;}).slice(0,8);
+  document.getElementById('bd-top-leads').innerHTML = top5.map(function(l,i){
+    var idx = SEED_LEADS.indexOf(l);
+    return '<tr onclick="openLeadPanel(\'seed_'+idx+'\')" style="cursor:pointer" onmouseover="this.style.background=\'rgba(99,102,241,.06)\'" onmouseout="this.style.background=\'\'">'+
+      '<td style="font-weight:600;font-size:13px">'+l.name+'</td>'+
+      '<td><span style="font-weight:700;color:var(--grn)">'+l.score+'</span></td>'+
+      '<td style="font-size:12px;color:var(--t2)">'+l.type+'</td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+l.location+'</td>'+
+      '<td><button onclick="event.stopPropagation();openLeadPanel(\'seed_'+idx+'\')" class="btn btn-primary" style="font-size:11px;padding:3px 10px">Open</button></td></tr>';
+  }).join('');
 }
 
 function loadCRM() {
-  const col = document.getElementById('k-new');
-  col.innerHTML = SEED_LEADS.slice(0,8).map(l => `<div class="kanban-card"><div class="name">${l.name}</div><div class="meta">${l.role} · ${l.location}</div></div>`).join('');
+  var cols = {new:[],contacted:[],interested:[],converted:[]};
+  SEED_LEADS.forEach(function(l,i){
+    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    var st = saved.status||l.status||'new';
+    if(!cols[st]) cols[st] = [];
+    cols[st].push({lead:l, idx:i});
+  });
+  var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+  s('crm-new', cols.new.length);
+  s('crm-contacted', cols.contacted.length);
+  s('crm-interested', cols.interested.length);
+  s('crm-converted', cols.converted.length);
+
+  ['new','contacted','interested','converted'].forEach(function(stage){
+    var el = document.getElementById('k-'+stage);
+    var items = cols[stage]||[];
+    if(!items.length) {
+      el.innerHTML = '<div class="empty-msg" style="padding:20px;font-size:12px">No leads in this stage</div>';
+      return;
+    }
+    el.innerHTML = items.slice(0,12).map(function(item){
+      var l = item.lead;
+      var sc = l.score>=80?'var(--grn)':l.score>=50?'var(--ylw)':'var(--red)';
+      return '<div class="kanban-card" onclick="openLeadPanel(\'seed_'+item.idx+'\')"><div style="display:flex;justify-content:space-between;align-items:center"><div class="name">'+l.name+'</div><span style="font-weight:700;font-size:12px;color:'+sc+'">'+l.score+'</span></div><div class="meta">'+l.role+'</div><div class="meta">'+l.location+'</div></div>';
+    }).join('');
+    if(items.length>12) el.innerHTML += '<div style="text-align:center;padding:8px;font-size:11px;color:var(--t3)">+'+(items.length-12)+' more</div>';
+  });
 }
 
 function loadRevenue() {
-  const pro = allUsers.filter(u=>u.plan==='pro').length;
-  const elite = allUsers.filter(u=>u.plan==='elite').length;
-  const mrr = pro*29+elite*79;
-  document.getElementById('rev-mrr').textContent = '$'+mrr;
-  document.getElementById('rev-arr').textContent = '$'+(mrr*12);
-  document.getElementById('rev-pro').textContent = pro+' users';
-  document.getElementById('rev-elite').textContent = elite+' users';
-  const milestones = [{l:'$1K MRR',t:1000},{l:'$5K MRR',t:5000},{l:'$10K MRR',t:10000}];
-  document.getElementById('rev-milestones').innerHTML = milestones.map(m => {
-    const pct = Math.min(100, Math.round(mrr/m.t*100));
-    return `<div class="lp-field"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-weight:600">${m.l}</span><span style="font-size:12px;color:var(--t3)">${pct}%</span></div><div style="height:6px;background:var(--brd);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--acc);border-radius:3px"></div></div></div>`;
+  var pro = allUsers.filter(function(u){return u.plan==='pro';}).length;
+  var elite = allUsers.filter(function(u){return u.plan==='elite';}).length;
+  var mrr = pro*29+elite*79;
+  var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+  s('rev-mrr', '$'+mrr);
+  s('rev-arr', '$'+(mrr*12));
+  s('rev-pro', pro+' users');
+  s('rev-elite', elite+' users');
+  var milestones = [{l:'$1K MRR',t:1000},{l:'$5K MRR',t:5000},{l:'$10K MRR',t:10000}];
+  document.getElementById('rev-milestones').innerHTML = milestones.map(function(m){
+    var pct = Math.min(100, Math.round(mrr/m.t*100));
+    return '<div class="lp-field"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-weight:600">'+m.l+'</span><span style="font-size:12px;color:var(--t3)">'+pct+'%</span></div><div style="height:6px;background:var(--brd);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--acc);border-radius:3px;transition:width .5s"></div></div></div>';
   }).join('');
 }
 
 function loadBizAnalytics() {
-  const scores = SEED_LEADS.map(l=>l.score);
-  const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+  var scores = SEED_LEADS.map(function(l){return l.score;});
+  var avg = Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length);
   document.getElementById('ba-avg').textContent = avg;
-  const hot = scores.filter(s=>s>=80).length;
-  const warm = scores.filter(s=>s>=50&&s<80).length;
-  const cold = scores.filter(s=>s<50).length;
+  var hot = scores.filter(function(s){return s>=80;}).length;
+  var warm = scores.filter(function(s){return s>=50&&s<80;}).length;
+  var cold = scores.filter(function(s){return s<50;}).length;
+
+  // Outreach pending
+  var statuses = getLeadStatuses();
+  var pending = statuses.new||0;
+  var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+  s('ba-pending', pending);
+  var healthEl = document.getElementById('ba-health');
+  if(healthEl) {
+    if(pending<25) { healthEl.textContent='Strong'; healthEl.style.color='var(--grn)'; }
+    else if(pending<40) { healthEl.textContent='Good'; healthEl.style.color='var(--ylw)'; }
+    else { healthEl.textContent='Needs Outreach'; healthEl.style.color='var(--red)'; }
+  }
+
+  // Score distribution
   document.getElementById('ba-dist').innerHTML = [
     {l:'Hot (80+)',n:hot,c:'var(--grn)'},{l:'Warm (50-79)',n:warm,c:'var(--ylw)'},{l:'Cold (<50)',n:cold,c:'var(--red)'}
-  ].map(d => `<div style="flex:1;text-align:center;padding:16px;background:var(--bg2);border-radius:8px"><div style="font-size:28px;font-weight:800;color:${d.c}">${d.n}</div><div style="font-size:11px;color:var(--t3);margin-top:4px">${d.l}</div></div>`).join('');
+  ].map(function(d){
+    return '<div style="flex:1;text-align:center;padding:16px;background:var(--bg2);border-radius:8px"><div style="font-size:28px;font-weight:800;color:'+d.c+'">'+d.n+'</div><div style="font-size:11px;color:var(--t3);margin-top:4px">'+d.l+'</div></div>';
+  }).join('');
+
+  // Lead types
+  var types = {};
+  SEED_LEADS.forEach(function(l){ types[l.type] = (types[l.type]||0)+1; });
+  var typeArr = Object.keys(types).map(function(k){return {l:k,n:types[k]};}).sort(function(a,b){return b.n-a.n;});
+  var typeMax = typeArr[0]?typeArr[0].n:1;
+  var typesEl = document.getElementById('ba-types');
+  if(typesEl) {
+    typesEl.innerHTML = typeArr.map(function(t){
+      var w = Math.round(t.n/typeMax*100);
+      return '<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span style="color:var(--t2)">'+t.l+'</span><span style="color:var(--t3)">'+t.n+'</span></div><div style="height:6px;background:var(--brd);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+w+'%;background:var(--acc);border-radius:3px"></div></div></div>';
+    }).join('');
+  }
+
+  // Source breakdown
+  var sources = {};
+  SEED_LEADS.forEach(function(l){ var src=(l.source||'Unknown').split(' ')[0]; sources[src]=(sources[src]||0)+1; });
+  var srcArr = Object.keys(sources).map(function(k){return {l:k,n:sources[k]};}).sort(function(a,b){return b.n-a.n;});
+  var sourcesEl = document.getElementById('ba-sources');
+  if(sourcesEl) {
+    sourcesEl.innerHTML = srcArr.map(function(src){
+      return '<div style="flex:1;text-align:center;padding:16px;background:var(--bg2);border-radius:8px"><div style="font-size:22px;font-weight:800;color:var(--acc)">'+src.n+'</div><div style="font-size:11px;color:var(--t3);margin-top:4px">'+src.l+'</div></div>';
+    }).join('');
+  }
 }
 
 function aiAdvise(q) {
   if (!q) return;
-  const chat = document.getElementById('ai-chat');
-  const hot = SEED_LEADS.filter(l=>l.score>=80);
-  const responses = {
-    'Which leads should I contact first?': `Based on your 50 leads, I recommend starting with the ${hot.length} hot leads (score 80+). Top 3 to contact immediately:\n\n1. ${SEED_LEADS[0].name} — ${SEED_LEADS[0].role} (${SEED_LEADS[0].location})\n2. ${SEED_LEADS[2].name} — ${SEED_LEADS[2].role} (${SEED_LEADS[2].location})\n3. ${SEED_LEADS[3].name} — ${SEED_LEADS[3].role} (${SEED_LEADS[3].location})\n\nThese are finance students at top schools — they need P&L tracking for internship applications.`,
-    "What's my best outreach strategy?": "LinkedIn DM is your strongest channel. Each lead has a personalized DM ready. Strategy:\n\n1. Send all 50 DMs this week (batch 10/day)\n2. Follow up non-responders after 3 days\n3. Offer free trial to responders\n4. Ask for referrals from interested leads\n\nExpected: 15-25% response rate = 8-12 conversations.",
-    'How can I improve conversion?': "Current conversion: 0%. Here's how to get to 10%+:\n\n1. Personalize each DM (already done ✓)\n2. Offer student discount (50% off)\n3. Create urgency ('beta access for first 20')\n4. Show social proof (share screenshots)\n5. Follow up 3x before giving up\n\nTarget: Convert 5 of 50 leads = 10% conversion.",
-    'Analyze my pipeline health': `Pipeline summary:\n• 50 leads in 'New' stage\n• ${hot.length} hot leads (score 80+)\n• 0 contacted yet — this is your bottleneck\n• $0 MRR — revenue starts when you begin outreach\n\nAction: Send first batch of 10 DMs today. Prioritize hot leads.`
+  var chat = document.getElementById('ai-chat');
+  var hot = SEED_LEADS.filter(function(l){return l.score>=80;});
+  var warm = SEED_LEADS.filter(function(l){return l.score>=50&&l.score<80;});
+  var cold = SEED_LEADS.filter(function(l){return l.score<50;});
+  var avg = Math.round(SEED_LEADS.reduce(function(a,l){return a+l.score;},0)/SEED_LEADS.length);
+
+  // Count statuses from localStorage
+  var stats = {new:0,contacted:0,interested:0,converted:0};
+  SEED_LEADS.forEach(function(l,i){
+    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    var st = saved.status||l.status||'new';
+    if(stats[st]!==undefined) stats[st]++;
+    else stats['new']++;
+  });
+
+  // Count user data
+  var totalUsers = allUsers?allUsers.length:0;
+  var proUsers = allUsers?allUsers.filter(function(u){return u.plan==='pro';}).length:0;
+  var eliteUsers = allUsers?allUsers.filter(function(u){return u.plan==='elite';}).length:0;
+  var mrr = (proUsers*29)+(eliteUsers*79);
+
+  // Location breakdown
+  var locMap = {};
+  SEED_LEADS.forEach(function(l){ var loc = (l.location||'Unknown').split(',')[0].trim(); locMap[loc] = (locMap[loc]||0)+1; });
+  var topLocs = Object.entries(locMap).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+
+  // Type breakdown
+  var typeMap = {};
+  SEED_LEADS.forEach(function(l){ var t = l.type||'Unknown'; typeMap[t]=(typeMap[t]||0)+1; });
+  var topTypes = Object.entries(typeMap).sort(function(a,b){return b[1]-a[1];});
+
+  // Uncontacted hot leads
+  var uncontactedHot = [];
+  SEED_LEADS.forEach(function(l,i){
+    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    var st = saved.status||l.status||'new';
+    if(l.score>=80 && st==='new') uncontactedHot.push({lead:l,idx:i});
+  });
+
+  var responses = {
+    'Which leads should I contact first?': '🎯 PRIORITY LEAD ANALYSIS\n\nYou have '+hot.length+' hot leads (80+), '+warm.length+' warm (50-79), and '+cold.length+' cold (<50).\nAverage score: '+avg+'/100\n\n'+
+      (uncontactedHot.length>0 ?
+        '⚡ '+uncontactedHot.length+' HOT LEADS still uncontacted:\n\n'+
+        uncontactedHot.slice(0,5).map(function(h,i){return (i+1)+'. '+h.lead.name+' — '+h.lead.role+' ('+h.lead.location+') — Score: '+h.lead.score;}).join('\n')+
+        '\n\n→ These should be your #1 priority today.' :
+        '✅ All hot leads have been contacted! Focus on warm leads next.')+
+      '\n\n📊 Pipeline Status:\n• New: '+stats.new+' | Contacted: '+stats.contacted+' | Interested: '+stats.interested+' | Converted: '+stats.converted,
+
+    "What's my best outreach strategy?": '📨 OUTREACH STRATEGY\n\nChannel: LinkedIn DM (personalized templates ready for all '+SEED_LEADS.length+' leads)\n\n'+
+      '📅 5-Day Blitz Plan:\n'+
+      'Day 1: Send 10 DMs to hot leads (score 80+)\nDay 2: Send 10 DMs to warm leads (score 50-79)\nDay 3: Send remaining warm leads\nDay 4: Follow up Day 1 non-responders\nDay 5: Follow up Day 2 non-responders\n\n'+
+      '📍 Geo Targeting — Top markets:\n'+topLocs.map(function(l){return '• '+l[0]+': '+l[1]+' leads';}).join('\n')+
+      '\n\n📈 Expected Results:\n• Response rate: 15-25% (8-12 conversations)\n• Conversion rate: 5-10% (3-5 signups)\n• Revenue potential: $'+((3*29))+'-$'+((5*79))+'/mo from first batch\n\n'+
+      '💡 Pro tip: Send DMs between 9-11am local time for best response rates.',
+
+    'How can I improve conversion?': '📈 CONVERSION OPTIMIZATION\n\n'+
+      'Current Pipeline:\n• '+stats.new+' New → '+stats.contacted+' Contacted → '+stats.interested+' Interested → '+stats.converted+' Converted\n'+
+      '• Conversion rate: '+(stats.converted>0?Math.round(stats.converted/SEED_LEADS.length*100):0)+'%\n'+
+      (totalUsers>0?'• Active users: '+totalUsers+' ('+proUsers+' Pro, '+eliteUsers+' Elite)\n• MRR: $'+mrr:'')+
+      '\n\n🎯 Action Items:\n'+
+      '1. '+( stats.contacted===0?'START OUTREACH — 0 leads contacted. This is the #1 bottleneck.':'Keep momentum — '+stats.contacted+' leads contacted, aim for 100%.')+'\n'+
+      '2. Student discount: Offer 50% off ($14.50/mo) — high elasticity in student segment\n'+
+      '3. Create urgency: "Beta access for first 20 signups — lock in $29/mo forever"\n'+
+      '4. Social proof: Screenshot your dashboard, share to Reddit/Twitter\n'+
+      '5. Referral bonus: Give converted users 1 month free for each referral\n'+
+      '6. Follow-up cadence: Day 1 → Day 3 → Day 7 → Day 14 (4-touch sequence)\n\n'+
+      '🎯 Target: Convert 5 of '+SEED_LEADS.length+' leads = '+(Math.round(5/SEED_LEADS.length*100))+'% conversion → $'+((3*29)+(2*79))+'/mo MRR',
+
+    'Analyze my pipeline health': '💪 PIPELINE HEALTH REPORT\n\n'+
+      '📊 Overall: '+SEED_LEADS.length+' leads | Avg score: '+avg+'/100\n\n'+
+      'Stage Breakdown:\n'+
+      '• 🆕 New: '+stats.new+' ('+(Math.round(stats.new/SEED_LEADS.length*100))+'%)\n'+
+      '• 📨 Contacted: '+stats.contacted+' ('+(Math.round(stats.contacted/SEED_LEADS.length*100))+'%)\n'+
+      '• ⭐ Interested: '+stats.interested+' ('+(Math.round(stats.interested/SEED_LEADS.length*100))+'%)\n'+
+      '• ✅ Converted: '+stats.converted+' ('+(Math.round(stats.converted/SEED_LEADS.length*100))+'%)\n\n'+
+      'Score Distribution:\n'+
+      '• 🔥 Hot (80+): '+hot.length+' leads\n'+
+      '• 🌡️ Warm (50-79): '+warm.length+' leads\n'+
+      '• ❄️ Cold (<50): '+cold.length+' leads\n\n'+
+      'Lead Types:\n'+topTypes.map(function(t){return '• '+t[0]+': '+t[1];}).join('\n')+
+      '\n\n'+(totalUsers>0?'💰 Revenue:\n• Users: '+totalUsers+' | Pro: '+proUsers+' | Elite: '+eliteUsers+'\n• MRR: $'+mrr+' | ARR: $'+(mrr*12)+'\n\n':'')+
+      (stats.new>40?'⚠️ ALERT: '+(Math.round(stats.new/SEED_LEADS.length*100))+'% of leads still in "New" — start outreach immediately!':
+       stats.interested>5?'📈 STRONG: '+stats.interested+' interested leads — focus on closing these this week!':
+       '👍 Pipeline is moving. Keep the outreach cadence going.'),
+
+    'What markets should I focus on?': '📍 MARKET ANALYSIS\n\n'+
+      'Lead Distribution by Market:\n'+topLocs.map(function(l,i){return (i+1)+'. '+l[0]+': '+l[1]+' leads ('+(Math.round(l[1]/SEED_LEADS.length*100))+'%)';}).join('\n')+
+      '\n\nLead Types:\n'+topTypes.map(function(t){return '• '+t[0]+': '+t[1]+' ('+(Math.round(t[1]/SEED_LEADS.length*100))+'%)';}).join('\n')+
+      '\n\n🎯 Strategy:\n'+
+      '• Focus on top 2 markets: '+topLocs[0][0]+' and '+(topLocs[1]?topLocs[1][0]:'N/A')+'\n'+
+      '• These represent '+(Math.round((topLocs[0][1]+(topLocs[1]?topLocs[1][1]:0))/SEED_LEADS.length*100))+'% of all leads\n'+
+      '• Create market-specific messaging for each geo\n'+
+      '• Consider timezone-optimized send times',
+
+    'Revenue forecast': '💰 REVENUE FORECAST\n\n'+
+      'Current State:\n'+(totalUsers>0?'• Active users: '+totalUsers+'\n• Pro ($29/mo): '+proUsers+'\n• Elite ($79/mo): '+eliteUsers+'\n• Current MRR: $'+mrr+'\n• Current ARR: $'+(mrr*12):'• No paying users yet — revenue starts with outreach')+
+      '\n\nForecast (Conservative):\n'+
+      '• Month 1: Convert 3 leads → $'+(3*29)+'/mo MRR\n'+
+      '• Month 2: Convert 5 more + 1 Elite → $'+((8*29)+(1*79))+'/mo MRR\n'+
+      '• Month 3: Convert 5 more + 1 Elite → $'+((13*29)+(2*79))+'/mo MRR\n'+
+      '• Month 6: 30 Pro + 5 Elite → $'+((30*29)+(5*79))+'/mo MRR ($'+((30*29+5*79)*12)+' ARR)\n\n'+
+      '🎯 Break-even target: $500 MRR = ~14 Pro users or 4 Pro + 2 Elite',
+
+    'Weekly action plan': '📋 THIS WEEK\'S ACTION PLAN\n\n'+
+      (stats.new>0?'Monday:\n• Send 10 DMs to highest-score uncontacted leads\n• Update CRM status for each\n\n':'Monday:\n• Follow up all contacted leads\n• Review interested leads for close opportunities\n\n')+
+      'Tuesday:\n• Send 10 more DMs (next batch by score)\n• Follow up Monday non-responders\n\n'+
+      'Wednesday:\n• Send remaining DMs\n• Post in r/wallstreetbets and r/stocks about TCP\n• Share dashboard screenshot on Twitter\n\n'+
+      'Thursday:\n• Follow up all non-responders (2nd touch)\n• Move responding leads to "Interested"\n• Offer trial access to warm leads\n\n'+
+      'Friday:\n• Pipeline review — update all lead statuses\n• Export weekly metrics\n• Plan next week\'s targets\n\n'+
+      '📊 Weekly KPIs:\n• DMs sent: 50 | Responses: 8-12 | Meetings: 3-5 | Conversions: 1-2',
+
+    'Compare lead segments': '🔍 SEGMENT ANALYSIS\n\n'+
+      'By Score Tier:\n'+
+      '🔥 Hot (80+): '+hot.length+' leads — '+(Math.round(hot.length/SEED_LEADS.length*100))+'%\n'+
+      '   Avg score: '+(hot.length?Math.round(hot.reduce(function(a,l){return a+l.score;},0)/hot.length):0)+'\n'+
+      '🌡️ Warm (50-79): '+warm.length+' leads — '+(Math.round(warm.length/SEED_LEADS.length*100))+'%\n'+
+      '   Avg score: '+(warm.length?Math.round(warm.reduce(function(a,l){return a+l.score;},0)/warm.length):0)+'\n'+
+      '❄️ Cold (<50): '+cold.length+' leads — '+(Math.round(cold.length/SEED_LEADS.length*100))+'%\n'+
+      '   Avg score: '+(cold.length?Math.round(cold.reduce(function(a,l){return a+l.score;},0)/cold.length):0)+'\n\n'+
+      'By Type:\n'+topTypes.map(function(t){
+        var tLeads = SEED_LEADS.filter(function(l){return l.type===t[0];});
+        var tAvg = Math.round(tLeads.reduce(function(a,l){return a+l.score;},0)/tLeads.length);
+        return '• '+t[0]+': '+t[1]+' leads, avg score '+tAvg;
+      }).join('\n')+
+      '\n\n💡 Insight: Focus on highest-score segments first. '+
+      (topTypes[0]?topTypes[0][0]+' is your largest segment — tailor messaging for this group.':'')
   };
-  const answer = responses[q] || `Analyzing: "${q}"\n\nBased on your ${SEED_LEADS.length} leads with an average score of ${Math.round(SEED_LEADS.reduce((a,l)=>a+l.score,0)/SEED_LEADS.length)}:\n\n• ${hot.length} hot leads ready for outreach\n• Top segments: Finance Students, Aspiring Traders\n• Recommended: Start LinkedIn DM campaign this week`;
-  chat.innerHTML = `<div style="margin-bottom:12px;color:var(--acc);font-weight:600">You: ${q}</div><div style="white-space:pre-line;line-height:1.6">${answer}</div>`;
+
+  var answer = responses[q];
+  if (!answer) {
+    answer = '🤖 Analyzing: "'+q+'"\n\n'+
+      'Based on your data:\n\n'+
+      '📊 Leads: '+SEED_LEADS.length+' total | '+hot.length+' hot | '+warm.length+' warm | '+cold.length+' cold\n'+
+      '📍 Top markets: '+topLocs.slice(0,3).map(function(l){return l[0];}).join(', ')+'\n'+
+      '📈 Pipeline: '+stats.new+' new → '+stats.contacted+' contacted → '+stats.interested+' interested → '+stats.converted+' converted\n'+
+      (totalUsers>0?'👥 Users: '+totalUsers+' | MRR: $'+mrr+'\n':'')+
+      '\n🎯 Recommended Next Steps:\n'+
+      (uncontactedHot.length>0?'1. Contact '+uncontactedHot.length+' uncontacted hot leads ASAP\n':'1. Follow up with contacted leads\n')+
+      '2. Review lead DMs — all '+SEED_LEADS.length+' are personalized and ready to send\n'+
+      '3. Track responses in the CRM kanban board\n'+
+      '4. Export leads to CSV for offline follow-up';
+  }
+
+  chat.innerHTML = '<div style="margin-bottom:12px;padding:10px 14px;background:rgba(99,102,241,.1);border-radius:8px;color:var(--acc);font-weight:600">You: '+q+'</div>'+
+    '<div style="white-space:pre-line;line-height:1.7;padding:12px 14px;background:rgba(255,255,255,.03);border-radius:8px;border-left:3px solid var(--acc)">'+answer+'</div>';
   document.getElementById('ai-input').value = '';
 }
 
@@ -1558,6 +1957,43 @@ function filterLeads(q) {
     (l.location||'').toLowerCase().includes(q) || (l.type||'').toLowerCase().includes(q)
   );
   renderLeadsTable(leads);
+}
+
+function exportLeads() {
+  var rows = [['Score','Name','Role','Location','Status','Priority','Type','DM']];
+  SEED_LEADS.forEach(function(l,i){
+    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    rows.push([
+      l.score||0, l.name||'', l.role||'', l.location||'',
+      saved.status||l.status||'new', l.priority||'', l.type||'',
+      (l.dm||'').replace(/"/g,'""')
+    ]);
+  });
+  var csv = rows.map(function(r){return r.map(function(c){return '"'+c+'"';}).join(',');}).join('\n');
+  var blob = new Blob([csv], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tc_leads_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  toast('Exported '+SEED_LEADS.length+' leads to CSV','grn');
+}
+
+function copyAllDMs() {
+  var dms = SEED_LEADS.map(function(l,i){
+    return '--- '+(i+1)+'. '+l.name+' ('+l.location+') ---\n'+(l.dm||'No DM template');
+  }).join('\n\n');
+  navigator.clipboard.writeText(dms).then(function(){
+    toast('All '+SEED_LEADS.length+' DMs copied to clipboard','grn');
+  }).catch(function(){
+    // fallback
+    var ta = document.createElement('textarea');
+    ta.value = dms;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('All '+SEED_LEADS.length+' DMs copied to clipboard','grn');
+  });
 }
 
 // ═══ LEAD PANEL ═══
