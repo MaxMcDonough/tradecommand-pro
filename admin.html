@@ -1907,14 +1907,14 @@
       <thead><tr style="border-bottom:1px solid var(--brd)">
         <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Score</th>
         <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Name</th>
-        <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Email</th>
-        <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Company</th>
+        <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">LinkedIn</th>
+        <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Role</th>
         <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Status</th>
-        <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Source</th>
+        <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Notes (hover for full)</th>
         <th style="padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase">Actions</th>
       </tr></thead>
       <tbody id="leads-table-body">
-        <tr><td colspan="7" style="padding:40px;text-align:center;color:var(--t3);font-size:13px">No leads yet. Add your first lead to get started.</td></tr>
+        <tr id="leads-loading-row"><td colspan="7" style="padding:40px;text-align:center;color:var(--t3);font-size:13px">⏳ Loading leads...</td></tr>
       </tbody>
     </table>
   </div>
@@ -2574,6 +2574,10 @@
       document.getElementById('userEmail').textContent = user.email;
       document.getElementById('adminEmail').textContent = user.email;
       document.getElementById('firebaseProjectId').textContent = firebase.app().options.projectId || 'YOUR_PROJECT_ID';
+      // Pre-populate leads from SEED_LEADS immediately — no Firebase wait needed
+      if (typeof SEED_LEADS !== 'undefined' && SEED_LEADS.length > 0) {
+        window._bizLeads = SEED_LEADS.map((l,i) => ({...l, id:'seed_'+i}));
+      }
       loadDashboard();
     }
 
@@ -3149,7 +3153,7 @@
         const userRevenue = allPayments.filter(p => p.uid === user.id && p.status === 'succeeded').reduce((sum, p) => sum + (p.amount || 0), 0);
         
         return `
-          <tr onclick="openUserPanel('${user.id}')">
+          <tr data-uid="${user.id}" onclick="openUserPanel('${user.id}')">
             <td><input type="checkbox" class="checkbox user-checkbox" data-user-id="${user.id}" onclick="event.stopPropagation(); updateUserSelection('${user.id}', this.checked)"></td>
             <td>
               <div style="display: flex; align-items: center; gap: 8px;">
@@ -4214,9 +4218,12 @@
 
     // ─── deleteUser ───
     async function deleteUser(uid, email) {
-      if (!confirm(`DELETE ${email}?\nThis will disable their account permanently. Are you sure?`)) return;
+      if (!confirm(`DELETE ${email}?\nThis will mark the account as disabled. Are you sure?`)) return;
+      // Optimistically remove the row immediately (don't wait for Firebase)
+      const row = document.querySelector(`tr[data-uid="${uid}"]`);
+      if (row) { row.style.opacity='0.4'; row.style.pointerEvents='none'; }
       try {
-        // Archive to deleted_users
+        // Archive snapshot then disable
         const userData = await db.collection('users').doc(uid).get();
         if (userData.exists) {
           await db.collection('deleted_users').doc(uid).set({
@@ -4225,16 +4232,19 @@
             deletedBy: auth.currentUser?.email || 'admin'
           });
         }
-        // Disable in users collection
         await db.collection('users').doc(uid).set({
           disabled: true,
           deletedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
-        showToast(`🗑 ${email} deleted`, 'success');
-        // Remove row from table
-        const row = document.querySelector(`tr[data-uid="${uid}"]`);
+        showToast(`🗑 ${email} disabled`, 'success');
         if (row) row.remove();
-      } catch(e) { showToast('Error deleting user: ' + e.message, 'error'); }
+        // Remove from allUsers cache
+        allUsers = allUsers.filter(u => u.id !== uid);
+      } catch(e) {
+        if (row) { row.style.opacity=''; row.style.pointerEvents=''; }
+        showToast('Delete failed: ' + (e.message || 'Firebase permission denied'), 'error');
+        console.error('deleteUser error:', e);
+      }
     }
 
     // ─── batchDeleteUsers ───
@@ -4370,7 +4380,10 @@
     let bizCalDate = new Date();
 
     function initBizPage(page) {
-      if (bizInitialised[page]) return;
+      // Leads & Prospecting always reload (seed data, fresh state)
+      // Other heavy pages only load once to avoid redundant queries
+      const alwaysReload = ['biz-leads', 'biz-prospecting'];
+      if (!alwaysReload.includes(page) && bizInitialised[page]) return;
       bizInitialised[page] = true;
       switch(page) {
         case 'biz-dashboard':   loadBizDashboard();   break;
@@ -5467,36 +5480,43 @@ const SEED_LEADS = [
     }
 
     async function loadBizLeads() {
+      // ── STEP 1: Render SEED_LEADS immediately (no Firebase wait) ──────────
+      const seedLeads = (typeof SEED_LEADS !== 'undefined' && SEED_LEADS.length > 0)
+        ? SEED_LEADS.map((l,i) => ({...l, id:'seed_'+i}))
+        : [];
+      if (seedLeads.length > 0) {
+        window._bizLeads = seedLeads;
+        bizRenderLeadsTable(seedLeads);
+        const setNow = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+        setNow('leads-total', seedLeads.length);
+        setNow('leads-hot',   seedLeads.filter(l=>l.score>=80).length);
+        setNow('leads-warm',  seedLeads.filter(l=>l.score>=50&&l.score<80).length);
+        setNow('leads-conv',  '0%');
+      }
+      // ── STEP 2: Check Firebase — update if real data exists ───────────────
       try {
         const snap = await db.collection('leads').orderBy('createdAt','desc').limit(100).get().catch(()=>({docs:[]}));
-        // ── Use SEED_LEADS directly when Firebase is empty (instant render) ──
-        let leads;
-        if (snap.docs.length === 0 && typeof SEED_LEADS !== 'undefined' && SEED_LEADS.length > 0) {
-          leads = SEED_LEADS.map((l,i) => ({...l, id:'seed_'+i}));
-          // Fire-and-forget: persist to Firebase in background for future loads
+        if (snap.docs.length > 0) {
+          const leads = snap.docs.map(d=>({id:d.id,...d.data()}));
+          const hot  = leads.filter(l=>(l.score||0)>=80).length;
+          const warm = leads.filter(l=>(l.score||0)>=50&&(l.score||0)<80).length;
+          const conv = Math.round(leads.filter(l=>l.status==='converted').length/leads.length*100);
+          const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+          set('leads-total', leads.length);
+          set('leads-hot', hot);
+          set('leads-warm', warm);
+          set('leads-conv', conv+'%');
+          window._bizLeads = leads;
+          bizRenderLeadsTable(leads);
+        } else if (seedLeads.length > 0) {
+          // Persist seeds to Firebase in background
           try {
-            const seedBatch = db.batch();
-            SEED_LEADS.forEach(lead => {
-              seedBatch.set(db.collection('leads').doc(), {...lead, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
-            });
-            seedBatch.commit().then(()=>console.log('[TC] Leads persisted to Firebase.')).catch(()=>{});
+            const b = db.batch();
+            SEED_LEADS.forEach(l => b.set(db.collection('leads').doc(), {...l, createdAt: firebase.firestore.FieldValue.serverTimestamp()}));
+            b.commit().catch(()=>{});
           } catch(_){}
-        } else {
-          leads = snap.docs.map(d=>({id:d.id,...d.data()}));
         }
-        const hot   = leads.filter(l=>(l.score||0)>=80).length;
-        const warm  = leads.filter(l=>(l.score||0)>=50&&(l.score||0)<80).length;
-        const conv  = leads.length ? Math.round(leads.filter(l=>l.status==='converted').length/leads.length*100) : 0;
-
-        const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
-        set('leads-total', leads.length);
-        set('leads-hot',   hot);
-        set('leads-warm',  warm);
-        set('leads-conv',  conv+'%');
-
-        window._bizLeads = leads;
-        bizRenderLeadsTable(leads);
-      } catch(e) { console.warn('loadBizLeads error:', e); }
+      } catch(e) { console.warn('loadBizLeads Firebase error (seed data still shown):', e); }
     }
 
     function bizRenderLeadsTable(leads) {
