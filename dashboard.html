@@ -249,6 +249,22 @@ a{color:var(--acc);text-decoration:none}
 .cbox{position:relative;height:260px}
 .cbtn{padding:3px 8px;font-size:10px;background:var(--bg2);border:1px solid var(--brd);color:var(--t3);border-radius:4px;cursor:pointer}
 .cbtn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+/* SYMBOL SELECTOR */
+#sym-selector{display:flex;gap:5px;padding:5px 0 4px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap;min-height:32px}
+#sym-selector::-webkit-scrollbar{display:none}
+.sym-pill{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;background:var(--card2);border:1px solid var(--brd);border-radius:5px;cursor:pointer;white-space:nowrap;transition:border-color .12s,background .12s;font-size:10px;flex-shrink:0}
+.sym-pill:hover{border-color:var(--acc);background:rgba(99,102,241,.1)}
+.sym-pill.sactive{background:rgba(99,102,241,.18);border-color:var(--acc)}
+.sym-pill .sp-sym{font-weight:700;color:var(--t1);font-size:10px}
+.sym-pill .sp-pct{font-size:9px}
+.sym-pill .sp-sig{font-size:8px;padding:1px 3px;border-radius:2px;font-weight:700}
+/* WATCHLIST FILTERS */
+.wl-filter-row{display:flex;gap:4px;padding:4px 0 5px;flex-wrap:wrap;align-items:center}
+.wl-fbtn{padding:3px 8px;background:var(--card2);border:1px solid var(--brd);border-radius:4px;color:var(--t2);font-size:10px;font-weight:600;cursor:pointer;transition:all .12s}
+.wl-fbtn.on{background:rgba(99,102,241,.15);border-color:var(--acc);color:var(--acc)}
+.wl-sort-row{display:flex;align-items:center;gap:5px;padding:1px 0 5px;font-size:10px;color:var(--t3)}
+.wl-sbtn{padding:2px 6px;background:transparent;border:1px solid var(--brd);border-radius:3px;color:var(--t3);font-size:10px;cursor:pointer;transition:all .12s}
+.wl-sbtn.on{color:var(--acc);border-color:var(--acc);background:rgba(99,102,241,.08)}
 
 /* SIGNALS */
 .sig{background:var(--bg2);border-radius:7px;padding:10px;margin-bottom:6px;border-left:3px solid}
@@ -1651,11 +1667,24 @@ a{color:var(--acc);text-decoration:none}
       <div class="refresh-info"><span id="last-refresh">Tap a stock to open details</span></div>
       <button class="btn-refresh" onclick="manualRefresh()">⟳ Refresh</button>
     </div>
-    <div class="scr" id="wl" style="max-height:320px"></div>
+    <div class="wl-filter-row">
+      <button class="wl-fbtn on" onclick="wlSetFilter('all',this)">All</button>
+      <button class="wl-fbtn" onclick="wlSetFilter('buy',this)">▲ BUY</button>
+      <button class="wl-fbtn" onclick="wlSetFilter('sell',this)">▼ SELL</button>
+      <button class="wl-fbtn" onclick="wlSetFilter('hot',this)">🔥 Hot</button>
+      <button class="wl-fbtn" onclick="wlSetFilter('drop',this)">📉 Drop</button>
+    </div>
+    <div class="wl-sort-row">Sort:
+      <button class="wl-sbtn on" id="wls-signal" onclick="wlSetSort('signal',this)">Signal</button>
+      <button class="wl-sbtn" id="wls-pct" onclick="wlSetSort('pct',this)">% Move</button>
+      <button class="wl-sbtn" id="wls-name" onclick="wlSetSort('name',this)">A–Z</button>
+    </div>
+    <div class="scr" id="wl" style="max-height:280px"></div>
     <div class="add-r"><input id="add-in" placeholder="Add ticker..." onkeypress="if(event.key==='Enter')addSym()"><button class="btn-s" onclick="addSym()">+</button></div>
   </div>
   <div class="c">
     <div class="ch"><span class="ct">📈 <span id="ch-sym">SPY</span></span><div id="tf-bar" style="display:flex;gap:3px"><button class="cbtn on" data-t="3M">3M</button><button class="cbtn" data-t="1M">1M</button><button class="cbtn" data-t="5D">5D</button></div></div>
+    <div id="sym-selector"></div>
     <div class="cbox"><canvas id="pchart"></canvas></div>
   </div>
   <div class="c">
@@ -2918,7 +2947,10 @@ const D = {
 // ===== PERSISTENCE =====
 function savePref(){
   try{
+    // Preserve existing session data (don't overwrite it)
+    const existing = JSON.parse(localStorage.getItem('tcp_v2')||'{}');
     localStorage.setItem('tcp_v2',JSON.stringify({
+      ...existing,
       fh:D.fh, av:D.av, na:D.na, name:D.name,
       bal:D.bal, risk:D.risk, wl:D.wl
     }));
@@ -3169,6 +3201,16 @@ function buildInvestSizer(sym) {
   document.getElementById('m-whats-next').style.display = 'none';
   // Clear active states
   document.querySelectorAll('.invest-btn').forEach(b => b.classList.remove('active'));
+  // CRITICAL: restore commit button onclick (it gets set to null after a commit — persists across modal opens)
+  const resetBtn = document.getElementById('is-commit-btn');
+  if (resetBtn) {
+    resetBtn.onclick = commitPosition;
+    resetBtn.textContent = '📋 Add to Session Plan';
+    resetBtn.style.background = '';
+    resetBtn.style.color = '';
+    resetBtn.style.border = '';
+    resetBtn.className = 'btn-commit';
+  }
 }
 
 function selectInvestBtn(btn, amt) {
@@ -3310,32 +3352,35 @@ function commitPosition() {
   // Track activity
   trackActivity('trade', {sym: _investSym, action: isBuy ? 'BUY' : 'SELL', shares, price, invested});
 
-  // Add to session
+  // Add to session (guard against missing positions array)
+  if (!D.session.positions) D.session.positions = [];
   D.session.positions.push({sym:_investSym, shares, entry:price, stop, target, invested, status:'open', pnl:0});
   D.session.deployed += invested;
   D.session.tradeCount++;
-  initSession();
+  // Render session bar without resetting D.session.start (initSession() would incorrectly overwrite it)
+  renderSessionBar();
+  document.getElementById('session-bar').classList.add('show');
 
   // Log to journal
   D.log.unshift({sy:_investSym, si:isBuy?'BUY':'SELL', en:price, ex:null, sh:shares, no:`Session trade. Invested $${invested.toFixed(2)}. Stop: $${stop.toFixed(2)}`, tm:new Date().toLocaleString()});
   mkJournal();
 
-  // Update commit button to confirmed state
+  // Update commit button to confirmed state — keep visible for 2s so user sees it
   const btn = document.getElementById('is-commit-btn');
-  btn.textContent = '✅ Added to Session — track in bar above';
+  btn.textContent = `✅ ${isBuy?'BUY':'SELL'} ${shares} ${_investSym} added — check bar above`;
   btn.style.background = 'var(--grn2)';
   btn.style.color = 'var(--grn)';
   btn.style.border = '1px solid var(--grn)';
-  btn.onclick = null;
+  btn.onclick = null; // prevent double-commit; restored by buildInvestSizer()
 
-  // Refresh sizer with updated remaining
-  setTimeout(() => buildInvestSizer(_investSym), 400);
+  // Refresh sizer after 2s so user has time to see the confirmation
+  setTimeout(() => buildInvestSizer(_investSym), 2000);
 
   // Show "next pick" toast suggestion
-  setTimeout(() => showNextPickToast(_investSym), 600);
+  setTimeout(() => showNextPickToast(_investSym), 800);
 
   // Refresh sector portfolios with updated session data
-  setTimeout(renderSectorPortfolios, 800);
+  setTimeout(renderSectorPortfolios, 1000);
 
   saveSessionToStorage();
 }
@@ -3553,6 +3598,7 @@ function launch(){
   setTimeout(genSigs,200);
   setTimeout(genEmerging,150);
   setTimeout(mkInsider,100);
+  setTimeout(renderSymSelector,300);
   setTimeout(()=>safeFetch(fetchFG),500);
 
   // Session resume: check for saved session after a short delay (data loads first)
@@ -3763,12 +3809,81 @@ function updTicker(){
   document.getElementById('tickers').innerHTML=['SPY','QQQ','DIA','IWM'].filter(s=>D.sd[s]).map(s=>{const d=D.sd[s],pct=d.pct||0;return `<div class="tk"><span class="tk-n">${s}</span><span class="tk-p">$${d.price.toFixed(2)}</span><span class="tk-c ${pct>=0?'up':'dn'}">${pct>=0?'+':''}${pct.toFixed(2)}%</span></div>`;}).join('');
   if(D.session && D.session.positions && D.session.positions.length) renderSessionBar();
 }
+let _wlFilter = 'all';
+let _wlSort = 'signal';
 function mkWL(){
-  const el=document.getElementById('wl');document.getElementById('wl-ct').textContent=D.wl.length;
-  el.innerHTML=D.wl.map(s=>{const d=D.sd[s]||{},p=d.price?'$'+d.price.toFixed(2):'--',pct=d.pct||0,sg=qSig(s);return `<div class="wl" onclick="openStock('${s}')" style="cursor:pointer"><div class="wl-s">${s}</div><div class="wl-p">${p}</div><div class="wl-c" style="color:${pct>=0?'var(--grn)':'var(--red)'};background:${pct>=0?'var(--grn2)':'var(--red2)'}">${pct>=0?'+':''}${pct.toFixed(2)}%</div><div class="wl-g ${sg.c}">${sg.l}</div></div>`;}).join('');
+  const el=document.getElementById('wl');
+  document.getElementById('wl-ct').textContent=D.wl.length;
+  // Apply filter
+  let syms = D.wl.filter(s => {
+    const d=D.sd[s]||{}, sg=qSig(s), pct=d.pct||0;
+    if(_wlFilter==='buy') return sg.l==='BUY'||sg.l==='STRONG BUY';
+    if(_wlFilter==='sell') return sg.l==='SELL'||sg.l==='STRONG SELL';
+    if(_wlFilter==='hot') return pct>2;
+    if(_wlFilter==='drop') return pct<-2;
+    return true;
+  });
+  // Apply sort
+  syms.sort((a,b)=>{
+    if(_wlSort==='name') return a.localeCompare(b);
+    if(_wlSort==='pct') return (D.sd[b]?.pct||0)-(D.sd[a]?.pct||0);
+    // signal sort: buy>watch>sell, then by strength
+    const sa=D.sigs.find(x=>x.sym===a), sb=D.sigs.find(x=>x.sym===b);
+    const va=sa?(sa.tp==='buy'?sa.str+10:sa.tp==='sell'?-sa.str:0):-99;
+    const vb=sb?(sb.tp==='buy'?sb.str+10:sb.tp==='sell'?-sb.str:0):-99;
+    return vb-va;
+  });
+  if(!syms.length){el.innerHTML='<p style="color:var(--t3);text-align:center;padding:12px;font-size:11px">No matches</p>';return;}
+  el.innerHTML=syms.map(s=>{const d=D.sd[s]||{},p=d.price?'$'+d.price.toFixed(2):'--',pct=d.pct||0,sg=qSig(s);return `<div class="wl" onclick="openStock('${s}')" style="cursor:pointer"><div class="wl-s">${s}</div><div class="wl-p">${p}</div><div class="wl-c" style="color:${pct>=0?'var(--grn)':'var(--red)'};background:${pct>=0?'var(--grn2)':'var(--red2)'}">${pct>=0?'+':''}${pct.toFixed(2)}%</div><div class="wl-g ${sg.c}">${sg.l}</div></div>`;}).join('');
+}
+function wlSetFilter(f, btn){
+  _wlFilter=f;
+  document.querySelectorAll('.wl-fbtn').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  mkWL();
+}
+function wlSetSort(s, btn){
+  _wlSort=s;
+  document.querySelectorAll('.wl-sbtn').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  mkWL();
 }
 function qSig(s){const d=D.sd[s];if(!d)return{c:'sig-hold',l:'HOLD'};if(d._rsi&&d._rsi<30)return{c:'sig-buy',l:'BUY'};if(d._rsi&&d._rsi>70)return{c:'sig-sell',l:'SELL'};if(d.pct>2)return{c:'sig-buy',l:'BUY'};if(d.pct<-2)return{c:'sig-sell',l:'SELL'};return{c:'sig-hold',l:'HOLD'};}
-function selSym(s){D.sel=s;document.getElementById('ch-sym').textContent=s;document.getElementById('t-sym').textContent=s;if(D.fh)fetchCandles(s);else mkDemoChart(s);mkInds(s);}
+function selSym(s){
+  D.sel=s;
+  document.getElementById('ch-sym').textContent=s;
+  document.getElementById('t-sym').textContent=s;
+  if(D.fh)fetchCandles(s);else mkDemoChart(s);
+  mkInds(s);
+  renderSymSelector();
+}
+function renderSymSelector(){
+  const el=document.getElementById('sym-selector');
+  if(!el)return;
+  // Sort watchlist: buy signals first (by strength), then watch, then sell, then no signal
+  const sorted=[...D.wl].sort((a,b)=>{
+    const sa=D.sigs.find(x=>x.sym===a),sb=D.sigs.find(x=>x.sym===b);
+    const va=sa?(sa.tp==='buy'?sa.str+10:sa.tp==='sell'?-sa.str:0):-50;
+    const vb=sb?(sb.tp==='buy'?sb.str+10:sb.tp==='sell'?-sb.str:0):-50;
+    return vb-va;
+  });
+  el.innerHTML=sorted.map(sym=>{
+    const d=D.sd[sym]||{};
+    const pct=d.pct||0;
+    const pctStr=(pct>=0?'+':'')+pct.toFixed(1)+'%';
+    const pctCol=pct>=0?'var(--grn)':'var(--red)';
+    const sig=D.sigs.find(x=>x.sym===sym);
+    let badge='';
+    if(sig){
+      const sc=sig.tp==='buy'?'var(--grn)':sig.tp==='sell'?'var(--red)':'var(--ylw)';
+      const sb=sig.tp==='buy'?'var(--grn2)':sig.tp==='sell'?'var(--red2)':'var(--ylw2)';
+      const icon=sig.tp==='buy'?'▲':sig.tp==='sell'?'▼':'◆';
+      badge=`<span class="sp-sig" style="background:${sb};color:${sc}">${icon}</span>`;
+    }
+    const act=sym===D.sel?' sactive':'';
+    return `<div class="sym-pill${act}" onclick="selSym('${sym}')"><span class="sp-sym">${sym}</span><span class="sp-pct" style="color:${pctCol}">${pctStr}</span>${badge}</div>`;
+  }).join('');
+}
 function addSym(){const i=document.getElementById('add-in'),s=i.value.trim().toUpperCase();if(!s||D.wl.includes(s)){i.value='';return;}D.wl.push(s);i.value='';if(D.fh)fetchQ(s).then(()=>{mkWL();genSigs();});else{D.sd[s]={price:100+Math.random()*200,pct:Math.random()*6-3,pc:100};mkWL();genSigs();}}
 
 // ===== CHARTS =====
@@ -3826,6 +3941,8 @@ function genSigs(){
   const atr=s._atr||s.price*.015,en=s.price,sl=tp==='buy'?en-2*atr:en+2*atr,tg=tp==='buy'?en+3*atr:en-3*atr,rr=Math.abs(tg-en)/Math.abs(en-sl);
   D.sigs.push({sym,tp,lb,cl,price:s.price,rs,str:Math.min(Math.abs(sc),8),en:en.toFixed(2),sl:sl.toFixed(2),tg:tg.toFixed(2),rr:rr.toFixed(1),conf:Math.min(Math.abs(sc)*12.5,95).toFixed(0)});});
   D.sigs.sort((a,b)=>b.str-a.str);mkSigs('all');
+  renderSymSelector();
+  mkWL();
   // Refresh sector portfolio cards with updated signal data
   renderSectorPortfolios();
 }
