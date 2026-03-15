@@ -169,6 +169,27 @@ a{color:var(--acc);text-decoration:none}
 .dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:3px}
 .dot.on{background:var(--grn);box-shadow:0 0 5px var(--grn)}
 .dot.off{background:var(--red)}
+.dot.pre{background:#f59e0b;box-shadow:0 0 5px #f59e0b;animation:dotPulse 1.8s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ===== MARKET TIME TOOLTIP ===== */
+.mkt-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;cursor:default;user-select:none}
+.mkt-clock{font-variant-numeric:tabular-nums}
+.mkt-tooltip{position:absolute;top:calc(100% + 12px);right:0;width:270px;background:#0d1420;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px 18px 14px;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease;z-index:9999;box-shadow:0 16px 48px rgba(0,0,0,.6)}
+.mkt-tooltip::before{content:'';position:absolute;top:-6px;right:20px;width:10px;height:10px;background:#0d1420;border-left:1px solid rgba(255,255,255,.1);border-top:1px solid rgba(255,255,255,.1);transform:rotate(45deg)}
+.mkt-wrap:hover .mkt-tooltip{opacity:1;pointer-events:auto;transform:translateY(0)}
+.mkt-tip-status{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.mkt-tip-status-icon{font-size:18px;line-height:1}
+.mkt-tip-status-text{font-size:14px;font-weight:700;color:#fff}
+.mkt-tip-rows{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.mkt-tip-row{display:flex;justify-content:space-between;align-items:center}
+.mkt-tip-label{font-size:11px;color:rgba(255,255,255,.35);letter-spacing:.3px}
+.mkt-tip-val{font-size:12px;font-weight:600;color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums}
+.mkt-tip-countdown{font-size:15px;font-weight:800;color:var(--acc)!important}
+.mkt-tip-sched-title{font-size:9px;font-weight:700;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.mkt-tip-sched{display:flex;flex-direction:column;gap:5px}
+.mkt-tip-sched-row{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35);padding:4px 8px;border-radius:6px;transition:background .15s}
+.mkt-tip-sched-row.active{background:rgba(255,255,255,.05);color:rgba(255,255,255,.75);font-weight:600}
 
 /* NAV */
 .nav{display:flex;gap:3px;padding:6px 16px;background:var(--bg2);border-bottom:1px solid var(--brd);overflow-x:auto}
@@ -1233,8 +1254,44 @@ a{color:var(--acc);text-decoration:none}
     <button id="btn-upgrade" onclick="showUpgradeModal()" style="display:none;padding:5px 11px;background:linear-gradient(135deg,#f59e0b,#f97316);color:#000;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">⚡ Upgrade</button>
     <button id="btn-manage-sub" onclick="openCustomerPortal()" style="display:none;padding:5px 11px;background:var(--card2);border:1px solid var(--grn);border-radius:6px;color:var(--grn);font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">Manage Plan</button>
     <span id="admin-link" style="display:none"><a href="admin.html">🔧 Admin</a></span>
-    <span><span class="dot" id="m-dot"></span><span id="m-st">--</span></span>
-    <span id="clock" style="font-variant-numeric:tabular-nums">--:--</span>
+    <div class="mkt-wrap">
+      <span class="dot" id="m-dot"></span>
+      <span id="m-st" style="font-size:12px;font-weight:600">--</span>
+      <span id="clock" class="mkt-clock" style="font-size:12px;color:rgba(255,255,255,.45)">--:--</span>
+      <!-- Hover tooltip -->
+      <div class="mkt-tooltip">
+        <div class="mkt-tip-status">
+          <span id="tip-status-icon" class="mkt-tip-status-icon">⏳</span>
+          <span id="tip-status-text" class="mkt-tip-status-text">Loading...</span>
+        </div>
+        <div class="mkt-tip-rows">
+          <div class="mkt-tip-row">
+            <span class="mkt-tip-label" id="tip-countdown-label">Opens in</span>
+            <span class="mkt-tip-val mkt-tip-countdown" id="tip-countdown">–</span>
+          </div>
+          <div class="mkt-tip-row">
+            <span class="mkt-tip-label">Your time</span>
+            <span class="mkt-tip-val" id="tip-local-time">–</span>
+          </div>
+          <div class="mkt-tip-row">
+            <span class="mkt-tip-label">Market time (ET)</span>
+            <span class="mkt-tip-val" id="tip-et-time">–</span>
+          </div>
+        </div>
+        <div class="mkt-tip-sched-title">NYSE · NASDAQ Hours (ET)</div>
+        <div class="mkt-tip-sched">
+          <div class="mkt-tip-sched-row" id="tip-row-pre">
+            <span>Pre-Market</span><span>4:00 AM – 9:30 AM</span>
+          </div>
+          <div class="mkt-tip-sched-row" id="tip-row-reg">
+            <span>Regular Hours</span><span>9:30 AM – 4:00 PM</span>
+          </div>
+          <div class="mkt-tip-sched-row" id="tip-row-ext">
+            <span>After Hours</span><span>4:00 PM – 8:00 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <span style="color:var(--t3)" id="src-ct">0 sources</span>
     <button onclick="openSettings()" style="padding:3px 9px;background:var(--card2);border:1px solid var(--brd);border-radius:5px;color:var(--t2);font-size:11px;cursor:pointer" title="Settings">⚙️</button>
     <button id="btn-signout" onclick="authSignOut()" class="btn-signout" style="display:none">Sign Out</button>
@@ -2676,15 +2733,94 @@ function launch(){
 
 function safeFetch(fn){try{fn();}catch(e){console.warn('fetch err:',e);}}
 
-// ===== CLOCK =====
+// ===== CLOCK + MARKET TOOLTIP =====
 function startClock(){updClock();setInterval(updClock,1000);}
+function fmtDur(mins){
+  if(mins<=0)return'now';
+  const h=Math.floor(mins/60),m=Math.round(mins%60);
+  if(h>0&&m>0)return h+'h '+m+'m';
+  if(h>0)return h+'h';
+  return m+'m';
+}
 function updClock(){
-  const n=new Date(),et=new Date(n.toLocaleString('en-US',{timeZone:'America/New_York'}));
+  const now=new Date();
+  const et=new Date(now.toLocaleString('en-US',{timeZone:'America/New_York'}));
+  const h=et.getHours(),m=et.getMinutes(),day=et.getDay();
+  const totalMins=h*60+m;
+  const PRE=4*60,OPEN=9*60+30,CLOSE=16*60,EXT=20*60;
+  const isWkd=day>=1&&day<=5;
+  const isPre=isWkd&&totalMins>=PRE&&totalMins<OPEN;
+  const isOpen=isWkd&&totalMins>=OPEN&&totalMins<CLOSE;
+  const isExt=isWkd&&totalMins>=CLOSE&&totalMins<EXT;
+
+  // Update clock display
   document.getElementById('clock').textContent=et.toLocaleTimeString('en-US',{hour12:true,hour:'numeric',minute:'2-digit',second:'2-digit'});
-  const h=et.getHours(),m=et.getMinutes(),d=et.getDay();
-  const o=d>=1&&d<=5&&((h===9&&m>=30)||(h>=10&&h<16));
-  document.getElementById('m-dot').className='dot '+(o?'on':'off');
-  const s=document.getElementById('m-st');s.textContent=o?'Open':'Closed';s.style.color=o?'var(--grn)':'var(--red)';
+
+  // Update dot + status label
+  const dot=document.getElementById('m-dot');
+  const st=document.getElementById('m-st');
+  if(isOpen){dot.className='dot on';st.textContent='Open';st.style.color='var(--grn)';}
+  else if(isPre){dot.className='dot pre';st.textContent='Pre-Market';st.style.color='#f59e0b';}
+  else if(isExt){dot.className='dot pre';st.textContent='After Hours';st.style.color='#f59e0b';}
+  else{dot.className='dot off';st.textContent='Closed';st.style.color='var(--red)';}
+
+  // ---- Tooltip ----
+  // Status
+  const tipIcon=document.getElementById('tip-status-icon');
+  const tipText=document.getElementById('tip-status-text');
+  const tipLabel=document.getElementById('tip-countdown-label');
+  const tipCountdown=document.getElementById('tip-countdown');
+
+  let statusIcon,statusText,cdLabel,cdMins;
+  if(isOpen){
+    statusIcon='🟢';statusText='Market Open';
+    cdLabel='Closes in';cdMins=CLOSE-totalMins;
+  } else if(isPre){
+    statusIcon='🟡';statusText='Pre-Market Trading';
+    cdLabel='Regular open in';cdMins=OPEN-totalMins;
+  } else if(isExt){
+    statusIcon='🟡';statusText='After Hours Trading';
+    cdLabel='Pre-Market opens in';
+    const minsLeft=24*60-totalMins;
+    // Next pre-market: if Fri after close, next Mon; else next day
+    cdMins=(day===5)?minsLeft+3*24*60-20*60:minsLeft+PRE;
+  } else {
+    statusIcon='🔴';statusText='Market Closed';
+    cdLabel='Pre-Market opens in';
+    if(!isWkd){
+      // Weekend: days until Monday
+      const daysToMon=day===6?2:1;
+      cdMins=(24*60-totalMins)+(daysToMon-1)*24*60+PRE;
+    } else if(totalMins>=EXT){
+      // Weekday after 8pm
+      const minsLeft=24*60-totalMins;
+      cdMins=day===5?minsLeft+(2*24*60)+PRE:minsLeft+PRE;
+    } else {
+      // Weekday before 4am
+      cdMins=PRE-totalMins;
+    }
+  }
+  if(tipIcon)tipIcon.textContent=statusIcon;
+  if(tipText)tipText.textContent=statusText;
+  if(tipLabel)tipLabel.textContent=cdLabel;
+  if(tipCountdown)tipCountdown.textContent=fmtDur(cdMins);
+
+  // Times
+  const localTZAbbr=now.toLocaleTimeString('en-US',{timeZoneName:'short'}).split(' ').pop();
+  const localStr=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true});
+  const etStr=et.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true});
+  const tl=document.getElementById('tip-local-time'),te=document.getElementById('tip-et-time');
+  if(tl)tl.textContent=localStr+' '+localTZAbbr;
+  if(te)te.textContent=etStr+' ET';
+
+  // Highlight active session row
+  ['pre','reg','ext'].forEach(k=>{
+    const el=document.getElementById('tip-row-'+k);
+    if(el)el.classList.remove('active');
+  });
+  if(isPre)document.getElementById('tip-row-pre')?.classList.add('active');
+  else if(isOpen)document.getElementById('tip-row-reg')?.classList.add('active');
+  else if(isExt)document.getElementById('tip-row-ext')?.classList.add('active');
 }
 
 // ===== NAV =====
