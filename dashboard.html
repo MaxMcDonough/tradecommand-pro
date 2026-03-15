@@ -451,11 +451,11 @@ a{color:var(--acc);text-decoration:none}
 @media(max-width:480px){
 
   /* ── TOP BAR ── */
-  .top{padding:0;flex-wrap:nowrap;height:48px;min-height:48px;position:sticky;top:0;z-index:100}
+  .top{padding:0;flex-wrap:nowrap;height:44px;min-height:44px;position:sticky;top:0;z-index:100}
   .logo{font-size:14px;padding:0 10px;flex-shrink:0}
   .tickers{display:none}
-  /* Right side of top bar: compress everything */
-  .top-r{gap:4px;padding:0 8px;font-size:10px;flex-shrink:0}
+  /* Right side: only show essential icons */
+  .top-r{gap:6px;padding:0 10px;font-size:10px;flex-shrink:0;align-items:center}
   .top-r #src-ct{display:none}
   .top-r [onclick*="startTour"]{display:none}
   #user-name{display:none !important}
@@ -463,13 +463,81 @@ a{color:var(--acc);text-decoration:none}
   #admin-link a{padding:3px 6px;background:rgba(255,255,255,.06);border-radius:4px;white-space:nowrap}
   #btn-upgrade{padding:4px 8px;font-size:10px}
   #btn-manage-sub{padding:4px 8px;font-size:10px}
-  /* Clock + market status */
+  /* Hide market status text on mobile — just show the dot */
+  #m-st{display:none}
+  #clock{display:none}
   .mkt-wrap{gap:3px}
-  #m-st{font-size:10px;font-weight:600}
-  #clock{font-size:10px}
-  .dot{width:5px;height:5px}
+  .dot{width:7px;height:7px}
   .mkt-tooltip{right:-8px;width:240px;top:calc(100% + 8px)}
   .trial-badge{font-size:9px;padding:2px 5px}
+  .btn-signout{font-size:9px !important;padding:3px 6px !important}
+
+  /* ── MOBILE P&L PILL (inserted into top bar) ── */
+  #mobile-pnl-pill{
+    display:flex !important;
+    align-items:center;
+    gap:6px;
+    padding:4px 10px;
+    background:var(--card2);
+    border:1px solid var(--brd);
+    border-radius:20px;
+    cursor:pointer;
+    white-space:nowrap;
+    flex-shrink:0;
+    transition:border-color .2s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  #mobile-pnl-pill:active{border-color:var(--acc)}
+  .pnl-pill-val{font-size:11px;font-weight:700}
+  .pnl-pill-label{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px}
+  .pnl-pill-arrow{font-size:8px;color:var(--t3);transition:transform .2s}
+  .pnl-pill-arrow.open{transform:rotate(180deg)}
+
+  /* ── SESSION BAR: collapsible on mobile ── */
+  #session-bar.show{
+    display:flex;
+    overflow:hidden;
+    max-height:0;
+    padding:0 10px;
+    transition:max-height .25s ease,padding .25s ease;
+    flex-wrap:wrap;
+    gap:0;
+    font-size:10px;
+    border-bottom:none;
+  }
+  #session-bar.show.mob-open{
+    max-height:120px;
+    padding:8px 10px;
+    border-bottom:1px solid var(--brd);
+  }
+  #session-bar::-webkit-scrollbar{display:none}
+  #session-bar .sb-item{
+    min-width:0;
+    flex:1;
+    padding:6px 0;
+    border-right:none;
+    text-align:center;
+  }
+  #session-bar .sb-label{font-size:8px;letter-spacing:.2px}
+  #session-bar .sb-val{font-size:12px}
+  #session-bar .sb-positions{display:none}
+  #session-bar .sb-port-btn{
+    flex:1;
+    padding:6px 0;
+    font-size:10px;
+    margin:4px 3px 0;
+    text-align:center;
+    border-radius:8px;
+  }
+  #session-bar .sb-end-btn{
+    flex:1;
+    padding:6px 0;
+    font-size:10px;
+    white-space:nowrap;
+    margin:4px 3px 0;
+    text-align:center;
+    border-radius:8px;
+  }
 
   /* ── NAV TABS ── */
   .nav{
@@ -482,7 +550,7 @@ a{color:var(--acc);text-decoration:none}
     background:var(--bg2);
     display:flex;
     align-items:stretch;
-    height:38px;
+    height:36px;
   }
   .nav::-webkit-scrollbar{display:none}
   .nav button{
@@ -504,28 +572,12 @@ a{color:var(--acc);text-decoration:none}
     border-bottom-color:var(--acc);
   }
 
-  /* ── SECTOR NAV ── */
-  .sector-nav{padding:3px 6px;gap:4px;-webkit-overflow-scrolling:touch;height:34px}
+  /* ── SECTOR NAV: tighter, inline with content ── */
+  .sector-nav{padding:4px 8px;gap:4px;-webkit-overflow-scrolling:touch;height:32px;position:relative;top:0}
   .sec-btn{padding:3px 10px;font-size:10px}
   .sec-nav-label{display:none}
-  #sector-ctx-bar{padding:4px 8px;font-size:10px}
-
-  /* ── SESSION BAR ── */
-  #session-bar{
-    overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    gap:0;
-    padding:4px 6px;
-    flex-wrap:nowrap;
-    scrollbar-width:none;
-    font-size:10px;
-  }
-  #session-bar::-webkit-scrollbar{display:none}
-  #session-bar .sb-item{min-width:64px;padding:3px 8px;border-right:1px solid var(--brd)}
-  #session-bar .sb-label{font-size:8px;letter-spacing:.2px}
-  #session-bar .sb-val{font-size:11px}
-  #session-bar .sb-port-btn{padding:3px 8px;font-size:10px;margin-left:4px}
-  #session-bar .sb-end-btn{padding:3px 8px;font-size:10px;white-space:nowrap}
+  /* Hide context bar on mobile — redundant */
+  #sector-ctx-bar{display:none !important}
 
   /* ── DEMO BANNER ── */
   #demo-banner{flex-direction:column;align-items:flex-start;gap:6px;padding:7px 10px;font-size:10px}
@@ -1919,6 +1971,14 @@ a{color:var(--acc);text-decoration:none}
 <div class="top">
   <div class="logo" onclick="pg('trading', document.querySelector('.nav button'))" style="cursor:pointer" title="Go to Trading">⚡ TradeCommand</div>
   <div class="tickers" id="tickers"></div>
+  <!-- Mobile P&L pill (hidden on desktop) -->
+  <div id="mobile-pnl-pill" style="display:none" onclick="toggleMobileSession()">
+    <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1">
+      <span class="pnl-pill-label">P&L</span>
+      <span class="pnl-pill-val" id="mob-pnl-val">$0</span>
+    </div>
+    <span class="pnl-pill-arrow" id="mob-pnl-arrow">▼</span>
+  </div>
   <div class="top-r">
     <span id="user-name" style="color:var(--grn);font-weight:600;display:none"></span>
     <span id="trial-badge" style="display:none" class="trial-badge"></span>
@@ -3558,6 +3618,12 @@ function renderSessionBar() {
   pnlEl.textContent = (pnl >= 0 ? '+' : '') + '$' + pnl.toFixed(2);
   pnlEl.className = 'sb-val ' + (pnl > 0 ? 'sb-pos' : pnl < 0 ? 'sb-neg' : 'sb-neu');
   document.getElementById('sb-trades').textContent = D.session.tradeCount;
+  // Sync mobile P&L pill
+  const mobPnl = document.getElementById('mob-pnl-val');
+  if(mobPnl){
+    mobPnl.textContent = (pnl >= 0 ? '+' : '') + '$' + pnl.toFixed(2);
+    mobPnl.style.color = pnl > 0 ? 'var(--grn)' : pnl < 0 ? 'var(--red)' : 'var(--t1)';
+  }
   // Render holdings section on trading page
   renderHoldings();
   // Render open position chips
@@ -4019,6 +4085,15 @@ function openSettings(){
   // Navigate to the settings page using the nav button
   const btn = document.querySelector('.nav button[onclick*="settings"]');
   if (btn) pg('settings', btn);
+}
+
+/* ── Mobile session bar toggle ── */
+function toggleMobileSession(){
+  const bar = document.getElementById('session-bar');
+  const arrow = document.getElementById('mob-pnl-arrow');
+  if(!bar) return;
+  bar.classList.toggle('mob-open');
+  if(arrow) arrow.classList.toggle('open');
 }
 function stgOpen() {
   // Pre-fill settings fields from live state
