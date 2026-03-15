@@ -1419,31 +1419,43 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <!-- Channel Targets -->
   <div class="card">
     <h3>🎯 Channel Targets</h3>
-    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Track sign-ups by acquisition channel. Click + to log a signup.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px" id="beta-channels">
+    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Track reach-outs and sign-ups by channel. Signups update automatically when you log them in the beta tracker above.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px" id="beta-channels">
       <div class="lp-field" style="border-left:3px solid #6366f1">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><div style="font-size:13px;font-weight:700">🤝 Friends &amp; Family</div><div style="font-size:11px;color:var(--t3)">Target: 15</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><span id="ch-friends" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('friends',15)">+</button></div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px">🤝 Friends &amp; Family</div>
+        <div style="display:flex;gap:16px;align-items:center">
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">REACHED OUT</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('friends',-1)">−</button><span id="ch-friends-reach" style="font-size:16px;font-weight:800;color:var(--ylw)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('friends',1)">+</button></div></div>
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">SIGNUPS</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('friends',15,-1)">−</button><span id="ch-friends" style="font-size:16px;font-weight:800;color:var(--grn)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('friends',15,1)">+</button></div></div>
+          <div style="text-align:center;margin-left:auto"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">TARGET</div><div style="font-size:16px;font-weight:800;color:var(--t2)">15</div></div>
         </div>
+        <div style="height:4px;background:var(--brd);border-radius:2px;margin-top:8px;overflow:hidden"><div id="ch-friends-bar" style="height:100%;width:0%;background:var(--grn);border-radius:2px;transition:width .3s"></div></div>
       </div>
       <div class="lp-field" style="border-left:3px solid #ff5722">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><div style="font-size:13px;font-weight:700">💬 Reddit &amp; Communities</div><div style="font-size:11px;color:var(--t3)">Target: 15</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><span id="ch-reddit" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('reddit',15)">+</button></div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px">💬 Reddit &amp; Communities</div>
+        <div style="display:flex;gap:16px;align-items:center">
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">REACHED OUT</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('reddit',-1)">−</button><span id="ch-reddit-reach" style="font-size:16px;font-weight:800;color:var(--ylw)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('reddit',1)">+</button></div></div>
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">SIGNUPS</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('reddit',15,-1)">−</button><span id="ch-reddit" style="font-size:16px;font-weight:800;color:var(--grn)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('reddit',15,1)">+</button></div></div>
+          <div style="text-align:center;margin-left:auto"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">TARGET</div><div style="font-size:16px;font-weight:800;color:var(--t2)">15</div></div>
         </div>
+        <div style="height:4px;background:var(--brd);border-radius:2px;margin-top:8px;overflow:hidden"><div id="ch-reddit-bar" style="height:100%;width:0%;background:var(--grn);border-radius:2px;transition:width .3s"></div></div>
       </div>
       <div class="lp-field" style="border-left:3px solid #00e676">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><div style="font-size:13px;font-weight:700">🌐 Beta Platforms</div><div style="font-size:11px;color:var(--t3)">Target: 10</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><span id="ch-platforms" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('platforms',10)">+</button></div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px">🌐 Beta Platforms</div>
+        <div style="display:flex;gap:16px;align-items:center">
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">REACHED OUT</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('platforms',-1)">−</button><span id="ch-platforms-reach" style="font-size:16px;font-weight:800;color:var(--ylw)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('platforms',1)">+</button></div></div>
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">SIGNUPS</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('platforms',10,-1)">−</button><span id="ch-platforms" style="font-size:16px;font-weight:800;color:var(--grn)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('platforms',10,1)">+</button></div></div>
+          <div style="text-align:center;margin-left:auto"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">TARGET</div><div style="font-size:16px;font-weight:800;color:var(--t2)">10</div></div>
         </div>
+        <div style="height:4px;background:var(--brd);border-radius:2px;margin-top:8px;overflow:hidden"><div id="ch-platforms-bar" style="height:100%;width:0%;background:var(--grn);border-radius:2px;transition:width .3s"></div></div>
       </div>
       <div class="lp-field" style="border-left:3px solid #ffab40">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div><div style="font-size:13px;font-weight:700">🎓 University / Campus</div><div style="font-size:11px;color:var(--t3)">Target: 10</div></div>
-          <div style="display:flex;align-items:center;gap:8px"><span id="ch-campus" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('campus',10)">+</button></div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:6px">🎓 University / Campus</div>
+        <div style="display:flex;gap:16px;align-items:center">
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">REACHED OUT</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('campus',-1)">−</button><span id="ch-campus-reach" style="font-size:16px;font-weight:800;color:var(--ylw)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('campus',1)">+</button></div></div>
+          <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">SIGNUPS</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('campus',10,-1)">−</button><span id="ch-campus" style="font-size:16px;font-weight:800;color:var(--grn)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannel('campus',10,1)">+</button></div></div>
+          <div style="text-align:center;margin-left:auto"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">TARGET</div><div style="font-size:16px;font-weight:800;color:var(--t2)">10</div></div>
         </div>
+        <div style="height:4px;background:var(--brd);border-radius:2px;margin-top:8px;overflow:hidden"><div id="ch-campus-bar" style="height:100%;width:0%;background:var(--grn);border-radius:2px;transition:width .3s"></div></div>
       </div>
     </div>
   </div>
@@ -1451,157 +1463,22 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <!-- Day-by-Day Battle Plan -->
   <div class="card">
     <h3>📅 Day-by-Day Battle Plan</h3>
-    <div style="display:grid;gap:12px;margin-top:12px">
-      <div class="lp-field" id="beta-day1" style="border-left:3px solid #00e676">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:13px;font-weight:700">Day 1 — Sun Mar 15 (Today)</div>
-          <span class="badge badge-grn" style="font-size:10px">Goal: 15</span>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6">
-          <strong>Foundation &amp; Warm Network</strong><br>
-          • Text/DM 20-30 friends individually (1:1, NOT group blasts)<br>
-          • Post Instagram Story with link — "beta testers wanted 🚀"<br>
-          • Post on LinkedIn: "building something, looking for early feedback"<br>
-          • Text family members who invest/trade<br>
-          • Message friends in finance clubs &amp; trading Discord servers<br>
-          • Submit to <strong>BetaList</strong> ($129 skip queue — featured within days)<br>
-          • Submit to <strong>BetaTesting.com</strong> (free — 400K+ testers)<br>
-          • Post on <strong>Indie Hackers</strong> "Show IH"
-        </div>
-      </div>
-      <div class="lp-field" id="beta-day2" style="border-left:3px solid #448aff">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:13px;font-weight:700">Day 2 — Mon Mar 16</div>
-          <span class="badge badge-blue" style="font-size:10px">Goal: 15</span>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6">
-          <strong>Reddit &amp; Online Communities</strong><br>
-          • r/alphaandbetausers — built for beta recruitment<br>
-          • r/SideProject — show what you built, ask for feedback<br>
-          • r/startups — "looking for beta testers for my trading dashboard"<br>
-          • r/daytrading — share a trading tip, mention tool in comments<br>
-          • r/stocks, r/options — offer free access for feedback<br>
-          • r/fintech — "built a portfolio analytics tool"<br>
-          • Join 3-5 trading Discord servers → #self-promo channels<br>
-          • Post in Facebook day trading groups<br>
-          • Comment on 10-15 Twitter/X threads about trading tools
-        </div>
-      </div>
-      <div class="lp-field" id="beta-day3" style="border-left:3px solid #ffab40">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:13px;font-weight:700">Day 3 — Tue Mar 17</div>
-          <span class="badge badge-org" style="font-size:10px">Goal: 10</span>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6">
-          <strong>Campus &amp; University Push</strong><br>
-          • Print 20 university flyers → bulletin boards (biz school, library, gym, student union)<br>
-          • Print 10 coffee shop flyers → spots near campus<br>
-          • DM finance club presidents at 5 nearby universities<br>
-          • Post in university subreddit / Facebook group<br>
-          • Ask student friends to share in GroupMe/WhatsApp<br>
-          • Email finance/investing professors
-        </div>
-      </div>
-      <div class="lp-field" id="beta-day4" style="border-left:3px solid #ff5252">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:13px;font-weight:700">Day 4 — Wed Mar 18</div>
-          <span class="badge badge-red" style="font-size:10px">Goal: 10</span>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6">
-          <strong>Follow-Up &amp; Push to 50</strong><br>
-          • Follow-up DMs to anyone who saw but didn't sign up<br>
-          • Reply to every Reddit comment with helpful info + link<br>
-          • Post "Day 3 update" on Twitter/X showing progress (FOMO)<br>
-          • Send student newsletter to collected emails<br>
-          • Live walkthrough on Instagram Stories or TikTok<br>
-          • Cross-post best Reddit post to Twitter/LinkedIn<br>
-          • Ask first 20 users to each invite 1 friend (referral)
-        </div>
-      </div>
-    </div>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Click any task to expand action plan resources. Check off as you complete them.</p>
+    <div id="beta-battle-plan" style="display:grid;gap:12px;margin-top:12px"></div>
   </div>
 
   <!-- Outreach Templates -->
   <div class="card">
     <h3>📋 Copy-Paste Outreach Templates</h3>
-    <div style="display:grid;gap:12px;margin-top:12px">
-      <div class="lp-field">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700">🤝 Close Friend DM</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(0)">Copy</button>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-0">Hey [name] — I've been building this trading dashboard tool and I'm looking for people to try the beta version before I launch it publicly. Would you be down to check it out and give me honest feedback? It's free and takes like 2 min to set up.
-
-No pressure if it's not your thing — but if you know anyone who trades or invests, I'd appreciate an intro too 🙏</div>
-      </div>
-      <div class="lp-field">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700">👨‍👩‍👧‍👦 Family Who Invests</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(1)">Copy</button>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-1">Hey [name] — you know how you were talking about investing? I actually built a tool that helps track portfolios and get trade signals. I'm looking for beta testers before I launch — would love for you to try it and tell me what you think. It's totally free right now.</div>
-      </div>
-      <div class="lp-field">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700">💬 Reddit Post (r/alphaandbetausers)</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(2)">Copy</button>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-2">[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals &amp; risk management
-
-Hey everyone 👋 I've been building TradeCommand Pro — a trading analytics dashboard with real-time portfolio tracking, AI-powered trade signals, and risk management tools.
-
-Looking for 50 beta testers to stress-test before public launch. You'll get:
-✅ Free lifetime access to the Pro tier
-✅ Direct line to me for feature requests
-✅ Early access to all future updates
-
-Would love your honest feedback!</div>
-      </div>
-      <div class="lp-field">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700">🎓 Finance Club President DM</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(3)">Copy</button>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-3">Hey! I'm a student and I built a trading dashboard that gives you real-time portfolio tracking, trade signals, and risk management tools. I'm offering free Pro access to your finance club members during our beta.
-
-Would you be open to sharing it with your group or letting me do a quick 10-min demo at your next meeting?</div>
-      </div>
-      <div class="lp-field">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700">🐦 Twitter/X Reply</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(4)">Copy</button>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-4">I actually built a free dashboard for this — tracks your portfolio in real-time, calculates position sizes, and sends alerts when signals align. Looking for beta testers if anyone wants to try it 🙌</div>
-      </div>
-      <div class="lp-field">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:700">📧 Cold Email</div>
-          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(5)">Copy</button>
-        </div>
-        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-5">Subject: Free beta access — trading dashboard with AI signals
-
-Hi [Name],
-
-I'm Max, founder of TradeCommand Pro. We're a real-time trading dashboard with AI-powered signals, portfolio analytics, and risk management tools.
-
-We're running a closed beta and I'd love to offer you free lifetime Pro access ($29/mo value) in exchange for your honest feedback.
-
-Takes 2 min to set up. Interested?</div>
-      </div>
-    </div>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">5 variations per category. Click any to expand, then copy the one that fits.</p>
+    <div style="display:grid;gap:10px;margin-top:12px" id="beta-templates-list"></div>
   </div>
 
   <!-- Beta Platforms -->
   <div class="card">
     <h3>🌐 Beta Platforms — Submit Today</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:12px">
-      <div class="lp-field" style="border-left:3px solid #00e676"><div style="font-size:13px;font-weight:700">BetaList</div><div style="font-size:11px;color:var(--t3)">$129 skip queue • 30-50 signups</div><div style="font-size:11px;color:var(--acc);margin-top:4px">betalist.com/submit</div></div>
-      <div class="lp-field" style="border-left:3px solid #448aff"><div style="font-size:13px;font-weight:700">BetaTesting.com</div><div style="font-size:11px;color:var(--t3)">Free • 400K+ tester pool</div><div style="font-size:11px;color:var(--acc);margin-top:4px">betatesting.com</div></div>
-      <div class="lp-field" style="border-left:3px solid #ffab40"><div style="font-size:13px;font-weight:700">Indie Hackers</div><div style="font-size:11px;color:var(--t3)">Free • Post in "Show IH"</div><div style="font-size:11px;color:var(--acc);margin-top:4px">indiehackers.com</div></div>
-      <div class="lp-field" style="border-left:3px solid #ff5722"><div style="font-size:13px;font-weight:700">GetWorm</div><div style="font-size:11px;color:var(--t3)">Free • Reward-based testers</div><div style="font-size:11px;color:var(--acc);margin-top:4px">getworm.com</div></div>
-      <div class="lp-field" style="border-left:3px solid #e91e63"><div style="font-size:13px;font-weight:700">ErliBird</div><div style="font-size:11px;color:var(--t3)">Free • 5-15 signups</div><div style="font-size:11px;color:var(--acc);margin-top:4px">erlibird.com</div></div>
-      <div class="lp-field" style="border-left:3px solid #9c27b0"><div style="font-size:13px;font-weight:700">Product Hunt</div><div style="font-size:11px;color:var(--t3)">Save for v3.0 full launch</div><div style="font-size:11px;color:var(--t3);margin-top:4px">producthunt.com</div></div>
-    </div>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Click any platform to open it and see the game plan for what to do when you get there.</p>
+    <div style="display:grid;gap:10px;margin-top:12px" id="beta-platforms-list"></div>
   </div>
 
   <!-- Incentive Stack -->
@@ -1620,17 +1497,8 @@ Takes 2 min to set up. Interested?</div>
   <!-- Reddit Subreddit Targets -->
   <div class="card">
     <h3>💬 Reddit Targets</h3>
-    <table style="width:100%;margin-top:8px"><thead><tr><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Subreddit</th><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Size</th><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Strategy</th><th style="text-align:center;padding:8px;color:var(--t3);font-size:11px">Posted</th></tr></thead>
-    <tbody id="reddit-tbody">
-      <tr><td style="padding:8px;font-size:13px">r/alphaandbetausers</td><td style="padding:8px;font-size:12px;color:var(--t3)">~30K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Direct beta recruitment</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(0,this.checked)"></td></tr>
-      <tr><td style="padding:8px;font-size:13px">r/SideProject</td><td style="padding:8px;font-size:12px;color:var(--t3)">~120K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Show your build, ask for feedback</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(1,this.checked)"></td></tr>
-      <tr><td style="padding:8px;font-size:13px">r/startups</td><td style="padding:8px;font-size:12px;color:var(--t3)">~1.2M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Beta testers wanted</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(2,this.checked)"></td></tr>
-      <tr><td style="padding:8px;font-size:13px">r/daytrading</td><td style="padding:8px;font-size:12px;color:var(--t3)">~2M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Value first, mention in comments</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(3,this.checked)"></td></tr>
-      <tr><td style="padding:8px;font-size:13px">r/stocks</td><td style="padding:8px;font-size:12px;color:var(--t3)">~6M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Offer free access for feedback</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(4,this.checked)"></td></tr>
-      <tr><td style="padding:8px;font-size:13px">r/fintech</td><td style="padding:8px;font-size:12px;color:var(--t3)">~50K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Builder-friendly community</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(5,this.checked)"></td></tr>
-      <tr><td style="padding:8px;font-size:13px">r/algotrading</td><td style="padding:8px;font-size:12px;color:var(--t3)">~200K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Algo/quant angle</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(6,this.checked)"></td></tr>
-      <tr><td style="padding:8px;font-size:13px">r/wallstreetbets</td><td style="padding:8px;font-size:12px;color:var(--t3)">~15M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Match the vibe — risky but huge reach</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(7,this.checked)"></td></tr>
-    </tbody></table>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Click any subreddit to open it and see tailored post templates + game plan.</p>
+    <div style="display:grid;gap:8px;margin-top:8px" id="reddit-targets-list"></div>
   </div>
 </div>
 
@@ -3260,10 +3128,11 @@ function loadBeta() {
   ['friends','reddit','platforms','campus'].forEach(function(ch){
     document.getElementById('ch-'+ch).textContent = state[ch] || 0;
   });
-  // Load reddit checks
-  var checks = JSON.parse(localStorage.getItem('tc_beta_reddit') || '[]');
-  var cbs = document.querySelectorAll('#reddit-tbody input[type=checkbox]');
-  cbs.forEach(function(cb, i){ cb.checked = checks[i] || false; });
+  loadChannelBars();
+  renderBetaBattlePlan();
+  renderBetaPlatforms();
+  renderRedditTargets();
+  renderBetaTemplates();
 }
 function updateBetaBar(count) {
   var pct = Math.min(100, Math.round((count/50)*100));
@@ -3283,17 +3152,38 @@ function updateBetaCount() {
   if(val >= 50) toast('🎉 You hit 50 beta users! Let\'s go!','grn');
   else toast('Beta count updated to '+val,'grn');
 }
-function bumpChannel(ch, target) {
+function bumpChannel(ch, target, delta) {
+  delta = delta || 1;
   var state = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0,"friends":0,"reddit":0,"platforms":0,"campus":0}');
-  state[ch] = (state[ch]||0) + 1;
+  state[ch] = Math.max(0, (state[ch]||0) + delta);
   state.count = (state.friends||0) + (state.reddit||0) + (state.platforms||0) + (state.campus||0);
   localStorage.setItem('tc_beta_state', JSON.stringify(state));
   document.getElementById('ch-'+ch).textContent = state[ch];
   document.getElementById('beta-count').textContent = state.count;
   updateBetaBar(state.count);
-  var pct = Math.round((state[ch]/target)*100);
-  if(state[ch] >= target) toast(ch+' channel hit target! 🎯','grn');
-  else toast(ch+': '+state[ch]+'/'+target+' ('+pct+'%)','grn');
+  var bar = document.getElementById('ch-'+ch+'-bar');
+  if(bar) bar.style.width = Math.min(100, Math.round((state[ch]/target)*100))+'%';
+  if(delta > 0 && state[ch] >= target) toast(ch+' channel hit target! 🎯','grn');
+  else if(delta > 0) toast(ch+' signup: '+state[ch]+'/'+target,'grn');
+}
+function bumpChannelReach(ch, delta) {
+  var state = JSON.parse(localStorage.getItem('tc_beta_reach') || '{}');
+  state[ch] = Math.max(0, (state[ch]||0) + delta);
+  localStorage.setItem('tc_beta_reach', JSON.stringify(state));
+  var el = document.getElementById('ch-'+ch+'-reach');
+  if(el) el.textContent = state[ch];
+  if(delta > 0) toast(ch+' reach out logged','grn');
+}
+function loadChannelBars() {
+  var state = JSON.parse(localStorage.getItem('tc_beta_state') || '{}');
+  var reach = JSON.parse(localStorage.getItem('tc_beta_reach') || '{}');
+  var targets = {friends:15,reddit:15,platforms:10,campus:10};
+  ['friends','reddit','platforms','campus'].forEach(function(ch){
+    var bar = document.getElementById('ch-'+ch+'-bar');
+    if(bar) bar.style.width = Math.min(100, Math.round(((state[ch]||0)/targets[ch])*100))+'%';
+    var rel = document.getElementById('ch-'+ch+'-reach');
+    if(rel) rel.textContent = reach[ch]||0;
+  });
 }
 function saveRedditCheck(idx, checked) {
   var checks = JSON.parse(localStorage.getItem('tc_beta_reddit') || '[]');
@@ -3311,6 +3201,367 @@ function copyTemplate(idx) {
     var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
     toast('Template copied','grn');
   }
+}
+
+// ═══ BETA BATTLE PLAN (Dynamic) ═══
+function getBetaDays() {
+  return [
+    {day:'Day 1',date:'Sun Mar 15',label:'Today',color:'#00e676',goal:15,theme:'Foundation & Warm Network',tasks:[
+      {text:'Text/DM 20-30 friends individually (1:1, NOT group blasts)',resources:[
+        {type:'template',label:'Copy Friend DM',action:"navigator.clipboard.writeText('Hey [name] — I\\'ve been building this trading dashboard tool and I\\'m looking for people to try the beta version before I launch it publicly. Would you be down to check it out and give me honest feedback? It\\'s free and takes like 2 min to set up. No pressure if it\\'s not your thing — but if you know anyone who trades or invests, I\\'d appreciate an intro too');toast('Copied!','grn')"},
+        {type:'contacts',label:'View Leads',action:"document.querySelector('[data-page=biz-leads]').click()"},
+        {type:'campaign',label:'Open Friends Campaign',action:"document.querySelector('[data-page=biz-campaigns]').click();setTimeout(function(){openCampaign('friends_family')},200)"}
+      ]},
+      {text:'Post Instagram Story with link — beta testers wanted',resources:[
+        {type:'file',label:'Preview Story Ad',action:"previewFile('ad_instagram_story','📸 IG Story','1080x1920 student offer')"},
+        {type:'link',label:'Open Instagram',action:"window.open('https://www.instagram.com/','_blank')"},
+        {type:'copy',label:'Copy Link',action:"navigator.clipboard.writeText('https://maxmcdonough.github.io/tradecommand-pro/');toast('Link copied!','grn')"}
+      ]},
+      {text:'Post on LinkedIn: building something, looking for feedback',resources:[
+        {type:'link',label:'Open LinkedIn',action:"window.open('https://www.linkedin.com/feed/','_blank')"},
+        {type:'template',label:'Copy LinkedIn Post',action:"navigator.clipboard.writeText('I\\'ve been building something for the past few months — TradeCommand Pro, a real-time trading dashboard with AI signals and risk management tools.\\n\\nLooking for 50 beta testers before I launch publicly. You\\'ll get free lifetime Pro access ($29/mo value) in exchange for honest feedback.\\n\\nDM me or sign up here: https://maxmcdonough.github.io/tradecommand-pro/\\n\\n#fintech #trading #startup #beta');toast('Copied!','grn')"}
+      ]},
+      {text:'Text family members who invest/trade',resources:[
+        {type:'template',label:'Copy Family Text',action:"navigator.clipboard.writeText('Hey! You know how you were talking about investing? I actually built a tool that helps track portfolios and get trade signals. Looking for beta testers — would love for you to try it. Totally free: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]},
+      {text:'Message friends in finance clubs & trading Discord servers',resources:[
+        {type:'template',label:'Copy Discord DM',action:"navigator.clipboard.writeText('Hey! I built a trading dashboard with real-time portfolio tracking and AI signals. Running a free beta right now — 50 spots. Want to check it out? https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]},
+      {text:'Submit to BetaList ($129 skip queue)',resources:[
+        {type:'link',label:'Open BetaList',action:"window.open('https://betalist.com/submit','_blank')"},
+        {type:'info',label:'Fill in: name, tagline, URL, description. Pay $129 to skip queue — expect 30-50 signups.'}
+      ]},
+      {text:'Submit to BetaTesting.com (free — 400K+ testers)',resources:[
+        {type:'link',label:'Open BetaTesting.com',action:"window.open('https://betatesting.com','_blank')"},
+        {type:'info',label:'Create project, upload screenshots, set tester criteria (18-35, interested in finance/trading).'}
+      ]},
+      {text:'Post on Indie Hackers "Show IH"',resources:[
+        {type:'link',label:'Open Indie Hackers',action:"window.open('https://www.indiehackers.com/new-post','_blank')"},
+        {type:'template',label:'Copy IH Post',action:"navigator.clipboard.writeText('Show IH: TradeCommand Pro — Trading Dashboard with AI Signals\\n\\nHey IH! I\\'ve been building TradeCommand Pro — a real-time trading analytics dashboard. Features include portfolio tracking, AI-powered signals, risk management, and a CRM for leads.\\n\\nLooking for 50 beta testers. Free Pro access for life if you sign up during beta.\\n\\nWould love feedback from this community!\\n\\nhttps://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]}
+    ]},
+    {day:'Day 2',date:'Mon Mar 16',label:'Tomorrow',color:'#448aff',goal:15,theme:'Reddit & Online Communities',tasks:[
+      {text:'Post in r/alphaandbetausers (direct recruitment)',resources:[
+        {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/alphaandbetausers/submit','_blank')"},
+        {type:'template',label:'Copy Post',action:"navigator.clipboard.writeText('[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals\\n\\nHey everyone! Looking for 50 beta testers for my trading analytics dashboard. Features: real-time portfolio tracking, AI-powered trade signals, risk management tools.\\n\\nYou get: Free lifetime Pro access ($29/mo value), direct line to me for feature requests, early access to all updates.\\n\\nhttps://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]},
+      {text:'Post in r/SideProject (show what you built)',resources:[
+        {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/SideProject/submit','_blank')"},
+        {type:'template',label:'Copy Post',action:"navigator.clipboard.writeText('I built a trading dashboard with AI signals and risk management — here\\'s what I learned\\n\\nBeen working on TradeCommand Pro for the past few months. It\\'s a real-time trading analytics tool with AI-powered signals, portfolio tracking, and a built-in CRM.\\n\\nTech stack: Firebase, vanilla JS, GitHub Pages. Built it all solo.\\n\\nLooking for beta testers — free Pro access for anyone who signs up: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]},
+      {text:'Post in r/startups (beta testers wanted)',resources:[
+        {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/startups/submit','_blank')"}
+      ]},
+      {text:'Comment in r/daytrading threads with helpful tips + link',resources:[
+        {type:'link',label:'Open r/daytrading',action:"window.open('https://www.reddit.com/r/daytrading/','_blank')"},
+        {type:'info',label:'Find 5 threads asking about tools or strategies. Add genuine value first, mention TC Pro naturally at the end.'}
+      ]},
+      {text:'Post in r/stocks, r/options — offer free access',resources:[
+        {type:'link',label:'Open r/stocks',action:"window.open('https://www.reddit.com/r/stocks/submit','_blank')"},
+        {type:'link',label:'Open r/options',action:"window.open('https://www.reddit.com/r/options/submit','_blank')"}
+      ]},
+      {text:'Post in r/fintech as builder-friendly pitch',resources:[
+        {type:'link',label:'Open r/fintech',action:"window.open('https://www.reddit.com/r/fintech/submit','_blank')"}
+      ]},
+      {text:'Join 3-5 trading Discord servers, post in #self-promo',resources:[
+        {type:'info',label:'Search "trading discord" on Google or Disboard.org. Look for servers with 500+ members and active #self-promo channels.'}
+      ]},
+      {text:'Post in Facebook day trading groups',resources:[
+        {type:'link',label:'Search FB Groups',action:"window.open('https://www.facebook.com/search/groups?q=day%20trading','_blank')"}
+      ]},
+      {text:'Comment on 10-15 Twitter/X threads about trading tools',resources:[
+        {type:'link',label:'Open Twitter',action:"window.open('https://twitter.com/search?q=trading%20tool&f=live','_blank')"},
+        {type:'template',label:'Copy Reply',action:"navigator.clipboard.writeText('I actually built a free dashboard for this — tracks your portfolio in real-time, calculates position sizes, and sends alerts when signals align. Looking for beta testers if anyone wants to try it: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]}
+    ]},
+    {day:'Day 3',date:'Tue Mar 17',label:'',color:'#ffab40',goal:10,theme:'Campus & University Push',tasks:[
+      {text:'Print 20 university flyers → post at bulletin boards',resources:[
+        {type:'file',label:'Preview Flyer',action:"previewFile('flyer_university','🎓 University Flyer','8.5×11 tear-off tabs')"},
+        {type:'link',label:'Open FedEx Print',action:"window.open('https://www.fedex.com/en-us/printing.html','_blank')"},
+        {type:'info',label:'Best spots: business school lobby, library entrance, student union, gym bulletin board'}
+      ]},
+      {text:'Print 10 coffee shop flyers → spots near campus',resources:[
+        {type:'file',label:'Preview Flyer',action:"previewFile('flyer_coffeeshop','☕ Coffee Shop Flyer','8.5×11 plans comparison')"},
+        {type:'info',label:'Ask barista for permission. Leave stack near register or pin to community board.'}
+      ]},
+      {text:'DM finance club presidents at 5 nearby universities',resources:[
+        {type:'template',label:'Copy Club DM',action:"navigator.clipboard.writeText('Hey! I\\'m a student and I built a trading dashboard that gives you real-time portfolio tracking, trade signals, and risk management tools. I\\'m offering free Pro access to your finance club members during our beta. Would you be open to sharing it with your group or letting me do a quick 10-min demo at your next meeting?');toast('Copied!','grn')"},
+        {type:'contacts',label:'View Student Leads',action:"document.querySelector('[data-page=biz-leads]').click()"}
+      ]},
+      {text:'Post in university subreddit / Facebook group',resources:[
+        {type:'info',label:'Search "[your university] trading" or "[your university] finance" on Reddit and Facebook'}
+      ]},
+      {text:'Ask student friends to share in GroupMe/WhatsApp',resources:[
+        {type:'template',label:'Copy Share Request',action:"navigator.clipboard.writeText('Hey! Quick favor — can you share this in your class group chat? My friend built this sick trading dashboard and it\\'s free during beta: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]},
+      {text:'Email finance/investing professors',resources:[
+        {type:'template',label:'Copy Professor Email',action:"navigator.clipboard.writeText('Subject: Free Trading Dashboard for Your Students\\n\\nHi Professor [Name],\\n\\nI\\'m a student who built a trading analytics tool called TradeCommand Pro. Features include real-time portfolio tracking, AI-powered trade signals, and risk management tools. I\\'m offering free Pro access to students during our beta.\\n\\nWould you be open to sharing with your class? I\\'d also love feedback from an academic perspective.\\n\\nBest,\\nMax');toast('Copied!','grn')"}
+      ]},
+      {text:'Post in university Discord servers',resources:[
+        {type:'info',label:'Many schools have Discord servers — search on Disboard or ask classmates for invite links'}
+      ]}
+    ]},
+    {day:'Day 4',date:'Wed Mar 18',label:'Push to 50',color:'#ff5252',goal:10,theme:'Follow-Up & Final Push',tasks:[
+      {text:'Send follow-up DMs to anyone who saw but did not sign up',resources:[
+        {type:'template',label:'Copy Follow-up',action:"navigator.clipboard.writeText('Hey! Just following up — did you get a chance to check out the trading dashboard? No worries if not, just want to make sure the link worked! We\\'re almost at our 50-user beta limit.');toast('Copied!','grn')"}
+      ]},
+      {text:'Reply to every Reddit comment with helpful info + link',resources:[
+        {type:'link',label:'Open Reddit Inbox',action:"window.open('https://www.reddit.com/message/inbox/','_blank')"},
+        {type:'info',label:'Be helpful first, promotional second. Answer questions genuinely.'}
+      ]},
+      {text:'Post Day 3 update on Twitter/X showing signup progress',resources:[
+        {type:'link',label:'Open Twitter',action:"window.open('https://twitter.com/compose/tweet','_blank')"},
+        {type:'template',label:'Copy Update Tweet',action:"navigator.clipboard.writeText('Day 3 of launching TradeCommand Pro beta 🚀\\n\\n📊 [X] beta testers signed up\\n📈 Getting amazing feedback\\n🎯 [50-X] spots left\\n\\nFree lifetime Pro access for early testers:\\nhttps://maxmcdonough.github.io/tradecommand-pro/\\n\\n#buildinpublic #fintech #trading');toast('Copied!','grn')"}
+      ]},
+      {text:'Send student newsletter to collected emails',resources:[
+        {type:'file',label:'Preview Student Email',action:"previewFile('newsletter_student','🎓 Student Offer','$9/mo student pricing')"},
+        {type:'campaign',label:'Open Email Campaign',action:"document.querySelector('[data-page=biz-campaigns]').click();setTimeout(function(){openCampaign('email_sequence')},200)"}
+      ]},
+      {text:'Live walkthrough on Instagram Stories or TikTok',resources:[
+        {type:'info',label:'Screen record the dashboard for 60 seconds. Show: portfolio view, a trade signal, the AI advisor. Add captions.'},
+        {type:'link',label:'Open Instagram',action:"window.open('https://www.instagram.com/','_blank')"}
+      ]},
+      {text:'Cross-post best Reddit post to Twitter/LinkedIn',resources:[
+        {type:'link',label:'Open Twitter',action:"window.open('https://twitter.com/compose/tweet','_blank')"},
+        {type:'link',label:'Open LinkedIn',action:"window.open('https://www.linkedin.com/feed/','_blank')"}
+      ]},
+      {text:'Ask first 20 users to each invite 1 friend (referral)',resources:[
+        {type:'template',label:'Copy Referral Ask',action:"navigator.clipboard.writeText('Thanks so much for trying TradeCommand Pro! Quick favor — do you know one person who trades or invests who\\'d find this useful? Each early referral gets locked into free Pro for life. Just send them: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+      ]}
+    ]}
+  ];
+}
+function renderBetaBattlePlan() {
+  var days = getBetaDays();
+  var container = document.getElementById('beta-battle-plan');
+  if(!container) return;
+  container.innerHTML = days.map(function(d,di){
+    var saved = JSON.parse(localStorage.getItem('tc_beta_day_'+di)||'[]');
+    var doneCount = saved.filter(function(v){return v;}).length;
+    var pct = d.tasks.length ? Math.round((doneCount/d.tasks.length)*100) : 0;
+    var tasksHTML = d.tasks.map(function(t,ti){
+      var checked = saved[ti]?'checked':'';
+      var done = saved[ti];
+      var resIcons = {template:'📋',file:'📄',contacts:'👥',link:'🔗',campaign:'📢',action:'⚡',info:'💡',copy:'📎'};
+      var resHTML = (t.resources||[]).map(function(r){
+        if(r.type==='info') return '<div style="font-size:11px;color:var(--t3);padding:4px 0">💡 '+r.label+'</div>';
+        return '<button class="btn btn-ghost" style="font-size:11px;padding:3px 10px" onclick="event.stopPropagation();'+r.action.replace(/"/g,'&quot;')+'">'+(resIcons[r.type]||'📎')+' '+r.label+'</button>';
+      }).join('');
+      return '<div style="border-left:3px solid '+(done?'var(--grn)':'var(--brd)')+';border-radius:6px;background:rgba(255,255,255,.02);'+(done?'opacity:.6':'')+'" onclick="toggleBetaTaskExp('+di+','+ti+')">'+
+        '<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;cursor:pointer">'+
+          '<input type="checkbox" '+checked+' onchange="event.stopPropagation();saveBetaDayCheck('+di+','+ti+',this.checked)" style="margin-top:2px;flex-shrink:0">'+
+          '<div style="flex:1"><div style="font-size:12px;color:var(--t1);'+(done?'text-decoration:line-through':'')+'">'+t.text+'</div>'+
+          ((t.resources||[]).length?'<div style="font-size:10px;color:var(--t3);margin-top:2px">'+t.resources.length+' resources ▾</div>':'')+
+        '</div></div>'+
+        '<div id="beta-task-exp-'+di+'-'+ti+'" style="display:none;padding:0 10px 8px 32px;border-top:1px solid rgba(255,255,255,.04)">'+
+          '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">'+resHTML+'</div>'+
+        '</div></div>';
+    }).join('');
+    return '<div class="lp-field" style="border-left:3px solid '+d.color+'">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
+        '<div style="font-size:13px;font-weight:700">'+d.day+' — '+d.date+(d.label?' <span style="font-size:11px;color:'+d.color+'">('+d.label+')</span>':'')+' <span style="font-size:11px;color:var(--t3);font-weight:400">'+d.theme+'</span></div>'+
+        '<div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:var(--t3)">'+doneCount+'/'+d.tasks.length+'</span><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06);color:'+d.color+'">Goal: '+d.goal+'</span></div>'+
+      '</div>'+
+      '<div style="height:5px;background:var(--brd);border-radius:3px;margin-bottom:10px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+d.color+';border-radius:3px;transition:width .3s"></div></div>'+
+      '<div style="display:grid;gap:4px">'+tasksHTML+'</div>'+
+    '</div>';
+  }).join('');
+}
+function toggleBetaTaskExp(di,ti) {
+  var el = document.getElementById('beta-task-exp-'+di+'-'+ti);
+  if(el) el.style.display = el.style.display==='none'?'block':'none';
+}
+function saveBetaDayCheck(di,ti,checked) {
+  var saved = JSON.parse(localStorage.getItem('tc_beta_day_'+di)||'[]');
+  saved[ti] = checked;
+  localStorage.setItem('tc_beta_day_'+di, JSON.stringify(saved));
+  renderBetaBattlePlan();
+}
+
+// ═══ BETA PLATFORMS (Dynamic) ═══
+function renderBetaPlatforms() {
+  var platforms = [
+    {name:'BetaList',cost:'$129 skip queue',expect:'30-50 signups',color:'#00e676',url:'https://betalist.com/submit',
+      gameplan:'1. Click "Submit your startup" → fill in product name, tagline, URL\n2. Write a compelling 2-sentence description focusing on what makes TC Pro unique\n3. Upload a screenshot of the dashboard (clean, populated with data)\n4. Pay $129 to skip the review queue (worth it — you get featured within days)\n5. Expected: 30-50 signups from BetaList audience within first week'},
+    {name:'BetaTesting.com',cost:'Free',expect:'400K+ tester pool',color:'#448aff',url:'https://betatesting.com',
+      gameplan:'1. Create a free account and click "Create Project"\n2. Describe your product: trading dashboard with AI signals, portfolio tracking\n3. Set tester criteria: ages 18-35, interested in finance/investing/trading\n4. Upload 3-5 screenshots of the dashboard\n5. Set testing period: 7 days\n6. Testers will submit structured feedback — respond to all of it'},
+    {name:'Indie Hackers',cost:'Free',expect:'Startup community',color:'#ffab40',url:'https://www.indiehackers.com/new-post',
+      gameplan:'1. Post in "Show IH" — title: "TradeCommand Pro — Trading Dashboard with AI Signals"\n2. Tell your build story: what inspired it, tech stack, how long it took\n3. Include a screenshot and the signup link\n4. Be genuine and transparent about where you are (pre-launch, looking for feedback)\n5. Reply to every comment — IH community values responsiveness'},
+    {name:'GetWorm',cost:'Free',expect:'Reward-based testers',color:'#ff5722',url:'https://getworm.com',
+      gameplan:'1. Sign up and create a new product listing\n2. Offer reward: "Free lifetime Pro access ($29/mo value)"\n3. Set task: "Sign up, explore the dashboard for 5 minutes, submit feedback"\n4. Upload screenshots and a short video walkthrough if possible\n5. GetWorm testers are motivated by rewards — keep the ask simple'},
+    {name:'ErliBird',cost:'Free',expect:'5-15 signups',color:'#e91e63',url:'https://erlibird.com',
+      gameplan:'1. Submit your product with screenshots and description\n2. ErliBird has a smaller but engaged audience\n3. Focus on the visual appeal of your dashboard in the listing\n4. Expected: 5-15 signups, but quality feedback\n5. Good for getting early testimonials'},
+    {name:'Product Hunt',cost:'Free',expect:'Save for v3.0 launch',color:'#9c27b0',url:'https://www.producthunt.com/',
+      gameplan:'1. DO NOT launch here yet — save for v3.0 full public launch\n2. For now: create a "Coming Soon" page and start collecting followers\n3. Follow other fintech products and engage with the community\n4. Build up 50+ followers before your launch day\n5. When ready: launch on a Tuesday, get 10 friends to upvote in the first hour'}
+  ];
+  var saved = JSON.parse(localStorage.getItem('tc_beta_plat_checks')||'[]');
+  var container = document.getElementById('beta-platforms-list');
+  if(!container) return;
+  container.innerHTML = platforms.map(function(p,i){
+    var done = saved[i];
+    return '<div style="border-left:3px solid '+p.color+';border-radius:8px;background:rgba(255,255,255,.03);'+(done?'opacity:.6':'')+'" onclick="toggleBetaPlatExp('+i+')">'+
+      '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer">'+
+        '<input type="checkbox" '+(done?'checked':'')+' onchange="event.stopPropagation();saveBetaPlatCheck('+i+',this.checked)" style="flex-shrink:0">'+
+        '<div style="flex:1"><div style="font-size:13px;font-weight:700;'+(done?'text-decoration:line-through':'')+'">'+p.name+'</div>'+
+        '<div style="font-size:11px;color:var(--t3)">'+p.cost+' · '+p.expect+'</div></div>'+
+        '<span style="font-size:10px;color:var(--t3)">▾ Game Plan</span>'+
+      '</div>'+
+      '<div id="beta-plat-exp-'+i+'" style="display:none;padding:0 12px 10px 36px;border-top:1px solid rgba(255,255,255,.04)">'+
+        '<div style="font-size:12px;color:var(--t2);line-height:1.7;white-space:pre-wrap;margin-top:8px">'+p.gameplan+'</div>'+
+        '<div style="margin-top:8px;display:flex;gap:6px">'+
+          '<button class="btn btn-primary" style="font-size:11px;padding:4px 12px" onclick="event.stopPropagation();window.open(\''+p.url+'\',\'_blank\')">Open '+p.name+' →</button>'+
+          '<button class="btn btn-ghost" style="font-size:11px;padding:4px 12px" onclick="event.stopPropagation();navigator.clipboard.writeText(\'https://maxmcdonough.github.io/tradecommand-pro/\');toast(\'Link copied!\',\'grn\')">📎 Copy TC Pro Link</button>'+
+        '</div>'+
+      '</div></div>';
+  }).join('');
+}
+function toggleBetaPlatExp(i) {
+  var el = document.getElementById('beta-plat-exp-'+i);
+  if(el) el.style.display = el.style.display==='none'?'block':'none';
+}
+function saveBetaPlatCheck(i,checked) {
+  var saved = JSON.parse(localStorage.getItem('tc_beta_plat_checks')||'[]');
+  saved[i] = checked;
+  localStorage.setItem('tc_beta_plat_checks', JSON.stringify(saved));
+  if(checked) toast('Platform submitted ✓','grn');
+}
+
+// ═══ REDDIT TARGETS (Dynamic) ═══
+function renderRedditTargets() {
+  var subs = [
+    {name:'r/alphaandbetausers',size:'~30K',strategy:'Direct beta recruitment — this sub exists for exactly this',url:'https://www.reddit.com/r/alphaandbetausers/submit',
+      posts:[
+        '[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals & risk management\n\nHey everyone! Looking for 50 beta testers for my trading analytics dashboard. Features: real-time portfolio tracking, AI-powered trade signals, risk management tools.\n\nYou get: Free lifetime Pro access ($29/mo value), direct line to me for feature requests.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/',
+        'Looking for beta testers: Built a trading analytics tool\n\nI\'ve been building TradeCommand Pro — a dashboard that tracks your portfolio in real-time and gives you AI-powered trade signals. Free Pro access for beta testers.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/',
+        '[Beta Testers Wanted] Trading dashboard with AI signals, position sizing, and risk management\n\n50 spots available. Free forever for early testers. Would love your feedback!\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+      ]},
+    {name:'r/SideProject',size:'~120K',strategy:'Show your build, share the journey, ask for feedback',url:'https://www.reddit.com/r/SideProject/submit',
+      posts:[
+        'I built a trading dashboard with AI signals and risk management — here\'s what I learned\n\nBeen working on TradeCommand Pro for a few months. It tracks portfolios in real-time, gives AI-powered trade signals, and has built-in risk management.\n\nTech stack: Firebase, vanilla JS, GitHub Pages. Built solo.\n\nLooking for beta testers — free Pro access: https://maxmcdonough.github.io/tradecommand-pro/',
+        'My side project: A trading analytics dashboard (looking for feedback)\n\nI built TradeCommand Pro as a solo developer. It started as a simple portfolio tracker and grew into a full trading analytics platform.\n\nWould love honest feedback from this community.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+      ]},
+    {name:'r/startups',size:'~1.2M',strategy:'Beta testers wanted angle — be humble, ask for help',url:'https://www.reddit.com/r/startups/submit',
+      posts:[
+        'Looking for beta testers for my trading analytics startup\n\nI\'m building TradeCommand Pro — a real-time trading dashboard with AI signals. Pre-launch and looking for 50 beta users to help shape the product.\n\nOffering free lifetime access to early testers. Any feedback welcome!\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+      ]},
+    {name:'r/daytrading',size:'~2M',strategy:'Lead with value (trading tips), mention tool naturally in comments',url:'https://www.reddit.com/r/daytrading/',
+      posts:[
+        'The 2% rule saved my account — how position sizing changed everything\n\n[Write a genuine post about the 2% rule and risk management. At the end:]\n\nI actually built a tool that calculates position sizes automatically based on your account size and stop-loss distance. Happy to share if anyone\'s interested.',
+        'Comment reply template: "I actually built a free dashboard for this — tracks your portfolio in real-time, calculates position sizes, and sends alerts when signals align. Looking for beta testers: https://maxmcdonough.github.io/tradecommand-pro/"'
+      ]},
+    {name:'r/stocks',size:'~6M',strategy:'Offer free access for honest feedback',url:'https://www.reddit.com/r/stocks/submit',
+      posts:[
+        'Built a portfolio tracking tool with AI signals — offering free access for feedback\n\nI\'ve been building TradeCommand Pro — it tracks your portfolio in real-time and generates AI-powered trade signals based on technical analysis.\n\nLooking for feedback from real traders. Free Pro access ($29/mo value) for anyone willing to try it.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+      ]},
+    {name:'r/fintech',size:'~50K',strategy:'Builder-friendly community — technical details welcome',url:'https://www.reddit.com/r/fintech/submit',
+      posts:[
+        'Built a portfolio analytics tool as a solo dev — looking for beta testers\n\nTradeCommand Pro: real-time portfolio tracking, AI-powered signals, risk management. Built with Firebase + vanilla JS.\n\nWould love feedback from the fintech community.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+      ]},
+    {name:'r/algotrading',size:'~200K',strategy:'Algo/quant angle — emphasize the signals engine',url:'https://www.reddit.com/r/algotrading/submit',
+      posts:[
+        'Built a signal detection system for retail traders — looking for feedback\n\nTradeCommand Pro generates trade signals when 3+ technical indicators align. Currently in beta — would love feedback from this community on the signal logic.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+      ]},
+    {name:'r/wallstreetbets',size:'~15M',strategy:'Match the energy — meme-friendly, casual, risky but massive reach',url:'https://www.reddit.com/r/wallstreetbets/submit',
+      posts:[
+        'Tired of losing money? Me too. So I built a dashboard that tells me when NOT to trade.\n\nTradeCommand Pro — portfolio tracker with AI signals. It literally tells you to stop trading when you\'re on a losing streak.\n\nFree during beta. Not financial advice. 🚀\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+      ]}
+  ];
+  var saved = JSON.parse(localStorage.getItem('tc_beta_reddit')||'[]');
+  var container = document.getElementById('reddit-targets-list');
+  if(!container) return;
+  container.innerHTML = subs.map(function(s,i){
+    var done = saved[i];
+    var postsHTML = s.posts.map(function(p,pi){
+      return '<div style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-top:6px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:10px;color:var(--t3)">Option '+(pi+1)+'</span>'+
+        '<button class="btn btn-ghost" style="font-size:10px;padding:2px 8px" onclick="event.stopPropagation();navigator.clipboard.writeText('+JSON.stringify(p).replace(/"/g,'&quot;').replace(/'/g,"\\'")+');toast(\'Post copied!\',\'grn\')">📎 Copy</button></div>'+
+        '<div style="font-size:11px;color:var(--t2);line-height:1.5;white-space:pre-wrap">'+p.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></div>';
+    }).join('');
+    return '<div style="border-left:3px solid '+(done?'var(--grn)':'var(--brd)')+';border-radius:8px;background:rgba(255,255,255,.03);'+(done?'opacity:.6':'')+'" onclick="toggleRedditExp('+i+')">'+
+      '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer">'+
+        '<input type="checkbox" '+(done?'checked':'')+' onchange="event.stopPropagation();saveRedditCheck('+i+',this.checked)" style="flex-shrink:0">'+
+        '<div style="flex:1"><div style="font-size:13px;font-weight:700;'+(done?'text-decoration:line-through':'')+'">'+s.name+'</div>'+
+        '<div style="font-size:11px;color:var(--t3)">'+s.size+' · '+s.strategy+'</div></div>'+
+        '<span style="font-size:10px;color:var(--t3)">'+s.posts.length+' posts ▾</span>'+
+      '</div>'+
+      '<div id="reddit-exp-'+i+'" style="display:none;padding:0 12px 10px 36px;border-top:1px solid rgba(255,255,255,.04)">'+
+        '<div style="margin-top:6px;margin-bottom:8px"><button class="btn btn-primary" style="font-size:11px;padding:4px 12px" onclick="event.stopPropagation();window.open(\''+s.url+'\',\'_blank\')">Open '+s.name+' →</button></div>'+
+        postsHTML+
+      '</div></div>';
+  }).join('');
+}
+function toggleRedditExp(i) {
+  var el = document.getElementById('reddit-exp-'+i);
+  if(el) el.style.display = el.style.display==='none'?'block':'none';
+}
+
+// ═══ BETA OUTREACH TEMPLATES (Dynamic — 5 per category) ═══
+function renderBetaTemplates() {
+  var categories = [
+    {icon:'🤝',name:'Close Friend DMs',templates:[
+      'Hey [name] — I\'ve been building this trading dashboard tool and I\'m looking for people to try the beta version before I launch it publicly. Would you be down to check it out and give me honest feedback? It\'s free and takes like 2 min to set up. No pressure if it\'s not your thing — but if you know anyone who trades or invests, I\'d appreciate an intro too 🙏',
+      'Hey! Quick ask — I built a trading dashboard and I need beta testers. Free Pro access ($29/mo value) if you try it out. Takes 2 min: https://maxmcdonough.github.io/tradecommand-pro/',
+      'Yo [name] — remember when we talked about trading? I actually built a whole dashboard for it. Portfolio tracking, AI signals, risk management — the whole thing. Looking for testers before I launch. Down to try it?',
+      '[name]! I need a favor 🙏 I\'m launching a trading tool and need 50 beta testers by Thursday. You don\'t even need to trade — I just need people to poke around and tell me what breaks lol. Free forever if you sign up now.',
+      'Hey — I know this is random but I built a trading analytics tool and I\'m finally ready to let people try it. Would mean a lot if you\'d check it out and give me your honest take. Free access: https://maxmcdonough.github.io/tradecommand-pro/'
+    ]},
+    {icon:'👨‍👩‍👧‍👦',name:'Family Who Invests',templates:[
+      'Hey [name] — you know how you were talking about investing? I actually built a tool that helps track portfolios and get trade signals. I\'m looking for beta testers before I launch — would love for you to try it and tell me what you think. It\'s totally free right now.',
+      'Hey [name]! I\'ve been working on something cool — a trading dashboard that tracks your portfolio in real-time and gives you AI-powered signals. I\'d love your feedback since you know about investing. Free during beta: https://maxmcdonough.github.io/tradecommand-pro/',
+      '[name] — I built a trading tool! Real-time portfolio tracking, trade signals, risk management. Since you\'re into investing, your feedback would be super valuable. Want to check it out? It\'s free.',
+      'Hey, so you know I\'ve been working on a side project? It\'s a trading analytics dashboard. I\'m looking for family and friends to be my first users. Would mean a lot if you\'d try it: https://maxmcdonough.github.io/tradecommand-pro/',
+      'Hi [name]! I know you do some trading/investing — I built a dashboard tool that might be useful. It tracks portfolios, gives AI signals, and manages risk. Looking for honest feedback during beta. Totally free, no catch.'
+    ]},
+    {icon:'💬',name:'Reddit Posts',templates:[
+      '[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals & risk management\n\nHey everyone 👋 I\'ve been building TradeCommand Pro — a trading analytics dashboard with real-time portfolio tracking, AI-powered trade signals, and risk management tools.\n\nLooking for 50 beta testers. You\'ll get:\n✅ Free lifetime Pro access ($29/mo value)\n✅ Direct line to me for feature requests\n✅ Early access to all future updates\n\nhttps://maxmcdonough.github.io/tradecommand-pro/',
+      'I built a trading dashboard — looking for honest feedback\n\nBeen building this for months and it\'s finally ready for testing. TradeCommand Pro tracks your portfolio in real-time, generates AI signals, and helps manage risk.\n\nOffering free Pro access to the first 50 testers.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/',
+      'Free trading analytics tool — need beta testers\n\nTradeCommand Pro: portfolio tracker + AI signals + risk management. Built it solo, looking for 50 people to break it before launch.\n\nFree forever for beta testers. Link: https://maxmcdonough.github.io/tradecommand-pro/',
+      'Show: Trading dashboard I built from scratch\n\nAfter months of building, TradeCommand Pro is ready for beta. Features: real-time portfolio tracking, AI-powered signals, position sizing, risk management.\n\nLooking for honest feedback. Free access: https://maxmcdonough.github.io/tradecommand-pro/',
+      'Launching my trading analytics tool in beta — 50 free spots\n\nTradeCommand Pro gives you real-time portfolio tracking, AI trade signals, and built-in risk management. Looking for traders who want free lifetime access in exchange for feedback.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/'
+    ]},
+    {icon:'🎓',name:'Finance Club / Professor',templates:[
+      'Hey! I\'m a student and I built a trading dashboard that gives you real-time portfolio tracking, trade signals, and risk management tools. I\'m offering free Pro access to your finance club members during our beta. Would you be open to sharing it with your group or letting me do a quick 10-min demo at your next meeting?',
+      'Hi! I built a trading analytics tool called TradeCommand Pro. It\'s free during beta and I think your finance club members would love it. It has real-time portfolio tracking, AI signals, and risk management. Could I do a quick demo at your next meeting?',
+      'Subject: Free Trading Tool for Your Students\n\nHi Professor [Name],\n\nI\'m [your name], a student who built a trading analytics platform. Features include real-time portfolio tracking, AI-powered trade signals, and risk management tools.\n\nI\'m offering free Pro access to students during beta. Would you consider sharing with your class?\n\nBest, Max',
+      'Hey [Club President name]! I\'m running a beta for my trading dashboard — TradeCommand Pro. Real-time portfolio tracking, AI signals, the works. Offering free lifetime access to your club members. Want to partner up?',
+      'Hi Professor [Name] — I\'m a student who\'s been building a trading analytics tool. It would be great for your students learning about markets. Free during beta, and I\'d love academic feedback. Details: https://maxmcdonough.github.io/tradecommand-pro/'
+    ]},
+    {icon:'🐦',name:'Twitter/X Replies & Posts',templates:[
+      'I actually built a free dashboard for this — tracks your portfolio in real-time, calculates position sizes, and sends alerts when signals align. Looking for beta testers if anyone wants to try it 🙌 https://maxmcdonough.github.io/tradecommand-pro/',
+      'Been building a trading analytics tool and it\'s finally ready for beta 🚀 Real-time portfolio tracking, AI signals, risk management — free for the first 50 testers. https://maxmcdonough.github.io/tradecommand-pro/ #buildinpublic #fintech',
+      'Day [X] of building TradeCommand Pro 📊\n\nJust hit [milestone]. Looking for 50 beta testers to try the dashboard before public launch.\n\nFree lifetime Pro access if you sign up now: https://maxmcdonough.github.io/tradecommand-pro/\n\n#fintech #trading',
+      'Hot take: Most trading tools are overpriced and overcomplicated.\n\nSo I built my own — TradeCommand Pro. Real-time tracking, AI signals, risk management. And it\'s free during beta.\n\nhttps://maxmcdonough.github.io/tradecommand-pro/',
+      'If you trade and you don\'t have a position sizing calculator... you\'re gambling.\n\nI built one into TradeCommand Pro along with AI signals and portfolio tracking. Free during beta: https://maxmcdonough.github.io/tradecommand-pro/'
+    ]},
+    {icon:'📧',name:'Cold Emails',templates:[
+      'Subject: Free beta access — trading dashboard with AI signals\n\nHi [Name],\n\nI\'m Max, founder of TradeCommand Pro. We\'re a real-time trading dashboard with AI-powered signals, portfolio analytics, and risk management tools.\n\nWe\'re running a closed beta and I\'d love to offer you free lifetime Pro access ($29/mo value) in exchange for your honest feedback.\n\nTakes 2 min to set up. Interested?',
+      'Subject: Built something for traders — would love your feedback\n\nHi [Name],\n\nI\'ve been building a trading analytics platform called TradeCommand Pro. It tracks portfolios in real-time, generates AI-powered trade signals, and helps manage risk.\n\nLooking for experienced traders to test it before launch. Free Pro access for life if you\'re interested.\n\nBest,\nMax',
+      'Subject: Quick question about trading tools\n\nHi [Name],\n\nI noticed you\'re involved in [trading/investing/finance]. I\'m building a trading dashboard and looking for feedback from people like you.\n\nWould you be open to a 5-minute look at TradeCommand Pro? Free access, no strings attached.\n\nMax',
+      'Subject: Exclusive beta invite — TradeCommand Pro\n\nHi [Name],\n\nYou\'re one of 50 people getting early access to TradeCommand Pro — a trading analytics dashboard with AI signals and risk management.\n\nFree lifetime Pro access for beta testers. Interested?\n\nhttps://maxmcdonough.github.io/tradecommand-pro/\n\nMax',
+      'Subject: Free trading tool for your portfolio\n\nHi [Name],\n\nI built TradeCommand Pro — real-time portfolio tracking, AI trade signals, and position sizing tools. It\'s free during our beta period.\n\nWould love 5 minutes of your time to try it and share feedback. Here\'s the link: https://maxmcdonough.github.io/tradecommand-pro/\n\nThanks,\nMax'
+    ]}
+  ];
+  var container = document.getElementById('beta-templates-list');
+  if(!container) return;
+  container.innerHTML = categories.map(function(cat,ci){
+    var templatesHTML = cat.templates.map(function(t,ti){
+      return '<div style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;padding:10px;margin-top:6px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:10px;color:var(--t3)">Option '+(ti+1)+'</span>'+
+        '<button class="btn btn-ghost" style="font-size:10px;padding:2px 8px" onclick="event.stopPropagation();navigator.clipboard.writeText('+JSON.stringify(t).replace(/"/g,'&quot;').replace(/'/g,"\\'")+');toast(\'Copied!\',\'grn\')">📎 Copy</button></div>'+
+        '<div style="font-size:11px;color:var(--t2);line-height:1.5;white-space:pre-wrap">'+t.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></div>';
+    }).join('');
+    return '<div class="lp-field" style="cursor:pointer" onclick="toggleTmplCat('+ci+')">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+        '<div style="font-size:13px;font-weight:700">'+cat.icon+' '+cat.name+' <span style="font-size:11px;font-weight:400;color:var(--t3)">('+cat.templates.length+' options)</span></div>'+
+        '<span style="font-size:10px;color:var(--t3)">▾</span>'+
+      '</div>'+
+      '<div id="tmpl-cat-'+ci+'" style="display:none;margin-top:8px">'+templatesHTML+'</div>'+
+    '</div>';
+  }).join('');
+}
+function toggleTmplCat(ci) {
+  var el = document.getElementById('tmpl-cat-'+ci);
+  if(el) el.style.display = el.style.display==='none'?'block':'none';
 }
 
 // ═══ EMAIL TEMPLATES ═══
