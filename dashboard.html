@@ -400,17 +400,21 @@ a{color:var(--acc);text-decoration:none}
 @media(max-width:768px){.g2,.g3,.g23{grid-template-columns:1fr}.nav{gap:2px;padding:4px 8px}.page{padding:8px}}
 
 /* ===== SECTOR NAV ===== */
-.sector-nav{display:flex;gap:6px;padding:7px 14px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--brd);overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:85}
+.sector-nav{display:flex;align-items:center;gap:6px;padding:6px 14px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--brd);overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:85}
 .sector-nav::-webkit-scrollbar{display:none}
+.sec-nav-label{flex-shrink:0;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;padding-right:4px;border-right:1px solid var(--brd);margin-right:2px;white-space:nowrap}
 /* ===== SECTOR CONTEXT BAR ===== */
-#sector-ctx-bar{display:none;align-items:center;gap:8px;padding:5px 14px;font-size:11px;color:var(--t2);background:rgba(59,130,246,.04);border-bottom:1px solid rgba(59,130,246,.08);transition:background .3s,border-color .3s}
-#sector-ctx-bar.sec-active{background:rgba(245,158,11,.05);border-bottom-color:rgba(245,158,11,.12)}
+#sector-ctx-bar{display:none;align-items:center;gap:8px;padding:5px 14px;font-size:11px;color:var(--t2);background:rgba(59,130,246,.04);border-bottom:1px solid rgba(59,130,246,.1);transition:background .25s,border-color .25s}
+#sector-ctx-bar.sec-active{background:rgba(245,158,11,.06);border-bottom-color:rgba(245,158,11,.18)}
 .ctx-icon{font-size:13px}
 .ctx-name{font-weight:700;color:var(--t1)}
 .ctx-sep{color:var(--brd);margin:0 2px}
 .ctx-hint{color:var(--t3)}
 .ctx-reset{margin-left:auto;padding:2px 8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:4px;color:var(--t3);font-size:10px;cursor:pointer;white-space:nowrap}
 .ctx-reset:hover{color:var(--t1);border-color:var(--acc)}
+/* ===== CONTENT FILTER FLASH ===== */
+@keyframes filterFlash{0%{opacity:.55;transform:translateY(4px)}100%{opacity:1;transform:translateY(0)}}
+.filter-flash>*{animation:filterFlash .18s ease-out}
 .sec-btn{flex-shrink:0;padding:4px 13px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--brd);background:transparent;color:var(--t2);transition:all .18s;white-space:nowrap}
 .sec-btn:hover{border-color:var(--sec-color,var(--acc));color:var(--sec-color,var(--acc))}
 .sec-btn.on{color:#fff;border-color:transparent;background:var(--sec-color,var(--acc))}
@@ -1573,7 +1577,7 @@ a{color:var(--acc);text-decoration:none}
   <span class="ctx-icon" id="ctx-icon">🌐</span>
   <span class="ctx-name" id="ctx-name">All Market</span>
   <span class="ctx-sep">·</span>
-  <span class="ctx-hint" id="ctx-hint">Select a sector above to filter this view</span>
+  <span class="ctx-hint" id="ctx-hint">↑ Pick a sector above to filter this page</span>
   <button class="ctx-reset" id="ctx-reset-btn" style="display:none" onclick="setSector('all',document.querySelector('[data-sec=all]'))">✕ Clear filter</button>
 </div>
 
@@ -2717,8 +2721,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // Render pricing cards in modals
   renderPricingCards('trial-pricing-container');
   renderPricingCards('upgrade-modal-pricing');
-  // Firebase auth state listener handles everything
-  auth.onAuthStateChanged(handleAuthState);
+  // Use SESSION persistence so private/incognito windows always start logged-out
+  auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .catch(() => {}) // silently ignore if Firebase isn't configured
+    .finally(() => auth.onAuthStateChanged(handleAuthState));
 });
 
 // ===== SESSION TRACKER =====
@@ -3058,7 +3064,7 @@ function launch(){
   D.fh=document.getElementById('k-fh').value.trim();
   D.av=document.getElementById('k-av').value.trim();
   D.na=document.getElementById('k-na').value.trim();
-  D.name=(document.getElementById('p-name').value.trim()||'Trader');
+  D.name=(document.getElementById('p-name').value.trim()||D.name||'Trader');
   D.bal=parseFloat(document.getElementById('s-bal').value)||25000;
   D.risk=parseFloat(document.getElementById('s-risk').value)||1;
 
@@ -3106,9 +3112,9 @@ function launch(){
   setInterval(()=>safeFetch(()=>fetchReddit(D._rsub)),180000);
   setInterval(()=>safeFetch(fetchTreasury),3600000);
 
-  setTimeout(genSigs,1500);
-  setTimeout(genEmerging,2500);
-  setTimeout(mkInsider,1000);
+  setTimeout(genSigs,200);
+  setTimeout(genEmerging,150);
+  setTimeout(mkInsider,100);
   setTimeout(()=>safeFetch(fetchFG),500);
 }
 
@@ -3208,7 +3214,13 @@ function updClock(){
 function pg(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.nav button').forEach(b => b.classList.remove('on'));
-  document.getElementById('p-' + id).classList.add('on');
+  const pgEl = document.getElementById('p-' + id);
+  pgEl.classList.add('on');
+  // Flash animation on page switch
+  pgEl.classList.remove('filter-flash');
+  void pgEl.offsetWidth;
+  pgEl.classList.add('filter-flash');
+  setTimeout(() => pgEl.classList.remove('filter-flash'), 300);
   btn.classList.add('on');
   _activePage = id;
   // Hide sector nav + context bar on pages where sectors are irrelevant
@@ -4074,15 +4086,15 @@ function updateSectorCtxBar(pageId) {
   const noBar = ['learn', 'tools'];
   if (noBar.includes(pageId)) { bar.style.display = 'none'; return; }
   bar.style.display = 'flex';
-  const pageHints = {
-    trading: 'filtering watchlist & signals',
-    intel:   'filtering emerging picks & insider trades',
-    news:    'filtering market headlines',
-    social:  'filtering Reddit ticker mentions',
-    crypto:  'crypto view',
-    brief:   'briefing includes sector context'
-  };
   const sec = (_activeSector !== 'all' && SECTORS[_activeSector]) ? SECTORS[_activeSector] : null;
+  const pageHints = {
+    trading: sec ? 'watchlist & signals filtered' : '↑ pick a sector to filter watchlist & signals',
+    intel:   sec ? 'emerging picks & insider trades filtered' : '↑ pick a sector to filter intel',
+    news:    sec ? 'headlines filtered by sector keywords' : '↑ pick a sector to filter headlines',
+    social:  sec ? 'ticker mentions filtered by sector' : '↑ pick a sector to filter Reddit mentions',
+    crypto:  'crypto overview',
+    brief:   sec ? 'sector context added to briefing' : '↑ pick a sector to focus your briefing'
+  };
   const icon = document.getElementById('ctx-icon');
   const name = document.getElementById('ctx-name');
   const hint = document.getElementById('ctx-hint');
@@ -4097,9 +4109,10 @@ function updateSectorCtxBar(pageId) {
 function renderSectorNav() {
   const el = document.getElementById('sector-nav');
   if (!el) return;
-  el.innerHTML = Object.entries(SECTORS).map(([id, s]) =>
-    `<button class="sec-btn${id===_activeSector?' on':''}" style="--sec-color:${s.color}" data-sec="${id}" onclick="setSector('${id}',this)">${s.icon} ${s.name}</button>`
-  ).join('');
+  el.innerHTML = '<span class="sec-nav-label">Filter by sector</span>' +
+    Object.entries(SECTORS).map(([id, s]) =>
+      `<button class="sec-btn${id===_activeSector?' on':''}" style="--sec-color:${s.color}" data-sec="${id}" onclick="setSector('${id}',this)">${s.icon} ${s.name}</button>`
+    ).join('');
 }
 
 function setSector(id, el) {
@@ -4132,7 +4145,14 @@ function setSector(id, el) {
     D._sectorKw = sec.kw;
   }
 
-  // Re-render the active page's content with the new sector filter
+  // Re-render the active page's content with the new sector filter + flash animation
+  const activePgEl = document.getElementById('p-' + (_activePage || 'trading'));
+  if (activePgEl) {
+    activePgEl.classList.remove('filter-flash');
+    void activePgEl.offsetWidth; // force reflow to restart animation
+    activePgEl.classList.add('filter-flash');
+    setTimeout(() => activePgEl.classList.remove('filter-flash'), 300);
+  }
   if (_activePage === 'intel') { genEmerging(); mkInsider(); }
   if (_activePage === 'news') mkFhNews();
   if (_activePage === 'social') mkMent();
