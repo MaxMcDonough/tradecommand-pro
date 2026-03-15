@@ -846,6 +846,32 @@ a{color:var(--acc);text-decoration:none}
 .trial-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:6px;font-size:11px;font-weight:600;color:var(--ylw)}
 
 /* ===== UPGRADE MODAL & PRICING ===== */
+/* ===== GUIDED TOUR ===== */
+#tour-overlay{display:none;position:fixed;inset:0;z-index:10005;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px}
+#tour-overlay.show{display:flex}
+.tour-box{position:relative;width:100%;max-width:600px;background:linear-gradient(135deg,#0d1420,#111827);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:36px 40px 28px;box-shadow:0 24px 80px rgba(0,0,0,.7);overflow:hidden}
+.tour-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--acc),#10b981)}
+.tour-progress{display:flex;align-items:center;gap:6px;margin-bottom:24px}
+.tour-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15);cursor:pointer;transition:all .2s}
+.tour-dot.active{background:var(--acc);width:22px;border-radius:4px}
+.tour-dot.done{background:rgba(99,102,241,.4)}
+.tour-step-label{margin-left:auto;font-size:10px;color:rgba(255,255,255,.3);font-weight:600;letter-spacing:.5px}
+.tour-icon{font-size:52px;line-height:1;margin-bottom:16px;display:block;filter:drop-shadow(0 4px 12px rgba(0,0,0,.4))}
+.tour-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:10px;line-height:1.2}
+.tour-desc{font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:18px}
+.tour-tips{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px 16px;margin-bottom:22px}
+.tour-tips-title{font-size:10px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.tour-tip{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px;line-height:1.5}
+.tour-tip:last-child{margin-bottom:0}
+.tour-tip-icon{flex-shrink:0;margin-top:1px;opacity:.7}
+.tour-nav{display:flex;align-items:center;gap:10px}
+.tour-btn-prev{padding:8px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.tour-btn-prev:hover{background:rgba(255,255,255,.1);color:#fff}
+.tour-btn-next{flex:1;padding:11px 20px;background:linear-gradient(135deg,var(--acc),#6366f1dd);border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.tour-btn-next:hover{opacity:.9;transform:translateY(-1px)}
+.tour-btn-skip{padding:8px 14px;background:transparent;border:none;color:rgba(255,255,255,.25);font-size:11px;cursor:pointer;transition:color .15s;margin-left:auto}
+.tour-btn-skip:hover{color:rgba(255,255,255,.5)}
+
 #upgrade-modal{display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);align-items:center;justify-content:center;padding:20px}
 #upgrade-modal.show{display:flex}
 .upgrade-box{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:36px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto}
@@ -1620,6 +1646,7 @@ a{color:var(--acc);text-decoration:none}
       </div>
     </div>
     <span style="color:var(--t3)" id="src-ct">0 sources</span>
+    <button onclick="startTour()" style="padding:3px 9px;background:var(--card2);border:1px solid var(--brd);border-radius:5px;color:var(--t2);font-size:11px;cursor:pointer" title="How to use TradeCommand Pro">?</button>
     <button onclick="openSettings()" style="padding:3px 9px;background:var(--card2);border:1px solid var(--brd);border-radius:5px;color:var(--t2);font-size:11px;cursor:pointer" title="Settings">⚙️</button>
     <button id="btn-signout" onclick="authSignOut()" class="btn-signout" style="display:none">Sign Out</button>
   </div>
@@ -2068,6 +2095,25 @@ a{color:var(--acc);text-decoration:none}
     <button class="btn-settings-danger" onclick="stgDeleteAccount()">Delete Account</button>
   </div>
 </div>
+</div>
+
+<!-- ===== GUIDED TOUR ===== -->
+<div id="tour-overlay">
+  <div class="tour-box">
+    <div class="tour-progress" id="tour-progress"></div>
+    <span class="tour-icon" id="tour-icon">📊</span>
+    <div class="tour-title" id="tour-title">Welcome</div>
+    <div class="tour-desc" id="tour-desc"></div>
+    <div class="tour-tips" id="tour-tips-box">
+      <div class="tour-tips-title">Pro tips</div>
+      <div id="tour-tips"></div>
+    </div>
+    <div class="tour-nav">
+      <button class="tour-btn-prev" id="tour-prev" onclick="tourPrev()">← Back</button>
+      <button class="tour-btn-next" id="tour-next" onclick="tourNext()">Next →</button>
+      <button class="tour-btn-skip" onclick="tourSkip()">Skip tour</button>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SESSION RESUME MODAL ===== -->
@@ -2780,6 +2826,10 @@ async function finishOnboarding() {
   if (knaEl && D.na) knaEl.value = D.na;
   // Launch the dashboard — first time user sees it, clean with no flash
   launch();
+  // Offer the tour to brand-new users after a short delay (dashboard has loaded)
+  setTimeout(() => {
+    if (!localStorage.getItem('tcp_tour_done')) startTour();
+  }, 1200);
 }
 
 async function handleAuthState(user) {
@@ -3698,6 +3748,175 @@ function manualRefresh(){
   if(el)el.textContent='⟳ Refreshing...';
   fetchAllQ().then(()=>{genSigs();setRefreshTime();});
 }
+
+// ===== GUIDED TOUR =====
+let _tourStep = 0;
+const TOUR_STEPS = [
+  {
+    icon: '👋',
+    title: 'Welcome to TradeCommand Pro',
+    desc: 'Your personal day trading intelligence center. This quick tour covers every feature so you can get the most out of the platform from day one. Takes about 2 minutes.',
+    tips: [
+      { icon: '💡', text: 'You can restart this tour anytime by clicking the <b>?</b> button in the top-right corner of the dashboard.' },
+      { icon: '⚡', text: 'Everything updates automatically — live market data, signals, and your P&L all refresh in real time.' },
+      { icon: '🔒', text: 'No real money is ever deposited here. This platform is for trade planning, logging, and analysis only.' }
+    ]
+  },
+  {
+    icon: '📋',
+    title: 'Watchlist — Your Stocks at a Glance',
+    desc: 'The watchlist (top-left) shows every stock you\'re tracking with live price, % change, and a quick BUY/SELL/HOLD signal badge. Click any ticker to open its full analysis modal.',
+    tips: [
+      { icon: '🔍', text: 'Use the <b>filter buttons</b> (All / BUY / SELL / Hot / Drop) to quickly surface only what matters right now.' },
+      { icon: '↕️', text: 'Sort by <b>Signal</b> to put your strongest buy opportunities at the top automatically.' },
+      { icon: '➕', text: 'Type any ticker in the box at the bottom and press Enter or + to add it to your watchlist instantly.' }
+    ]
+  },
+  {
+    icon: '📈',
+    title: 'Chart & Symbol Selector',
+    desc: 'The center panel shows a price + volume chart for the selected symbol. The row of pill buttons above the chart is your quick-switcher — sorted so your strongest BUY signals appear first.',
+    tips: [
+      { icon: '🎯', text: 'Click any pill above the chart to instantly switch to that stock — both the chart and technicals update.' },
+      { icon: '⏱️', text: 'Use the <b>3M / 1M / 5D</b> buttons in the chart header to change the timeframe. 5D is great for spotting intraday momentum.' },
+      { icon: '🔄', text: 'Pills re-sort automatically each time signals regenerate, so the most promising picks stay on the left.' }
+    ]
+  },
+  {
+    icon: '📊',
+    title: 'Technicals Panel',
+    desc: 'The right column shows 8 live technical indicators: RSI, MACD, SMA, EMA, VWAP, ATR, Bollinger Bands, and Volume ratio. Each shows a value and a plain-English signal (Bullish / Bearish / Oversold etc.).',
+    tips: [
+      { icon: '🟢', text: '<b>RSI under 30</b> = oversold = potential bounce entry. <b>RSI over 70</b> = overbought = watch for a pullback.' },
+      { icon: '📐', text: '<b>Above VWAP</b> means institutions are buying. It\'s a key intraday support/resistance level.' },
+      { icon: '💥', text: '<b>ATR (Average True Range)</b> tells you how much the stock moves on a typical day — use it to set realistic stop sizes.' }
+    ]
+  },
+  {
+    icon: '🎯',
+    title: 'Trade Signals — Multi-Factor AI',
+    desc: 'The Signals section (below the chart row) grades every stock in your watchlist across 8 technical factors. Each signal shows entry, stop-loss, target, R/R ratio, and a confidence percentage.',
+    tips: [
+      { icon: '⚖️', text: '<b>R/R ratio</b> is Risk-to-Reward. A 3:1 means you stand to gain $3 for every $1 you risk — aim for 2:1 or better.' },
+      { icon: '🔥', text: 'Filter by <b>Buy</b> tab to see only bullish setups, or <b>Strong Sell</b> for short candidates.' },
+      { icon: '🤖', text: 'Reddit buzz (ApeWisdom mentions) adds to a signal\'s score — high social momentum on a technical breakout is a powerful combo.' }
+    ]
+  },
+  {
+    icon: '🔎',
+    title: 'Stock Modal — Full Deep Dive',
+    desc: 'Click any stock (from watchlist, signals, or holdings) to open its full analysis modal. It has 5 tabs: Overview (fundamentals + news), Live Chart (TradingView), Technicals, News, and AI Analysis.',
+    tips: [
+      { icon: '🤖', text: 'The <b>AI Analysis</b> tab generates a structured trade thesis: bull case, bear case, key catalysts, and a recommended action.' },
+      { icon: '🏛️', text: '<b>Overview</b> shows market cap, P/E, 52-week range, analyst recommendations, and recent company news all in one place.' },
+      { icon: '🔗', text: 'Use the quick-links (Yahoo Finance, SEC EDGAR, Google News) at the top of the modal to research further without leaving your flow.' }
+    ]
+  },
+  {
+    icon: '💰',
+    title: 'Investment Sizer — Size Positions Like a Pro',
+    desc: 'Inside the stock modal, the Investment Sizer (Overview tab) calculates exactly how many shares to buy based on your session balance. Pick a % of your available capital and it auto-calculates stop, target, max loss, and R/R.',
+    tips: [
+      { icon: '📐', text: 'Click a <b>% button</b> (10%, 20%, 35%, 50%, All In) or type a custom dollar amount — shares, stop, and target calculate instantly.' },
+      { icon: '✅', text: 'Click <b>Add to Plan</b> to commit the trade. It adds to your Holdings section and session bar immediately.' },
+      { icon: '⚠️', text: 'The sizer uses your risk profile from onboarding to highlight your recommended max risk per trade in red. Never exceed it.' }
+    ]
+  },
+  {
+    icon: '📂',
+    title: 'Holdings — Live P&L + Next Move',
+    desc: 'Once you\'ve added trades, the Holdings section appears on the trading page. Each card shows live P&L, your entry vs current price, stop/target levels, and a next-move recommendation.',
+    tips: [
+      { icon: '🎯', text: 'When a stock hits its <b>stop or target</b>, you get a badge on the card AND a browser push notification (if allowed).' },
+      { icon: '💡', text: 'Next-move guidance updates automatically: "Hold — within plan range", "Up 8%+ — consider partial take", "Near stop — review risk".' },
+      { icon: '✕', text: 'Hit <b>Close Position</b> on any card to log the exit at the current price. P&L is recorded to your session and journal.' }
+    ]
+  },
+  {
+    icon: '🕵️',
+    title: 'Intel Tab — Emerging & Insider',
+    desc: 'The Intel tab surfaces two powerful signals most traders miss: Emerging Picks (unusual Reddit/ApeWisdom momentum + niche sector picks) and SEC EDGAR Insider Trades (Form 4 filings).',
+    tips: [
+      { icon: '📣', text: 'Cluster insider buys (3+ insiders buying within days) are one of the most reliable signals of management confidence.' },
+      { icon: '🚀', text: 'Emerging picks are scored by source credibility + social volume. A stock appearing in both social and price-action movers is high-signal.' },
+      { icon: '🏭', text: 'Use the <b>sector filter</b> buttons at the top to see only Intel picks within your chosen sector.' }
+    ]
+  },
+  {
+    icon: '🏭',
+    title: 'Sectors — Filter Everything at Once',
+    desc: 'The sector buttons (just below the nav) let you filter your entire dashboard by industry. When a sector is active, signals, news, watchlist, Intel, and emerging picks all narrow to that sector.',
+    tips: [
+      { icon: '🗺️', text: 'The <b>Sector Portfolios</b> section at the bottom of the trading page shows performance and signal density for all 12 sectors at a glance.' },
+      { icon: '🎯', text: 'Click a Sector Portfolio card to instantly switch your watchlist and filters to that sector\'s top stocks.' },
+      { icon: '✕', text: 'Click <b>Clear filter</b> in the context bar (below the nav) to go back to viewing all sectors at once.' }
+    ]
+  },
+  {
+    icon: '📅',
+    title: 'Session Tracker & Resume',
+    desc: 'The Session Bar at the top tracks your start balance, remaining capital, deployed amount, realized P&L, and trade count across the day. When you return tomorrow, you\'ll be asked to resume or start fresh.',
+    tips: [
+      { icon: '↩️', text: '<b>Resume Session</b> restores all your open positions and updates their P&L to current prices — perfect for multi-day holds.' },
+      { icon: '🔄', text: '<b>Start Fresh</b> resets the session with your current balance — good for a clean daily slate.' },
+      { icon: '🏁', text: 'Click <b>End Session</b> in the session bar to close all positions at market prices and see your final P&L summary.' }
+    ]
+  },
+  {
+    icon: '⚙️',
+    title: 'Settings & Live Data',
+    desc: 'The Settings page (⚙️ top right) lets you update your profile, connect live data API keys, and customize the app. The dashboard works great without API keys using high-quality simulated data.',
+    tips: [
+      { icon: '📡', text: 'Add a free <b>Finnhub API key</b> (finnhub.io — free tier) to get real-time quotes, live charts, and company fundamentals.' },
+      { icon: '📰', text: 'Add a free <b>NewsAPI key</b> (newsapi.org) to pull live financial headlines directly into your signals and stock modals.' },
+      { icon: '🚀', text: 'You\'re all set! Hit the trading page, find a setup you like, size it in the investment sizer, and add it to your plan. Good luck!' }
+    ]
+  }
+];
+
+function startTour() {
+  _tourStep = 0;
+  document.getElementById('tour-overlay').classList.add('show');
+  renderTourStep();
+}
+function tourNext() {
+  if (_tourStep < TOUR_STEPS.length - 1) {
+    _tourStep++;
+    renderTourStep();
+  } else {
+    tourSkip();
+  }
+}
+function tourPrev() {
+  if (_tourStep > 0) { _tourStep--; renderTourStep(); }
+}
+function tourSkip() {
+  document.getElementById('tour-overlay').classList.remove('show');
+  try { localStorage.setItem('tcp_tour_done','1'); } catch(e){}
+}
+function renderTourStep() {
+  const s = TOUR_STEPS[_tourStep];
+  const total = TOUR_STEPS.length;
+  document.getElementById('tour-icon').textContent = s.icon;
+  document.getElementById('tour-title').textContent = s.title;
+  document.getElementById('tour-desc').textContent = s.desc;
+  document.getElementById('tour-tips').innerHTML = s.tips.map(t =>
+    `<div class="tour-tip"><span class="tour-tip-icon">${t.icon}</span><span>${t.text}</span></div>`
+  ).join('');
+  // Progress dots
+  document.getElementById('tour-progress').innerHTML =
+    Array.from({length: total}, (_,i) =>
+      `<div class="tour-dot${i===_tourStep?' active':i<_tourStep?' done':''}" onclick="tourGoTo(${i})"></div>`
+    ).join('') +
+    `<span class="tour-step-label">${_tourStep+1} / ${total}</span>`;
+  // Prev button
+  const prev = document.getElementById('tour-prev');
+  prev.style.display = _tourStep === 0 ? 'none' : 'block';
+  // Next button label
+  const next = document.getElementById('tour-next');
+  next.textContent = _tourStep === total - 1 ? '✅ Start Trading!' : 'Next →';
+}
+function tourGoTo(n) { _tourStep = n; renderTourStep(); }
 
 // ===== LAUNCH =====
 function launch(){
