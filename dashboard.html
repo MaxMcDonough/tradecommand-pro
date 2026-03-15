@@ -108,6 +108,25 @@ a{color:var(--acc);text-decoration:none}
 .sb-val{font-size:13px;font-weight:700}
 .sb-pos{color:var(--grn)}.sb-neg{color:var(--red)}.sb-neu{color:var(--t1)}
 .sb-positions{display:flex;gap:6px;padding:4px 14px;flex:1;overflow-x:auto;align-items:center}
+
+/* SESSION RESUME MODAL */
+#session-resume-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9991;display:flex;align-items:center;justify-content:center;padding:20px}
+#session-resume-modal.hidden{display:none}
+.sr-box{background:var(--card);border:1px solid var(--brd);border-radius:18px;padding:32px 28px;max-width:420px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.sr-icon{font-size:44px;margin-bottom:10px}
+.sr-title{font-size:22px;font-weight:800;color:var(--t1);margin-bottom:6px}
+.sr-sub{font-size:13px;color:var(--t2);margin-bottom:18px;line-height:1.55}
+.sr-summary{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:14px 16px;margin-bottom:20px;text-align:left}
+.sr-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.sr-row:last-child{border-bottom:none;padding-bottom:0}
+.sr-row-lbl{color:var(--t3)}
+.sr-row-val{font-weight:700;color:var(--t1)}
+.sr-btns{display:flex;gap:10px;margin-bottom:12px}
+.sr-btn-resume{flex:2;padding:14px;background:linear-gradient(135deg,var(--acc),#10b981);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.sr-btn-resume:hover{opacity:.88}
+.sr-btn-fresh{flex:1;padding:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.sr-btn-fresh:hover{border-color:rgba(255,255,255,.2);color:var(--t1)}
+.sr-note{font-size:10px;color:var(--t3);line-height:1.6}
 .sb-pos-chip{display:flex;align-items:center;gap:5px;padding:3px 8px;background:var(--card2);border:1px solid var(--brd);border-radius:99px;font-size:10px;cursor:pointer;white-space:nowrap;transition:border-color .2s}
 .sb-pos-chip:hover{border-color:var(--acc)}
 .sb-pos-chip .chip-pnl{font-weight:700}
@@ -1116,11 +1135,12 @@ a{color:var(--acc);text-decoration:none}
           <div class="ob-balance-entry">
             <span class="ob-bal-prefix">$</span>
             <input type="number" class="ob-balance-input" id="ob-balance-input"
-              placeholder="5000" min="500" max="10000000" step="500"
+              placeholder="e.g. 1000" min="1" max="10000000" step="500"
               oninput="obSetBalance(+this.value)"
               onchange="obSnapBalance(this)">
           </div>
-          <div class="ob-balance-hint">Use ▲ ▼ arrows to step in $500 increments</div>
+          <div class="ob-balance-hint">Any amount from $1 · ▲ ▼ arrows step in $500 increments</div>
+          <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.28);text-align:center;line-height:1.5">🔒 No real money is deposited here — this is for trade logging and position sizing only.</div>
         </div>
         <div>
           <label>Risk tolerance</label>
@@ -1886,7 +1906,7 @@ a{color:var(--acc);text-decoration:none}
   <div class="settings-row">
     <div><div class="settings-row-lbl">Account balance</div><div class="settings-row-val">Used for position sizing</div></div>
     <div class="settings-input-group">
-      <input class="settings-input" id="stg-bal" type="number" min="500" step="500" placeholder="25000">
+      <input class="settings-input" id="stg-bal" type="number" min="1" step="500" placeholder="25000">
       <button class="btn-settings-save" onclick="stgSaveProfile()">Save</button>
     </div>
   </div>
@@ -1979,6 +1999,21 @@ a{color:var(--acc);text-decoration:none}
     <button class="btn-settings-danger" onclick="stgDeleteAccount()">Delete Account</button>
   </div>
 </div>
+</div>
+
+<!-- ===== SESSION RESUME MODAL ===== -->
+<div id="session-resume-modal" class="hidden">
+  <div class="sr-box">
+    <div class="sr-icon">📊</div>
+    <h2 class="sr-title">Welcome back, <span id="sr-name">Trader</span></h2>
+    <p class="sr-sub">You have a previous trading session. Pick up where you left off, or start clean.</p>
+    <div class="sr-summary" id="sr-summary"></div>
+    <div class="sr-btns">
+      <button class="sr-btn-resume" onclick="resumeSession()">📈 Resume Session</button>
+      <button class="sr-btn-fresh" onclick="startFreshSession()">🔄 Start Fresh</button>
+    </div>
+    <p class="sr-note">Resuming will restore your open positions and update their P&L to current market prices.</p>
+  </div>
 </div>
 
 <!-- ===== PORTFOLIO MODAL ===== -->
@@ -2458,14 +2493,21 @@ function obUpdateName(val) {
   if (err && _obName) err.textContent = '';
 }
 function obSetBalance(val) {
-  if (!val || isNaN(val) || val < 500) return;
+  if (!val || isNaN(val) || val < 1) return;
   _obBalance = val;
 }
 function obSnapBalance(input) {
-  if (!input.value || +input.value < 500) { input.value = 500; _obBalance = 500; return; }
-  const snapped = Math.round(+input.value / 500) * 500;
-  input.value = snapped;
-  _obBalance = snapped;
+  const v = +input.value;
+  if (!input.value || v < 1) { input.value = 1; _obBalance = 1; return; }
+  // Only snap to $500 grid if the user typed >= $500; below that let any integer through
+  if (v >= 500) {
+    const snapped = Math.round(v / 500) * 500;
+    input.value = snapped;
+    _obBalance = snapped;
+  } else {
+    _obBalance = Math.round(v); // dollar-level precision
+    input.value = _obBalance;
+  }
 }
 function obSetRisk(idx) {
   _obRisk = idx;
@@ -2600,11 +2642,11 @@ function onboardNext() {
       return;
     }
     // Must have a balance
-    if (!_obBalance || _obBalance < 500) {
+    if (!_obBalance || _obBalance < 1) {
       const balInput = document.getElementById('ob-balance-input');
       if (balInput) balInput.focus();
       const err = document.getElementById('ob-step1-error');
-      if (err) err.textContent = 'Please enter a starting balance of at least $500.';
+      if (err) err.textContent = 'Please enter a starting balance (minimum $1).';
       return;
     }
   }
@@ -2908,6 +2950,11 @@ function clearSaved(){
   document.getElementById('s-risk').value=1;
   document.getElementById('saved-banner').classList.remove('show');
 }
+// Auto-save session on tab close / refresh
+window.addEventListener('beforeunload', () => {
+  if (D.session && D.session.tradeCount > 0) saveSessionToStorage();
+});
+
 // Auto-launch on page open — pre-fill form fields from D defaults then launch
 window.addEventListener('DOMContentLoaded', () => {
   // Check local admin bypass first (for when Firebase isn't configured)
@@ -3010,7 +3057,86 @@ function endSession() {
   alert(`Session ended!\n\nStarted with: $${D.session.start.toFixed(2)}\nNet P&L: ${net>=0?'+':''}$${net.toFixed(2)}\nTrades: ${D.session.tradeCount}\n\nFinal balance: $${(D.session.start + net).toFixed(2)}`);
   // Reset for new session
   D.session = {start:D.bal, deployed:0, realized:0, positions:[], tradeCount:0};
+  saveSessionToStorage();
   renderSessionBar();
+}
+
+// ===== SESSION RESUME =====
+function saveSessionToStorage() {
+  try {
+    const raw = localStorage.getItem('tcp_v2') || '{}';
+    const p = JSON.parse(raw);
+    p.session = { ...D.session, savedAt: Date.now() };
+    localStorage.setItem('tcp_v2', JSON.stringify(p));
+  } catch(e) {}
+}
+
+function checkSavedSession() {
+  try {
+    const raw = localStorage.getItem('tcp_v2');
+    if (!raw) return null;
+    const p = JSON.parse(raw);
+    if (!p.session || !p.session.tradeCount || p.session.tradeCount === 0) return null;
+    return p.session;
+  } catch(e) { return null; }
+}
+
+function showSessionResume(saved) {
+  const modal = document.getElementById('session-resume-modal');
+  if (!modal) return;
+
+  const nameEl = document.getElementById('sr-name');
+  if (nameEl) nameEl.textContent = D.name && D.name !== 'User' ? D.name : 'Trader';
+
+  const open = (saved.positions || []).filter(p => p.status === 'open');
+  const realized = saved.realized || 0;
+  const pnlColor = realized > 0 ? 'var(--grn)' : realized < 0 ? 'var(--red)' : 'var(--t1)';
+  const pnlStr = (realized >= 0 ? '+$' : '-$') + Math.abs(realized).toFixed(2);
+  const savedDate = saved.savedAt ? new Date(saved.savedAt).toLocaleString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'Last session';
+
+  const summary = document.getElementById('sr-summary');
+  if (summary) summary.innerHTML = `
+    <div class="sr-row"><span class="sr-row-lbl">Last active</span><span class="sr-row-val">${savedDate}</span></div>
+    <div class="sr-row"><span class="sr-row-lbl">Session start balance</span><span class="sr-row-val">$${(saved.start || 0).toLocaleString()}</span></div>
+    <div class="sr-row"><span class="sr-row-lbl">Realized P&L</span><span class="sr-row-val" style="color:${pnlColor}">${pnlStr}</span></div>
+    <div class="sr-row"><span class="sr-row-lbl">Total trades</span><span class="sr-row-val">${saved.tradeCount || 0}</span></div>
+    <div class="sr-row"><span class="sr-row-lbl">Open positions</span><span class="sr-row-val">${open.length} position${open.length !== 1 ? 's' : ''}</span></div>
+  `;
+
+  window._savedSessionData = saved;
+  modal.classList.remove('hidden');
+}
+
+function resumeSession() {
+  const modal = document.getElementById('session-resume-modal');
+  if (modal) modal.classList.add('hidden');
+  if (!window._savedSessionData) return;
+
+  D.session = { ...window._savedSessionData };
+  // Update unrealized P&L on open positions using current market prices
+  if (D.session.positions) {
+    D.session.deployed = 0;
+    D.session.positions.forEach(pos => {
+      if (pos.status === 'open') {
+        D.session.deployed += pos.invested || 0;
+        // pnl is recalculated live in renderSessionBar — no need to update here
+      }
+    });
+  }
+  renderSessionBar();
+  document.getElementById('session-bar').classList.add('show');
+  const open = D.session.positions.filter(p => p.status === 'open').length;
+  showToast(`📈 Session resumed · ${D.session.tradeCount} trade${D.session.tradeCount !== 1 ? 's' : ''} · ${open} open position${open !== 1 ? 's' : ''}`, 'info');
+}
+
+function startFreshSession() {
+  const modal = document.getElementById('session-resume-modal');
+  if (modal) modal.classList.add('hidden');
+  D.session = { start: D.bal, deployed: 0, realized: 0, positions: [], tradeCount: 0 };
+  saveSessionToStorage();
+  renderSessionBar();
+  document.getElementById('session-bar').classList.add('show');
+  showToast('🔄 Fresh session started — clean slate', 'info');
 }
 
 // ===== INVESTMENT SIZER =====
@@ -3211,8 +3337,7 @@ function commitPosition() {
   // Refresh sector portfolios with updated session data
   setTimeout(renderSectorPortfolios, 800);
 
-  // Save session to localStorage
-  try { const raw = localStorage.getItem('tcp_v2') || '{}'; const p = JSON.parse(raw); p.session = D.session; localStorage.setItem('tcp_v2', JSON.stringify(p)); } catch(e) {}
+  saveSessionToStorage();
 }
 
 // ===== SETTINGS PAGE =====
@@ -3395,7 +3520,6 @@ function launch(){
   if(nameEl){nameEl.textContent='👤 '+D.name;nameEl.style.display='inline';}
 
   startClock(); initCharts(); mkHeatmap(); mkSources();
-  initSession();
   renderSectorNav();
   updateSectorCtxBar('trading');
 
@@ -3430,6 +3554,17 @@ function launch(){
   setTimeout(genEmerging,150);
   setTimeout(mkInsider,100);
   setTimeout(()=>safeFetch(fetchFG),500);
+
+  // Session resume: check for saved session after a short delay (data loads first)
+  setTimeout(() => {
+    const saved = checkSavedSession();
+    if (saved) {
+      showSessionResume(saved);
+    } else {
+      // No previous session — start fresh immediately
+      initSession();
+    }
+  }, 700);
 }
 
 function safeFetch(fn){try{fn();}catch(e){console.warn('fetch err:',e);}}
