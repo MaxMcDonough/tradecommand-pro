@@ -180,6 +180,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="nav-item" data-page="biz-analytics">📈 Biz Analytics</div>
   <div class="nav-item" data-page="biz-advisor">🤖 AI Advisor</div>
   <div class="nav-item" data-page="biz-plan">📋 Growth Plan</div>
+  <div class="nav-item" data-page="biz-scheduled">📅 Scheduled</div>
   <div class="nav-item" data-page="biz-beta">🚀 Beta Launch</div>
   <div class="nav-item" data-page="biz-newsletters">✉️ Email Templates</div>
   <div class="nav-item" data-page="biz-files">📁 Files</div>
@@ -847,82 +848,49 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <div id="mkt-type-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:12px"></div>
   </div>
 
-  <!-- Ad Creatives & Posts -->
+  <!-- Ad Creatives & Posts — CLICKABLE -->
   <div class="card">
     <h3>🎨 Ad Creatives &amp; Posts</h3>
-    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Ready-to-post social media ads, flyers, and print materials. All files saved to your workspace.</p>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Click any creative to preview details. All files in your Files section.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
-      <div class="lp-field" style="border-left:3px solid #E1306C">
-        <div style="font-size:12px;font-weight:700">📸 Instagram Launch Post</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; "TradeCommand Pro is LIVE"</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_launch.html</div>
-      </div>
-      <div class="lp-field" style="border-left:3px solid #E1306C">
-        <div style="font-size:12px;font-weight:700">📸 Instagram Story &mdash; Free for Students</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1920 &mdash; Student signup CTA</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_story_free.html</div>
-      </div>
-      <div class="lp-field" style="border-left:3px solid #1877F2">
-        <div style="font-size:12px;font-weight:700">📘 Facebook Features Ad</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">1200x628 &mdash; Feature showcase</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_facebook_features.html</div>
-      </div>
-      <div class="lp-field" style="border-left:3px solid #E1306C">
-        <div style="font-size:12px;font-weight:700">📸 Instagram Testimonial</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; Social proof / 5-star</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_testimonial.html</div>
-      </div>
-      <div class="lp-field" style="border-left:3px solid #E1306C">
-        <div style="font-size:12px;font-weight:700">📸 Carousel Slide 1</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; "5 Reasons Traders Love TCP"</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_carousel_1.html</div>
-      </div>
-      <div class="lp-field" style="border-left:3px solid #6366f1">
-        <div style="font-size:12px;font-weight:700">💎 Sponsored Post</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; Dashboard mockup ad</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_sponsored_post.html</div>
-      </div>
+      <div class="lp-field" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ig_launch','📸 Instagram Launch Post','1080x1080 — TradeCommand Pro is LIVE. Bold dark gradient, neon green accents, feature highlights, and strong CTA.');"><div style="font-size:12px;font-weight:700">📸 Instagram Launch Post</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ig_story','📸 Instagram Story — Students','1080x1920 — Student offer story with .edu signup CTA.')"><div style="font-size:12px;font-weight:700">📸 Instagram Story — Students</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1920 — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #1877F2;cursor:pointer" onclick="previewFile('fb_features','📘 Facebook Features Ad','1200x628 — Feature showcase for Facebook feed. Portfolio tracking, AI signals, risk management.')"><div style="font-size:12px;font-weight:700">📘 Facebook Features Ad</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1200x628 — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ig_test','📸 Instagram Testimonial','1080x1080 — Social proof ad with 5-star rating and user quote.')"><div style="font-size:12px;font-weight:700">📸 Testimonial Post</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ig_car','📸 Carousel Slide 1','1080x1080 — 5 Reasons Traders Love TradeCommand Pro.')"><div style="font-size:12px;font-weight:700">📸 Carousel Slide 1</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('spon','💎 Sponsored Post','1080x1080 — Dashboard mockup for paid promo.')"><div style="font-size:12px;font-weight:700">💎 Sponsored Post</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
     </div>
   </div>
 
-  <!-- Print Materials -->
+  <!-- Print Materials — CLICKABLE -->
   <div class="card">
     <h3>🖨️ Print Materials</h3>
-    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Printable flyers and business cards for physical distribution.</p>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Click to preview. Print-ready files in your Files section.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
-      <div class="lp-field" style="border-left:3px solid #10b981">
-        <div style="font-size:12px;font-weight:700">🎓 University Flyer</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">8.5x11" &mdash; "FREE for Students" with tear-off tabs</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">flyer_university.html</div>
-      </div>
-      <div class="lp-field" style="border-left:3px solid #f59e0b">
-        <div style="font-size:12px;font-weight:700">☕ Coffee Shop Flyer</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">8.5x11" &mdash; Professional design with plans</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">flyer_coffeeshop.html</div>
-      </div>
-      <div class="lp-field" style="border-left:3px solid #6366f1">
-        <div style="font-size:12px;font-weight:700">💼 Business Cards</div>
-        <div style="font-size:11px;color:var(--t3);margin-top:4px">3.5x2" &mdash; Front + Back design with crop marks</div>
-        <div style="font-size:11px;color:var(--acc);margin-top:4px">business_card.html</div>
-      </div>
+      <div class="lp-field" style="border-left:3px solid #10b981;cursor:pointer" onclick="previewFile('uni_fly','🎓 University Flyer','8.5×11 inch — Dark gradient, QR code, tear-off tabs. FREE for Students headline.')"><div style="font-size:12px;font-weight:700">🎓 University Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:4px">8.5×11" tear-off — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #f59e0b;cursor:pointer" onclick="previewFile('cof_fly','☕ Coffee Shop Flyer','8.5×11 inch — Professional design with plan comparison table.')"><div style="font-size:12px;font-weight:700">☕ Coffee Shop Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:4px">8.5×11" plans — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('biz_card','💼 Business Cards','3.5×2 inch — Front + Back. Logo, tagline, QR code, crop marks.')"><div style="font-size:12px;font-weight:700">💼 Business Cards</div><div style="font-size:11px;color:var(--t3);margin-top:4px">3.5×2" front+back — Click to preview</div></div>
     </div>
   </div>
 
-  <!-- Ad Strategy -->
+  <!-- Ad Strategy — CLICKABLE phases -->
   <div class="card">
     <h3>📋 Ad Strategy</h3>
     <div style="display:grid;gap:12px;margin-top:12px">
-      <div class="lp-field">
-        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Phase 1: Organic Launch (Week 1-2)</div>
-        <div style="font-size:11px;color:var(--t2);line-height:1.5">Post launch announcement on Instagram + Twitter. Share university flyers at NYU, Columbia, Wharton bulletin boards. Send LinkedIn DMs to all 89 leads. Post in r/wallstreetbets, r/daytrading, r/stocks.</div>
+      <div class="lp-field" style="border-left:3px solid #00e676;cursor:pointer" onclick="document.querySelector('[data-page=biz-campaigns]').click()">
+        <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:12px;font-weight:700">Phase 1: Organic Launch (Week 1-2)</div><span class="badge badge-yellow" style="font-size:10px">Current</span></div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.5;margin-top:4px">Instagram + Twitter launch posts. University flyers at NYU, Columbia, Wharton. LinkedIn DMs to 89 leads. Reddit posts in 8 subreddits. Friends &amp; family outreach.</div>
+        <div style="font-size:10px;color:var(--acc);margin-top:6px">→ Click to open Campaigns</div>
       </div>
-      <div class="lp-field">
-        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Phase 2: Paid Social (Week 3-4)</div>
-        <div style="font-size:11px;color:var(--t2);line-height:1.5">Run Instagram sponsored posts targeting 18-35, interest: stock trading, finance, investing. Facebook retargeting pixel on tradecommandpro.com. Budget: $10/day. Goal: 500 clicks, 50 signups.</div>
+      <div class="lp-field" style="border-left:3px solid #448aff;cursor:pointer" onclick="document.querySelector('[data-page=biz-campaigns]').click()">
+        <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:12px;font-weight:700">Phase 2: Paid Social (Week 3-4)</div><span class="badge badge-indigo" style="font-size:10px">Planned</span></div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.5;margin-top:4px">Instagram sponsored posts (18-35, finance interest). Facebook retargeting. Budget: $10/day. Goal: 500 clicks, 50 signups.</div>
+        <div style="font-size:10px;color:var(--acc);margin-top:6px">→ Click to open Campaigns</div>
       </div>
-      <div class="lp-field">
-        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Phase 3: Community + Referral (Week 5-8)</div>
-        <div style="font-size:11px;color:var(--t2);line-height:1.5">Launch ambassador program for trading Discord/FinTwit creators. Referral incentive: 1 month free Pro for each referral. Coffee shop flyers in financial district areas. Target: 200 total users.</div>
+      <div class="lp-field" style="border-left:3px solid #9c27b0;cursor:pointer" onclick="document.querySelector('[data-page=biz-campaigns]').click()">
+        <div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:12px;font-weight:700">Phase 3: Community + Referral (Week 5-8)</div><span class="badge badge-indigo" style="font-size:10px">Planned</span></div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.5;margin-top:4px">Ambassador program for Discord/FinTwit creators. Referral: 1 month free per invite. Coffee shop flyers in financial district. Target: 200 users.</div>
+        <div style="font-size:10px;color:var(--acc);margin-top:6px">→ Click to open Campaigns</div>
       </div>
     </div>
   </div>
@@ -931,17 +899,74 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 <!-- ═══ CAMPAIGNS ═══ -->
 <div class="page" id="biz-campaigns-page">
   <div class="stats">
-    <div class="stat"><div class="stat-label">Active Campaigns</div><div class="stat-val">1</div></div>
-    <div class="stat"><div class="stat-label">Total Outreach</div><div class="stat-val">0</div></div>
-    <div class="stat"><div class="stat-label">Response Rate</div><div class="stat-val">—</div></div>
-    <div class="stat"><div class="stat-label">Meetings Booked</div><div class="stat-val">0</div></div>
+    <div class="stat"><div class="stat-label">Active Campaigns</div><div class="stat-val" id="camp-active">7</div></div>
+    <div class="stat"><div class="stat-label">Total Outreach</div><div class="stat-val" id="camp-sent">0</div></div>
+    <div class="stat"><div class="stat-label">Response Rate</div><div class="stat-val" id="camp-rate">—</div></div>
+    <div class="stat"><div class="stat-label">Meetings Booked</div><div class="stat-val" id="camp-meetings">0</div></div>
   </div>
-  <div class="table-wrap">
-    <div class="table-bar"><h3>Campaigns</h3><button class="btn btn-primary">+ New Campaign</button></div>
-    <table><thead><tr><th>Name</th><th>Channel</th><th>Sent</th><th>Replies</th><th>Status</th></tr></thead>
-    <tbody>
-      <tr><td style="font-weight:600">LinkedIn Student Outreach</td><td>LinkedIn DM</td><td>0 / 50</td><td>0</td><td><span class="badge badge-yellow">Ready</span></td></tr>
-    </tbody></table>
+
+  <div id="campaign-detail" style="display:none">
+    <div style="margin-bottom:12px"><button class="btn btn-ghost" onclick="closeCampaignDetail()" style="font-size:12px">← Back to Campaigns</button></div>
+    <div class="card" id="campaign-detail-content"></div>
+  </div>
+
+  <div id="campaign-list">
+    <div class="card">
+      <h3>📢 Active Campaigns</h3>
+      <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Click any campaign to see targets, messaging, and track progress.</p>
+      <div style="display:grid;gap:10px">
+
+        <div class="lp-field" style="border-left:3px solid #0077B5;cursor:pointer" onclick="openCampaign('linkedin_student')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;font-weight:700">🔗 LinkedIn Student Outreach</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Target: Finance students at NYU, Columbia, Wharton, Baruch</div></div>
+            <div style="text-align:right"><span class="badge badge-grn" style="font-size:10px">Active</span><div style="font-size:11px;color:var(--t3);margin-top:4px" id="c-linkedin-count">0 / 30 sent</div></div>
+          </div>
+        </div>
+
+        <div class="lp-field" style="border-left:3px solid #ff5722;cursor:pointer" onclick="openCampaign('reddit_beta')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;font-weight:700">🟠 Reddit Beta Recruitment</div><div style="font-size:11px;color:var(--t3);margin-top:2px">8 subreddits: alphaandbetausers, SideProject, daytrading, stocks</div></div>
+            <div style="text-align:right"><span class="badge badge-yellow" style="font-size:10px">Ready</span><div style="font-size:11px;color:var(--t3);margin-top:4px">0 / 8 posted</div></div>
+          </div>
+        </div>
+
+        <div class="lp-field" style="border-left:3px solid #E1306C;cursor:pointer" onclick="openCampaign('instagram_launch')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;font-weight:700">📸 Instagram Launch Campaign</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Story + Feed Post + Carousel. Organic first, then $10/day paid.</div></div>
+            <div style="text-align:right"><span class="badge badge-yellow" style="font-size:10px">Ready</span><div style="font-size:11px;color:var(--t3);margin-top:4px">3 creatives ready</div></div>
+          </div>
+        </div>
+
+        <div class="lp-field" style="border-left:3px solid #1877F2;cursor:pointer" onclick="openCampaign('facebook_ads')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;font-weight:700">📘 Facebook Paid Ads</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Retargeting + cold audience. Age 18-35, finance interest.</div></div>
+            <div style="text-align:right"><span class="badge badge-indigo" style="font-size:10px">Planned</span><div style="font-size:11px;color:var(--t3);margin-top:4px">$10/day budget</div></div>
+          </div>
+        </div>
+
+        <div class="lp-field" style="border-left:3px solid #10b981;cursor:pointer" onclick="openCampaign('campus_blitz')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;font-weight:700">🎓 Campus Blitz</div><div style="font-size:11px;color:var(--t3);margin-top:2px">University flyers, finance club demos, professor outreach</div></div>
+            <div style="text-align:right"><span class="badge badge-yellow" style="font-size:10px">Ready</span><div style="font-size:11px;color:var(--t3);margin-top:4px">30 flyers to print</div></div>
+          </div>
+        </div>
+
+        <div class="lp-field" style="border-left:3px solid #7c4dff;cursor:pointer" onclick="openCampaign('email_sequence')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;font-weight:700">📧 Email Drip Sequence</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Welcome → Tips (Day 3) → Signals (Day 7) → Upgrade (Day 14)</div></div>
+            <div style="text-align:right"><span class="badge badge-grn" style="font-size:10px">Ready</span><div style="font-size:11px;color:var(--t3);margin-top:4px">6 emails drafted</div></div>
+          </div>
+        </div>
+
+        <div class="lp-field" style="border-left:3px solid #ffd740;cursor:pointer" onclick="openCampaign('friends_family')">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:13px;font-weight:700">🤝 Friends &amp; Family Beta</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Personal 1:1 DMs to warm network for fast signups</div></div>
+            <div style="text-align:right"><span class="badge badge-grn" style="font-size:10px">Active</span><div style="font-size:11px;color:var(--t3);margin-top:4px">Target: 15 signups</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1013,33 +1038,330 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 
 <!-- ═══ GROWTH PLAN ═══ -->
 <div class="page" id="biz-plan-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Current Phase</div><div class="stat-val" style="color:#ffab40;font-size:16px">Q1: Launch</div></div>
+    <div class="stat"><div class="stat-label">Leads</div><div class="stat-val" id="gp-leads">89</div></div>
+    <div class="stat"><div class="stat-label">Users</div><div class="stat-val" id="gp-users">—</div></div>
+    <div class="stat"><div class="stat-label">MRR Target</div><div class="stat-val" style="color:#00e676">$1,000</div></div>
+  </div>
+
   <div class="card">
     <h3>📋 Growth Milestones</h3>
-    <div style="display:flex;flex-direction:column;gap:16px;margin-top:12px">
-      <div class="lp-field"><div style="display:flex;justify-content:space-between"><span style="font-weight:600">Q1: Launch & Seed</span><span class="badge badge-yellow">In Progress</span></div><div style="font-size:12px;color:var(--t2);margin-top:6px">Find 100+ leads, build outreach pipeline, get first 10 users</div><div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:50%;background:var(--ylw);border-radius:3px"></div></div></div>
-      <div class="lp-field"><div style="display:flex;justify-content:space-between"><span style="font-weight:600">Q2: Traction</span><span class="badge badge-indigo">Upcoming</span></div><div style="font-size:12px;color:var(--t2);margin-top:6px">50 active users, $1K MRR, Reddit/Twitter campaigns</div><div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div></div>
-      <div class="lp-field"><div style="display:flex;justify-content:space-between"><span style="font-weight:600">Q3: Scale</span><span class="badge badge-indigo">Upcoming</span></div><div style="font-size:12px;color:var(--t2);margin-top:6px">200+ users, $5K MRR, paid ads, affiliate program</div><div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div></div>
-      <div class="lp-field"><div style="display:flex;justify-content:space-between"><span style="font-weight:600">Q4: Optimize</span><span class="badge badge-indigo">Upcoming</span></div><div style="font-size:12px;color:var(--t2);margin-top:6px">500+ users, $10K MRR, enterprise features, mobile app</div><div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div></div>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Click any milestone to expand details, action items, and KPIs.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+
+      <div class="lp-field" style="border-left:3px solid #ffab40;cursor:pointer" onclick="toggleGrowthPhase('gp1')">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q1: Launch &amp; Seed</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-yellow">In Progress</span><span style="color:var(--t3);font-size:14px" id="gp1-arrow">▸</span></div></div>
+        <div style="font-size:12px;color:var(--t2);margin-top:4px">Find 100+ leads → Build pipeline → Get first 50 beta users → First paying customers</div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:60%;background:var(--ylw);border-radius:3px"></div></div>
+        <div id="gp1" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
+          <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',0,this.checked)" class="gp1-cb"> Build 89+ lead database <span class="badge badge-grn" style="font-size:9px">Done</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',1,this.checked)" class="gp1-cb"> Personalize DMs for all leads <span class="badge badge-grn" style="font-size:9px">Done</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',2,this.checked)" class="gp1-cb"> Create 6 ad creatives + 3 print materials <span class="badge badge-grn" style="font-size:9px">Done</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',3,this.checked)" class="gp1-cb"> Build 6 newsletter templates <span class="badge badge-grn" style="font-size:9px">Done</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',4,this.checked)" class="gp1-cb"> Set up 3-touch follow-up system <span class="badge badge-grn" style="font-size:9px">Done</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',5,this.checked)" class="gp1-cb"> Submit to BetaList ($129 skip queue)</label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',6,this.checked)" class="gp1-cb"> Post on Reddit (8 subreddits)</label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',7,this.checked)" class="gp1-cb"> Print &amp; distribute 30 flyers</label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',8,this.checked)" class="gp1-cb"> Get 50 beta users by Thu Mar 19</label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',9,this.checked)" class="gp1-cb"> Convert 10 beta users to paid ($290 MRR)</label>
+          </div>
+          <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--acc)">89</div><div style="font-size:10px;color:var(--t3)">LEADS</div></div>
+            <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--ylw)">50</div><div style="font-size:10px;color:var(--t3)">BETA TARGET</div></div>
+            <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:800;color:#00e676">$1K</div><div style="font-size:10px;color:var(--t3)">MRR TARGET</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #448aff;cursor:pointer" onclick="toggleGrowthPhase('gp2')">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q2: Traction</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="color:var(--t3);font-size:14px" id="gp2-arrow">▸</span></div></div>
+        <div style="font-size:12px;color:var(--t2);margin-top:4px">Scale to 200 users → $3K MRR → Reddit/Twitter campaigns → Affiliate program</div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div>
+        <div id="gp2" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
+          <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Launch paid Instagram + Facebook ads ($10/day)</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Start affiliate/referral program (1 mo free per referral)</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Partner with 3 trading Discord communities</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Launch Product Hunt (target: Top 5 of the Day)</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Build email automation (Mailchimp/ConvertKit)</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> SEO: publish 10 blog posts (trading tips, tool comparisons)</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Get 5 user testimonials for social proof</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #6366f1;cursor:pointer" onclick="toggleGrowthPhase('gp3')">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q3: Scale</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="color:var(--t3);font-size:14px" id="gp3-arrow">▸</span></div></div>
+        <div style="font-size:12px;color:var(--t2);margin-top:4px">500+ users → $5K MRR → Mobile app → API integrations → Content marketing</div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div>
+        <div id="gp3" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
+          <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Ship mobile-responsive dashboard</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Integrate TD Ameritrade, Robinhood, Webull APIs</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Scale ads to $30/day</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Hire 1 part-time content creator</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Build YouTube/TikTok presence (trading tips)</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #e91e63;cursor:pointer" onclick="toggleGrowthPhase('gp4')">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q4: Optimize &amp; Expand</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="color:var(--t3);font-size:14px" id="gp4-arrow">▸</span></div></div>
+        <div style="font-size:12px;color:var(--t2);margin-top:4px">1000+ users → $10K MRR → Enterprise tier → Team features → Native mobile app</div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div>
+        <div id="gp4" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
+          <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
+          <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Launch Enterprise tier ($199/mo)</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Build team collaboration features</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Ship native iOS + Android apps</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Apply to YC / raise seed round</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Hire first 2 full-time employees</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Beta Launch Plan Checklist -->
+  <div class="card">
+    <h3 style="cursor:pointer" onclick="toggleGrowthPhase('gp-beta-full')">🚀 Beta Launch Plan — Full Checklist <span style="color:var(--t3);font-size:14px" id="gp-beta-full-arrow">▸</span></h3>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:4px">Complete 4-day plan to get 50 users by Thursday Mar 19.</p>
+    <div id="gp-beta-full" style="display:none;margin-top:12px">
+
+      <div style="font-size:13px;font-weight:700;color:#00e676;margin:12px 0 8px">Day 1 — Sunday Mar 15: Foundation &amp; Warm Network (Goal: 15)</div>
+      <div style="display:grid;gap:4px;margin-bottom:16px" class="gp-beta-day">
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(0,this.checked)" class="bp-cb"> Text/DM 20-30 friends individually (NOT group blasts — 1:1 messages)</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(1,this.checked)" class="bp-cb"> Post Instagram Story with swipe-up link or "DM me for access"</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(2,this.checked)" class="bp-cb"> Post on LinkedIn — "building something, looking for early feedback"</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(3,this.checked)" class="bp-cb"> Text family members who invest or trade</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(4,this.checked)" class="bp-cb"> Message friends in finance clubs &amp; trading Discord servers</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(5,this.checked)" class="bp-cb"> Submit to BetaList ($129 skip queue — betalist.com/submit)</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(6,this.checked)" class="bp-cb"> Submit to BetaTesting.com (free — 400K+ testers)</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(7,this.checked)" class="bp-cb"> Post on Indie Hackers "Show IH"</label>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:#448aff;margin:12px 0 8px">Day 2 — Monday Mar 16: Reddit &amp; Online Communities (Goal: 15)</div>
+      <div style="display:grid;gap:4px;margin-bottom:16px" class="gp-beta-day">
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(8,this.checked)" class="bp-cb"> Post in r/alphaandbetausers — built for beta recruitment</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(9,this.checked)" class="bp-cb"> Post in r/SideProject — show what you built, ask for feedback</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(10,this.checked)" class="bp-cb"> Post in r/startups — "looking for beta testers for my trading dashboard"</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(11,this.checked)" class="bp-cb"> Post in r/daytrading — share a trading tip, mention tool in comments</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(12,this.checked)" class="bp-cb"> Post in r/stocks, r/options — offer free access for feedback</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(13,this.checked)" class="bp-cb"> Post in r/fintech — "built a portfolio analytics tool"</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(14,this.checked)" class="bp-cb"> Join 3-5 trading Discord servers → share in #self-promo channels</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(15,this.checked)" class="bp-cb"> Post in Facebook day trading groups</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(16,this.checked)" class="bp-cb"> Comment on 10-15 Twitter/X threads about trading tools</label>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:#ffab40;margin:12px 0 8px">Day 3 — Tuesday Mar 17: Campus &amp; University Push (Goal: 10)</div>
+      <div style="display:grid;gap:4px;margin-bottom:16px" class="gp-beta-day">
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(17,this.checked)" class="bp-cb"> Print 20 university flyers → post at bulletin boards (biz school, library, gym)</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(18,this.checked)" class="bp-cb"> Print 10 coffee shop flyers → drop at spots near campus</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(19,this.checked)" class="bp-cb"> DM finance club presidents at 5 nearby universities</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(20,this.checked)" class="bp-cb"> Post in university subreddit / Facebook group</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(21,this.checked)" class="bp-cb"> Ask student friends to share in GroupMe/WhatsApp groups</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(22,this.checked)" class="bp-cb"> Email finance/investing professors</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(23,this.checked)" class="bp-cb"> Post in university Discord servers</label>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:#ff5252;margin:12px 0 8px">Day 4 — Wednesday Mar 18: Follow-Up &amp; Push to 50 (Goal: 10)</div>
+      <div style="display:grid;gap:4px;margin-bottom:16px" class="gp-beta-day">
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(24,this.checked)" class="bp-cb"> Send follow-up DMs to anyone who saw but didn't sign up</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(25,this.checked)" class="bp-cb"> Reply to every Reddit comment with helpful info + link</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(26,this.checked)" class="bp-cb"> Post "Day 3 update" on Twitter/X showing signup progress (FOMO)</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(27,this.checked)" class="bp-cb"> Send student newsletter to collected emails</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(28,this.checked)" class="bp-cb"> Do live walkthrough on Instagram Stories or TikTok</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(29,this.checked)" class="bp-cb"> Cross-post best Reddit post to Twitter/LinkedIn</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2)"><input type="checkbox" onchange="saveBetaPlanCheck(30,this.checked)" class="bp-cb"> Ask first 20 users to each invite 1 friend (referral)</label>
+      </div>
+
+      <div style="background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);border-radius:10px;padding:16px;margin-top:12px">
+        <div style="font-size:13px;font-weight:700;color:#00e676;margin-bottom:6px">🎁 Beta Incentive Stack</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">
+          • Free lifetime Pro access ($29/mo value) — $0 cost<br>
+          • "Founding Member" badge on profile — $0 cost<br>
+          • Direct Slack/Discord access to founder — $0 cost<br>
+          • Name on "Founding 50" page — $0 cost<br>
+          • Vote on next features to build — $0 cost
+        </div>
+      </div>
+
+      <div style="background:rgba(255,171,64,.08);border:1px solid rgba(255,171,64,.2);border-radius:10px;padding:16px;margin-top:12px">
+        <div style="font-size:13px;font-weight:700;color:#ffab40;margin-bottom:6px">🌐 Beta Platforms to Submit</div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.7">
+          • <strong>BetaList</strong> — $129 skip queue, 30-50 signups expected (betalist.com/submit)<br>
+          • <strong>BetaTesting.com</strong> — Free, 400K+ tester pool (betatesting.com)<br>
+          • <strong>Indie Hackers</strong> — Free, post in "Show IH" (indiehackers.com)<br>
+          • <strong>GetWorm</strong> — Free, reward-based testers (getworm.com)<br>
+          • <strong>ErliBird</strong> — Free, 5-15 signups (erlibird.com)<br>
+          • <strong>Product Hunt</strong> — Save for v3.0 full launch
+        </div>
+      </div>
+
+      <div style="margin-top:16px;display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="document.querySelector('[data-page=biz-beta]').click()">Open Beta Launch Tracker →</button>
+        <button class="btn btn-ghost" onclick="document.querySelector('[data-page=biz-scheduled]').click()">Open Today's Schedule →</button>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ═══ FILES ═══ -->
 <div class="page" id="biz-files-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Files</div><div class="stat-val">21</div></div>
+    <div class="stat"><div class="stat-label">Ad Creatives</div><div class="stat-val">6</div></div>
+    <div class="stat"><div class="stat-label">Print Materials</div><div class="stat-val">3</div></div>
+    <div class="stat"><div class="stat-label">Newsletters</div><div class="stat-val">6</div></div>
+  </div>
+
+  <!-- Ad Creatives -->
   <div class="card">
-    <h3>📁 Files</h3>
-    <div style="border:2px dashed var(--brd);border-radius:12px;padding:40px;text-align:center;margin-top:8px">
-      <div style="font-size:32px;margin-bottom:8px">📄</div>
-      <div style="font-size:14px;color:var(--t2);margin-bottom:4px">Drop files here or click to upload</div>
-      <div style="font-size:11px;color:var(--t3)">Supported: PDF, DOCX, XLSX, CSV, Images</div>
-      <input type="file" style="display:none" id="file-input">
-      <button class="btn btn-primary" style="margin-top:12px" onclick="document.getElementById('file-input').click()">Choose File</button>
+    <h3>🎨 Ad Creatives &amp; Social Posts</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px">
+      <div class="lp-field file-card" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ad_instagram_launch','📸 Instagram Launch Post','1080x1080 — TradeCommand Pro is LIVE. Bold dark gradient with neon green accents, feature highlights, and strong CTA.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📸 Instagram Launch Post</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1080 · Instagram Feed</div></div><span class="badge" style="font-size:9px;background:rgba(225,48,108,.15);color:#E1306C">IG</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_instagram_launch.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ad_instagram_story','📸 Instagram Story — Students','1080x1920 — Free for students promotion with .edu signup CTA and urgency timer.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📸 Instagram Story — Students</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1920 · Instagram Story</div></div><span class="badge" style="font-size:9px;background:rgba(225,48,108,.15);color:#E1306C">IG</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_instagram_story_free.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #1877F2;cursor:pointer" onclick="previewFile('ad_facebook_features','📘 Facebook Features Ad','1200x628 — Feature showcase ad for Facebook feed. Highlights portfolio tracking, AI signals, risk management, and market intel.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📘 Facebook Features Ad</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1200×628 · Facebook Feed</div></div><span class="badge" style="font-size:9px;background:rgba(24,119,242,.15);color:#1877F2">FB</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_facebook_features.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ad_instagram_testimonial','📸 Instagram Testimonial','1080x1080 — Social proof ad with 5-star rating, user quote, and signup CTA.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📸 Instagram Testimonial</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1080 · Instagram Feed</div></div><span class="badge" style="font-size:9px;background:rgba(225,48,108,.15);color:#E1306C">IG</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_instagram_testimonial.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ad_instagram_carousel','📸 Carousel Slide 1','1080x1080 — First slide of carousel: 5 Reasons Traders Love TradeCommand Pro.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📸 Carousel Slide 1</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1080 · Carousel</div></div><span class="badge" style="font-size:9px;background:rgba(225,48,108,.15);color:#E1306C">IG</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_instagram_carousel_1.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('ad_sponsored_post','💎 Sponsored Post','1080x1080 — Dashboard mockup sponsored post for paid promotion on IG/FB.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">💎 Sponsored Post</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1080 · Paid Promo</div></div><span class="badge" style="font-size:9px;background:rgba(99,102,241,.15);color:#6366f1">AD</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_sponsored_post.html</div>
+      </div>
     </div>
   </div>
-  <div class="table-wrap" style="margin-top:16px">
-    <div class="table-bar"><h3>Uploaded Files</h3></div>
-    <table><thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Uploaded</th></tr></thead>
-    <tbody><tr><td colspan="4" class="empty-msg">No files uploaded yet</td></tr></tbody></table>
+
+  <!-- Print Materials -->
+  <div class="card">
+    <h3>🖨️ Print Materials</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px">
+      <div class="lp-field file-card" style="border-left:3px solid #10b981;cursor:pointer" onclick="previewFile('flyer_university','🎓 University Flyer','8.5×11 inch — Dark gradient design with QR code, tear-off tabs at bottom. Headline: FREE for Students. Lists features and $0/mo student pricing.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🎓 University Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">8.5×11" · Tear-off tabs</div></div><span class="badge" style="font-size:9px;background:rgba(16,185,129,.15);color:#10b981">PRINT</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">flyer_university.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #f59e0b;cursor:pointer" onclick="previewFile('flyer_coffeeshop','☕ Coffee Shop Flyer','8.5×11 inch — Professional design with plan comparison table (Free/Pro/Elite). Targeting young professionals in coffee shops near financial district.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">☕ Coffee Shop Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">8.5×11" · Plans comparison</div></div><span class="badge" style="font-size:9px;background:rgba(245,158,11,.15);color:#f59e0b">PRINT</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">flyer_coffeeshop.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('business_card','💼 Business Cards','3.5×2 inch — Front: logo + tagline + name/title. Back: QR code + feature list. Crop marks included for professional printing.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">💼 Business Cards</div><div style="font-size:11px;color:var(--t3);margin-top:2px">3.5×2" · Front + Back</div></div><span class="badge" style="font-size:9px;background:rgba(99,102,241,.15);color:#6366f1">PRINT</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">business_card.html</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Newsletters -->
+  <div class="card">
+    <h3>✉️ Newsletter Templates</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px">
+      <div class="lp-field file-card" style="border-left:3px solid #00e676;cursor:pointer" onclick="previewFile('newsletter_welcome','👋 Welcome Email','Onboarding email for new users. Features overview, 3-step getting started guide, social proof stats (2,400+ traders, 87% win rate). Dark theme design matching brand.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">👋 Welcome Email</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Onboarding · Auto-send on signup</div></div><span class="badge badge-grn" style="font-size:9px">EMAIL</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_01_welcome.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #448aff;cursor:pointer" onclick="previewFile('newsletter_signals','📊 Weekly Trading Signals','6 high-conviction trade setups with entry/target/stop levels. Market outlook, watchlist table. Recurring weekly format with market bar header.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📊 Weekly Signals</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Recurring · Every Monday</div></div><span class="badge badge-blue" style="font-size:9px">EMAIL</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_02_weekly_signals.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #9c27b0;cursor:pointer" onclick="previewFile('newsletter_student','🎓 Student Offer','$9/mo student pricing campaign. Testimonials from NYU/Wharton/Baruch students. Urgency countdown (72 hours, 347/500 spots). .edu verification CTA.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🎓 Student Offer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Promo · Campus leads</div></div><span class="badge" style="font-size:9px;background:rgba(156,39,176,.15);color:#ce93d8">EMAIL</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_03_student_offer.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('newsletter_update','🚀 Product Update v2.5','New features: lead filtering, marketing page, follow-up system. Full changelog with colored dots. Roadmap preview of upcoming features. Interactive feature preview mockup.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🚀 Product Update</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Product · After each release</div></div><span class="badge badge-indigo" style="font-size:9px">EMAIL</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_04_product_update.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #ff9800;cursor:pointer" onclick="previewFile('newsletter_tips','📈 5 Rules — Trading Tips','Educational content: 5 risk management rules with product tie-ins. Each rule has an example and TradeCommand Pro integration tip. High-value nurture content.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📈 Trading Tips</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Education · Day 3 nurture</div></div><span class="badge" style="font-size:9px;background:rgba(255,152,0,.15);color:#ffb74d">EMAIL</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_05_trading_tips.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #ffd740;cursor:pointer" onclick="previewFile('newsletter_upgrade','👑 Elite Upgrade','Pro→Elite upsell: side-by-side plan comparison, +43% avg return stat, testimonial, 30-day money-back guarantee. Gold accent theme.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">👑 Elite Upgrade</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Upsell · Day 14</div></div><span class="badge" style="font-size:9px;background:rgba(255,215,64,.15);color:#ffd740">EMAIL</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_06_pro_upgrade.html</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beta Launch Plan -->
+  <div class="card">
+    <h3>🚀 Strategy Documents</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px">
+      <div class="lp-field file-card" style="border-left:3px solid #00e676;cursor:pointer" onclick="previewFile('beta_plan','🚀 Beta Launch Plan','Complete 4-day battle plan to get 50 beta users by Thursday. Day-by-day actions, channel targets, copy-paste outreach templates, Reddit subreddit guide, beta platform directory, incentive stack.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🚀 50 Users by Thursday Plan</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Strategy · Beta Launch Playbook</div></div><span class="badge badge-grn" style="font-size:9px">DOC</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">beta_launch_plan_50_by_thursday.html</div>
+      </div>
+      <div class="lp-field file-card" style="border-left:3px solid #448aff;cursor:pointer" onclick="previewFile('leads_xlsx','📊 Leads Export','Spreadsheet export of all 89 leads with scores, roles, companies, locations, statuses, channels, and personalized DMs.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📊 Leads Spreadsheet</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Data · All 89 leads</div></div><span class="badge badge-blue" style="font-size:9px">XLSX</span></div>
+        <div style="font-size:11px;color:var(--acc);margin-top:6px">TradeCommand_Leads.xlsx</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Preview Modal -->
+  <div id="file-preview-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999" onclick="closeFilePreview()"></div>
+  <div id="file-preview-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;max-width:560px;width:90%;z-index:1000;max-height:80vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 id="fp-title" style="margin:0;font-size:18px"></h3>
+      <button onclick="closeFilePreview()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px">✕</button>
+    </div>
+    <div id="fp-desc" style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:16px"></div>
+    <div id="fp-actions" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  </div>
+</div>
+
+<!-- ═══ SCHEDULED — TODAY'S ACTIONS ═══ -->
+<div class="page" id="biz-scheduled-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Today</div><div class="stat-val" style="color:#ffab40;font-size:14px" id="sched-date">Sun Mar 15</div></div>
+    <div class="stat"><div class="stat-label">Tasks Today</div><div class="stat-val" id="sched-total">0</div></div>
+    <div class="stat"><div class="stat-label">Completed</div><div class="stat-val" id="sched-done" style="color:#00e676">0</div></div>
+    <div class="stat"><div class="stat-label">Beta Progress</div><div class="stat-val" id="sched-beta">0 / 50</div></div>
+  </div>
+
+  <!-- Today's Schedule -->
+  <div class="card">
+    <h3 id="sched-header">📅 Today's Schedule — Sunday, March 15</h3>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Your prioritized action plan for today. Check items off as you go.</p>
+    <div id="sched-tasks" style="display:grid;gap:8px"></div>
+  </div>
+
+  <!-- People to Contact Today -->
+  <div class="card">
+    <h3>📞 People to Contact Today</h3>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Priority leads from your pipeline + warm network contacts for beta outreach.</p>
+    <div id="sched-contacts" style="display:grid;gap:6px"></div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="card">
+    <h3>⚡ Quick Actions</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+      <button class="btn btn-primary" onclick="document.querySelector('[data-page=biz-beta]').click()">🚀 Beta Launch Tracker</button>
+      <button class="btn btn-ghost" onclick="document.querySelector('[data-page=biz-leads]').click()">👥 Open Leads</button>
+      <button class="btn btn-ghost" onclick="document.querySelector('[data-page=biz-campaigns]').click()">📢 Campaigns</button>
+      <button class="btn btn-ghost" onclick="document.querySelector('[data-page=biz-newsletters]').click()">✉️ Email Templates</button>
+      <button class="btn btn-ghost" onclick="exportLeads()">📥 Export Leads CSV</button>
+    </div>
   </div>
 </div>
 
@@ -1598,7 +1920,7 @@ const titles = {
   'biz-dashboard':'📊 Biz Dashboard','biz-crm':'🎯 CRM & Pipeline','biz-prospecting':'🔍 Prospecting',
   'biz-leads':'👥 Leads','biz-marketing':'📣 Marketing','biz-campaigns':'📢 Campaigns',
   'biz-revenue':'💰 Revenue','biz-analytics':'📈 Biz Analytics','biz-advisor':'🤖 AI Advisor',
-  'biz-plan':'📋 Growth Plan','biz-beta':'🚀 Beta Launch','biz-newsletters':'✉️ Email Templates','biz-files':'📁 Files','biz-settings':'⚙️ Biz Settings'
+  'biz-plan':'📋 Growth Plan','biz-scheduled':'📅 Scheduled','biz-beta':'🚀 Beta Launch','biz-newsletters':'✉️ Email Templates','biz-files':'📁 Files','biz-settings':'⚙️ Biz Settings'
 };
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
@@ -1635,6 +1957,9 @@ function loadPage(page) {
     case 'biz-marketing': loadMarketing(); break;
     case 'biz-beta': loadBeta(); break;
     case 'biz-newsletters': loadEmailTemplates(); break;
+    case 'biz-scheduled': loadScheduled(); break;
+    case 'biz-campaigns': loadCampaigns(); break;
+    case 'biz-plan': loadGrowthPlan(); break;
     case 'changelog': loadChangelog(); break;
   }
 }
@@ -2319,6 +2644,198 @@ function loadMarketing() {
         '<span style="font-size:11px;color:var(--t3)">avg '+avgScore+'</span>'+
       '</div></div>';
   }).join('');
+}
+
+// ═══ SCHEDULED ═══
+function loadScheduled() {
+  var now = new Date();
+  var day = now.getDay(); // 0=Sun
+  var dateStr = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  document.getElementById('sched-date').textContent = dateStr;
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('sched-header').textContent = '📅 Today\'s Schedule — ' + dayNames[day] + ', ' + now.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+
+  // Build today's tasks based on beta plan day
+  var betaState = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0}');
+  document.getElementById('sched-beta').textContent = (betaState.count||0) + ' / 50';
+
+  var tasks = [];
+  // Always include these
+  tasks.push({cat:'🚀 Beta',text:'Text/DM 10 friends individually — personal 1:1 messages',pri:'high'});
+  tasks.push({cat:'🚀 Beta',text:'Post Instagram Story with dashboard screenshot + "beta testers wanted"',pri:'high'});
+  tasks.push({cat:'🚀 Beta',text:'Post on LinkedIn — "building something, looking for early feedback"',pri:'high'});
+  tasks.push({cat:'🚀 Beta',text:'Submit to BetaList ($129 skip queue) — betalist.com/submit',pri:'high'});
+  tasks.push({cat:'🚀 Beta',text:'Submit to BetaTesting.com (free, 400K+ testers)',pri:'med'});
+  tasks.push({cat:'🚀 Beta',text:'Post on Indie Hackers "Show IH" section',pri:'med'});
+  tasks.push({cat:'💬 Reddit',text:'Post in r/alphaandbetausers — beta recruitment post',pri:'high'});
+  tasks.push({cat:'💬 Reddit',text:'Post in r/SideProject — show build, ask for feedback',pri:'med'});
+  tasks.push({cat:'💬 Reddit',text:'Post in r/daytrading — share tip, mention tool in comments',pri:'med'});
+  tasks.push({cat:'👥 Leads',text:'Send DMs to top 10 hot leads (score 80+) from Leads page',pri:'high'});
+  tasks.push({cat:'👥 Leads',text:'Copy all DMs and begin LinkedIn outreach to finance students',pri:'med'});
+  tasks.push({cat:'👥 Leads',text:'Send follow-up #1 (Day 3) to any leads contacted earlier this week',pri:'med'});
+  tasks.push({cat:'📧 Email',text:'Set up email platform (Mailchimp/ConvertKit) and upload Welcome Email template',pri:'med'});
+  tasks.push({cat:'🎓 Campus',text:'Identify 5 finance club presidents at nearby universities to DM tomorrow',pri:'low'});
+  tasks.push({cat:'🖨️ Print',text:'Send university + coffee shop flyers to printer (or print at home)',pri:'low'});
+
+  document.getElementById('sched-total').textContent = tasks.length;
+  var saved = JSON.parse(localStorage.getItem('tc_sched_checks') || '[]');
+  var doneCount = saved.filter(function(v){return v;}).length;
+  document.getElementById('sched-done').textContent = doneCount;
+
+  var priColors = {high:'#ff5252',med:'#ffab40',low:'#448aff'};
+  var priLabels = {high:'High',med:'Medium',low:'Low'};
+  document.getElementById('sched-tasks').innerHTML = tasks.map(function(t,i){
+    var checked = saved[i] ? 'checked' : '';
+    var strike = saved[i] ? 'text-decoration:line-through;opacity:.5' : '';
+    return '<label style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:8px;cursor:pointer;border-left:3px solid '+priColors[t.pri]+';'+strike+'">'+
+      '<input type="checkbox" '+checked+' onchange="toggleSchedTask('+i+',this.checked)" style="margin-top:3px;flex-shrink:0">'+
+      '<div style="flex:1"><div style="font-size:13px;color:var(--t1)">'+t.text+'</div>'+
+      '<div style="display:flex;gap:6px;margin-top:4px"><span style="font-size:10px;color:var(--t3)">'+t.cat+'</span><span style="font-size:10px;color:'+priColors[t.pri]+'">'+priLabels[t.pri]+' Priority</span></div>'+
+      '</div></label>';
+  }).join('');
+
+  // People to contact — top 15 leads by score
+  var topLeads = SEED_LEADS.map(function(l,i){return Object.assign({},l,{idx:i});})
+    .sort(function(a,b){return b.score-a.score;}).slice(0,15);
+  document.getElementById('sched-contacts').innerHTML = topLeads.map(function(l){
+    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+l.idx)||'{}');
+    var st = saved.status||l.status||'new';
+    var stColor = st==='contacted'?'var(--ylw)':st==='interested'?'var(--acc)':st==='converted'?'var(--grn)':'var(--t3)';
+    return '<div class="lp-field" style="cursor:pointer;padding:10px 12px" onclick="openLead('+l.idx+')">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+        '<div style="display:flex;align-items:center;gap:10px">'+
+          '<span style="font-size:16px;font-weight:800;color:var(--acc)">'+l.score+'</span>'+
+          '<div><div style="font-size:13px;font-weight:600">'+l.name+'</div>'+
+          '<div style="font-size:11px;color:var(--t3)">'+l.role+' · '+(l.company||'')+'</div></div>'+
+        '</div>'+
+        '<div style="text-align:right"><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06);color:'+stColor+'">'+st+'</span>'+
+        '<div style="font-size:10px;color:var(--t3);margin-top:2px">'+(l.channel||'LinkedIn')+'</div></div>'+
+      '</div></div>';
+  }).join('');
+}
+function toggleSchedTask(idx, checked) {
+  var saved = JSON.parse(localStorage.getItem('tc_sched_checks') || '[]');
+  saved[idx] = checked;
+  localStorage.setItem('tc_sched_checks', JSON.stringify(saved));
+  loadScheduled();
+}
+
+// ═══ CAMPAIGNS DETAIL ═══
+function loadCampaigns() {
+  // Update counts from localStorage
+  var betaState = JSON.parse(localStorage.getItem('tc_beta_state') || '{}');
+  var total = (betaState.friends||0)+(betaState.reddit||0)+(betaState.platforms||0)+(betaState.campus||0);
+  document.getElementById('camp-sent').textContent = total;
+}
+function openCampaign(id) {
+  var data = getCampaignData(id);
+  document.getElementById('campaign-list').style.display = 'none';
+  document.getElementById('campaign-detail').style.display = 'block';
+  var el = document.getElementById('campaign-detail-content');
+  el.innerHTML = '<h3>'+data.icon+' '+data.name+'</h3>'+
+    '<div style="display:flex;gap:8px;margin:12px 0"><span class="badge badge-'+data.statusClass+'" style="font-size:10px">'+data.status+'</span><span style="font-size:12px;color:var(--t3)">'+data.channel+'</span></div>'+
+    '<div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:16px">'+data.description+'</div>'+
+    '<div style="font-size:12px;font-weight:700;color:var(--acc);margin-bottom:8px">Action Checklist:</div>'+
+    '<div style="display:grid;gap:6px">'+data.actions.map(function(a,i){
+      var saved = JSON.parse(localStorage.getItem('tc_camp_'+id)||'[]');
+      var chk = saved[i]?'checked':'';
+      var strike = saved[i]?'style="text-decoration:line-through;opacity:.5"':'';
+      return '<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);cursor:pointer" '+strike+'><input type="checkbox" '+chk+' onchange="saveCampCheck(\''+id+'\','+i+',this.checked)"> '+a+'</label>';
+    }).join('')+'</div>'+
+    (data.template?'<div style="margin-top:16px;padding:14px;background:var(--bg);border:1px solid var(--brd);border-radius:8px"><div style="font-size:11px;font-weight:700;color:var(--acc);margin-bottom:6px">MESSAGE TEMPLATE:</div><div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap">'+data.template+'</div><button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="navigator.clipboard.writeText(document.querySelector(\'#campaign-detail-content pre,#campaign-detail-content [style*=pre-wrap]\').textContent);toast(\'Copied!\',\'grn\')">Copy Template</button></div>':'');
+}
+function closeCampaignDetail() {
+  document.getElementById('campaign-list').style.display = 'block';
+  document.getElementById('campaign-detail').style.display = 'none';
+}
+function saveCampCheck(id,idx,checked) {
+  var saved = JSON.parse(localStorage.getItem('tc_camp_'+id)||'[]');
+  saved[idx] = checked;
+  localStorage.setItem('tc_camp_'+id, JSON.stringify(saved));
+  openCampaign(id);
+}
+function getCampaignData(id) {
+  var campaigns = {
+    linkedin_student: {icon:'🔗',name:'LinkedIn Student Outreach',channel:'LinkedIn DM',status:'Active',statusClass:'grn',
+      description:'Direct LinkedIn DMs to finance students, aspiring traders, and quant researchers at top universities. Each message is personalized with their school, role, and interests. Goal: 30 conversations, 15 signups.',
+      actions:['Export top 30 student leads from Leads page','Personalize each DM using templates from lead panel','Send first batch of 10 DMs today','Send second batch of 10 DMs tomorrow','Send third batch of 10 DMs day 3','Follow up on non-responders at Day 3','Track responses in lead panel Activity tab','Convert interested leads to beta signups'],
+      template:'Hey [Name] — I noticed you\'re studying finance at [School]. I built a trading dashboard that gives you real-time portfolio tracking, AI signals, and risk management tools. We\'re running a free beta right now and I\'d love to get your feedback. Would you be down to check it out?'},
+    reddit_beta: {icon:'🟠',name:'Reddit Beta Recruitment',channel:'Reddit',status:'Ready',statusClass:'ylw',
+      description:'Post across 8 trading and startup subreddits. Lead with value (trading tips, tool reviews), then mention TradeCommand Pro naturally. Goal: 15 signups from Reddit alone.',
+      actions:['Post in r/alphaandbetausers (direct recruitment)','Post in r/SideProject (show your build)','Post in r/startups (beta testers wanted)','Comment in r/daytrading threads with helpful tips + link','Post in r/stocks offering free access','Post in r/fintech as builder-friendly pitch','Post in r/algotrading if relevant','Post in r/wallstreetbets (match the vibe!)','Reply to all comments within 1 hour','Track which subreddits drive signups'],
+      template:'[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals & risk management\n\nHey everyone 👋 I\'ve been building TradeCommand Pro — a trading analytics dashboard with real-time portfolio tracking, AI-powered trade signals, and risk management tools.\n\nLooking for 50 beta testers. You\'ll get:\n✅ Free lifetime Pro access ($29/mo value)\n✅ Direct line to me for feature requests\n✅ Early access to all future updates'},
+    instagram_launch: {icon:'📸',name:'Instagram Launch Campaign',channel:'Instagram',status:'Ready',statusClass:'ylw',
+      description:'Three-phase Instagram campaign: organic story + feed post → carousel → paid sponsored post. Target: finance/trading audience ages 18-35.',
+      actions:['Post Launch Announcement (ad_instagram_launch.html) to feed','Post Student Story (ad_instagram_story_free.html)','Post Carousel Slide 1 (ad_instagram_carousel_1.html)','Add link in bio to tradecommandpro.com','Use hashtags: #daytrading #tradingtools #stocks #fintech','Engage with comments for first 2 hours after posting','Repost best content to stories','Set up $10/day promotion on best-performing post after 48h'],
+      template:null},
+    facebook_ads: {icon:'📘',name:'Facebook Paid Ads',channel:'Facebook',status:'Planned',statusClass:'indigo',
+      description:'Paid Facebook campaign targeting 18-35 year olds interested in stock trading, investing, and personal finance. Start after organic Instagram campaign proves messaging.',
+      actions:['Install Facebook Pixel on tradecommandpro.com','Create Custom Audience: website visitors','Create Lookalike Audience from email list','Upload ad_facebook_features.html creative','Set daily budget: $10/day','Target: 18-35, Interest: stock trading, investing, finance','A/B test 2 ad copies','Monitor CPA and pause underperformers after 72h','Retarget website visitors who didn\'t sign up'],
+      template:null},
+    campus_blitz: {icon:'🎓',name:'Campus Blitz',channel:'University',status:'Ready',statusClass:'ylw',
+      description:'Physical + digital campus outreach. Print flyers with tear-off tabs for bulletin boards, partner with finance clubs, reach professors who teach trading/investing courses.',
+      actions:['Print 20 university flyers (flyer_university.html)','Print 10 coffee shop flyers (flyer_coffeeshop.html)','Print 50 business cards (business_card.html)','Post flyers: NYU Stern, Columbia Business, Baruch','Post flyers: university library, student union, gym','Drop coffee shop flyers near campus','DM 5 finance club presidents offering free demo','Email 3 finance/investing professors','Post in university subreddit and Facebook groups','Ask student friends to share in class GroupMe/WhatsApp'],
+      template:'Hey! I\'m a student and I built a trading dashboard with real-time portfolio tracking, trade signals, and risk management tools. Offering free Pro access to your finance club during beta. Would you be open to sharing with your group or letting me do a quick 10-min demo?'},
+    email_sequence: {icon:'📧',name:'Email Drip Sequence',channel:'Email',status:'Ready',statusClass:'grn',
+      description:'Automated 5-email sequence that nurtures new signups from onboarding through upgrade. Each email is drafted and ready to load into Mailchimp/ConvertKit.',
+      actions:['Sign up for Mailchimp or ConvertKit (free tier)','Upload Welcome Email (newsletter_01_welcome.html) as Day 0','Upload Trading Tips (newsletter_05_trading_tips.html) as Day 3','Upload Weekly Signals (newsletter_02_weekly_signals.html) as Day 7','Upload Elite Upgrade (newsletter_06_pro_upgrade.html) as Day 14','Set up automation triggers','Add signup form to tradecommandpro.com','Test full sequence with your own email','Upload Student Offer for campus leads segment'],
+      template:null},
+    friends_family: {icon:'🤝',name:'Friends & Family Beta',channel:'Personal DM',status:'Active',statusClass:'grn',
+      description:'Personal 1:1 outreach to friends, family, and acquaintances. Fastest channel for first signups — no convincing needed, just ask. Target: 15 signups from warm network alone.',
+      actions:['List 30 friends/family who might be interested','Text 10 closest friends TODAY with personal message','Text 10 more friends tomorrow','Text family members who invest/trade','Ask each signup to invite 1 friend (2x multiplier)','Follow up after 48h with anyone who didn\'t respond','Thank everyone who signed up with a personal note'],
+      template:'Hey [name] — I\'ve been building this trading dashboard tool and I\'m looking for people to try the beta version before I launch it publicly. Would you be down to check it out and give me honest feedback? It\'s free and takes like 2 min to set up.\n\nNo pressure if it\'s not your thing — but if you know anyone who trades or invests, I\'d appreciate an intro too 🙏'}
+  };
+  return campaigns[id] || {icon:'📢',name:id,channel:'—',status:'—',statusClass:'indigo',description:'',actions:[],template:null};
+}
+
+// ═══ GROWTH PLAN ═══
+function loadGrowthPlan() {
+  document.getElementById('gp-leads').textContent = SEED_LEADS.length;
+  // Load saved checkboxes
+  ['gp1','gp2','gp3','gp4'].forEach(function(phase){
+    var saved = JSON.parse(localStorage.getItem('tc_'+phase+'_checks')||'[]');
+    var cbs = document.querySelectorAll('.'+phase+'-cb');
+    cbs.forEach(function(cb,i){ cb.checked = saved[i]||false; });
+  });
+  loadBetaPlanChecks();
+}
+function toggleGrowthPhase(id) {
+  var el = document.getElementById(id);
+  var arrow = document.getElementById(id+'-arrow');
+  if(el.style.display==='none'){el.style.display='block';arrow.textContent='▾';}
+  else{el.style.display='none';arrow.textContent='▸';}
+}
+function saveGPCheck(phase,idx,checked) {
+  var saved = JSON.parse(localStorage.getItem('tc_'+phase+'_checks')||'[]');
+  saved[idx] = checked;
+  localStorage.setItem('tc_'+phase+'_checks', JSON.stringify(saved));
+}
+
+// ═══ BETA PLAN CHECKLIST (in Growth Plan) ═══
+function saveBetaPlanCheck(idx, checked) {
+  var saved = JSON.parse(localStorage.getItem('tc_beta_plan_checks')||'[]');
+  saved[idx] = checked;
+  localStorage.setItem('tc_beta_plan_checks', JSON.stringify(saved));
+}
+function loadBetaPlanChecks() {
+  var saved = JSON.parse(localStorage.getItem('tc_beta_plan_checks')||'[]');
+  var cbs = document.querySelectorAll('.bp-cb');
+  cbs.forEach(function(cb,i){ cb.checked = saved[i]||false; });
+}
+
+// ═══ FILE PREVIEW ═══
+function previewFile(id, title, desc) {
+  document.getElementById('fp-title').textContent = title;
+  document.getElementById('fp-desc').textContent = desc;
+  document.getElementById('fp-actions').innerHTML =
+    '<button class="btn btn-primary" onclick="document.querySelector(\'[data-page=biz-files]\').click();closeFilePreview()">Open in Files</button>'+
+    '<button class="btn btn-ghost" onclick="closeFilePreview()">Close</button>';
+  document.getElementById('file-preview-overlay').style.display = 'block';
+  document.getElementById('file-preview-modal').style.display = 'block';
+}
+function closeFilePreview() {
+  document.getElementById('file-preview-overlay').style.display = 'none';
+  document.getElementById('file-preview-modal').style.display = 'none';
 }
 
 // ═══ BETA LAUNCH ═══
