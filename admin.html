@@ -2450,7 +2450,9 @@
         
         const page = item.getAttribute('data-page');
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(`${page}-page`).classList.add('active');
+        const pageEl = document.getElementById(`${page}-page`);
+        if (pageEl) pageEl.classList.add('active');
+        else console.warn('Page element not found:', page + '-page');
         
         const titles = {
           dashboard: 'Dashboard',
@@ -2894,33 +2896,42 @@
     }
 
     const loadDashboard = async () => {
+      // Load users (critical — everything depends on this)
       try {
-        // Load users
         const usersSnap = await db.collection('users').get();
         allUsers = usersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-        // Load activity
-        const activitySnap = await db.collection('activity').orderBy('timestamp', 'desc').limit(20).get();
-        allActivity = activitySnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-        // Load payments
-        await loadPaymentHistory();
-
-        // Load Stripe config
-        await loadStripeConfig();
-
-        updateDashboard();
-        updateDashboardRevenue();
-        renderUsersTable();
-        renderActivityFeed();
-        renderAnalytics();
-        renderSubscriptionsTable();
-        updateSubscriptionsPage();
-        renderRevenueTrendChart();
-      } catch (error) {
-        console.error('Error loading dashboard:', error);
-        showToast('Error loading data', 'error');
+      } catch (e) {
+        console.warn('Could not load users:', e);
       }
+
+      // Load activity (non-critical — may not have index or collection)
+      try {
+        const activitySnap = await db.collection('activity')
+          .orderBy('timestamp', 'desc').limit(20).get()
+          .catch(() => db.collection('activity').limit(20).get())
+          .catch(() => ({ docs: [] }));
+        allActivity = activitySnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      } catch (e) {
+        console.warn('Could not load activity:', e);
+        allActivity = [];
+      }
+
+      // Load payments (non-critical)
+      try { await loadPaymentHistory(); } catch (e) { console.warn('loadPaymentHistory:', e); }
+
+      // Load Stripe config (non-critical)
+      try { await loadStripeConfig(); } catch (e) { console.warn('loadStripeConfig:', e); }
+
+      // Render everything — each call is isolated so one crash won't block others
+      const safe = (fn, name) => { try { fn(); } catch(e) { console.warn(name + ':', e); } };
+      safe(updateDashboard,          'updateDashboard');
+      safe(updateDashboardRevenue,   'updateDashboardRevenue');
+      safe(renderUsersTable,         'renderUsersTable');
+      safe(renderActivityFeed,       'renderActivityFeed');
+      safe(renderAnalytics,          'renderAnalytics');
+      safe(renderSubscriptionsTable, 'renderSubscriptionsTable');
+      safe(updateSubscriptionsPage,  'updateSubscriptionsPage');
+      safe(renderRevenueTrendChart,  'renderRevenueTrendChart');
     };
 
     // Update Dashboard Stats
@@ -3364,6 +3375,7 @@
     // Activity Feed
     const renderActivityFeed = () => {
       const feed = document.getElementById('activityFeed');
+      if (!feed) return;
       if (allActivity.length === 0) {
         feed.innerHTML = '<div class="loading-placeholder" style="padding: 20px;">No activity yet</div>';
         return;
