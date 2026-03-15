@@ -5579,28 +5579,28 @@ const SEED_LEADS = [
       const tbody = document.getElementById('leads-table-body');
       if (!tbody) return;
       if (!leads || leads.length===0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--t3);">No leads yet. Click \u201c+ Add Lead\u201d to get started.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--t3);">No leads yet.</td></tr>';
         return;
       }
-      const sc = s => s>=80?'var(--grn)':s>=50?'var(--ylw)':'var(--red)';
-      tbody.innerHTML = leads.map(lead => {
-        const li = lead.linkedIn
-          ? `<a href="${lead.linkedIn}" target="_blank" style="color:var(--acc);text-decoration:none;font-size:12px;white-space:nowrap">🔗 LinkedIn</a>`
-          : '<span style="color:var(--t3)">—</span>';
-        const dmBtn = lead.dm
-          ? `<button class="btn btn-sm" style="background:var(--acc);color:#000;font-size:11px;padding:3px 10px;margin-right:4px;border-radius:5px" onclick="copyLeadDM('${lead.id}');this.textContent='✓';setTimeout(()=>this.textContent='📋 DM',1600)">📋 DM</button>`
-          : '';
-        const notesText = (lead.notes||'');
-        const notesTrunc = notesText.length > 90 ? notesText.substring(0,90)+'…' : notesText;
-        const notesAttr = notesText.replace(/"/g,'&quot;').replace(/\n/g,' ');
-        return `<tr>
-          <td style="padding:10px 16px"><span style="font-weight:700;color:${sc(lead.score||0)}">${lead.score||0}</span></td>
-          <td style="padding:10px 16px;font-size:13px;color:var(--t1);font-weight:500">${lead.name||'—'}</td>
-          <td style="padding:10px 16px">${li}</td>
-          <td style="padding:10px 16px;font-size:12px;color:var(--t2)">${lead.role||lead.company||'—'}</td>
-          <td style="padding:10px 16px;font-size:12px;text-transform:capitalize;color:${sc(lead.score||0)}">${lead.status||'new'}</td>
-          <td style="padding:10px 16px;font-size:12px;color:var(--t3);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${notesAttr}">${notesTrunc}</td>
-          <td style="padding:10px 16px;white-space:nowrap">${dmBtn}<button class="btn btn-sm btn-secondary" onclick="editLead('${lead.id}')">Edit</button></td>
+      const sc = s => s>=80?'#10b981':s>=50?'#f59e0b':'#ef4444';
+      const priColor = p => p==='High'?'#10b981':p==='Med'?'#f59e0b':'#94a3b8';
+      tbody.innerHTML = leads.map((lead,i) => {
+        const id = lead.id || ('seed_' + i);
+        return `<tr data-id="${id}"
+          onclick="openLeadPanel('${id}')"
+          style="border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .15s"
+          onmouseover="this.style.background='rgba(99,102,241,.08)'"
+          onmouseout="this.style.background=''">
+          <td style="padding:10px 16px"><span style="font-weight:700;color:${sc(lead.score||0)};font-size:15px">${lead.score||0}</span></td>
+          <td style="padding:10px 16px">
+            <div style="font-size:13px;color:#f1f5f9;font-weight:600">${lead.name||'—'}</div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px">${lead.location||''}</div>
+          </td>
+          <td style="padding:10px 16px;font-size:12px;color:#94a3b8">${lead.role||lead.company||'—'}</td>
+          <td style="padding:10px 16px"><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(99,102,241,.15);color:#6366f1;font-weight:600">${lead.status||'new'}</span></td>
+          <td style="padding:10px 16px"><span style="font-size:11px;color:${priColor(lead.priority)};font-weight:600">${lead.priority||'—'}</span></td>
+          <td style="padding:10px 16px;font-size:11px;color:#64748b">${lead.type||'—'}</td>
+          <td style="padding:10px 16px"><button onclick="event.stopPropagation();openLeadPanel('${id}')" style="background:#6366f1;color:#fff;border:none;border-radius:5px;padding:4px 12px;font-size:11px;cursor:pointer">Open →</button></td>
         </tr>`;
       }).join('');
     }
