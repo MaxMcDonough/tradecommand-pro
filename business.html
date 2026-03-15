@@ -2665,7 +2665,9 @@
         <input id="gate-email" type="email" placeholder="Email address" value="max.mcdonough123@gmail.com" style="width:100%;padding:10px 14px;background:#111827;border:1px solid #2a3550;border-radius:8px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;">
         <input id="gate-password" type="password" placeholder="Password" style="width:100%;padding:10px 14px;background:#111827;border:1px solid #2a3550;border-radius:8px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;" onkeydown="if(event.key==='Enter')adminGateLogin()">
         <div id="gate-error" style="color:#ef4444;font-size:12px;margin-bottom:10px;display:none"></div>
-        <button onclick="adminGateLogin()" style="width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Sign In</button>
+        <button onclick="adminGateLogin()" style="width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px">Sign In</button>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="flex:1;height:1px;background:#2a3550"></div><span style="color:#64748b;font-size:11px">or</span><div style="flex:1;height:1px;background:#2a3550"></div></div>
+        <button onclick="adminGateGoogle()" style="width:100%;padding:11px;background:#fff;color:#1a1a1a;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px"> Sign in with Google</button>
       </div>
     </div>
     <div class="container" style="display:none">
@@ -4974,6 +4976,17 @@ LOW:
           // Firebase mode
           try {
             await auth.signInWithEmailAndPassword(email, pass);
+          } catch(e) {
+            errEl.textContent = e.message.replace('Firebase: ','').replace(/\(auth\/.*\)/,'').trim();
+            errEl.style.display = 'block';
+          }
+        }
+
+        async function adminGateGoogle() {
+          const errEl = document.getElementById('gate-error');
+          try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            await auth.signInWithPopup(provider);
           } catch(e) {
             errEl.textContent = e.message.replace('Firebase: ','').replace(/\(auth\/.*\)/,'').trim();
             errEl.style.display = 'block';
