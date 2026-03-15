@@ -1343,17 +1343,17 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
       </div>
     </div>
   </div>
+</div>
 
-  <!-- File Preview Modal -->
-  <div id="file-preview-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999" onclick="closeFilePreview()"></div>
-  <div id="file-preview-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;max-width:900px;width:95%;z-index:1000;max-height:90vh;overflow-y:auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <h3 id="fp-title" style="margin:0;font-size:18px"></h3>
-      <button onclick="closeFilePreview()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px">✕</button>
-    </div>
-    <div id="fp-desc" style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:16px"></div>
-    <div id="fp-actions" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+<!-- File Preview Modal (GLOBAL — outside all pages so it works from Marketing, Files, etc.) -->
+<div id="file-preview-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999" onclick="closeFilePreview()"></div>
+<div id="file-preview-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;max-width:900px;width:95%;z-index:1000;max-height:90vh;overflow-y:auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h3 id="fp-title" style="margin:0;font-size:18px"></h3>
+    <button onclick="closeFilePreview()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px">✕</button>
   </div>
+  <div id="fp-desc" style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:16px"></div>
+  <div id="fp-actions" style="display:flex;gap:8px;flex-wrap:wrap"></div>
 </div>
 
 <!-- ═══ SCHEDULED — TODAY'S ACTIONS ═══ -->
