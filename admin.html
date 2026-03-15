@@ -1511,11 +1511,31 @@
         <div class="page" id="changelog-page">
           <div style="max-width: 860px;">
 
-            <!-- v2.1 -->
+            <!-- v2.2 -->
             <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--acc);">
               <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
-                <span style="font-size:18px;font-weight:700;color:var(--t1);">v2.1</span>
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v2.2</span>
                 <span style="background:rgba(59,130,246,.15);color:#93c5fd;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.8px;">LATEST</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Business Hub — Admin Integration</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Business Hub fully integrated into Admin — CRM, Leads, Prospecting, Marketing, Campaigns, Revenue, Analytics, AI Advisor, Growth Plan, Files, and Settings all live in the sidebar</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> AI Business Advisor — health score (0–100) with per-metric breakdown, priority action items based on live user data, and contextual Q&amp;A</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Revenue page — MRR/ARR tracking, Pro vs Elite breakdown, milestone tracker, MRR trend chart</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> CRM &amp; Pipeline — deal stages, weighted pipeline value, win rate, average deal size</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Leads — hot/warm/cold scoring, conversion tracking, full lead table</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Marketing — monthly content calendar, channel performance stats</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Campaigns — open rate, send rate, conversion tracking per campaign</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Removed standalone Business Command Centre link from admin sidebar</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Dashboard load now resilient — each Firestore query isolated, individual failures don't block the rest</li>
+              </ul>
+            </div>
+
+            <!-- v2.1 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--pur);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v2.1</span>
                 <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
               </div>
               <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Homepage Sign-Up Flow</div>
@@ -3147,9 +3167,9 @@
             <td><span class="status-badge ${user.disabled ? 'offline' : 'online'}"><div class="status-indicator"></div>${user.disabled ? 'Disabled' : 'Active'}</span></td>
             <td>
               <div style="display:flex;gap:4px;flex-wrap:wrap">
-                <button class="btn btn-success btn-sm" style="font-size:10px;padding:3px 7px" onclick="upgradeUser('${userId}','pro','${user.email}')">⬆️ Pro</button>
-                <button class="btn btn-primary btn-sm" style="font-size:10px;padding:3px 7px;background:rgba(139,92,246,.3);border-color:rgba(139,92,246,.5);color:#a78bfa" onclick="upgradeUser('${userId}','elite','${user.email}')">👑 Elite</button>
-                <button class="btn btn-danger btn-sm" style="font-size:10px;padding:3px 7px" onclick="deleteUser('${userId}','${user.email}')">🗑</button>
+                <button class="btn btn-success btn-sm" style="font-size:10px;padding:3px 7px" onclick="upgradeUser('${user.id}','pro','${user.email}')">⬆️ Pro</button>
+                <button class="btn btn-primary btn-sm" style="font-size:10px;padding:3px 7px;background:rgba(139,92,246,.3);border-color:rgba(139,92,246,.5);color:#a78bfa" onclick="upgradeUser('${user.id}','elite','${user.email}')">👑 Elite</button>
+                <button class="btn btn-danger btn-sm" style="font-size:10px;padding:3px 7px" onclick="deleteUser('${user.id}','${user.email}')">🗑</button>
               </div>
             </td>
             <td><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation()">→</button></td>
