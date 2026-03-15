@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1280px;height:640px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0e17}
+.wrap{width:1280px;height:640px;position:relative;overflow:hidden;background:linear-gradient(135deg,#0a0e17 0%,#111827 100%)}
+
+/* Glow blobs */
+.glow1{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,0.12) 0%,transparent 70%);top:-100px;left:-80px;pointer-events:none}
+.glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(6,182,212,0.1) 0%,transparent 70%);bottom:-80px;right:100px;pointer-events:none}
+
+/* Top + bottom accent bars */
+.bar-top{position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+.bar-bot{position:absolute;bottom:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+
+/* Grid lines */
+.grid-h{position:absolute;left:0;right:0;height:1px;background:rgba(42,53,80,0.6)}
+.grid-v{position:absolute;top:0;bottom:0;width:1px;background:rgba(42,53,80,0.6)}
+
+/* Chart sparkline */
+.chart-area{position:absolute;bottom:0;left:0;right:400px;height:300px;opacity:0.25}
+
+/* Main content */
+.content{position:absolute;left:72px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;width:720px}
+.logo-row{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.bolt{font-size:52px;line-height:1}
+.brand{font-size:48px;font-weight:800;color:#f1f5f9;letter-spacing:-1px;line-height:1}
+.underline{width:560px;height:3px;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:2px;margin-bottom:24px}
+.tagline{font-size:24px;color:#94a3b8;font-weight:400;line-height:1.5;margin-bottom:32px}
+.tagline span{color:#e2e8f0;font-weight:600}
+
+/* Pills */
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.pill{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px}
+.pill-grn{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.3)}
+.pill-blu{background:rgba(59,130,246,0.15);color:#3b82f6;border:1px solid rgba(59,130,246,0.3)}
+.pill-cyn{background:rgba(6,182,212,0.15);color:#06b6d4;border:1px solid rgba(6,182,212,0.3)}
+.pill-pur{background:rgba(139,92,246,0.15);color:#8b5cf6;border:1px solid rgba(139,92,246,0.3)}
+.pill-org{background:rgba(249,115,22,0.15);color:#f97316;border:1px solid rgba(249,115,22,0.3)}
+
+.url{font-size:15px;color:#3b82f6;font-family:'SF Mono',monospace;opacity:0.9;font-weight:500}
+
+/* Signal cards on right */
+.cards{position:absolute;right:48px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;width:220px}
+.card{background:#1a2236;border:1px solid #2a3550;border-radius:10px;padding:14px 16px;position:relative;overflow:hidden}
+.card-accent{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:2px 0 0 2px}
+.card-sym{font-size:12px;font-weight:700;color:#94a3b8;margin-bottom:4px;letter-spacing:0.5px}
+.card-sig{font-size:16px;font-weight:800}
+.card-price{font-size:11px;color:#64748b;margin-top:3px}
+.grn{color:#10b981}
+.blu{color:#3b82f6}
+.red{color:#ef4444}
+.ylw{color:#f59e0b}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="glow1"></div>
+  <div class="glow2"></div>
+  <div class="bar-top"></div>
+  <div class="bar-bot"></div>
+  <div class="grid-h" style="top:213px"></div>
+  <div class="grid-h" style="top:427px"></div>
+  <div class="grid-v" style="left:880px"></div>
+
+  <!-- Sparkline chart -->
+  <svg class="chart-area" viewBox="0 0 880 300" preserveAspectRatio="none" style="position:absolute;left:0;bottom:5px;width:870px;height:280px">
+    <defs>
+      <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <polyline points="0,280 60,260 120,270 180,240 240,220 300,235 360,200 420,175 480,190 540,160 600,145 660,155 720,120 780,100 840,85 880,70"
+      fill="none" stroke="url(#lineGrad)" stroke-width="2.5" opacity="0.6"/>
+    <polygon points="0,280 60,260 120,270 180,240 240,220 300,235 360,200 420,175 480,190 540,160 600,145 660,155 720,120 780,100 840,85 880,70 880,300 0,300"
+      fill="url(#cg)"/>
+    <defs>
+      <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#3b82f6"/>
+        <stop offset="100%" stop-color="#06b6d4"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Main content -->
+  <div class="content">
+    <div class="logo-row">
+      <span class="bolt">⚡</span>
+      <span class="brand">TradeCommand Pro</span>
+    </div>
+    <div class="underline"></div>
+    <div class="tagline">
+      <span>15+ live data sources.</span> AI trade signals.<br>
+      12 sector portfolios. <span>Free to start.</span>
+    </div>
+    <div class="pills">
+      <div class="pill pill-grn">🟢 AI Signals</div>
+      <div class="pill pill-blu">📊 12 Sectors</div>
+      <div class="pill pill-cyn">⚡ Live Quotes</div>
+      <div class="pill pill-pur">🤖 Reddit Intel</div>
+      <div class="pill pill-org">🇨🇦 Wealthsimple</div>
+    </div>
+    <div class="url">maxmcdonough.github.io/tradecommand-pro</div>
+  </div>
+
+  <!-- Signal cards -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-accent" style="background:#10b981"></div>
+      <div class="card-sym">NVDA</div>
+      <div class="card-sig grn">STRONG BUY</div>
+      <div class="card-price">$121.80 · Conf: 87%</div>
+    </div>
+    <div class="card">
+      <div class="card-accent" style="background:#3b82f6"></div>
+      <div class="card-sym">AMD</div>
+      <div class="card-sig blu">BUY</div>
+      <div class="card-price">$192.88 · Conf: 75%</div>
+    </div>
+    <div class="card">
+      <div class="card-accent" style="background:#f59e0b"></div>
+      <div class="card-sym">SPY</div>
+      <div class="card-sig ylw">WATCH</div>
+      <div class="card-price">$572.40 · Conf: 60%</div>
+    </div>
+    <div class="card">
+      <div class="card-accent" style="background:#ef4444"></div>
+      <div class="card-sym">TSLA</div>
+      <div class="card-sig red">SELL</div>
+      <div class="card-price">$271.50 · Conf: 72%</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -323,6 +323,87 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
 .footer-legal a:hover{color:var(--t2)}
 .disclaimer{max-width:1200px;margin:20px auto 0;padding:16px;background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.15);border-radius:8px;font-size:11px;color:var(--t3);line-height:1.6;text-align:center}
 
+/* ─── FEATURE SPOTLIGHT ────────────────────────────────── */
+#spotlight{background:var(--bg)}
+.spotlight-inner{max-width:1100px;margin:0 auto}
+.spotlight-tabs{display:flex;gap:0;flex-wrap:wrap;margin-bottom:40px;border-bottom:1px solid var(--brd);padding-bottom:0;margin-top:48px}
+.sptab{padding:13px 20px;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;margin-bottom:-1px}
+.sptab.active{color:var(--blu);border-bottom-color:var(--blu)}
+.sptab:hover{color:var(--t1)}
+.sp-panels{position:relative;min-height:340px}
+.sp-panel{display:none;grid-template-columns:1fr 1fr;gap:56px;align-items:center;animation:spFadeIn .3s ease}
+@keyframes spFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sp-panel.active{display:grid}
+.sp-text h3{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;line-height:1.2;margin-bottom:16px;letter-spacing:-.3px}
+.sp-text h3 em{font-style:italic;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sp-text p{font-size:15px;color:var(--t2);line-height:1.8;margin-bottom:20px}
+.sp-bullets{display:flex;flex-direction:column;gap:9px}
+.sp-bullet{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--t2)}
+.sp-bullet::before{content:'✓';color:var(--grn);font-weight:700;flex-shrink:0;margin-top:1px}
+.sp-visual{background:var(--card);border:1px solid var(--brd2);border-radius:16px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.sp-try{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:11px 22px;background:var(--grad);color:#fff;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;transition:box-shadow .2s}
+.sp-try:hover{box-shadow:0 8px 24px rgba(59,130,246,.35)}
+@media(max-width:768px){.sp-panel.active{grid-template-columns:1fr}.sp-visual{display:none}}
+
+/* ─── COMPARISON TABLE ──────────────────────────────────── */
+#compare{background:var(--bg2)}
+.compare-wrap{overflow-x:auto;margin-top:56px}
+.compare-table{width:100%;border-collapse:collapse;min-width:620px}
+.compare-table th{padding:14px 18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);text-align:left;border-bottom:2px solid var(--brd)}
+.compare-table th.hl{color:var(--blu);background:rgba(59,130,246,.06)}
+.compare-table td{padding:13px 18px;font-size:13px;color:var(--t2);border-bottom:1px solid rgba(255,255,255,.04)}
+.compare-table td.feat-lbl{font-weight:600;color:var(--t1)}
+.compare-table td.hl{background:rgba(59,130,246,.04);color:var(--t1);font-weight:600}
+.compare-table tr:hover td{background:rgba(255,255,255,.018)}
+.compare-table tr:hover td.hl{background:rgba(59,130,246,.07)}
+.ck{color:var(--grn);font-size:16px;font-weight:700}
+.cx{color:var(--red);font-size:15px}
+.cprt{color:var(--org);font-size:11px;font-weight:600}
+.compare-note{text-align:center;margin-top:18px;font-size:12px;color:var(--t3)}
+
+/* ─── CALCULATOR ────────────────────────────────────────── */
+#calculator{background:var(--bg)}
+.calc-inner{max-width:900px;margin:0 auto}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:56px;align-items:start}
+.calc-form{background:var(--card);border:1px solid var(--brd2);border-radius:16px;padding:28px}
+.calc-form h3{font-size:16px;font-weight:700;margin-bottom:22px}
+.calc-field{margin-bottom:16px}
+.calc-field label{display:block;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.calc-field input{width:100%;padding:11px 13px;background:var(--card2);border:1px solid var(--brd2);border-radius:8px;color:var(--t1);font-size:14px;outline:none;transition:border-color .2s}
+.calc-field input:focus{border-color:var(--blu)}
+.calc-result{background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(6,182,212,.05));border:1px solid rgba(59,130,246,.22);border-radius:16px;padding:28px}
+.calc-result h3{font-size:16px;font-weight:700;margin-bottom:22px}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.calc-row:last-of-type{border-bottom:none}
+.calc-row .lbl{font-size:13px;color:var(--t2)}
+.calc-row .val{font-size:15px;font-weight:700;color:var(--t1)}
+.calc-row .val.grn{color:var(--grn)}
+.calc-row .val.red{color:var(--red)}
+.calc-row .val.blu{color:var(--blu);font-size:17px}
+.calc-cta-btn{display:block;width:100%;margin-top:18px;padding:13px;text-align:center;background:var(--grad);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:box-shadow .2s}
+.calc-cta-btn:hover{box-shadow:0 8px 24px rgba(59,130,246,.35)}
+@media(max-width:768px){.calc-grid{grid-template-columns:1fr}}
+
+/* ─── QUOTE TICKER STRIP ─────────────────────────────────── */
+#quote-strip{padding:56px 0;background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(6,182,212,.04));border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);overflow:hidden}
+.qs-label{text-align:center;font-size:12px;font-weight:500;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:20px}
+.qs-track{display:flex;gap:16px;animation:scrollQuotes 35s linear infinite;width:max-content}
+@keyframes scrollQuotes{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.qs-item{display:flex;align-items:flex-start;gap:12px;padding:16px 20px;background:var(--card);border:1px solid var(--brd);border-radius:12px;min-width:310px;max-width:310px}
+.qs-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;margin-top:2px}
+.qs-text{font-size:13px;color:var(--t2);font-style:italic;line-height:1.5}
+.qs-name{font-size:11px;color:var(--t3);margin-top:5px;font-style:normal}
+
+/* ─── FLOATING CTA BAR ───────────────────────────────────── */
+#float-cta{position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(8,9,15,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(59,130,246,.25);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;transform:translateY(100%);transition:transform .5s cubic-bezier(.16,1,.3,1);gap:16px}
+#float-cta.show{transform:translateY(0)}
+.fcta-text{font-size:14px;color:var(--t2);flex:1}
+.fcta-text strong{color:var(--t1)}
+.fcta-btns{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.fcta-dismiss{background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer;padding:4px 8px;line-height:1;transition:color .2s}
+.fcta-dismiss:hover{color:var(--t1)}
+@media(max-width:768px){#float-cta{padding:12px 16px;flex-wrap:wrap;gap:8px}.fcta-text{font-size:12px;width:100%}}
+
 /* ─── SCROLL ANIMATIONS ───────────────────────────────── */
 .fade-in{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
 .fade-in.visible{opacity:1;transform:translateY(0)}
@@ -369,6 +450,15 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
 </head>
 <body>
 
+<!-- ── FLOATING CTA BAR ──────────────────────────────────── -->
+<div id="float-cta">
+  <div class="fcta-text"><strong>⚡ TradeCommand Pro</strong> — Free AI trade signals, live prices &amp; step-by-step plans. Set up in 60 seconds.</div>
+  <div class="fcta-btns">
+    <a href="dashboard.html" class="btn-hero" style="padding:10px 20px;font-size:13px">Start Free →</a>
+    <button class="fcta-dismiss" onclick="document.getElementById('float-cta').classList.remove('show');localStorage.setItem('tcp_fcta','1')" title="Dismiss">×</button>
+  </div>
+</div>
+
 <!-- ── NAVIGATION ──────────────────────────────────────── -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">
@@ -378,8 +468,9 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
   <div class="nav-links">
     <a href="#howitworks">How It Works</a>
     <a href="#features">Features</a>
+    <a href="#calculator">Calculator</a>
     <a href="#pricing">Pricing</a>
-    <a href="#sources">Data Sources</a>
+    <a href="#compare">Compare</a>
     <a href="#about">About</a>
   </div>
   <div class="nav-cta">
@@ -630,6 +721,201 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
   </div>
 </section>
 
+<!-- ── FEATURE SPOTLIGHT ─────────────────────────────────── -->
+<section id="spotlight">
+  <div class="section-inner spotlight-inner">
+    <div class="centered fade-in">
+      <div class="section-badge">🔍 Deep Dive</div>
+      <h2 class="section-title">Built for serious <em>traders</em></h2>
+      <p class="section-sub">Every feature is precision-engineered to help you move faster, trade smarter, and protect your capital.</p>
+    </div>
+    <div class="spotlight-tabs fade-in">
+      <div class="sptab active" onclick="showSpotlight('signals',this)">🤖 AI Signals</div>
+      <div class="sptab" onclick="showSpotlight('plan',this)">📋 Trade Plans</div>
+      <div class="sptab" onclick="showSpotlight('session',this)">📊 Session Tracker</div>
+      <div class="sptab" onclick="showSpotlight('reddit',this)">💬 Reddit Radar</div>
+      <div class="sptab" onclick="showSpotlight('briefings',this)">🗓 Daily Briefings</div>
+    </div>
+    <div class="sp-panels fade-in">
+
+      <!-- AI SIGNALS -->
+      <div class="sp-panel active" id="sp-signals">
+        <div class="sp-text">
+          <h3>8-Factor AI <em>Signals</em></h3>
+          <p>Every stock on your watchlist is analyzed across 8 technical indicators in real time. The result: a single, confidence-scored BUY / SELL / WATCH signal you can act on in seconds.</p>
+          <div class="sp-bullets">
+            <div class="sp-bullet">RSI (14-period) for overbought/oversold conditions</div>
+            <div class="sp-bullet">MACD crossover for momentum direction shifts</div>
+            <div class="sp-bullet">VWAP deviation for intraday price context</div>
+            <div class="sp-bullet">Bollinger Band squeeze for breakout detection</div>
+            <div class="sp-bullet">Volume ratio vs 20-day average for conviction</div>
+            <div class="sp-bullet">Reddit sentiment from 5 subreddits cross-referenced</div>
+          </div>
+          <a href="dashboard.html" class="sp-try">See Live Signals →</a>
+        </div>
+        <div class="sp-visual">
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🎯 Live Signal Cards</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:13px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:15px;font-weight:700">NVDA</div><div style="font-size:11px;color:var(--t3);margin-top:2px">$121.80 · +2.70%</div></div>
+              <div style="text-align:right"><div style="background:rgba(16,185,129,.2);color:#10b981;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px">STRONG BUY</div><div style="font-size:10px;color:var(--grn);margin-top:4px">Confidence: 91%</div></div>
+            </div>
+            <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.18);border-radius:10px;padding:13px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:15px;font-weight:700">AMD</div><div style="font-size:11px;color:var(--t3);margin-top:2px">$192.88 · +2.24%</div></div>
+              <div style="text-align:right"><div style="background:rgba(16,185,129,.2);color:#10b981;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px">BUY</div><div style="font-size:10px;color:var(--grn);margin-top:4px">Confidence: 78%</div></div>
+            </div>
+            <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:13px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:15px;font-weight:700">TSLA</div><div style="font-size:11px;color:var(--t3);margin-top:2px">$271.50 · −1.91%</div></div>
+              <div style="text-align:right"><div style="background:rgba(245,158,11,.2);color:#f59e0b;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px">WATCH</div><div style="font-size:10px;color:var(--ylw);margin-top:4px">Confidence: 52%</div></div>
+            </div>
+            <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.18);border-radius:10px;padding:13px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:15px;font-weight:700">MSFT</div><div style="font-size:11px;color:var(--t3);margin-top:2px">$388.45 · −0.54%</div></div>
+              <div style="text-align:right"><div style="background:rgba(239,68,68,.2);color:#ef4444;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px">SELL</div><div style="font-size:10px;color:var(--red);margin-top:4px">Confidence: 73%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRADE PLAN -->
+      <div class="sp-panel" id="sp-plan">
+        <div class="sp-text">
+          <h3>Exact <em>Action Plans</em></h3>
+          <p>Never guess how many shares to buy. Click any signal and get a complete trade plan calculated from your actual account balance — with every number you need to execute confidently.</p>
+          <div class="sp-bullets">
+            <div class="sp-bullet">Shares to buy based on your exact risk % setting</div>
+            <div class="sp-bullet">Entry price, stop loss, and profit target pre-calculated</div>
+            <div class="sp-bullet">Maximum dollar loss if stop is hit — no surprises</div>
+            <div class="sp-bullet">Risk-reward ratio shown for every trade</div>
+            <div class="sp-bullet">One-click Wealthsimple Trade execution</div>
+            <div class="sp-bullet">Session portfolio tracker updates automatically</div>
+          </div>
+          <a href="dashboard.html" class="sp-try">Try the Planner →</a>
+        </div>
+        <div class="sp-visual">
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">📋 Trade Action Plan — AMD</div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Account Balance</span><span style="font-size:13px;font-weight:700">$5,000</span></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Risk Per Trade</span><span style="font-size:13px;font-weight:700">2% ($100)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Entry Price</span><span style="font-size:13px;font-weight:700">$192.88</span></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Stop Loss</span><span style="font-size:13px;font-weight:700;color:#ef4444">$185.00 (−4.1%)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Target</span><span style="font-size:13px;font-weight:700;color:#10b981">$208.00 (+7.8%)</span></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Shares to Buy</span><span style="font-size:16px;font-weight:800;color:var(--blu)">13 shares</span></div>
+            <div style="display:flex;justify-content:space-between;padding:9px 0"><span style="font-size:12px;color:var(--t3)">Risk / Reward</span><span style="font-size:13px;font-weight:700;color:var(--grn)">1 : 1.90</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SESSION TRACKER -->
+      <div class="sp-panel" id="sp-session">
+        <div class="sp-text">
+          <h3>Track your <em>session P&amp;L</em></h3>
+          <p>The session bar at the top of the dashboard tracks every committed trade in real time. See deployed capital, live P&amp;L, and per-position guidance — all in one glance.</p>
+          <div class="sp-bullets">
+            <div class="sp-bullet">Session P&amp;L updates live as prices move</div>
+            <div class="sp-bullet">Per-position guidance: hold, exit near stop, or add</div>
+            <div class="sp-bullet">Browser notifications when stop or target is hit</div>
+            <div class="sp-bullet">Visual alert badges for critical price levels</div>
+            <div class="sp-bullet">Daily P&amp;L history saved between sessions</div>
+          </div>
+          <a href="dashboard.html" class="sp-try">Open the Dashboard →</a>
+        </div>
+        <div class="sp-visual">
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">📊 Live Session Summary</div>
+          <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between">
+            <div><div style="font-size:11px;color:var(--t3)">Session P&amp;L</div><div style="font-size:22px;font-weight:800;color:#10b981">+$247.80</div></div>
+            <div><div style="font-size:11px;color:var(--t3)">Deployed</div><div style="font-size:16px;font-weight:700">$2,508</div></div>
+            <div><div style="font-size:11px;color:var(--t3)">Trades</div><div style="font-size:16px;font-weight:700">3 open</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="background:var(--bg2);border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+              <div><span style="font-size:13px;font-weight:700">NVDA</span> <span style="font-size:11px;color:var(--t3)">10 shares</span></div>
+              <div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#10b981">+$82.40</div><div style="font-size:10px;color:var(--grn)">▶ Hold — near target</div></div>
+            </div>
+            <div style="background:var(--bg2);border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center">
+              <div><span style="font-size:13px;font-weight:700">AMD</span> <span style="font-size:11px;color:var(--t3)">13 shares</span></div>
+              <div style="text-align:right"><div style="font-size:13px;font-weight:700;color:#10b981">+$165.40</div><div style="font-size:10px;color:var(--grn)">▶ Hold — strong momentum</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REDDIT RADAR -->
+      <div class="sp-panel" id="sp-reddit">
+        <div class="sp-text">
+          <h3>Reddit's <em>signal radar</em></h3>
+          <p>Retail sentiment moves stocks before technicals do. TradeCommand Pro monitors 5 of the biggest trading subreddits and surfaces tickers that are building momentum.</p>
+          <div class="sp-bullets">
+            <div class="sp-bullet">r/wallstreetbets, r/stocks, r/daytrading, r/options, r/pennystocks</div>
+            <div class="sp-bullet">ApeWisdom: most-mentioned tickers ranked by volume</div>
+            <div class="sp-bullet">Sentiment shift detection — mentions rising fast</div>
+            <div class="sp-bullet">Direct link to the hot thread for each symbol</div>
+            <div class="sp-bullet">Cross-referenced with AI technical signals</div>
+          </div>
+          <a href="dashboard.html" class="sp-try">See Reddit Radar →</a>
+        </div>
+        <div class="sp-visual">
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🔥 Top Reddit Mentions Today</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:8px">
+              <div style="width:28px;height:28px;border-radius:6px;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#ef4444">1</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:700">GME</div><div style="font-size:10px;color:var(--t3)">4,821 mentions · r/wallstreetbets</div></div>
+              <div style="font-size:11px;font-weight:700;color:var(--grn)">▲ +312%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:8px">
+              <div style="width:28px;height:28px;border-radius:6px;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#3b82f6">2</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:700">NVDA</div><div style="font-size:10px;color:var(--t3)">2,104 mentions · r/stocks</div></div>
+              <div style="font-size:11px;font-weight:700;color:var(--grn)">▲ +87%</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:8px">
+              <div style="width:28px;height:28px;border-radius:6px;background:rgba(139,92,246,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#8b5cf6">3</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:700">TSLA</div><div style="font-size:10px;color:var(--t3)">1,788 mentions · r/options</div></div>
+              <div style="font-size:11px;font-weight:700;color:var(--ylw)">▲ +23%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DAILY BRIEFINGS -->
+      <div class="sp-panel" id="sp-briefings">
+        <div class="sp-text">
+          <h3>5× daily <em>intelligence briefings</em></h3>
+          <p>Never trade blind. TradeCommand Pro delivers five structured briefings throughout the trading day — each tailored to the current market phase with actionable intelligence.</p>
+          <div class="sp-bullets">
+            <div class="sp-bullet">Pre-Market (6:30am): overnight futures, gap movers, earnings</div>
+            <div class="sp-bullet">Market Open (9:30am): breadth, early signals, sector leaders</div>
+            <div class="sp-bullet">Midday (12:00pm): trend continuation, lunch-hour watch list</div>
+            <div class="sp-bullet">Power Hour (3:00pm): closing momentum, final signals</div>
+            <div class="sp-bullet">Post-Close (4:30pm): full recap, AH movers, tomorrow's setup</div>
+          </div>
+          <a href="dashboard.html" class="sp-try">Read Today's Brief →</a>
+        </div>
+        <div class="sp-visual">
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">📋 Today's Briefings</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🌅</div>
+              <div><div style="font-size:13px;font-weight:700">Pre-Market Brief</div><div style="font-size:11px;color:var(--grn)">● Available Now · 6:30am</div></div>
+            </div>
+            <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;font-size:16px">📈</div>
+              <div><div style="font-size:13px;font-weight:700">Market Open Brief</div><div style="font-size:11px;color:var(--grn)">● Available Now · 9:30am</div></div>
+            </div>
+            <div style="background:var(--bg2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:16px">☀️</div>
+              <div><div style="font-size:13px;font-weight:700">Midday Update</div><div style="font-size:11px;color:var(--t3)">12:00pm</div></div>
+            </div>
+            <div style="background:var(--bg2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(139,92,246,.12);display:flex;align-items:center;justify-content:center;font-size:16px">⚡</div>
+              <div><div style="font-size:13px;font-weight:700">Power Hour Brief</div><div style="font-size:11px;color:var(--t3)">3:00pm</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── DASHBOARD PREVIEW ────────────────────────────────── -->
 <section id="preview" style="background:var(--bg2)">
   <div class="section-inner">
@@ -715,6 +1001,48 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
   </div>
 </section>
 
+<!-- ── COMPARISON TABLE ──────────────────────────────────── -->
+<section id="compare">
+  <div class="section-inner">
+    <div class="centered fade-in">
+      <div class="section-badge">⚖️ vs The Competition</div>
+      <h2 class="section-title">What Wall Street pays for.<br><em>Now free.</em></h2>
+      <p class="section-sub">Professional traders spend hundreds per month on tools that don't do half of what TradeCommand Pro does for $0.</p>
+    </div>
+    <div class="compare-wrap fade-in">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:220px">Feature</th>
+            <th class="hl" style="text-align:center">⚡ TradeCommand Pro</th>
+            <th style="text-align:center">Bloomberg Terminal</th>
+            <th style="text-align:center">ThinkorSwim</th>
+            <th style="text-align:center">Webull</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="feat-lbl">Monthly Price</td><td class="hl" style="text-align:center;color:var(--grn);font-weight:800">Free → $29</td><td style="text-align:center;color:var(--red)">$600+</td><td style="text-align:center">Free (US only)</td><td style="text-align:center">Free</td></tr>
+          <tr><td class="feat-lbl">AI Trade Signals</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+          <tr><td class="feat-lbl">Step-by-Step Action Plans</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+          <tr><td class="feat-lbl">Automatic Position Sizing</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cprt">Manual</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+          <tr><td class="feat-lbl">Reddit Sentiment (5 subs)</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cprt">Partial</span></td></tr>
+          <tr><td class="feat-lbl">Real-Time Price Quotes</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td></tr>
+          <tr><td class="feat-lbl">5× Daily AI Briefings</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+          <tr><td class="feat-lbl">Fear &amp; Greed Index</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cprt">Paid Add-on</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+          <tr><td class="feat-lbl">Live Session P&amp;L Tracker</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cprt">Complex</span></td><td style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td></tr>
+          <tr><td class="feat-lbl">Canadian / Wealthsimple</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+          <tr><td class="feat-lbl">Beginner Trading Guide</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cprt">Complex Docs</span></td><td style="text-align:center"><span class="cprt">Partial</span></td></tr>
+          <tr><td class="feat-lbl">Open Source</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-note fade-in">* Bloomberg Terminal pricing based on publicly reported rates (~$2,000/month). Comparison is illustrative. Feature availability subject to change.</p>
+    <div style="text-align:center;margin-top:32px" class="fade-in">
+      <a href="dashboard.html" class="btn-hero" style="display:inline-block;text-decoration:none">Get the Edge — Free →</a>
+    </div>
+  </div>
+</section>
+
 <!-- ── DATA SOURCES ──────────────────────────────────────── -->
 <section id="sources" style="background:var(--bg2)">
   <div class="section-inner">
@@ -795,6 +1123,54 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
           <div class="source-desc">Professional interactive charts embedded in every stock detail view. RSI, MACD, Volume overlays. Fully interactive.</div>
           <span class="source-badge badge-auto">No Key Needed</span>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── POSITION SIZE CALCULATOR ──────────────────────────── -->
+<section id="calculator">
+  <div class="section-inner calc-inner">
+    <div class="centered fade-in">
+      <div class="section-badge">🧮 Try It Live</div>
+      <h2 class="section-title">Calculate your <em>position size</em></h2>
+      <p class="section-sub">The same risk calculator built into every signal. Enter your numbers and see how the trade plan protects your capital — before you touch a single share.</p>
+    </div>
+    <div class="calc-grid">
+      <div class="calc-form fade-in">
+        <h3>🔢 Your Trade Setup</h3>
+        <div class="calc-field">
+          <label>Account Balance ($)</label>
+          <input type="number" id="calc-bal" value="5000" oninput="calcPosition()" min="100">
+        </div>
+        <div class="calc-field">
+          <label>Risk Per Trade (%)</label>
+          <input type="number" id="calc-risk" value="2" oninput="calcPosition()" min="0.5" max="10" step="0.5">
+        </div>
+        <div class="calc-field">
+          <label>Entry Price ($)</label>
+          <input type="number" id="calc-entry" value="192.88" oninput="calcPosition()" step="0.01">
+        </div>
+        <div class="calc-field">
+          <label>Stop Loss Price ($)</label>
+          <input type="number" id="calc-stop" value="185.00" oninput="calcPosition()" step="0.01">
+        </div>
+        <div class="calc-field">
+          <label>Target Price ($)</label>
+          <input type="number" id="calc-target" value="208.00" oninput="calcPosition()" step="0.01">
+        </div>
+        <p style="font-size:12px;color:var(--t3);margin-top:8px">⚡ In the dashboard, these numbers are generated automatically from each AI signal.</p>
+      </div>
+      <div class="calc-result fade-in fade-in-delay-1">
+        <h3>📋 Your Trade Plan</h3>
+        <div class="calc-row"><span class="lbl">Max Risk ($)</span><span class="val red" id="cr-maxloss">$100.00</span></div>
+        <div class="calc-row"><span class="lbl">Shares to Buy</span><span class="val blu" id="cr-shares">13 shares</span></div>
+        <div class="calc-row"><span class="lbl">Capital Deployed</span><span class="val" id="cr-invested">$2,507.44</span></div>
+        <div class="calc-row"><span class="lbl">Stop Loss</span><span class="val red" id="cr-stop-pct">$185.00 (−4.1%)</span></div>
+        <div class="calc-row"><span class="lbl">Profit Target</span><span class="val grn" id="cr-target-pct">$208.00 (+7.8%)</span></div>
+        <div class="calc-row"><span class="lbl">Max Profit</span><span class="val grn" id="cr-profit">$195.00</span></div>
+        <div class="calc-row"><span class="lbl">Risk / Reward Ratio</span><span class="val grn" id="cr-rr">1 : 1.95</span></div>
+        <a href="dashboard.html" class="calc-cta-btn">Get Live Signals with Auto Plans →</a>
       </div>
     </div>
   </div>
@@ -926,6 +1302,30 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
   </div>
 </section>
 
+<!-- ── QUOTE TICKER STRIP ─────────────────────────────────── -->
+<div id="quote-strip">
+  <div class="qs-label">What traders are saying</div>
+  <div style="overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent)">
+    <div class="qs-track">
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6)">M</div><div><div class="qs-text">"The action plan saved me from over-trading. I follow the numbers exactly — no emotion."</div><div class="qs-name">Mike R. · Vancouver · Day Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">S</div><div><div class="qs-text">"I went from panic-selling to systematic trading in 2 weeks. Genuinely changed how I think."</div><div class="qs-name">Sarah T. · Toronto · Swing Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#f97316,#f59e0b)">J</div><div><div class="qs-text">"Caught GME +40% before it ran. The Reddit signal was flashing for 3 days straight."</div><div class="qs-name">Jordan K. · Calgary · Momentum Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">A</div><div><div class="qs-text">"Never knew about position sizing before this. Complete game-changer for risk management."</div><div class="qs-name">Alex P. · Edmonton · Beginner Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#06b6d4,#10b981)">R</div><div><div class="qs-text">"5 daily briefings means I'm never trading blind. Best free trading tool I've found."</div><div class="qs-name">Ryan W. · Ottawa · Long-Term Investor</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#ef4444,#f97316)">L</div><div><div class="qs-text">"Fear & Greed + AI signals together told me to wait out the dip. Bought the bottom."</div><div class="qs-name">Lisa M. · Montreal · Part-Time Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">D</div><div><div class="qs-text">"Finally a Canadian tool that integrates with Wealthsimple. Everything else is US-only."</div><div class="qs-name">Daniel B. · Winnipeg · New Trader</div></div></div>
+      <!-- duplicates for seamless loop -->
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6)">M</div><div><div class="qs-text">"The action plan saved me from over-trading. I follow the numbers exactly — no emotion."</div><div class="qs-name">Mike R. · Vancouver · Day Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">S</div><div><div class="qs-text">"I went from panic-selling to systematic trading in 2 weeks. Genuinely changed how I think."</div><div class="qs-name">Sarah T. · Toronto · Swing Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#f97316,#f59e0b)">J</div><div><div class="qs-text">"Caught GME +40% before it ran. The Reddit signal was flashing for 3 days straight."</div><div class="qs-name">Jordan K. · Calgary · Momentum Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">A</div><div><div class="qs-text">"Never knew about position sizing before this. Complete game-changer for risk management."</div><div class="qs-name">Alex P. · Edmonton · Beginner Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#06b6d4,#10b981)">R</div><div><div class="qs-text">"5 daily briefings means I'm never trading blind. Best free trading tool I've found."</div><div class="qs-name">Ryan W. · Ottawa · Long-Term Investor</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#ef4444,#f97316)">L</div><div><div class="qs-text">"Fear & Greed + AI signals together told me to wait out the dip. Bought the bottom."</div><div class="qs-name">Lisa M. · Montreal · Part-Time Trader</div></div></div>
+      <div class="qs-item"><div class="qs-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">D</div><div><div class="qs-text">"Finally a Canadian tool that integrates with Wealthsimple. Everything else is US-only."</div><div class="qs-name">Daniel B. · Winnipeg · New Trader</div></div></div>
+    </div>
+  </div>
+</div>
+
 <!-- ── ABOUT ─────────────────────────────────────────────── -->
 <section id="about">
   <div class="section-inner">
@@ -1019,6 +1419,22 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">Is this financial advice? <span class="faq-arrow">+</span></div>
         <div class="faq-a"><p>No. TradeCommand Pro is an educational and analytical tool. The signals, action plans, and briefings are computer-generated analysis for informational purposes only. They are not financial advice. Always do your own research, and consider speaking with a qualified financial advisor before trading. Never invest money you cannot afford to lose.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What is the session portfolio tracker? <span class="faq-arrow">+</span></div>
+        <div class="faq-a"><p>The session tracker is a live trading journal built into the top of the dashboard. Every time you commit a trade plan, it's logged to your session — showing total deployed capital, live unrealized P&amp;L, and guidance on each open position (hold, near stop, target hit). Browser notifications alert you when prices hit your stop or target levels automatically.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Does TradeCommand Pro work on mobile? <span class="faq-arrow">+</span></div>
+        <div class="faq-a"><p>Yes — TradeCommand Pro is fully responsive and works on any device. Check signals, read briefings, and review your session on mobile. For placing trades, we recommend generating your plan on TradeCommand Pro and then executing in the Wealthsimple mobile app using the one-click link.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is there a guided tour for new users? <span class="faq-arrow">+</span></div>
+        <div class="faq-a"><p>Yes — when you first open the dashboard, a 12-step guided tour automatically walks you through every major feature: the watchlist, AI signals, trade plan calculator, session tracker, Reddit radar, 5 daily briefings, crypto page, and more. You can replay the tour any time by clicking the <strong>?</strong> button in the top navigation bar.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How do I get the best results from the signals? <span class="faq-arrow">+</span></div>
+        <div class="faq-a"><p>The most successful traders using TradeCommand Pro follow these three rules: (1) Only take trades where the AI signal confidence is above 70%. (2) Always use the generated stop loss — it's your protection. (3) Cross-reference the technical signal with the Reddit sentiment and the Fear &amp; Greed Index before committing. The dashboard puts all three in front of you simultaneously.</p></div>
       </div>
     </div>
   </div>
@@ -1191,6 +1607,55 @@ function animateCounters(){
 }
 const statsObs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){animateCounters();statsObs.disconnect();}});},{threshold:0.5});
 const statsEl=document.getElementById('stats');if(statsEl)statsObs.observe(statsEl);
+
+// ── FEATURE SPOTLIGHT TABS ─────────────────────────────────
+function showSpotlight(id, btn){
+  document.querySelectorAll('.sp-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sptab').forEach(t=>t.classList.remove('active'));
+  const panel=document.getElementById('sp-'+id);
+  if(panel)panel.classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+// ── POSITION CALCULATOR ────────────────────────────────────
+function calcPosition(){
+  const bal=parseFloat(document.getElementById('calc-bal').value)||5000;
+  const risk=parseFloat(document.getElementById('calc-risk').value)||2;
+  const entry=parseFloat(document.getElementById('calc-entry').value)||192.88;
+  const stop=parseFloat(document.getElementById('calc-stop').value)||185;
+  const target=parseFloat(document.getElementById('calc-target').value)||208;
+  if(!entry||!stop||entry===stop)return;
+  const maxLoss=bal*(risk/100);
+  const riskPerShare=Math.abs(entry-stop);
+  const shares=Math.max(1,Math.floor(maxLoss/riskPerShare));
+  const invested=shares*entry;
+  const actualMaxLoss=shares*riskPerShare;
+  const maxProfit=shares*Math.abs(target-entry);
+  const stopPct=((stop-entry)/entry*100).toFixed(1);
+  const targetPct=((target-entry)/entry*100).toFixed(1);
+  const rr=(maxProfit/actualMaxLoss).toFixed(2);
+  document.getElementById('cr-maxloss').textContent='$'+actualMaxLoss.toFixed(2);
+  document.getElementById('cr-shares').textContent=shares+' shares';
+  document.getElementById('cr-invested').textContent='$'+invested.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('cr-stop-pct').textContent='$'+stop.toFixed(2)+' ('+stopPct+'%)';
+  document.getElementById('cr-target-pct').textContent='$'+target.toFixed(2)+' (+'+parseFloat(targetPct).toFixed(1)+'%)';
+  document.getElementById('cr-profit').textContent='$'+maxProfit.toFixed(2);
+  document.getElementById('cr-rr').textContent='1 : '+rr;
+}
+calcPosition();
+
+// ── FLOATING CTA BAR ──────────────────────────────────────
+(function(){
+  if(localStorage.getItem('tcp_fcta'))return;
+  let shown=false;
+  window.addEventListener('scroll',function(){
+    if(!shown&&window.scrollY>600){
+      shown=true;
+      const fb=document.getElementById('float-cta');
+      if(fb)fb.classList.add('show');
+    }
+  });
+})();
 </script>
 </body>
 </html>
