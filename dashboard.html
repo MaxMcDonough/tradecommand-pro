@@ -503,7 +503,7 @@ a{color:var(--acc);text-decoration:none}
 /* ===== ONBOARDING MODAL ===== */
 #onboarding-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:10000;backdrop-filter:blur(8px);padding:20px}
 #onboarding-overlay.hidden{display:none}
-.onboard-box{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:36px;max-width:500px;width:100%;text-align:center}
+.onboard-box{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:32px;max-width:620px;width:100%;text-align:center}
 .onboard-step{display:none}.onboard-step.active{display:block}
 .onboard-icon{font-size:48px;margin-bottom:14px}
 .onboard-title{font-size:22px;font-weight:700;color:var(--t1);margin-bottom:10px}
@@ -530,6 +530,39 @@ a{color:var(--acc);text-decoration:none}
 .onboard-steps-list{display:grid;gap:10px;margin-bottom:22px;text-align:left}
 .onboard-step-item{background:var(--bg2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--t2)}
 .onboard-step-item strong{display:block;color:var(--t1);font-size:13px;margin-bottom:2px}
+/* Onboarding tier cards */
+.ob-tiers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px;text-align:left}
+.ob-tier{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:14px;display:flex;flex-direction:column;position:relative}
+.ob-tier.ob-best{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.07)}
+.ob-tier-badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--acc);color:#000;font-size:9px;font-weight:800;padding:2px 10px;border-radius:8px;white-space:nowrap;letter-spacing:.5px}
+.ob-tier-name{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
+.ob-tier-price{font-size:20px;font-weight:800;color:var(--t1);line-height:1;margin-bottom:2px}
+.ob-tier-price sub{font-size:10px;color:var(--t2);font-weight:400}
+.ob-tier-note{font-size:9px;color:var(--t3);margin-bottom:10px}
+.ob-tier-feats{list-style:none;padding:0;margin:0 0 12px;flex:1}
+.ob-tier-feats li{font-size:10px;color:var(--t2);padding:3px 0;display:flex;align-items:flex-start;gap:5px;border-bottom:1px solid rgba(255,255,255,.04)}
+.ob-tier-feats li:last-child{border:none}
+.ob-ck{color:#10b981;font-size:10px;flex-shrink:0;margin-top:1px}
+.ob-x{color:#ef4444;font-size:10px;flex-shrink:0;margin-top:1px}
+.ob-tier-btn{display:block;width:100%;padding:8px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;border:none;transition:opacity .15s}
+.ob-tier-btn:hover{opacity:.85}
+.ob-tier-btn.ob-accent{background:var(--acc);color:#000}
+.ob-tier-btn.ob-outline{background:transparent;color:var(--t1);border:1px solid var(--brd)}
+.ob-tier-btn.ob-ghost{background:transparent;color:var(--t3);border:1px solid rgba(255,255,255,.07);font-size:10px}
+/* How it works redesign */
+.hiw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;text-align:left}
+.hiw-card{background:var(--bg2);border:1px solid var(--brd);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.hiw-num{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.hiw-num.c1{background:rgba(99,102,241,.2);color:#818cf8}
+.hiw-num.c2{background:rgba(16,185,129,.2);color:#34d399}
+.hiw-num.c3{background:rgba(245,158,11,.2);color:#fbbf24}
+.hiw-num.c4{background:rgba(239,68,68,.2);color:#f87171}
+.hiw-card-text strong{display:block;font-size:12px;color:var(--t1);font-weight:700;margin-bottom:3px}
+.hiw-card-text span{font-size:11px;color:var(--t2);line-height:1.5}
+.hiw-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.hiw-stat{background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(16,185,129,.07));border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:10px;text-align:center}
+.hiw-stat-val{font-size:18px;font-weight:800;color:var(--t1);line-height:1}
+.hiw-stat-lbl{font-size:9px;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 
 /* ===== TRIAL EXPIRED SCREEN ===== */
 #trial-expired{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9998;overflow-y:auto;padding:20px}
@@ -768,40 +801,97 @@ a{color:var(--acc);text-decoration:none}
         <button class="btn-onboard-next" onclick="onboardNext()">Get Started →</button>
       </div>
     </div>
-    <!-- Step 2: Trial is active -->
+    <!-- Step 2: Plan comparison -->
     <div class="onboard-step" id="onboard-step-1">
-      <div class="onboard-icon">🎁</div>
-      <div class="onboard-title">Your Free Trial Is Active</div>
-      <div class="onboard-trial-highlight">
-        <strong id="onboard-trial-days">7 days</strong> of full Pro access — no credit card needed
-        <p>All features unlocked. API keys included. Launch and start trading now.</p>
+      <div class="onboard-trial-highlight" style="margin-bottom:16px">
+        <strong id="onboard-trial-days">7 days</strong> free trial — full access, no credit card needed
+        <p>All features unlocked during your trial. Choose a plan to keep access after.</p>
       </div>
-      <div class="onboard-upgrade-cta">
-        <h3>⚡ Upgrade anytime during your trial</h3>
-        <p>Pro at $29/mo for live data &amp; AI analysis. Elite at $79/mo for institutional-grade edge.</p>
-        <div class="onboard-upgrade-btns">
-          <a href="https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200" target="_blank" class="btn-up-mo">Pro — $29/mo CAD</a>
-          <a href="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201" target="_blank" class="btn-up-yr">Elite — $79/mo CAD</a>
+      <div class="ob-tiers">
+        <!-- Free -->
+        <div class="ob-tier">
+          <div class="ob-tier-name">Free</div>
+          <div class="ob-tier-price">$0<sub>/forever</sub></div>
+          <div class="ob-tier-note">No credit card</div>
+          <ul class="ob-tier-feats">
+            <li><span class="ob-ck">✓</span> Full dashboard</li>
+            <li><span class="ob-ck">✓</span> Demo prices</li>
+            <li><span class="ob-ck">✓</span> AI signals (8-factor)</li>
+            <li><span class="ob-ck">✓</span> Sector heatmap</li>
+            <li><span class="ob-x">✗</span> Live real-time prices</li>
+            <li><span class="ob-x">✗</span> Options flow</li>
+            <li><span class="ob-x">✗</span> Unusual Whales</li>
+          </ul>
+          <button class="ob-tier-btn ob-ghost" onclick="onboardNext()">Continue free</button>
+        </div>
+        <!-- Pro -->
+        <div class="ob-tier">
+          <div class="ob-tier-badge" style="background:var(--acc);color:#000">POPULAR</div>
+          <div class="ob-tier-name">Pro</div>
+          <div class="ob-tier-price">$29<sub>/mo</sub></div>
+          <div class="ob-tier-note">CAD · cancel anytime</div>
+          <ul class="ob-tier-feats">
+            <li><span class="ob-ck">✓</span> Everything in Free</li>
+            <li><span class="ob-ck">✓</span> Live prices (15s)</li>
+            <li><span class="ob-ck">✓</span> Unlimited watchlist</li>
+            <li><span class="ob-ck">✓</span> Full AI analysis</li>
+            <li><span class="ob-ck">✓</span> 15+ data feeds</li>
+            <li><span class="ob-x">✗</span> Options flow</li>
+            <li><span class="ob-x">✗</span> Unusual Whales</li>
+          </ul>
+          <a href="https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200" target="_blank" class="ob-tier-btn ob-outline">Upgrade to Pro</a>
+        </div>
+        <!-- Elite -->
+        <div class="ob-tier ob-best">
+          <div class="ob-tier-badge">ELITE</div>
+          <div class="ob-tier-name">Elite</div>
+          <div class="ob-tier-price">$79<sub>/mo</sub></div>
+          <div class="ob-tier-note">CAD · full edge</div>
+          <ul class="ob-tier-feats">
+            <li><span class="ob-ck">✓</span> Everything in Pro</li>
+            <li><span class="ob-ck">✓</span> Options flow alerts</li>
+            <li><span class="ob-ck">✓</span> Unusual Whales</li>
+            <li><span class="ob-ck">✓</span> Dark pool data</li>
+            <li><span class="ob-ck">✓</span> Tick-level prices</li>
+            <li><span class="ob-ck">✓</span> Trade coach AI</li>
+            <li><span class="ob-ck">✓</span> Priority support</li>
+          </ul>
+          <a href="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201" target="_blank" class="ob-tier-btn ob-accent">Upgrade to Elite</a>
         </div>
       </div>
       <div class="onboard-actions">
-        <button class="btn-onboard-next" onclick="onboardNext()">Continue →</button>
-        <button class="btn-onboard-skip" onclick="skipOnboarding()">Skip for now</button>
+        <button class="btn-onboard-next" onclick="onboardNext()" style="background:transparent;color:var(--t3);border:1px solid var(--brd);font-size:12px;padding:9px 20px">Continue with trial →</button>
       </div>
     </div>
-    <!-- Step 3: How it works -->
+    <!-- Step 3: How it works — redesigned -->
     <div class="onboard-step" id="onboard-step-2">
-      <div class="onboard-icon">🧭</div>
-      <div class="onboard-title">How It Works</div>
-      <div class="onboard-text">TradeCommand Pro pulls live data the moment you launch. Here's how to get the most out of it:</div>
-      <div class="onboard-steps-list">
-        <div class="onboard-step-item"><strong>1️⃣ Set your name & balance</strong>Personalize your dashboard on the setup screen</div>
-        <div class="onboard-step-item"><strong>2️⃣ Choose your sectors</strong>Select which market sectors to monitor</div>
-        <div class="onboard-step-item"><strong>3️⃣ Hit Launch</strong>Your full intelligence dashboard loads in seconds</div>
-        <div class="onboard-step-item"><strong>4️⃣ Trade smarter</strong>Use AI insights and live feeds to time your entries</div>
+      <div class="onboard-title" style="margin-bottom:6px">How It Works</div>
+      <div class="onboard-text" style="margin-bottom:14px">Live data. AI analysis. One dashboard. Here's what you're getting:</div>
+      <div class="hiw-stats">
+        <div class="hiw-stat"><div class="hiw-stat-val">15+</div><div class="hiw-stat-lbl">Live feeds</div></div>
+        <div class="hiw-stat"><div class="hiw-stat-val">8</div><div class="hiw-stat-lbl">AI factors</div></div>
+        <div class="hiw-stat"><div class="hiw-stat-val">15s</div><div class="hiw-stat-lbl">Data refresh</div></div>
+      </div>
+      <div class="hiw-grid">
+        <div class="hiw-card">
+          <div class="hiw-num c1">1</div>
+          <div class="hiw-card-text"><strong>Set your profile</strong><span>Enter your name, balance &amp; risk tolerance</span></div>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num c2">2</div>
+          <div class="hiw-card-text"><strong>Pick your sectors</strong><span>Choose which market sectors to track</span></div>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num c3">3</div>
+          <div class="hiw-card-text"><strong>Hit Launch</strong><span>15+ live feeds load instantly in your dashboard</span></div>
+        </div>
+        <div class="hiw-card">
+          <div class="hiw-num c4">4</div>
+          <div class="hiw-card-text"><strong>Trade smarter</strong><span>AI insights + live data to time every entry</span></div>
+        </div>
       </div>
       <div class="onboard-actions">
-        <button class="btn-onboard-next" onclick="onboardNext()">Got it →</button>
+        <button class="btn-onboard-next" onclick="onboardNext()">Let's go →</button>
       </div>
     </div>
     <!-- Step 4: Launch -->
