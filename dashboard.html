@@ -1965,35 +1965,36 @@ function updateAcceptBtn() {
 }
 async function acceptTermsAndProceed() {
   if (!document.getElementById('chk-terms').checked || !document.getElementById('chk-privacy').checked) return;
+  document.getElementById('terms-gate').classList.add('hidden');
   const user = auth.currentUser;
   if (user) {
-    try {
-      await db.collection('users').doc(user.uid).update({
-        acceptedTerms: true,
-        acceptedTermsVersion: '1.0',
-        acceptedTermsAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    } catch(e) { console.warn('Could not save terms acceptance:', e); }
+    // Save acceptance to Firestore (fire-and-forget, don't block UX)
+    db.collection('users').doc(user.uid).update({
+      acceptedTerms: true,
+      acceptedTermsVersion: '1.0',
+      acceptedTermsAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(e => console.warn('Could not save terms acceptance:', e));
   }
-  document.getElementById('terms-gate').classList.add('hidden');
-  // Proceed to onboarding if not onboarded yet, otherwise upgrade prompt
-  const docSnap = await db.collection('users').doc(user.uid).get();
-  const userData = docSnap.data();
-  if (!userData?.onboarded) {
-    setTimeout(() => showOnboarding(_trialDaysLeft), 200);
-  } else {
-    setTimeout(() => showUpgradePrompt(_trialDaysLeft), 200);
-  }
+  // T&C gate only shows when user has NOT onboarded yet → always go to onboarding
+  setTimeout(() => showOnboarding(_trialDaysLeft), 250);
 }
 
 // ===== ONBOARDING =====
 let onboardStep = 0;
 function showOnboarding(daysLeft) {
-  _trialDaysLeft = daysLeft;
+  _trialDaysLeft = daysLeft || _trialDaysLeft || 7;
   const overlay = document.getElementById('onboarding-overlay');
   if (!overlay) return;
+  // Always reset to step 0
+  if (onboardStep !== 0) {
+    document.getElementById(`onboard-step-${onboardStep}`)?.classList.remove('active');
+    document.getElementById(`dot-${onboardStep}`)?.classList.remove('active');
+    onboardStep = 0;
+    document.getElementById('onboard-step-0')?.classList.add('active');
+    document.getElementById('dot-0')?.classList.add('active');
+  }
   const daysEl = document.getElementById('onboard-trial-days');
-  if (daysEl) daysEl.textContent = `${daysLeft} day${daysLeft !== 1 ? 's' : ''}`;
+  if (daysEl) daysEl.textContent = `${_trialDaysLeft} day${_trialDaysLeft !== 1 ? 's' : ''}`;
   overlay.classList.remove('hidden');
 }
 function onboardNext() {
@@ -2137,6 +2138,15 @@ async function handleAuthState(user) {
       loginCount: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     hideAuth();
+    // Pre-fill API key inputs with admin/trial keys set above so launch() reads them correctly
+    const kfhEl = document.getElementById('k-fh');
+    const kavEl = document.getElementById('k-av');
+    const knaEl = document.getElementById('k-na');
+    const pnameEl = document.getElementById('p-name');
+    if (kfhEl && D.fh) kfhEl.value = D.fh;
+    if (kavEl && D.av) kavEl.value = D.av;
+    if (knaEl && D.na) knaEl.value = D.na;
+    if (pnameEl && D.name && D.name !== 'User') pnameEl.value = D.name;
     document.getElementById('setup').style.display = 'flex';
     setTimeout(launch, 50);
   } catch(e) {
