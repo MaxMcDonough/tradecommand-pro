@@ -5468,20 +5468,22 @@ const SEED_LEADS = [
 
     async function loadBizLeads() {
       try {
-        let snap = await db.collection('leads').orderBy('createdAt','desc').limit(100).get().catch(()=>({docs:[]}));
-        // ── Auto-seed Firebase when leads collection is empty ──────────────
+        const snap = await db.collection('leads').orderBy('createdAt','desc').limit(100).get().catch(()=>({docs:[]}));
+        // ── Use SEED_LEADS directly when Firebase is empty (instant render) ──
+        let leads;
         if (snap.docs.length === 0 && typeof SEED_LEADS !== 'undefined' && SEED_LEADS.length > 0) {
-          console.log('[TradeCommand] Seeding ' + SEED_LEADS.length + ' leads to Firebase...');
-          const seedBatch = db.batch();
-          SEED_LEADS.forEach(lead => {
-            const ref = db.collection('leads').doc();
-            seedBatch.set(ref, {...lead, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
-          });
-          await seedBatch.commit();
-          snap = await db.collection('leads').orderBy('createdAt','desc').limit(100).get().catch(()=>({docs:[]}));
-          console.log('[TradeCommand] Seeded ' + snap.docs.length + ' leads.');
+          leads = SEED_LEADS.map((l,i) => ({...l, id:'seed_'+i}));
+          // Fire-and-forget: persist to Firebase in background for future loads
+          try {
+            const seedBatch = db.batch();
+            SEED_LEADS.forEach(lead => {
+              seedBatch.set(db.collection('leads').doc(), {...lead, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
+            });
+            seedBatch.commit().then(()=>console.log('[TC] Leads persisted to Firebase.')).catch(()=>{});
+          } catch(_){}
+        } else {
+          leads = snap.docs.map(d=>({id:d.id,...d.data()}));
         }
-        const leads = snap.docs.map(d=>({id:d.id,...d.data()}));
         const hot   = leads.filter(l=>(l.score||0)>=80).length;
         const warm  = leads.filter(l=>(l.score||0)>=50&&(l.score||0)<80).length;
         const conv  = leads.length ? Math.round(leads.filter(l=>l.status==='converted').length/leads.length*100) : 0;
@@ -5549,53 +5551,45 @@ const SEED_LEADS = [
       const snap = await db.collection('prospects').orderBy('createdAt','desc').limit(50).get().catch(()=>({docs:[]}));
       const tbody = document.getElementById('prosp-table-body');
       if (!tbody) return;
-      if (snap.docs.length===0) {
-        // ── Auto-seed prospects from SEED_LEADS ──────────────────────────
-        if (typeof SEED_LEADS !== 'undefined' && SEED_LEADS.length > 0) {
-          const pb = db.batch();
-          SEED_LEADS.forEach(lead => {
-            const ref = db.collection('prospects').doc();
-            pb.set(ref, {
-              name: lead.name, email: lead.email||'', source: lead.source||'LinkedIn',
-              status: lead.status||'new', score: lead.score||0,
-              linkedIn: lead.linkedIn||'', notes: lead.notes||'', dm: lead.dm||'',
-              lastContact: '', nextAction: lead.dm ? 'Send LinkedIn DM' : '—',
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-          });
-          await pb.commit();
-          const snap2 = await db.collection('prospects').orderBy('createdAt','desc').limit(50).get().catch(()=>({docs:[]}));
-          const sc2 = s => s>=80?'var(--grn)':s>=50?'var(--ylw)':'var(--red)';
-          tbody.innerHTML = snap2.docs.map(d=>{
-            const p=d.data(), pid=d.id;
-            return `<tr>
-              <td style="padding:10px 16px"><span style="font-weight:700;color:${sc2(p.score||0)}">${p.score||0}</span></td>
-              <td style="padding:10px 16px;font-size:13px;color:var(--t1)">${p.name||'—'}</td>
-              <td style="padding:10px 16px">${p.linkedIn?`<a href="${p.linkedIn}" target="_blank" style="color:var(--acc);font-size:12px">🔗 LinkedIn</a>`:'—'}</td>
-              <td style="padding:10px 16px;font-size:13px;color:var(--t2)">${p.source||'—'}</td>
-              <td style="padding:10px 16px;font-size:12px;text-transform:capitalize;color:var(--t2)">${p.status||'new'}</td>
-              <td style="padding:10px 16px;font-size:13px;color:var(--t2)">${p.lastContact||'—'}</td>
-              <td style="padding:10px 16px;font-size:13px;color:var(--t2)">${p.nextAction||'—'}</td>
-              <td style="padding:10px 16px"><button class="btn btn-sm btn-secondary" onclick="(async()=>{const ld=(window._bizLeads||[]).find(l=>l.id==='${pid}')||p;if(ld&&ld.dm)navigator.clipboard.writeText(ld.dm||p.dm||'').catch(()=>prompt('Copy DM:',p.dm||''))})()">📋 DM</button></td>
-            </tr>`;
-          }).join('');
-          return;
-        }
+      // ── Render from SEED_LEADS instantly if Firebase is empty ────────────
+      const prospData = snap.docs.length > 0
+        ? snap.docs.map(d=>({...d.data(), _id:d.id}))
+        : (typeof SEED_LEADS !== 'undefined' ? SEED_LEADS.map((l,i)=>({...l, _id:'seed_'+i, nextAction:'Send LinkedIn DM', lastContact:''})) : []);
+
+      if (prospData.length === 0) {
         tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--t3);">No prospects yet. Add one or import a CSV.</td></tr>';
         return;
       }
-      tbody.innerHTML = snap.docs.map(d=>{
-        const p=d.data();
-        const sc=p.score>=80?'var(--grn)':p.score>=50?'var(--ylw)':'var(--red)';
+
+      // Fire-and-forget persist to Firebase if we used seed data
+      if (snap.docs.length === 0 && prospData.length > 0) {
+        try {
+          const pb = db.batch();
+          SEED_LEADS.forEach(lead => {
+            pb.set(db.collection('prospects').doc(), {
+              name:lead.name, email:lead.email||'', source:lead.source||'LinkedIn',
+              status:lead.status||'new', score:lead.score||0, linkedIn:lead.linkedIn||'',
+              notes:lead.notes||'', dm:lead.dm||'', lastContact:'',
+              nextAction:lead.dm?'Send LinkedIn DM':'—',
+              createdAt:firebase.firestore.FieldValue.serverTimestamp()
+            });
+          });
+          pb.commit().catch(()=>{});
+        } catch(_){}
+      }
+
+      const sc2 = s => s>=80?'var(--grn)':s>=50?'var(--ylw)':'var(--red)';
+      tbody.innerHTML = prospData.map(p => {
+        const pid = p._id||'';
         return `<tr>
-          <td style="padding:10px 16px"><span style="font-weight:700;color:${sc}">${p.score||0}</span></td>
+          <td style="padding:10px 16px"><span style="font-weight:700;color:${sc2(p.score||0)}">${p.score||0}</span></td>
           <td style="padding:10px 16px;font-size:13px;color:var(--t1)">${p.name||'—'}</td>
-          <td style="padding:10px 16px;font-size:13px;color:var(--t2)">${p.email||'—'}</td>
+          <td style="padding:10px 16px">${p.linkedIn?`<a href="${p.linkedIn}" target="_blank" style="color:var(--acc);font-size:12px">🔗 LinkedIn</a>`:'—'}</td>
           <td style="padding:10px 16px;font-size:13px;color:var(--t2)">${p.source||'—'}</td>
           <td style="padding:10px 16px;font-size:12px;text-transform:capitalize;color:var(--t2)">${p.status||'new'}</td>
           <td style="padding:10px 16px;font-size:13px;color:var(--t2)">${p.lastContact||'—'}</td>
           <td style="padding:10px 16px;font-size:13px;color:var(--t2)">${p.nextAction||'—'}</td>
-          <td style="padding:10px 16px"><button class="btn btn-sm btn-secondary">Edit</button></td>
+          <td style="padding:10px 16px"><button class="btn btn-sm btn-secondary" onclick="copyLeadDM('${pid}')">📋 DM</button></td>
         </tr>`;
       }).join('');
     }
