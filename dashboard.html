@@ -454,6 +454,35 @@ a{color:var(--acc);text-decoration:none}
 .sec-btn:hover{border-color:var(--sec-color,var(--acc));color:var(--sec-color,var(--acc))}
 .sec-btn.on{color:#fff;border-color:transparent;background:var(--sec-color,var(--acc))}
 
+/* ===== HOLDINGS SECTION ===== */
+#holdings-section{display:none;margin-bottom:12px}
+#holdings-section.has-positions{display:block}
+.holdings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:10px}
+.holding-card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;transition:border-color .15s}
+.holding-card:hover{border-color:rgba(99,102,241,.4)}
+.holding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.holding-card.hc-up::before{background:var(--grn)}
+.holding-card.hc-dn::before{background:var(--red)}
+.holding-card.hc-neu::before{background:var(--ylw)}
+.hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.hc-sym{font-size:16px;font-weight:800;color:var(--t1)}
+.hc-shares{font-size:10px;color:var(--t3);background:var(--bg2);padding:2px 6px;border-radius:4px}
+.hc-pnl{font-size:18px;font-weight:800;margin-bottom:2px}
+.hc-pnlpct{font-size:11px;font-weight:600}
+.hc-levels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:8px 0;padding:7px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+.hc-level{text-align:center}
+.hc-level .lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px}
+.hc-level .val{font-size:11px;font-weight:700}
+.hc-actions{display:flex;gap:6px;margin-top:8px}
+.hc-btn{flex:1;padding:5px 0;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;transition:opacity .12s}
+.hc-btn:hover{opacity:.8}
+.hc-btn-view{background:var(--acc);color:#fff}
+.hc-btn-close{background:var(--red2);color:var(--red);border:1px solid var(--red)}
+.hc-summary{display:flex;gap:16px;padding:10px 14px;background:var(--bg2);border-radius:8px;margin-top:10px;flex-wrap:wrap}
+.hc-sum-item{display:flex;flex-direction:column;gap:2px}
+.hc-sum-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
+.hc-sum-val{font-size:13px;font-weight:800}
+
 /* ===== SECTOR PORTFOLIO CARDS ===== */
 .sec-port-section{margin:0 0 12px 0}
 .sec-port-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:8px;margin-top:10px}
@@ -1705,6 +1734,17 @@ a{color:var(--acc);text-decoration:none}
     </div>
   </div>
 </div>
+<!-- HOLDINGS -->
+<div id="holdings-section">
+  <div class="ch">
+    <span class="ct">📂 Open Holdings</span>
+    <span class="badge" style="background:var(--acc);color:#fff" id="holdings-ct">0</span>
+    <span style="font-size:9px;color:var(--t3);margin-left:8px">Live P&amp;L vs your entry — prices update with market data</span>
+  </div>
+  <div class="holdings-grid" id="holdings-grid"></div>
+  <div class="hc-summary" id="holdings-summary"></div>
+</div>
+
 <div class="g g23">
   <div class="c">
     <div class="ch"><span class="ct">🎯 Trade Signals</span><span class="badge" style="background:var(--acc);color:#fff">Multi-Factor</span></div>
@@ -3045,6 +3085,8 @@ function renderSessionBar() {
   pnlEl.textContent = (pnl >= 0 ? '+' : '') + '$' + pnl.toFixed(2);
   pnlEl.className = 'sb-val ' + (pnl > 0 ? 'sb-pos' : pnl < 0 ? 'sb-neg' : 'sb-neu');
   document.getElementById('sb-trades').textContent = D.session.tradeCount;
+  // Render holdings section on trading page
+  renderHoldings();
   // Render open position chips
   const chips = document.getElementById('sb-positions');
   const open = D.session.positions.filter(p => p.status === 'open');
@@ -3063,6 +3105,119 @@ function renderSessionBar() {
     }).join('');
   } else {
     chips.innerHTML = '<span style="font-size:10px;color:var(--t3);padding:0 8px">No open positions</span>';
+  }
+}
+
+function renderHoldings() {
+  const sec = document.getElementById('holdings-section');
+  const grid = document.getElementById('holdings-grid');
+  const summary = document.getElementById('holdings-summary');
+  const ct = document.getElementById('holdings-ct');
+  if (!sec || !grid) return;
+
+  const open = (D.session.positions || []).filter(p => p.status === 'open');
+  if (!open.length) {
+    sec.classList.remove('has-positions');
+    return;
+  }
+  sec.classList.add('has-positions');
+  ct.textContent = open.length;
+
+  let totalPnl = 0, totalDeployed = 0, alerts = [];
+
+  grid.innerHTML = open.map(pos => {
+    const cur = D.sd[pos.sym] ? D.sd[pos.sym].price : pos.entry;
+    const pnl = (cur - pos.entry) * pos.shares;
+    const pnlPct = ((cur - pos.entry) / pos.entry * 100);
+    totalPnl += pnl;
+    totalDeployed += pos.invested || (pos.shares * pos.entry);
+
+    const col = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
+    const cls = pnl > 0 ? 'hc-up' : pnl < 0 ? 'hc-dn' : 'hc-neu';
+    const pnlStr = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
+    const pnlPctStr = (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%';
+
+    // Status alert
+    const hitStop = pos.stop && cur <= pos.stop;
+    const hitTarget = pos.target && cur >= pos.target;
+    const nearStop = pos.stop && !hitStop && cur <= pos.stop * 1.02;
+    const nearTarget = pos.target && !hitTarget && cur >= pos.target * 0.98;
+    let alertBadge = '';
+    if (hitStop) alertBadge = `<span style="background:var(--red2);color:var(--red);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:6px">⚠️ STOP HIT</span>`;
+    else if (hitTarget) alertBadge = `<span style="background:var(--grn2);color:var(--grn);font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;margin-left:6px">🎯 TARGET HIT</span>`;
+    else if (nearStop) alertBadge = `<span style="background:rgba(239,68,68,.1);color:var(--red);font-size:9px;padding:2px 5px;border-radius:4px;margin-left:6px">Near stop</span>`;
+    else if (nearTarget) alertBadge = `<span style="background:rgba(16,185,129,.1);color:var(--grn);font-size:9px;padding:2px 5px;border-radius:4px;margin-left:6px">Near target</span>`;
+
+    // Next move recommendation
+    let nextMove = '';
+    if (hitStop) { nextMove = `<div style="font-size:10px;color:var(--red);font-weight:600;margin-bottom:6px">→ Consider closing — stop level breached</div>`; alerts.push({sym:pos.sym, msg:'Stop hit'}); }
+    else if (hitTarget) { nextMove = `<div style="font-size:10px;color:var(--grn);font-weight:600;margin-bottom:6px">→ Target reached — consider taking profit</div>`; alerts.push({sym:pos.sym, msg:'Target hit'}); }
+    else if (pnlPct <= -5) { nextMove = `<div style="font-size:10px;color:var(--red);margin-bottom:6px">→ Down 5%+ — review stop loss</div>`; }
+    else if (pnlPct >= 8) { nextMove = `<div style="font-size:10px;color:var(--grn);margin-bottom:6px">→ Up 8%+ — consider partial take</div>`; }
+    else { nextMove = `<div style="font-size:10px;color:var(--t3);margin-bottom:6px">→ Hold — within plan range</div>`; }
+
+    return `<div class="holding-card ${cls}">
+      <div class="hc-top">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span class="hc-sym">${pos.sym}</span>
+          <span class="hc-shares">${pos.shares} shares</span>
+          ${alertBadge}
+        </div>
+        <div style="text-align:right">
+          <div class="hc-pnl" style="color:${col}">${pnlStr}</div>
+          <div class="hc-pnlpct" style="color:${col}">${pnlPctStr}</div>
+        </div>
+      </div>
+      ${nextMove}
+      <div class="hc-levels">
+        <div class="hc-level">
+          <div class="lbl">Entry</div>
+          <div class="val" style="color:var(--t2)">$${pos.entry.toFixed(2)}</div>
+        </div>
+        <div class="hc-level">
+          <div class="lbl">Current</div>
+          <div class="val" style="color:${col}">$${cur.toFixed(2)}</div>
+        </div>
+        <div class="hc-level">
+          <div class="lbl">Stop / Target</div>
+          <div class="val" style="color:var(--red);font-size:10px">$${pos.stop?pos.stop.toFixed(2):'--'}</div>
+          <div class="val" style="color:var(--grn);font-size:10px">$${pos.target?pos.target.toFixed(2):'--'}</div>
+        </div>
+      </div>
+      <div class="hc-actions">
+        <button class="hc-btn hc-btn-view" onclick="openStock('${pos.sym}')">📈 View</button>
+        <button class="hc-btn hc-btn-close" onclick="closePosition('${pos.sym}')">✕ Close Position</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Summary row
+  const totalPnlCol = totalPnl >= 0 ? 'var(--grn)' : 'var(--red)';
+  const totalPnlStr = (totalPnl >= 0 ? '+$' : '-$') + Math.abs(totalPnl).toFixed(2);
+  const remain = sessionRemaining();
+  summary.innerHTML = `
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Open Positions</div><div class="hc-sum-val">${open.length}</div></div>
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Total Deployed</div><div class="hc-sum-val">$${totalDeployed.toFixed(2)}</div></div>
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Unrealised P&amp;L</div><div class="hc-sum-val" style="color:${totalPnlCol}">${totalPnlStr}</div></div>
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Remaining Cash</div><div class="hc-sum-val">$${remain.toFixed(2)}</div></div>
+    ${alerts.length ? `<div class="hc-sum-item" style="margin-left:auto"><div class="hc-sum-lbl">Alerts</div><div class="hc-sum-val" style="color:var(--red)">${alerts.map(a=>a.sym+': '+a.msg).join(' · ')}</div></div>` : ''}
+  `;
+
+  // Browser notification for stop/target hits (if permission granted)
+  if (alerts.length && Notification.permission === 'granted') {
+    alerts.forEach(a => {
+      new Notification(`TradeCommand Pro — ${a.sym}`, {
+        body: a.msg + ` on ${a.sym}. Open your dashboard to act.`,
+        icon: 'https://maxmcdonough.github.io/tradecommand-pro/social-preview.png'
+      });
+    });
+  }
+}
+
+// Request notification permission on first position add (called from commitPosition)
+function requestNotifPermission() {
+  if (typeof Notification !== 'undefined' && Notification.permission === 'default') {
+    Notification.requestPermission();
   }
 }
 
@@ -3355,6 +3510,7 @@ function commitPosition() {
   // Add to session (guard against missing positions array)
   if (!D.session.positions) D.session.positions = [];
   D.session.positions.push({sym:_investSym, shares, entry:price, stop, target, invested, status:'open', pnl:0});
+  requestNotifPermission();
   D.session.deployed += invested;
   D.session.tradeCount++;
   // Render session bar without resetting D.session.start (initSession() would incorrectly overwrite it)
