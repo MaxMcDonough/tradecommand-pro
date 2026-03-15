@@ -1728,7 +1728,7 @@ async function handleAuthState(user) {
     }
     if(!D.isAdmin) {
       // Check Pro subscription status
-      if(userData.plan === 'pro_monthly' || userData.plan === 'pro_annual') {
+      if(userData.plan === 'pro' || userData.plan === 'elite' || userData.plan === 'pro_monthly' || userData.plan === 'pro_annual') {
         const subscriptionEnd = userData.subscriptionEnd ? new Date(userData.subscriptionEnd) : null;
         if(subscriptionEnd && new Date() > subscriptionEnd) {
           // Subscription expired
@@ -1736,16 +1736,16 @@ async function handleAuthState(user) {
           document.getElementById('setup').style.display = 'none';
           return;
         } else {
-          // Active Pro subscription
+          // Active paid subscription
           const badge = document.getElementById('trial-badge');
           if(badge) {
-            badge.textContent = '⚡ Pro';
+            badge.textContent = userData.plan === 'elite' ? '💎 Elite' : '⚡ Pro';
             badge.style.display = 'inline-flex';
-            badge.style.background = 'rgba(16,185,129,.15)';
-            badge.style.borderColor = 'rgba(16,185,129,.3)';
-            badge.style.color = 'var(--grn)';
+            badge.style.background = userData.plan === 'elite' ? 'rgba(99,102,241,.15)' : 'rgba(16,185,129,.15)';
+            badge.style.borderColor = userData.plan === 'elite' ? 'rgba(99,102,241,.3)' : 'rgba(16,185,129,.3)';
+            badge.style.color = userData.plan === 'elite' ? '#6366f1' : 'var(--grn)';
           }
-          // Use admin keys for Pro users
+          // Use admin keys for paid users
           const adminKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
           D.fh = adminKeys.fh;
           D.av = adminKeys.av;
@@ -1789,7 +1789,7 @@ async function handleAuthState(user) {
     const upgradeBtn = document.getElementById('btn-upgrade');
     const manageBtn = document.getElementById('btn-manage-sub');
     if (!D.isAdmin) {
-      if (userData.plan === 'pro_monthly' || userData.plan === 'pro_annual') {
+      if (userData.plan === 'pro' || userData.plan === 'elite' || userData.plan === 'pro_monthly' || userData.plan === 'pro_annual') {
         if (upgradeBtn) upgradeBtn.style.display = 'none';
         if (manageBtn) manageBtn.style.display = 'block';
       } else {
