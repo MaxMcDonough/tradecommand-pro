@@ -180,6 +180,8 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="nav-item" data-page="biz-analytics">📈 Biz Analytics</div>
   <div class="nav-item" data-page="biz-advisor">🤖 AI Advisor</div>
   <div class="nav-item" data-page="biz-plan">📋 Growth Plan</div>
+  <div class="nav-item" data-page="biz-beta">🚀 Beta Launch</div>
+  <div class="nav-item" data-page="biz-newsletters">✉️ Email Templates</div>
   <div class="nav-item" data-page="biz-files">📁 Files</div>
   <div class="nav-item" data-page="biz-settings">⚙️ Biz Settings</div>
 </div>
@@ -491,7 +493,35 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <div id="changelog-updated" style="font-size:11px;color:var(--t3);margin-top:4px;margin-bottom:12px"></div>
     <div style="display:flex;flex-direction:column;gap:24px;margin-top:8px">
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-green">v2.4</span><span class="badge badge-yellow">LATEST</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 12:10 PM EST</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-green">v2.6</span><span class="badge badge-yellow">LATEST</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 6:45 PM EST</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">BETA LAUNCH + EMAIL TEMPLATES</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + NEW: Beta Launch page &mdash; 4-day battle plan with daily goals, channel tracking, progress bar<br>
+        + Interactive channel counters (Friends, Reddit, Beta Platforms, Campus) with localStorage persistence<br>
+        + 6 copy-paste outreach templates (Close Friend, Family, Reddit, Finance Club, Twitter, Cold Email)<br>
+        + Reddit subreddit target tracker with posted/not-posted checkboxes<br>
+        + Beta platform directory: BetaList, BetaTesting.com, Indie Hackers, GetWorm, ErliBird<br>
+        + Incentive stack reference table<br>
+        + NEW: Email Templates page &mdash; 6 newsletter designs for every funnel stage<br>
+        + Welcome, Weekly Signals, Student Offer, Product Update, Trading Tips, Elite Upgrade<br>
+        + Recommended send sequence with trigger timing<br>
+        + Preview and copy buttons for each template<br>
+        + Updated changelog with v2.5 + v2.6
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.5</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 3:30 PM EST</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">LEAD FILTERING + MARKETING PAGE</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Multi-dimensional lead filtering: type, channel, status, score tier<br>
+        + 14 new diverse leads (total: 89) across 9 outreach channels<br>
+        + Rebuilt Marketing page with dynamic channel/type stats<br>
+        + Ad creatives gallery and print materials section<br>
+        + Channel column in leads table with icons + status-colored badges<br>
+        + Updated CSV export to include channel data<br>
+        + 3-phase ad strategy (Organic → Paid Social → Community)
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.4</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 12:10 PM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">PROSPECTING + SALES FUNNEL</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + 25 new Wall Street leads from Vibe Prospecting &mdash; Goldman Sachs, JPMorgan, Morgan Stanley, Citadel, Jane Street, Two Sigma, Bloomberg, Citigroup, Bridgewater, DE Shaw, PIMCO, and more<br>
@@ -1013,6 +1043,381 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   </div>
 </div>
 
+<!-- ═══ BETA LAUNCH ═══ -->
+<div class="page" id="biz-beta-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Target</div><div class="stat-val" style="color:#00e676">50 Users</div></div>
+    <div class="stat"><div class="stat-label">Deadline</div><div class="stat-val" style="color:#ffab40">Thu Mar 19</div></div>
+    <div class="stat"><div class="stat-label">Days Left</div><div class="stat-val" id="beta-days">—</div></div>
+    <div class="stat"><div class="stat-label">Signed Up</div><div class="stat-val" id="beta-count">0</div></div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="card">
+    <h3>📊 Progress to 50</h3>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:12px">
+      <div style="flex:1;background:rgba(255,255,255,.06);border-radius:8px;height:24px;overflow:hidden">
+        <div id="beta-bar" style="height:100%;background:linear-gradient(90deg,#6366f1,#00e676);border-radius:8px;transition:width .5s;width:0%"></div>
+      </div>
+      <span id="beta-pct" style="font-size:14px;font-weight:700;color:var(--acc)">0%</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <input type="number" id="beta-input" placeholder="Enter signup count..." min="0" max="100" style="flex:1;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);padding:8px 12px;font-size:13px">
+      <button class="btn btn-primary" onclick="updateBetaCount()">Update</button>
+    </div>
+  </div>
+
+  <!-- Channel Targets -->
+  <div class="card">
+    <h3>🎯 Channel Targets</h3>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Track sign-ups by acquisition channel. Click + to log a signup.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px" id="beta-channels">
+      <div class="lp-field" style="border-left:3px solid #6366f1">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700">🤝 Friends &amp; Family</div><div style="font-size:11px;color:var(--t3)">Target: 15</div></div>
+          <div style="display:flex;align-items:center;gap:8px"><span id="ch-friends" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('friends',15)">+</button></div>
+        </div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #ff5722">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700">💬 Reddit &amp; Communities</div><div style="font-size:11px;color:var(--t3)">Target: 15</div></div>
+          <div style="display:flex;align-items:center;gap:8px"><span id="ch-reddit" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('reddit',15)">+</button></div>
+        </div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #00e676">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700">🌐 Beta Platforms</div><div style="font-size:11px;color:var(--t3)">Target: 10</div></div>
+          <div style="display:flex;align-items:center;gap:8px"><span id="ch-platforms" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('platforms',10)">+</button></div>
+        </div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #ffab40">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:13px;font-weight:700">🎓 University / Campus</div><div style="font-size:11px;color:var(--t3)">Target: 10</div></div>
+          <div style="display:flex;align-items:center;gap:8px"><span id="ch-campus" style="font-size:18px;font-weight:800;color:var(--acc)">0</span><button class="btn btn-ghost" style="padding:2px 8px;font-size:14px" onclick="bumpChannel('campus',10)">+</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day-by-Day Battle Plan -->
+  <div class="card">
+    <h3>📅 Day-by-Day Battle Plan</h3>
+    <div style="display:grid;gap:12px;margin-top:12px">
+      <div class="lp-field" id="beta-day1" style="border-left:3px solid #00e676">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:700">Day 1 — Sun Mar 15 (Today)</div>
+          <span class="badge badge-grn" style="font-size:10px">Goal: 15</span>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6">
+          <strong>Foundation &amp; Warm Network</strong><br>
+          • Text/DM 20-30 friends individually (1:1, NOT group blasts)<br>
+          • Post Instagram Story with link — "beta testers wanted 🚀"<br>
+          • Post on LinkedIn: "building something, looking for early feedback"<br>
+          • Text family members who invest/trade<br>
+          • Message friends in finance clubs &amp; trading Discord servers<br>
+          • Submit to <strong>BetaList</strong> ($129 skip queue — featured within days)<br>
+          • Submit to <strong>BetaTesting.com</strong> (free — 400K+ testers)<br>
+          • Post on <strong>Indie Hackers</strong> "Show IH"
+        </div>
+      </div>
+      <div class="lp-field" id="beta-day2" style="border-left:3px solid #448aff">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:700">Day 2 — Mon Mar 16</div>
+          <span class="badge badge-blue" style="font-size:10px">Goal: 15</span>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6">
+          <strong>Reddit &amp; Online Communities</strong><br>
+          • r/alphaandbetausers — built for beta recruitment<br>
+          • r/SideProject — show what you built, ask for feedback<br>
+          • r/startups — "looking for beta testers for my trading dashboard"<br>
+          • r/daytrading — share a trading tip, mention tool in comments<br>
+          • r/stocks, r/options — offer free access for feedback<br>
+          • r/fintech — "built a portfolio analytics tool"<br>
+          • Join 3-5 trading Discord servers → #self-promo channels<br>
+          • Post in Facebook day trading groups<br>
+          • Comment on 10-15 Twitter/X threads about trading tools
+        </div>
+      </div>
+      <div class="lp-field" id="beta-day3" style="border-left:3px solid #ffab40">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:700">Day 3 — Tue Mar 17</div>
+          <span class="badge badge-org" style="font-size:10px">Goal: 10</span>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6">
+          <strong>Campus &amp; University Push</strong><br>
+          • Print 20 university flyers → bulletin boards (biz school, library, gym, student union)<br>
+          • Print 10 coffee shop flyers → spots near campus<br>
+          • DM finance club presidents at 5 nearby universities<br>
+          • Post in university subreddit / Facebook group<br>
+          • Ask student friends to share in GroupMe/WhatsApp<br>
+          • Email finance/investing professors
+        </div>
+      </div>
+      <div class="lp-field" id="beta-day4" style="border-left:3px solid #ff5252">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:700">Day 4 — Wed Mar 18</div>
+          <span class="badge badge-red" style="font-size:10px">Goal: 10</span>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6">
+          <strong>Follow-Up &amp; Push to 50</strong><br>
+          • Follow-up DMs to anyone who saw but didn't sign up<br>
+          • Reply to every Reddit comment with helpful info + link<br>
+          • Post "Day 3 update" on Twitter/X showing progress (FOMO)<br>
+          • Send student newsletter to collected emails<br>
+          • Live walkthrough on Instagram Stories or TikTok<br>
+          • Cross-post best Reddit post to Twitter/LinkedIn<br>
+          • Ask first 20 users to each invite 1 friend (referral)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Outreach Templates -->
+  <div class="card">
+    <h3>📋 Copy-Paste Outreach Templates</h3>
+    <div style="display:grid;gap:12px;margin-top:12px">
+      <div class="lp-field">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700">🤝 Close Friend DM</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(0)">Copy</button>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-0">Hey [name] — I've been building this trading dashboard tool and I'm looking for people to try the beta version before I launch it publicly. Would you be down to check it out and give me honest feedback? It's free and takes like 2 min to set up.
+
+No pressure if it's not your thing — but if you know anyone who trades or invests, I'd appreciate an intro too 🙏</div>
+      </div>
+      <div class="lp-field">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700">👨‍👩‍👧‍👦 Family Who Invests</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(1)">Copy</button>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-1">Hey [name] — you know how you were talking about investing? I actually built a tool that helps track portfolios and get trade signals. I'm looking for beta testers before I launch — would love for you to try it and tell me what you think. It's totally free right now.</div>
+      </div>
+      <div class="lp-field">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700">💬 Reddit Post (r/alphaandbetausers)</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(2)">Copy</button>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-2">[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals &amp; risk management
+
+Hey everyone 👋 I've been building TradeCommand Pro — a trading analytics dashboard with real-time portfolio tracking, AI-powered trade signals, and risk management tools.
+
+Looking for 50 beta testers to stress-test before public launch. You'll get:
+✅ Free lifetime access to the Pro tier
+✅ Direct line to me for feature requests
+✅ Early access to all future updates
+
+Would love your honest feedback!</div>
+      </div>
+      <div class="lp-field">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700">🎓 Finance Club President DM</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(3)">Copy</button>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-3">Hey! I'm a student and I built a trading dashboard that gives you real-time portfolio tracking, trade signals, and risk management tools. I'm offering free Pro access to your finance club members during our beta.
+
+Would you be open to sharing it with your group or letting me do a quick 10-min demo at your next meeting?</div>
+      </div>
+      <div class="lp-field">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700">🐦 Twitter/X Reply</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(4)">Copy</button>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-4">I actually built a free dashboard for this — tracks your portfolio in real-time, calculates position sizes, and sends alerts when signals align. Looking for beta testers if anyone wants to try it 🙌</div>
+      </div>
+      <div class="lp-field">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;font-weight:700">📧 Cold Email</div>
+          <button class="btn btn-ghost" style="font-size:11px;padding:2px 8px" onclick="copyTemplate(5)">Copy</button>
+        </div>
+        <div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="tmpl-5">Subject: Free beta access — trading dashboard with AI signals
+
+Hi [Name],
+
+I'm Max, founder of TradeCommand Pro. We're a real-time trading dashboard with AI-powered signals, portfolio analytics, and risk management tools.
+
+We're running a closed beta and I'd love to offer you free lifetime Pro access ($29/mo value) in exchange for your honest feedback.
+
+Takes 2 min to set up. Interested?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beta Platforms -->
+  <div class="card">
+    <h3>🌐 Beta Platforms — Submit Today</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:12px">
+      <div class="lp-field" style="border-left:3px solid #00e676"><div style="font-size:13px;font-weight:700">BetaList</div><div style="font-size:11px;color:var(--t3)">$129 skip queue • 30-50 signups</div><div style="font-size:11px;color:var(--acc);margin-top:4px">betalist.com/submit</div></div>
+      <div class="lp-field" style="border-left:3px solid #448aff"><div style="font-size:13px;font-weight:700">BetaTesting.com</div><div style="font-size:11px;color:var(--t3)">Free • 400K+ tester pool</div><div style="font-size:11px;color:var(--acc);margin-top:4px">betatesting.com</div></div>
+      <div class="lp-field" style="border-left:3px solid #ffab40"><div style="font-size:13px;font-weight:700">Indie Hackers</div><div style="font-size:11px;color:var(--t3)">Free • Post in "Show IH"</div><div style="font-size:11px;color:var(--acc);margin-top:4px">indiehackers.com</div></div>
+      <div class="lp-field" style="border-left:3px solid #ff5722"><div style="font-size:13px;font-weight:700">GetWorm</div><div style="font-size:11px;color:var(--t3)">Free • Reward-based testers</div><div style="font-size:11px;color:var(--acc);margin-top:4px">getworm.com</div></div>
+      <div class="lp-field" style="border-left:3px solid #e91e63"><div style="font-size:13px;font-weight:700">ErliBird</div><div style="font-size:11px;color:var(--t3)">Free • 5-15 signups</div><div style="font-size:11px;color:var(--acc);margin-top:4px">erlibird.com</div></div>
+      <div class="lp-field" style="border-left:3px solid #9c27b0"><div style="font-size:13px;font-weight:700">Product Hunt</div><div style="font-size:11px;color:var(--t3)">Save for v3.0 full launch</div><div style="font-size:11px;color:var(--t3);margin-top:4px">producthunt.com</div></div>
+    </div>
+  </div>
+
+  <!-- Incentive Stack -->
+  <div class="card">
+    <h3>🎁 Beta Incentive Stack</h3>
+    <table style="width:100%;margin-top:8px"><thead><tr><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Incentive</th><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Cost</th><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Impact</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:8px;font-size:13px">Free lifetime Pro access ($29/mo value)</td><td style="padding:8px;font-size:13px;color:#00e676">$0</td><td style="padding:8px;font-size:13px;color:#00e676">🔥 Highest</td></tr>
+      <tr><td style="padding:8px;font-size:13px">"Founding Member" badge</td><td style="padding:8px;font-size:13px;color:#00e676">$0</td><td style="padding:8px;font-size:13px;color:#ffab40">Medium</td></tr>
+      <tr><td style="padding:8px;font-size:13px">Direct Slack/Discord access to founder</td><td style="padding:8px;font-size:13px;color:#00e676">$0</td><td style="padding:8px;font-size:13px;color:#ffab40">Medium</td></tr>
+      <tr><td style="padding:8px;font-size:13px">Name on "Founding 50" page</td><td style="padding:8px;font-size:13px;color:#00e676">$0</td><td style="padding:8px;font-size:13px;color:#ffab40">Medium</td></tr>
+      <tr><td style="padding:8px;font-size:13px">Vote on next features</td><td style="padding:8px;font-size:13px;color:#00e676">$0</td><td style="padding:8px;font-size:13px;color:#00e676">High</td></tr>
+    </tbody></table>
+  </div>
+
+  <!-- Reddit Subreddit Targets -->
+  <div class="card">
+    <h3>💬 Reddit Targets</h3>
+    <table style="width:100%;margin-top:8px"><thead><tr><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Subreddit</th><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Size</th><th style="text-align:left;padding:8px;color:var(--t3);font-size:11px">Strategy</th><th style="text-align:center;padding:8px;color:var(--t3);font-size:11px">Posted</th></tr></thead>
+    <tbody id="reddit-tbody">
+      <tr><td style="padding:8px;font-size:13px">r/alphaandbetausers</td><td style="padding:8px;font-size:12px;color:var(--t3)">~30K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Direct beta recruitment</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(0,this.checked)"></td></tr>
+      <tr><td style="padding:8px;font-size:13px">r/SideProject</td><td style="padding:8px;font-size:12px;color:var(--t3)">~120K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Show your build, ask for feedback</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(1,this.checked)"></td></tr>
+      <tr><td style="padding:8px;font-size:13px">r/startups</td><td style="padding:8px;font-size:12px;color:var(--t3)">~1.2M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Beta testers wanted</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(2,this.checked)"></td></tr>
+      <tr><td style="padding:8px;font-size:13px">r/daytrading</td><td style="padding:8px;font-size:12px;color:var(--t3)">~2M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Value first, mention in comments</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(3,this.checked)"></td></tr>
+      <tr><td style="padding:8px;font-size:13px">r/stocks</td><td style="padding:8px;font-size:12px;color:var(--t3)">~6M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Offer free access for feedback</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(4,this.checked)"></td></tr>
+      <tr><td style="padding:8px;font-size:13px">r/fintech</td><td style="padding:8px;font-size:12px;color:var(--t3)">~50K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Builder-friendly community</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(5,this.checked)"></td></tr>
+      <tr><td style="padding:8px;font-size:13px">r/algotrading</td><td style="padding:8px;font-size:12px;color:var(--t3)">~200K</td><td style="padding:8px;font-size:12px;color:var(--t2)">Algo/quant angle</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(6,this.checked)"></td></tr>
+      <tr><td style="padding:8px;font-size:13px">r/wallstreetbets</td><td style="padding:8px;font-size:12px;color:var(--t3)">~15M</td><td style="padding:8px;font-size:12px;color:var(--t2)">Match the vibe — risky but huge reach</td><td style="text-align:center;padding:8px"><input type="checkbox" onchange="saveRedditCheck(7,this.checked)"></td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ═══ EMAIL TEMPLATES ═══ -->
+<div class="page" id="biz-newsletters-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Templates</div><div class="stat-val">6</div></div>
+    <div class="stat"><div class="stat-label">Categories</div><div class="stat-val">4</div></div>
+    <div class="stat"><div class="stat-label">Status</div><div class="stat-val" style="color:#ffab40">Draft</div></div>
+    <div class="stat"><div class="stat-label">Ready to Send</div><div class="stat-val" style="color:#00e676">6</div></div>
+  </div>
+
+  <div class="card">
+    <h3>✉️ Newsletter &amp; Email Templates</h3>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Pre-built email templates for every stage of the funnel. Click Preview to see the full design. All are ready to copy into your email platform.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+
+      <div class="lp-field" style="border-left:3px solid #00e676">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:700">👋 Welcome Email</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:4px">New user onboarding — features overview, 3-step getting started, social proof stats</div>
+            <div style="display:flex;gap:6px;margin-top:8px"><span class="badge badge-grn" style="font-size:10px">Onboarding</span><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06)">Auto-send</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="previewNewsletter('welcome')">Preview</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="copyNewsletterFile('newsletter_01_welcome.html')">Copy Filename</button>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #448aff">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:700">📊 Weekly Trading Signals</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:4px">6 high-conviction trade setups, market outlook, watchlist table. Recurring weekly format.</div>
+            <div style="display:flex;gap:6px;margin-top:8px"><span class="badge badge-blue" style="font-size:10px">Recurring</span><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06)">Weekly</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="previewNewsletter('signals')">Preview</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="copyNewsletterFile('newsletter_02_weekly_signals.html')">Copy Filename</button>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #9c27b0">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:700">🎓 Student Offer</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:4px">$9/mo student pricing, testimonials from NYU/Wharton/Baruch, urgency countdown, .edu verification CTA.</div>
+            <div style="display:flex;gap:6px;margin-top:8px"><span class="badge" style="font-size:10px;background:rgba(156,39,176,.2);color:#ce93d8">Promo</span><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06)">Students</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="previewNewsletter('student')">Preview</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="copyNewsletterFile('newsletter_03_student_offer.html')">Copy Filename</button>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #6366f1">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:700">🚀 Product Update (v2.5)</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:4px">New features: lead filtering, marketing page, follow-up system. Full changelog + roadmap preview.</div>
+            <div style="display:flex;gap:6px;margin-top:8px"><span class="badge badge-indigo" style="font-size:10px">Product</span><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06)">v2.5</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="previewNewsletter('update')">Preview</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="copyNewsletterFile('newsletter_04_product_update.html')">Copy Filename</button>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #ff9800">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:700">📈 5 Rules — Trading Tips</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:4px">Educational content piece: 5 risk management rules with product tie-ins. High-value lead nurture content.</div>
+            <div style="display:flex;gap:6px;margin-top:8px"><span class="badge" style="font-size:10px;background:rgba(255,152,0,.2);color:#ffb74d">Education</span><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06)">Nurture</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="previewNewsletter('tips')">Preview</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="copyNewsletterFile('newsletter_05_trading_tips.html')">Copy Filename</button>
+        </div>
+      </div>
+
+      <div class="lp-field" style="border-left:3px solid #ffd740">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:700">👑 Elite Upgrade</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:4px">Pro → Elite upsell: side-by-side comparison, testimonial, 30-day guarantee, stats showing Elite ROI.</div>
+            <div style="display:flex;gap:6px;margin-top:8px"><span class="badge" style="font-size:10px;background:rgba(255,215,64,.2);color:#ffd740">Upsell</span><span class="badge" style="font-size:10px;background:rgba(255,255,255,.06)">Pro Users</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px">
+          <button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="previewNewsletter('upgrade')">Preview</button>
+          <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="copyNewsletterFile('newsletter_06_pro_upgrade.html')">Copy Filename</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Email Sequence Recommendation -->
+  <div class="card">
+    <h3>📬 Recommended Send Sequence</h3>
+    <div style="display:grid;gap:10px;margin-top:12px">
+      <div class="lp-field" style="border-left:3px solid #00e676">
+        <div style="font-size:12px;font-weight:700">Step 1: Welcome Email</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: Immediately on signup</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #ff9800">
+        <div style="font-size:12px;font-weight:700">Step 2: Trading Tips (5 Rules)</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: Day 3 after signup — builds trust &amp; engagement</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #448aff">
+        <div style="font-size:12px;font-weight:700">Step 3: Weekly Signals</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: First Monday after signup — recurring weekly</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #6366f1">
+        <div style="font-size:12px;font-weight:700">Step 4: Product Update</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: After each release — keep users informed</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #ffd740">
+        <div style="font-size:12px;font-weight:700">Step 5: Elite Upgrade</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: Day 14 — users have seen enough value to convert</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #9c27b0">
+        <div style="font-size:12px;font-weight:700">Parallel: Student Offer</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: Campus leads only — send on sign-up or via flyer QR</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ BIZ SETTINGS ═══ -->
 <div class="page" id="biz-settings-page">
   <div class="card">
@@ -1193,7 +1598,7 @@ const titles = {
   'biz-dashboard':'📊 Biz Dashboard','biz-crm':'🎯 CRM & Pipeline','biz-prospecting':'🔍 Prospecting',
   'biz-leads':'👥 Leads','biz-marketing':'📣 Marketing','biz-campaigns':'📢 Campaigns',
   'biz-revenue':'💰 Revenue','biz-analytics':'📈 Biz Analytics','biz-advisor':'🤖 AI Advisor',
-  'biz-plan':'📋 Growth Plan','biz-files':'📁 Files','biz-settings':'⚙️ Biz Settings'
+  'biz-plan':'📋 Growth Plan','biz-beta':'🚀 Beta Launch','biz-newsletters':'✉️ Email Templates','biz-files':'📁 Files','biz-settings':'⚙️ Biz Settings'
 };
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
@@ -1228,6 +1633,8 @@ function loadPage(page) {
     case 'biz-revenue': loadRevenue(); break;
     case 'biz-analytics': loadBizAnalytics(); break;
     case 'biz-marketing': loadMarketing(); break;
+    case 'biz-beta': loadBeta(); break;
+    case 'biz-newsletters': loadEmailTemplates(); break;
     case 'changelog': loadChangelog(); break;
   }
 }
@@ -1912,6 +2319,91 @@ function loadMarketing() {
         '<span style="font-size:11px;color:var(--t3)">avg '+avgScore+'</span>'+
       '</div></div>';
   }).join('');
+}
+
+// ═══ BETA LAUNCH ═══
+function loadBeta() {
+  var deadline = new Date('2026-03-19T23:59:59');
+  var now = new Date();
+  var diff = Math.max(0, Math.ceil((deadline - now) / (1000*60*60*24)));
+  document.getElementById('beta-days').textContent = diff;
+  document.getElementById('beta-days').style.color = diff <= 1 ? '#ff5252' : diff <= 2 ? '#ffab40' : '#00e676';
+  // Load saved state
+  var state = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0,"friends":0,"reddit":0,"platforms":0,"campus":0}');
+  document.getElementById('beta-count').textContent = state.count;
+  updateBetaBar(state.count);
+  ['friends','reddit','platforms','campus'].forEach(function(ch){
+    document.getElementById('ch-'+ch).textContent = state[ch] || 0;
+  });
+  // Load reddit checks
+  var checks = JSON.parse(localStorage.getItem('tc_beta_reddit') || '[]');
+  var cbs = document.querySelectorAll('#reddit-tbody input[type=checkbox]');
+  cbs.forEach(function(cb, i){ cb.checked = checks[i] || false; });
+}
+function updateBetaBar(count) {
+  var pct = Math.min(100, Math.round((count/50)*100));
+  document.getElementById('beta-bar').style.width = pct+'%';
+  document.getElementById('beta-pct').textContent = pct+'%';
+  if(count>=50) document.getElementById('beta-pct').style.color='#00e676';
+}
+function updateBetaCount() {
+  var val = parseInt(document.getElementById('beta-input').value);
+  if(isNaN(val) || val < 0) { toast('Enter a valid number','red'); return; }
+  var state = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0,"friends":0,"reddit":0,"platforms":0,"campus":0}');
+  state.count = val;
+  localStorage.setItem('tc_beta_state', JSON.stringify(state));
+  document.getElementById('beta-count').textContent = val;
+  updateBetaBar(val);
+  document.getElementById('beta-input').value = '';
+  if(val >= 50) toast('🎉 You hit 50 beta users! Let\'s go!','grn');
+  else toast('Beta count updated to '+val,'grn');
+}
+function bumpChannel(ch, target) {
+  var state = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0,"friends":0,"reddit":0,"platforms":0,"campus":0}');
+  state[ch] = (state[ch]||0) + 1;
+  state.count = (state.friends||0) + (state.reddit||0) + (state.platforms||0) + (state.campus||0);
+  localStorage.setItem('tc_beta_state', JSON.stringify(state));
+  document.getElementById('ch-'+ch).textContent = state[ch];
+  document.getElementById('beta-count').textContent = state.count;
+  updateBetaBar(state.count);
+  var pct = Math.round((state[ch]/target)*100);
+  if(state[ch] >= target) toast(ch+' channel hit target! 🎯','grn');
+  else toast(ch+': '+state[ch]+'/'+target+' ('+pct+'%)','grn');
+}
+function saveRedditCheck(idx, checked) {
+  var checks = JSON.parse(localStorage.getItem('tc_beta_reddit') || '[]');
+  checks[idx] = checked;
+  localStorage.setItem('tc_beta_reddit', JSON.stringify(checks));
+  if(checked) toast('Marked as posted ✓','grn');
+}
+function copyTemplate(idx) {
+  var el = document.getElementById('tmpl-'+idx);
+  if(!el) return;
+  var text = el.textContent || el.innerText;
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function(){ toast('Template copied to clipboard','grn'); });
+  } else {
+    var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    toast('Template copied','grn');
+  }
+}
+
+// ═══ EMAIL TEMPLATES ═══
+function loadEmailTemplates() {
+  // Nothing dynamic to load — page is static
+}
+function previewNewsletter(type) {
+  var files = {welcome:'newsletter_01_welcome.html',signals:'newsletter_02_weekly_signals.html',student:'newsletter_03_student_offer.html',update:'newsletter_04_product_update.html',tips:'newsletter_05_trading_tips.html',upgrade:'newsletter_06_pro_upgrade.html'};
+  var f = files[type];
+  if(!f) return;
+  toast('Newsletter file: '+f+' — open from your files folder','grn');
+}
+function copyNewsletterFile(name) {
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(name).then(function(){ toast('Filename copied: '+name,'grn'); });
+  } else {
+    toast(name,'grn');
+  }
 }
 
 function loadBizAnalytics() {
