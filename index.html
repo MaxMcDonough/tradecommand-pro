@@ -88,6 +88,9 @@ h1 em{font-style:italic;background:linear-gradient(135deg,#3b82f6,#06b6d4,#8b5cf
 .hero-form input:focus{border-color:var(--blu)}
 .hero-form input::placeholder{color:var(--t3)}
 .btn-hero{padding:14px 24px;background:var(--grad);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;transition:box-shadow .2s,transform .2s}
+.btn-hero-ghost{padding:14px 24px;background:transparent;color:var(--t1);border:1px solid var(--brd2);border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .2s,color .2s;text-decoration:none;display:inline-block}
+.btn-hero-ghost:hover{border-color:var(--blu);color:var(--blu)}
+.hero-cta-btns{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
 .btn-hero:hover{box-shadow:0 8px 30px rgba(59,130,246,.4);transform:translateY(-1px)}
 .hero-proof{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t3)}
 .hero-proof strong{color:var(--t2)}
@@ -446,7 +449,32 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
   .footer-bottom{flex-direction:column;text-align:center}
   .pf-content{grid-template-columns:1fr}
 }
+
+/* ===== ACCESS MODAL ===== */
+#access-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)}
+#access-modal-overlay.show{display:flex}
+.access-modal{background:#0f1623;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:36px 32px;max-width:440px;width:100%;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.7)}
+.access-modal-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.access-modal-close:hover{color:#fff;background:rgba(239,68,68,.3)}
+.access-modal-logo{font-size:24px;font-weight:800;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin-bottom:4px}
+.access-modal-plan-banner{text-align:center;margin-bottom:20px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600}
+.access-modal-plan-banner.pro{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:#60a5fa}
+.access-modal-plan-banner.elite{background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);color:#a78bfa}
+.access-modal h3{font-size:18px;font-weight:700;text-align:center;color:#fff;margin-bottom:6px}
+.access-modal p{font-size:13px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:22px}
+.access-modal-email{width:100%;padding:11px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;transition:border-color .2s}
+.access-modal-email:focus{border-color:#3b82f6}
+.access-modal-submit{width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;transition:opacity .2s}
+.access-modal-submit:hover{opacity:.9}
+.access-modal-or{text-align:center;color:rgba(255,255,255,.25);font-size:12px;margin-bottom:10px;position:relative}
+.access-modal-or::before,.access-modal-or::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:rgba(255,255,255,.1)}
+.access-modal-or::before{left:0}.access-modal-or::after{right:0}
+.access-modal-skip{width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:10px;color:rgba(255,255,255,.5);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.access-modal-skip:hover{border-color:rgba(255,255,255,.3);color:#fff}
+@media(max-width:480px){.access-modal{padding:28px 20px;border-radius:14px}}
+
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -454,7 +482,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
 <div id="float-cta">
   <div class="fcta-text"><strong>⚡ TradeCommand Pro</strong> — Free AI trade signals, live prices &amp; step-by-step plans. Set up in 60 seconds.</div>
   <div class="fcta-btns">
-    <a href="dashboard.html" class="btn-hero" style="padding:10px 20px;font-size:13px">Start Free →</a>
+    <a href="dashboard.html?tab=signup" class="btn-hero" style="padding:10px 20px;font-size:13px">Get Started →</a>
     <button class="fcta-dismiss" onclick="document.getElementById('float-cta').classList.remove('show');localStorage.setItem('tcp_fcta','1')" title="Dismiss">×</button>
   </div>
 </div>
@@ -474,8 +502,8 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
     <a href="#about">About</a>
   </div>
   <div class="nav-cta">
-    <a href="dashboard.html" class="btn-nav-ghost">View Demo</a>
-    <a href="dashboard.html" class="btn-nav">Launch Free →</a>
+    <a href="dashboard.html" class="btn-nav-ghost">Sign In</a>
+    <a href="dashboard.html?tab=signup" class="btn-nav">Sign Up Free →</a>
   </div>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -487,7 +515,8 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
   <a href="#pricing" onclick="toggleMenu()">Pricing</a>
   <a href="#sources" onclick="toggleMenu()">Data Sources</a>
   <a href="#about" onclick="toggleMenu()">About</a>
-  <a href="dashboard.html" style="color:var(--blu);font-weight:600">Launch Dashboard →</a>
+  <a href="dashboard.html" style="color:var(--t2);font-weight:500" onclick="toggleMenu()">Sign In</a>
+  <a href="dashboard.html?tab=signup" style="color:var(--blu);font-weight:700" onclick="toggleMenu()">Sign Up Free →</a>
 </div>
 
 <!-- ── HERO ────────────────────────────────────────────── -->
@@ -506,9 +535,9 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
       <p class="hero-sub fade-in fade-in-delay-2">
         The professional trading dashboard that gives retail investors the same edge as Wall Street. 15+ live data sources, AI signals with step-by-step trade plans, and one-click Wealthsimple execution.
       </p>
-      <div class="hero-form fade-in fade-in-delay-3">
-        <input type="email" placeholder="Enter your email to get started free">
-        <a href="dashboard.html" class="btn-hero">Get Free Access →</a>
+      <div class="hero-cta-btns fade-in fade-in-delay-3">
+        <a href="dashboard.html?tab=signup" class="btn-hero">Create Free Account →</a>
+        <a href="dashboard.html" class="btn-hero-ghost">Sign In</a>
       </div>
       <div class="hero-proof fade-in fade-in-delay-4">
         <span class="live-dot"></span>
@@ -974,7 +1003,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
       </div>
     </div>
     <div style="text-align:center;margin-top:32px" class="fade-in">
-      <a href="dashboard.html" class="btn-hero" style="display:inline-block;text-decoration:none">Open Live Dashboard →</a>
+      <a href="dashboard.html?tab=signup" class="btn-hero" style="display:inline-block;text-decoration:none">Open Live Dashboard →</a>
     </div>
   </div>
 </section>
@@ -1038,7 +1067,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
     </div>
     <p class="compare-note fade-in">* Bloomberg Terminal pricing based on publicly reported rates (~$2,000/month). Comparison is illustrative. Feature availability subject to change.</p>
     <div style="text-align:center;margin-top:32px" class="fade-in">
-      <a href="dashboard.html" class="btn-hero" style="display:inline-block;text-decoration:none">Get the Edge — Free →</a>
+      <a href="dashboard.html?tab=signup" class="btn-hero" style="display:inline-block;text-decoration:none">Get the Edge — Free →</a>
     </div>
   </div>
 </section>
@@ -1225,7 +1254,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
           <li class="no">Options flow alerts</li>
           <li class="no">1-on-1 setup call</li>
         </ul>
-        <a href="dashboard.html" class="btn-price btn-price-pro">Start Pro Trial →</a>
+        <button onclick="openAccessModal('pro')" class="btn-price btn-price-pro">Get Pro — $29/mo →</button>
       </div>
       <!-- ELITE -->
       <div class="price-card fade-in fade-in-delay-2">
@@ -1246,7 +1275,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
           <li>Early access to new features</li>
           <li>Private Discord community</li>
         </ul>
-        <a href="mailto:max.mcdonough123@gmail.com?subject=TradeCommand Elite" class="btn-price btn-price-elite">Contact for Elite →</a>
+        <button onclick="openAccessModal('elite')" class="btn-price btn-price-elite">Get Elite — $79/mo →</button>
       </div>
     </div>
     <p class="price-note fade-in">⚡ <strong>Pro tip:</strong> Get your 3 free API keys (Finnhub, Alpha Vantage, NewsAPI) and you get Pro-level features at zero cost. <a href="#sources" style="color:var(--blu)">See how →</a></p>
@@ -1394,7 +1423,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
     <div class="faq-list fade-in">
       <div class="faq-item open">
         <div class="faq-q" onclick="toggleFaq(this)">Is TradeCommand Pro really free? <span class="faq-arrow">+</span></div>
-        <div class="faq-a"><p>Yes — the dashboard itself is completely free to download and use forever. The free tier uses demo prices (approximate market values). For live real-time prices, you need a free Finnhub API key, which takes 30 seconds to get at <a href="https://finnhub.io/register" target="_blank">finnhub.io/register</a>. No credit card, no subscription — just a free account.</p></div>
+        <div class="faq-a"><p>Yes — the dashboard is completely free to sign up and use forever. The free tier uses demo prices (approximate market values). For live real-time prices, you need a free Finnhub API key, which takes 30 seconds to get at <a href="https://finnhub.io/register" target="_blank">finnhub.io/register</a>. No credit card, no subscription — just a free account.</p></div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">Do I need trading experience to use this? <span class="faq-arrow">+</span></div>
@@ -1414,7 +1443,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">How do I set it up? <span class="faq-arrow">+</span></div>
-        <div class="faq-a"><p>Download or open the dashboard HTML file. It auto-launches immediately. For live prices, add your free Finnhub API key — the dashboard will remember it forever in your browser. Optionally add Alpha Vantage (fundamentals) and NewsAPI (headlines) for the full experience. The whole setup takes about 5 minutes.</p></div>
+        <div class="faq-a"><p>Just sign up with your email or Google and you're in — no downloads, no installs. For live prices, add your free Finnhub API key — the dashboard will remember it forever in your browser. Optionally add Alpha Vantage (fundamentals) and NewsAPI (headlines) for the full experience. The whole setup takes about 5 minutes.</p></div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">Is this financial advice? <span class="faq-arrow">+</span></div>
@@ -1446,9 +1475,9 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
     <div class="section-badge" style="margin:0 auto 20px;display:inline-flex">⚡ Start Today</div>
     <h2 class="fade-in">Start trading <em>smarter</em> today.</h2>
     <p class="fade-in fade-in-delay-1">Join traders across Canada who are using TradeCommand Pro to make more informed decisions. Free forever. Set up in 60 seconds.</p>
-    <div class="cta-form fade-in fade-in-delay-2">
-      <input type="email" placeholder="Enter your email">
-      <a href="dashboard.html" class="btn-hero">Get Free Access →</a>
+    <div class="hero-cta-btns fade-in fade-in-delay-2" style="justify-content:center">
+      <a href="dashboard.html?tab=signup" class="btn-hero">Create Free Account →</a>
+      <a href="dashboard.html" class="btn-hero-ghost">Sign In</a>
     </div>
     <p class="cta-note fade-in fade-in-delay-3">No credit card · No signup required · Open source · 100% free to start</p>
   </div>
@@ -1523,7 +1552,7 @@ footer{background:var(--bg2);border-top:1px solid var(--brd);padding:60px 40px 3
         <li><a href="mailto:max.mcdonough123@gmail.com">Contact</a></li>
         <li><a href="#testimonials">Testimonials</a></li>
         <li><a href="https://my.wealthsimple.com/app/invest" target="_blank">Wealthsimple Trade</a></li>
-        <li><a href="mailto:max.mcdonough123@gmail.com?subject=TradeCommand Elite">Elite Plan</a></li>
+        <li><a href="javascript:void(0)" onclick="openAccessModal('elite')">Elite Plan</a></li>
       </ul>
     </div>
   </div>
@@ -1657,5 +1686,97 @@ calcPosition();
   });
 })();
 </script>
+
+<!-- ===== ACCESS MODAL ===== -->
+<div id="access-modal-overlay">
+  <div class="access-modal">
+    <button class="access-modal-close" onclick="closeAccessModal()">✕</button>
+    <div class="access-modal-logo">⚡ TradeCommand</div>
+    <div id="access-plan-banner" class="access-modal-plan-banner" style="display:none"></div>
+    <h3 id="access-modal-title">Create your free account</h3>
+    <p id="access-modal-sub">Sign up to access the full dashboard and all features.</p>
+    <input type="email" id="access-email-input" class="access-modal-email" placeholder="Your email address">
+    <button class="access-modal-submit" onclick="submitAccessEmail()">Continue →</button>
+    <div class="access-modal-or">or</div>
+    <button class="access-modal-skip" onclick="skipToSignup()">Go to Sign Up / Sign In</button>
+  </div>
+</div>
+
+
+<script>
+// ── ACCESS MODAL ──
+const _EMAILJS_IDX = { svc: 'service_tradecommand', tpl_interest: 'template_interest', uid: 'YOUR_EMAILJS_PUBLIC_KEY' };
+let _accessPlan = null;
+
+function openAccessModal(plan) {
+  _accessPlan = plan || null;
+  const overlay = document.getElementById('access-modal-overlay');
+  const banner = document.getElementById('access-plan-banner');
+  const title = document.getElementById('access-modal-title');
+  const sub = document.getElementById('access-modal-sub');
+  if (plan === 'pro') {
+    banner.textContent = '📦 Pro Plan — $29/mo';
+    banner.className = 'access-modal-plan-banner pro';
+    banner.style.display = 'block';
+    title.textContent = 'Start your Pro trial';
+    sub.textContent = 'Enter your email to create an account and activate Pro.';
+  } else if (plan === 'elite') {
+    banner.textContent = '👑 Elite Plan — $79/mo';
+    banner.className = 'access-modal-plan-banner elite';
+    banner.style.display = 'block';
+    title.textContent = 'Get Elite access';
+    sub.textContent = 'Enter your email to create an account and activate Elite.';
+  } else {
+    banner.style.display = 'none';
+    title.textContent = 'Create your free account';
+    sub.textContent = 'Sign up to access the full dashboard and all features.';
+  }
+  overlay.classList.add('show');
+  document.getElementById('access-email-input').focus();
+}
+
+function closeAccessModal() {
+  document.getElementById('access-modal-overlay').classList.remove('show');
+  document.getElementById('access-email-input').value = '';
+}
+
+function submitAccessEmail() {
+  const email = document.getElementById('access-email-input').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('access-email-input').style.borderColor = '#ef4444';
+    setTimeout(() => document.getElementById('access-email-input').style.borderColor = '', 1200);
+    return;
+  }
+  // Send interest email via EmailJS
+  try {
+    emailjs.init(_EMAILJS_IDX.uid);
+    emailjs.send(_EMAILJS_IDX.svc, _EMAILJS_IDX.tpl_interest, {
+      to_email: email, to_name: email.split('@')[0], plan: _accessPlan || 'free'
+    });
+  } catch(e) {}
+  // Redirect to dashboard with params
+  let url = 'dashboard.html?tab=signup&email=' + encodeURIComponent(email);
+  if (_accessPlan) url += '&checkout=' + _accessPlan;
+  window.location.href = url;
+}
+
+function skipToSignup() {
+  closeAccessModal();
+  let url = 'dashboard.html?tab=signup';
+  if (_accessPlan) url += '&checkout=' + _accessPlan;
+  window.location.href = url;
+}
+
+// Close on overlay click
+document.getElementById('access-modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeAccessModal();
+});
+
+// Enter key submits
+document.getElementById('access-email-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') submitAccessEmail();
+});
+</script>
+
 </body>
 </html>

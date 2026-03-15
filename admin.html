@@ -906,6 +906,7 @@
         <div class="nav-item" data-page="subscriptions">💳 Subscriptions</div>
         <div class="nav-item" data-page="promos">🎁 Promos</div>
         <div class="nav-item" data-page="settings">⚙️ Settings</div>
+        <div class="nav-item" data-page="changelog">📋 Changelog</div>
       </div>
     </div>
 
@@ -1451,6 +1452,230 @@
             </div>
           </div>
         </div>
+
+        <!-- ===== CHANGELOG PAGE ===== -->
+        <div class="page" id="changelog-page">
+          <div style="max-width: 860px;">
+
+            <!-- v2.1 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--acc);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v2.1</span>
+                <span style="background:rgba(59,130,246,.15);color:#93c5fd;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.8px;">LATEST</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Homepage Sign-Up Flow</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Replaced email capture forms (hero &amp; CTA sections) with Sign Up / Sign In buttons</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Nav bar updated to Sign In + Sign Up Free buttons</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Floating bottom CTA simplified to single "Get Started →" button</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> FAQ: "How do I set it up?" — removed download references, now says sign up + login</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> FAQ: Free tier description — removed "download", now says "sign up and use forever"</li>
+              </ul>
+            </div>
+
+            <!-- v2.0 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--pur);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v2.0</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Mobile Optimization</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Comprehensive @media(max-width:480px) CSS across all pages — dashboard, admin, business command centre</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> dashboard.html: hides ticker strip on mobile, compact top bar, scrollable nav tabs, full-screen modals, single-column grids</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> admin.html: 2-column stat cards, horizontal-scroll tables, compact content header, mobile sidebar</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> business.html: single-column grids, kanban, table overflow, compact header and cards</li>
+              </ul>
+            </div>
+
+            <!-- v1.9 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--grn);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.9</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Pricing &amp; Checkout Flow</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Pro plan: direct Stripe checkout from homepage pricing section</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Elite plan: direct Stripe checkout (was a mailto link)</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Access modal — email capture fires interest email, then redirects to sign-up with plan pre-selected</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> dashboard.html reads ?tab=signup, ?email=, ?checkout= URL params on load</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Checkout plan banner shown on auth screen when arriving from a pricing CTA</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> After sign-up or Google auth, redirects to Stripe with email + user ID pre-filled</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> handlePaymentReturn() handles Elite plans — shows "Welcome to Elite!" not just Pro</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> All Stripe links in onboarding + upgrade modals use goToStripe() — no more target="_blank"</li>
+              </ul>
+            </div>
+
+            <!-- v1.8 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--cyn);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.8</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Emails &amp; Newsletters</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Welcome email HTML template — sent automatically on new account creation (email + Google)</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Personal newsletter — from Max directly to friends; natural voice, confident tone</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Prospecting newsletter — cold/warm outreach with comparison table vs Bloomberg/ThinkorSwim</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Launch announcement newsletter — full public launch with features, pricing, CTA</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Interest/nurture email — fires when user submits email on homepage; includes full plan breakdown</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> All emails signed off as "Max McDonough — Founder &amp; Developer, TradeCommand Pro"</li>
+              </ul>
+            </div>
+
+            <!-- v1.7 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--ylw);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.7</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Auth &amp; Sign-Up Improvements</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Phone number field added to sign-up form (optional)</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Confirm password field — validates match before account creation</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Password strength bar — 4-level indicator (Weak / Fair / Good / Strong) with colour coding</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Welcome email (EmailJS) auto-sent on email/password sign-up and first Google sign-up</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Minimum password length enforced at 8 characters</li>
+              </ul>
+            </div>
+
+            <!-- v1.6 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--org);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.6</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">March 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Admin Panel &amp; Business Command Centre</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> URL hash routing throughout admin panel — browser back/forward buttons work on all pages</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Live analytics — Firestore onSnapshot listeners, data updates in real time without refresh</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> "Currently Online" panel — users active in last 5 minutes with plan badge and last-seen time</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Activity feed refresh button</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Business Command Centre: URL hash routing — back/forward navigation across all sections</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Subscription pricing updated to reflect actual tiers: Pro $29/mo, Elite $79/mo</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Admin session extended to 8 hours</li>
+              </ul>
+            </div>
+
+            <!-- v1.5 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--brd);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.5</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">Early 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Homepage Overhaul</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Feature spotlight section with interactive live mockup cards</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Comparison table vs Bloomberg Terminal, ThinkorSwim, Webull</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Live position size calculator with account-based output</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Scrolling quote strip from traders</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Floating sticky CTA bar (appears after scrolling past hero)</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> 5 new FAQ items: AI accuracy, Wealthsimple integration, mobile, session tracker, signals best practices</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Logo click returns to Trading page</li>
+              </ul>
+            </div>
+
+            <!-- v1.4 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--brd);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.4</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">Early 2026</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Guided Tour</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> 12-step guided tour auto-launches for first-time users after onboarding</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Covers watchlist, AI signals, trade plan calculator, session tracker, Reddit Radar, briefings, crypto page</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Replay any time via the ? button in the top nav bar</li>
+              </ul>
+            </div>
+
+            <!-- v1.3 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--brd);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.3</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">Late 2025</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">UI &amp; Data Fixes</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Chart symbol selector — change chart symbol independently from watchlist selection</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Watchlist filters and sort controls (by signal strength, % change, alphabetical)</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Fixed centre column overflow on trading page</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Fixed sector variable bug causing incorrect sector filtering</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Improved instant load times — reduced initial data fetching latency</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Fixed auth session persistence in private/incognito windows</li>
+              </ul>
+            </div>
+
+            <!-- v1.2 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--brd);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.2</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">Late 2025</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Session Tracker &amp; Holdings</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Holdings section on trading page — live P&amp;L per position with next-move guidance and alert badges</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Session tracker bar — deployed capital, realized P&amp;L, remaining balance, trade count</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Browser notifications when a position hits its stop loss or profit target</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Session resume modal on login — continue tracking positions from a previous session</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Account balance minimum enforced at $1</li>
+              </ul>
+            </div>
+
+            <!-- v1.1 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--brd);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.1</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">Mid 2025</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Auth, Onboarding &amp; User Profiles</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Firebase Auth — email/password sign-in and Google OAuth</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> 6-step personalized onboarding — name, balance, risk tolerance, focus style, watchlist, tier selection</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Firestore user profiles — settings and preferences persist across devices</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Settings page — update profile, API keys, balance, and risk tolerance</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Sector-aware navigation — sector filter persists across pages and affects signals, news, and watchlist</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--ylw);font-weight:700;flex-shrink:0;">~</span> Removed Google News (API restrictions); replaced with curated market data feeds</li>
+              </ul>
+            </div>
+
+            <!-- v1.0 -->
+            <div class="chart-container" style="height:auto;padding:28px 32px;margin-bottom:20px;border-left:3px solid var(--brd);">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;">
+                <span style="font-size:18px;font-weight:700;color:var(--t1);">v1.0</span>
+                <span style="background:rgba(100,116,139,.2);color:var(--t3);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.8px;">INITIAL RELEASE</span>
+                <span style="font-size:12px;color:var(--t3);margin-left:auto;">2025</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--t2);margin-bottom:12px;text-transform:uppercase;letter-spacing:.8px;">Core Dashboard</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:9px;">
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Watchlist with live/demo prices across 12 market sectors</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> AI trade signals — 8-factor analysis (RSI, MACD, SMA, EMA, VWAP, Bollinger, ATR, volume) with confidence score</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Step-by-step action plan — exact entry, stop loss, profit target, position size in shares and dollars</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> 5x daily market briefings (pre-market, mid-morning, lunch, power hour, end of day)</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Reddit Radar — real-time sentiment from r/wallstreetbets, r/stocks, r/investing, r/Superstonk</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Fear &amp; Greed Index with 7-day trend chart</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Crypto dashboard — top 50 coins via CoinGecko</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Market news feed filtered for Canadian and US markets</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Trading 101 beginner guide — 10 chapters from fundamentals to advanced strategies</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> Tools page — position sizer, risk/reward calculator, trade journal</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> One-click Wealthsimple Trade integration per stock</li>
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--t2);"><span style="color:var(--grn);font-weight:700;flex-shrink:0;">+</span> TSX + US + Crypto coverage including Wealthsimple-compatible tickers</li>
+              </ul>
+            </div>
+
+            <!-- Legend -->
+            <div style="display:flex;gap:20px;padding:14px 20px;background:var(--bg2);border-radius:8px;font-size:12px;color:var(--t3);flex-wrap:wrap;">
+              <span><strong style="color:var(--grn);">+</strong>&nbsp; New feature / addition</span>
+              <span><strong style="color:var(--ylw);">~</strong>&nbsp; Change / improvement</span>
+              <span><strong style="color:var(--red);">-</strong>&nbsp; Removed / deprecated</span>
+            </div>
+
+          </div>
+        </div>
+        <!-- ===== END CHANGELOG PAGE ===== -->
+
       </div>
     </div>
   </div>
@@ -1670,7 +1895,8 @@
           newsletters: 'Newsletters',
           subscriptions: 'Subscriptions',
           promos: 'Promos',
-          settings: 'Settings'
+          settings: 'Settings',
+          changelog: 'Changelog'
         };
         document.getElementById('pageTitle').textContent = titles[page];
 
