@@ -402,6 +402,15 @@ a{color:var(--acc);text-decoration:none}
 /* ===== SECTOR NAV ===== */
 .sector-nav{display:flex;gap:6px;padding:7px 14px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--brd);overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:85}
 .sector-nav::-webkit-scrollbar{display:none}
+/* ===== SECTOR CONTEXT BAR ===== */
+#sector-ctx-bar{display:none;align-items:center;gap:8px;padding:5px 14px;font-size:11px;color:var(--t2);background:rgba(59,130,246,.04);border-bottom:1px solid rgba(59,130,246,.08);transition:background .3s,border-color .3s}
+#sector-ctx-bar.sec-active{background:rgba(245,158,11,.05);border-bottom-color:rgba(245,158,11,.12)}
+.ctx-icon{font-size:13px}
+.ctx-name{font-weight:700;color:var(--t1)}
+.ctx-sep{color:var(--brd);margin:0 2px}
+.ctx-hint{color:var(--t3)}
+.ctx-reset{margin-left:auto;padding:2px 8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:4px;color:var(--t3);font-size:10px;cursor:pointer;white-space:nowrap}
+.ctx-reset:hover{color:var(--t1);border-color:var(--acc)}
 .sec-btn{flex-shrink:0;padding:4px 13px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--brd);background:transparent;color:var(--t2);transition:all .18s;white-space:nowrap}
 .sec-btn:hover{border-color:var(--sec-color,var(--acc));color:var(--sec-color,var(--acc))}
 .sec-btn.on{color:#fff;border-color:transparent;background:var(--sec-color,var(--acc))}
@@ -1559,6 +1568,15 @@ a{color:var(--acc);text-decoration:none}
   <!-- Rendered by renderSectorNav() -->
 </div>
 
+<!-- SECTOR CONTEXT BAR -->
+<div id="sector-ctx-bar">
+  <span class="ctx-icon" id="ctx-icon">🌐</span>
+  <span class="ctx-name" id="ctx-name">All Market</span>
+  <span class="ctx-sep">·</span>
+  <span class="ctx-hint" id="ctx-hint">Select a sector above to filter this view</span>
+  <button class="ctx-reset" id="ctx-reset-btn" style="display:none" onclick="setSector('all',document.querySelector('[data-sec=all]'))">✕ Clear filter</button>
+</div>
+
 <!-- PAGE: TRADING -->
 <div class="page on" id="p-trading">
 <div class="g g3" style="margin-bottom:12px">
@@ -1661,8 +1679,21 @@ a{color:var(--acc);text-decoration:none}
 <!-- PAGE: NEWS -->
 <div class="page" id="p-news">
 <div class="g g2">
-  <div class="c"><div class="ch"><span class="ct">📰 Finnhub News</span><span class="badge" style="background:var(--grn2);color:var(--grn)">API</span></div><div class="scr" id="n-fh" style="max-height:600px"><p class="ld">Loading...</p></div></div>
-  <div class="c"><div class="ch"><span class="ct">🌐 Google News</span><span class="badge" style="background:var(--ylw2);color:var(--ylw)">RSS</span></div><div class="scr" id="n-gn" style="max-height:600px"><p class="ld">Loading...</p></div></div>
+  <div class="c">
+    <div class="ch">
+      <span class="ct">📰 Market News</span>
+      <span class="badge" style="background:var(--grn2);color:var(--grn)">Finnhub</span>
+      <span id="news-sector-badge" style="display:none;font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(245,158,11,.15);color:#f59e0b;font-weight:700;margin-left:6px"></span>
+    </div>
+    <div class="scr" id="n-fh" style="max-height:600px"><p class="ld">Loading...</p></div>
+  </div>
+  <div class="c">
+    <div class="ch">
+      <span class="ct">📡 Business Headlines</span>
+      <span class="badge" style="background:var(--cyn2);color:var(--cyn)">NewsAPI</span>
+    </div>
+    <div class="scr" id="news-list" style="max-height:600px"><p class="ld">Loading headlines...</p></div>
+  </div>
 </div>
 </div>
 
@@ -3046,6 +3077,7 @@ function launch(){
   startClock(); initCharts(); mkHeatmap(); mkSources();
   initSession();
   renderSectorNav();
+  updateSectorCtxBar('trading');
 
   // Always load demo data first for instant display
   loadDemo();
@@ -3066,7 +3098,7 @@ function launch(){
 
   // Free APIs - always try
   safeFetch(fetchCrypto); safeFetch(fetchCFG); safeFetch(fetchCTrend);
-  safeFetch(()=>fetchReddit('wallstreetbets')); safeFetch(fetchApe); safeFetch(fetchGNews);
+  safeFetch(()=>fetchReddit('wallstreetbets')); safeFetch(fetchApe);
   safeFetch(fetchTreasury);
 
   setInterval(()=>safeFetch(fetchCrypto),60000);
@@ -3173,7 +3205,22 @@ function updClock(){
 }
 
 // ===== NAV =====
-function pg(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));document.getElementById('p-'+id).classList.add('on');btn.classList.add('on');}
+function pg(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('on'));
+  document.getElementById('p-' + id).classList.add('on');
+  btn.classList.add('on');
+  _activePage = id;
+  // Hide sector nav + context bar on pages where sectors are irrelevant
+  const noSector = ['learn', 'tools'];
+  const sn = document.getElementById('sector-nav');
+  if (sn) sn.style.display = noSector.includes(id) ? 'none' : 'flex';
+  updateSectorCtxBar(id);
+  // Re-render current page's content with active sector filter
+  if (id === 'intel') { genEmerging(); mkInsider(); }
+  if (id === 'news') mkFhNews();
+  if (id === 'social') mkMent();
+}
 
 // ===== DEMO DATA =====
 function loadDemo(){
@@ -3335,10 +3382,33 @@ function mkHeatmap(){
 
 // ===== NEWS =====
 function mkFhNews(){
-  const el=document.getElementById('n-fh');
-  el.innerHTML=D.news.map(n=>{const st=sent(n.headline);return `<div class="ni" onclick="window.open('${n.url}','_blank')"><div class="ni-t">${tAgo(new Date(n.datetime*1000))}</div><div class="ni-h">${n.headline}</div><div class="ni-m"><span class="ni-src">${n.source}</span><span class="ni-sent" style="background:${st.bg};color:${st.c}">${st.l}</span></div></div>`;}).join('');
+  const el = document.getElementById('n-fh');
+  if (!el) return;
+  let news = D.news;
+  const secBadge = document.getElementById('news-sector-badge');
+  // Filter by active sector when one is selected
+  if (_activeSector !== 'all' && SECTORS[_activeSector]) {
+    const sec = SECTORS[_activeSector];
+    const tickers = sec.tickers.map(t => t.toLowerCase());
+    const kws = (sec.kw || '').toLowerCase().split(/[\s,]+/).filter(k => k.length > 3);
+    const filtered = news.filter(n => {
+      const h = (n.headline || '').toLowerCase();
+      return tickers.some(t => h.includes(t)) || kws.some(k => h.includes(k));
+    });
+    if (filtered.length > 0) {
+      news = filtered;
+      if (secBadge) { secBadge.textContent = sec.icon + ' ' + sec.name; secBadge.style.display = 'inline'; }
+    } else {
+      // No sector match — show all with a note
+      if (secBadge) secBadge.style.display = 'none';
+    }
+  } else {
+    if (secBadge) secBadge.style.display = 'none';
+  }
+  el.innerHTML = news.length
+    ? news.map(n => { const st = sent(n.headline); return `<div class="ni" onclick="window.open('${n.url}','_blank')"><div class="ni-t">${tAgo(new Date(n.datetime*1000))}</div><div class="ni-h">${n.headline}</div><div class="ni-m"><span class="ni-src">${n.source}</span><span class="ni-sent" style="background:${st.bg};color:${st.c}">${st.l}</span></div></div>`; }).join('')
+    : '<p style="color:var(--t3);text-align:center;padding:20px;font-size:12px">No news for this sector yet — showing all market news.</p>';
 }
-function mkGNews(items){document.getElementById('n-gn').innerHTML=items.map(n=>{const st=sent(n.title);return `<div class="ni" onclick="window.open('${n.link}','_blank')"><div class="ni-t">${n.pubDate?tAgo(new Date(n.pubDate)):''}</div><div class="ni-h">${n.title}</div><div class="ni-m"><span class="ni-src">${n.source}</span><span class="ni-sent" style="background:${st.bg};color:${st.c}">${st.l}</span></div></div>`;}).join('');}
 function sent(t){const w=t.toLowerCase();let s=0;['surge','beat','growth','record','jump','rally','gain','soar','rise','bull','upgrade','strong','rebound','boost','profit'].forEach(b=>{if(w.includes(b))s++;});['drop','fall','crash','plunge','loss','decline','fear','cut','sell','warning','risk','weak','downturn','slump','miss'].forEach(b=>{if(w.includes(b))s--;});if(s>0)return{l:'Bullish',c:'var(--grn)',bg:'var(--grn2)'};if(s<0)return{l:'Bearish',c:'var(--red)',bg:'var(--red2)'};return{l:'Neutral',c:'var(--ylw)',bg:'var(--ylw2)'};}
 function tAgo(d){const s=(Date.now()-d.getTime())/1000;if(s<60)return'Now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
 
@@ -3348,9 +3418,21 @@ function rSub(sub,btn){document.querySelectorAll('#r-tabs .itab').forEach(b=>b.c
 
 // ===== MENTIONS =====
 function mkMent(){
-  const el=document.getElementById('mentions');if(!D.ment.length){el.innerHTML='<p style="color:var(--t3);text-align:center;padding:16px">Loading...</p>';return;}
-  const mx=D.ment[0]?.mentions||1;
-  el.innerHTML=D.ment.map(m=>{const pct=(m.mentions/mx*100).toFixed(0);const sc=m.upvotes>m.mentions*5?'var(--grn)':m.upvotes<m.mentions*2?'var(--red)':'var(--ylw)';const sl=m.upvotes>m.mentions*5?'Bull':m.upvotes<m.mentions*2?'Mixed':'Neut';return `<div class="mb"><span class="mb-sym">${m.ticker}</span><span class="mb-ct">${m.mentions} ment.</span><div class="mb-bg"><div class="mb-fill" style="width:${pct}%"></div></div><span class="mb-sent" style="color:${sc}">${sl}</span></div>`;}).join('');
+  const el = document.getElementById('mentions');
+  if (!D.ment.length) { el.innerHTML = '<p style="color:var(--t3);text-align:center;padding:16px">Loading...</p>'; return; }
+  let ment = D.ment;
+  if (_activeSector !== 'all' && SECTORS[_activeSector]) {
+    const tickers = SECTORS[_activeSector].tickers;
+    const filtered = ment.filter(m => tickers.includes(m.ticker));
+    if (filtered.length > 0) ment = filtered;
+  }
+  const mx = ment[0]?.mentions || 1;
+  el.innerHTML = ment.map(m => {
+    const pct = (m.mentions / mx * 100).toFixed(0);
+    const sc = m.upvotes > m.mentions * 5 ? 'var(--grn)' : m.upvotes < m.mentions * 2 ? 'var(--red)' : 'var(--ylw)';
+    const sl = m.upvotes > m.mentions * 5 ? 'Bull' : m.upvotes < m.mentions * 2 ? 'Mixed' : 'Neut';
+    return `<div class="mb"><span class="mb-sym">${m.ticker}</span><span class="mb-ct">${m.mentions} ment.</span><div class="mb-bg"><div class="mb-fill" style="width:${pct}%"></div></div><span class="mb-sent" style="color:${sc}">${sl}</span></div>`;
+  }).join('');
 }
 
 // ===== CRYPTO =====
@@ -3360,19 +3442,87 @@ function mkCTrend(coins){document.getElementById('c-trend').innerHTML=coins.slic
 
 // ===== INSIDER (demo) =====
 function mkInsider(){
-  const ins=[{sym:'AAPL',name:'Tim Cook',title:'CEO',tp:'Sale',sh:'75,000',val:'$14.2M',dt:'2d ago'},{sym:'NVDA',name:'Jensen Huang',title:'CEO',tp:'Sale',sh:'120,000',val:'$105M',dt:'3d ago'},{sym:'AMD',name:'Lisa Su',title:'CEO',tp:'Purchase',sh:'10,000',val:'$1.8M',dt:'2d ago'},{sym:'TSLA',name:'Robyn Denholm',title:'Chair',tp:'Sale',sh:'50,000',val:'$12.4M',dt:'1d ago'},{sym:'SOFI',name:'Anthony Noto',title:'CEO',tp:'Purchase',sh:'50,000',val:'$475K',dt:'1d ago'},{sym:'MSFT',name:'Satya Nadella',title:'CEO',tp:'Sale',sh:'30,000',val:'$12.7M',dt:'4d ago'},{sym:'META',name:'Mark Zuckerberg',title:'CEO',tp:'Sale',sh:'200,000',val:'$102M',dt:'5d ago'},{sym:'AMZN',name:'Andrew Jassy',title:'CEO',tp:'Sale',sh:'15,000',val:'$2.8M',dt:'3d ago'}];
-  document.getElementById('insider').innerHTML=ins.map(i=>`<div class="ins"><div class="ins-h"><span class="ins-s">${i.sym}</span><span class="ins-tp" style="background:${i.tp==='Purchase'?'var(--grn2)':'var(--red2)'};color:${i.tp==='Purchase'?'var(--grn)':'var(--red)'}">${i.tp}</span></div><div class="ins-d">${i.name} (${i.title}) · ${i.sh} shares · ${i.val} · ${i.dt}</div></div>`).join('');
+  const ins = [
+    {sym:'AAPL', name:'Tim Cook',          title:'CEO',   tp:'Sale',     sh:'75,000',  val:'$14.2M', dt:'2d ago'},
+    {sym:'NVDA', name:'Jensen Huang',       title:'CEO',   tp:'Sale',     sh:'120,000', val:'$105M',  dt:'3d ago'},
+    {sym:'AMD',  name:'Lisa Su',            title:'CEO',   tp:'Purchase', sh:'10,000',  val:'$1.8M',  dt:'2d ago'},
+    {sym:'TSLA', name:'Robyn Denholm',      title:'Chair', tp:'Sale',     sh:'50,000',  val:'$12.4M', dt:'1d ago'},
+    {sym:'SOFI', name:'Anthony Noto',       title:'CEO',   tp:'Purchase', sh:'50,000',  val:'$475K',  dt:'1d ago'},
+    {sym:'MSFT', name:'Satya Nadella',      title:'CEO',   tp:'Sale',     sh:'30,000',  val:'$12.7M', dt:'4d ago'},
+    {sym:'META', name:'Mark Zuckerberg',    title:'CEO',   tp:'Sale',     sh:'200,000', val:'$102M',  dt:'5d ago'},
+    {sym:'AMZN', name:'Andrew Jassy',       title:'CEO',   tp:'Sale',     sh:'15,000',  val:'$2.8M',  dt:'3d ago'},
+    {sym:'JPM',  name:'Jamie Dimon',        title:'CEO',   tp:'Sale',     sh:'180,000', val:'$33.6M', dt:'6d ago'},
+    {sym:'LLY',  name:'David Ricks',        title:'CEO',   tp:'Sale',     sh:'12,000',  val:'$9.7M',  dt:'4d ago'},
+    {sym:'RKLB', name:'Peter Beck',         title:'CEO',   tp:'Purchase', sh:'500,000', val:'$12.4M', dt:'3d ago'},
+    {sym:'XOM',  name:'Darren Woods',       title:'CEO',   tp:'Sale',     sh:'25,000',  val:'$2.8M',  dt:'5d ago'},
+    {sym:'PLTR', name:'Peter Thiel',        title:'Dir',   tp:'Sale',     sh:'400,000', val:'$11.4M', dt:'4d ago'},
+    {sym:'GS',   name:'David Solomon',      title:'CEO',   tp:'Purchase', sh:'5,000',   val:'$2.8M',  dt:'7d ago'},
+    {sym:'MRNA', name:'Stephane Bancel',    title:'CEO',   tp:'Purchase', sh:'20,000',  val:'$856K',  dt:'5d ago'},
+    {sym:'BA',   name:'Kelly Ortberg',      title:'CEO',   tp:'Purchase', sh:'50,000',  val:'$8.4M',  dt:'6d ago'},
+    {sym:'DE',   name:'John May',           title:'CEO',   tp:'Sale',     sh:'15,000',  val:'$6.2M',  dt:'3d ago'},
+    {sym:'ENPH', name:'Badri Kothandaraman',title:'CEO',   tp:'Purchase', sh:'25,000',  val:'$1.7M',  dt:'5d ago'},
+  ];
+  let filtered = ins;
+  if (_activeSector !== 'all' && SECTORS[_activeSector]) {
+    const tickers = SECTORS[_activeSector].tickers;
+    const f = ins.filter(i => tickers.includes(i.sym));
+    if (f.length > 0) filtered = f;
+  }
+  document.getElementById('insider').innerHTML = filtered.map(i =>
+    `<div class="ins"><div class="ins-h"><span class="ins-s">${i.sym}</span><span class="ins-tp" style="background:${i.tp==='Purchase'?'var(--grn2)':'var(--red2)'};color:${i.tp==='Purchase'?'var(--grn)':'var(--red)'}">${i.tp}</span></div><div class="ins-d">${i.name} (${i.title}) · ${i.sh} shares · ${i.val} · ${i.dt}</div></div>`
+  ).join('');
 }
 
 // ===== EMERGING =====
 function genEmerging(){
-  const picks=[];
-  D.ment.slice(0,10).forEach(m=>{if(!D.wl.includes(m.ticker))picks.push({sym:m.ticker,src:'Reddit/ApeWisdom',why:`${m.mentions} mentions, ${m.upvotes} upvotes (24h)`,sc:Math.min(m.mentions/50,10),tp:'social'});});
-  D.wl.forEach(sym=>{const s=D.sd[sym];if(s&&Math.abs(s.pct)>3)picks.push({sym,src:'Price Action',why:`${s.pct>0?'+':''}${s.pct.toFixed(1)}% today`,sc:Math.abs(s.pct),tp:'momentum'});});
-  [{sym:'PLTR',src:'Reddit + Institutional',why:'Govt AI contracts, Reddit buzz surging',sc:7,tp:'niche'},{sym:'SMCI',src:'AI Infra',why:'AI server demand, high-beta volatile play',sc:6,tp:'niche'},{sym:'SOFI',src:'Fintech',why:'Insider buying, student loan tailwind',sc:5,tp:'niche'},{sym:'MARA',src:'Crypto Mining',why:'Bitcoin proxy, BTC halving effects',sc:5,tp:'crypto'},{sym:'ARM',src:'Semiconductor',why:'AI chip licensing, strong IP moat',sc:6,tp:'niche'},{sym:'COIN',src:'Crypto/Fintech',why:'Exchange volume surge, regulatory clarity',sc:5,tp:'crypto'}].forEach(n=>{if(!picks.find(p=>p.sym===n.sym))picks.push(n);});
-  picks.sort((a,b)=>b.sc-a.sc);
-  const cols={social:'var(--org)',momentum:'var(--grn)',niche:'var(--pur)',crypto:'var(--cyn)'};
-  document.getElementById('emerging').innerHTML=picks.slice(0,15).map(p=>`<div class="sig fi" style="border-left-color:${cols[p.tp]||'var(--acc)'}"><div class="sig-h"><span class="sig-s">${p.sym}</span><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:rgba(255,255,255,.05);color:${cols[p.tp]};font-weight:600">${p.src}</span></div><div class="sig-d">${p.why}</div><div class="sig-bar"><div class="sig-fill" style="width:${p.sc*10}%;background:${cols[p.tp]}"></div></div></div>`).join('');
+  const sectorTickers = (_activeSector !== 'all' && SECTORS[_activeSector]) ? SECTORS[_activeSector].tickers : null;
+  const picks = [];
+  // Reddit momentum (filter by sector if active)
+  D.ment.slice(0, 15).forEach(m => {
+    if (sectorTickers && !sectorTickers.includes(m.ticker)) return;
+    if (!D.wl.includes(m.ticker)) picks.push({sym:m.ticker, src:'Reddit/ApeWisdom', why:`${m.mentions} mentions, ${m.upvotes} upvotes (24h)`, sc:Math.min(m.mentions/50,10), tp:'social'});
+  });
+  // Price action movers
+  D.wl.forEach(sym => {
+    if (sectorTickers && !sectorTickers.includes(sym)) return;
+    const s = D.sd[sym];
+    if (s && Math.abs(s.pct) > 3) picks.push({sym, src:'Price Action', why:`${s.pct>0?'+':''}${s.pct.toFixed(1)}% today — unusual move`, sc:Math.abs(s.pct), tp:'momentum'});
+  });
+  // Curated niche picks (sector-tagged for filtering)
+  const curated = [
+    {sym:'PLTR',  sec:['ai','all'],     src:'Reddit + Institutional', why:'Govt AI contracts, Reddit buzz surging',       sc:7, tp:'niche'},
+    {sym:'SMCI',  sec:['ai','all'],     src:'AI Infrastructure',      why:'AI server demand, high-beta volatile play',    sc:6, tp:'niche'},
+    {sym:'ARM',   sec:['ai','tech'],    src:'Semiconductor',          why:'AI chip licensing royalties, strong IP moat',  sc:7, tp:'niche'},
+    {sym:'SOFI',  sec:['finance','all'],src:'Fintech',                why:'Insider buying, student loan tailwind',        sc:5, tp:'niche'},
+    {sym:'MARA',  sec:['all'],          src:'Crypto Mining',          why:'Bitcoin proxy, BTC halving effects',           sc:5, tp:'crypto'},
+    {sym:'COIN',  sec:['finance','all'],src:'Crypto/Fintech',         why:'Exchange volume surge, regulatory clarity',    sc:5, tp:'crypto'},
+    {sym:'RKLB',  sec:['space','all'],  src:'Space Tech',             why:'Record launch cadence, NASA contracts',        sc:7, tp:'niche'},
+    {sym:'LLY',   sec:['health','all'], src:'Pharma/Biotech',         why:'GLP-1 drug pipeline, obesity market leader',  sc:8, tp:'niche'},
+    {sym:'DE',    sec:['agri','infra'], src:'Agriculture Tech',       why:'Precision farming AI, strong demand cycle',    sc:5, tp:'niche'},
+    {sym:'ENPH',  sec:['clean','all'],  src:'Clean Energy',           why:'Solar installation rebound, policy tailwinds', sc:5, tp:'niche'},
+    {sym:'AXON',  sec:['defense','all'],src:'Defense Tech',           why:'Police tech expansion, Taser monopoly',        sc:6, tp:'niche'},
+    {sym:'RIVN',  sec:['ev','all'],     src:'EV Maker',               why:'Amazon van contract, improving margins',       sc:5, tp:'niche'},
+    {sym:'COP',   sec:['energy','all'], src:'Oil & Gas',              why:'Strong FCF, buyback program, OPEC tailwinds',  sc:5, tp:'niche'},
+    {sym:'GS',    sec:['finance','all'],src:'Investment Banking',     why:'M&A rebound, trading desk outperformance',    sc:6, tp:'niche'},
+    {sym:'MRNA',  sec:['health','all'], src:'Biotech',                why:'mRNA pipeline beyond COVID, RSV vaccine',      sc:5, tp:'niche'},
+  ];
+  curated.forEach(n => {
+    if (sectorTickers) {
+      // Show if the curated pick is in the sector's tickers list OR sec includes the active sector
+      if (!sectorTickers.includes(n.sym)) return;
+    }
+    if (!picks.find(p => p.sym === n.sym)) picks.push(n);
+  });
+  picks.sort((a, b) => b.sc - a.sc);
+  const cols = {social:'var(--org)', momentum:'var(--grn)', niche:'var(--pur)', crypto:'var(--cyn)'};
+  const el = document.getElementById('emerging');
+  if (!picks.length) {
+    el.innerHTML = '<p style="color:var(--t3);text-align:center;padding:24px;font-size:12px">No emerging picks for this sector yet — check back after market open.</p>';
+    return;
+  }
+  el.innerHTML = picks.slice(0, 15).map(p =>
+    `<div class="sig fi" style="border-left-color:${cols[p.tp]||'var(--acc)'}"><div class="sig-h"><span class="sig-s">${p.sym}</span><span style="font-size:9px;padding:2px 5px;border-radius:3px;background:rgba(255,255,255,.05);color:${cols[p.tp]};font-weight:600">${p.src}</span></div><div class="sig-d">${p.why}</div><div class="sig-bar"><div class="sig-fill" style="width:${p.sc*10}%;background:${cols[p.tp]}"></div></div></div>`
+  ).join('');
 }
 
 // ===== EARNINGS =====
@@ -3915,7 +4065,34 @@ const SECTORS = {
 };
 
 let _activeSector = 'all';
+let _activePage = 'trading';
 let _nextToastTimer = null;
+
+function updateSectorCtxBar(pageId) {
+  const bar = document.getElementById('sector-ctx-bar');
+  if (!bar) return;
+  const noBar = ['learn', 'tools'];
+  if (noBar.includes(pageId)) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  const pageHints = {
+    trading: 'filtering watchlist & signals',
+    intel:   'filtering emerging picks & insider trades',
+    news:    'filtering market headlines',
+    social:  'filtering Reddit ticker mentions',
+    crypto:  'crypto view',
+    brief:   'briefing includes sector context'
+  };
+  const sec = (_activeSector !== 'all' && SECTORS[_activeSector]) ? SECTORS[_activeSector] : null;
+  const icon = document.getElementById('ctx-icon');
+  const name = document.getElementById('ctx-name');
+  const hint = document.getElementById('ctx-hint');
+  const resetBtn = document.getElementById('ctx-reset-btn');
+  if (icon) icon.textContent = sec ? sec.icon : '🌐';
+  if (name) name.textContent = sec ? sec.name : 'All Market';
+  if (hint) hint.textContent = pageHints[pageId] || 'select a sector to filter';
+  if (resetBtn) resetBtn.style.display = sec ? 'inline-block' : 'none';
+  bar.classList.toggle('sec-active', !!sec);
+}
 
 function renderSectorNav() {
   const el = document.getElementById('sector-nav');
@@ -3954,6 +4131,12 @@ function setSector(id, el) {
   if (sec.kw) {
     D._sectorKw = sec.kw;
   }
+
+  // Re-render the active page's content with the new sector filter
+  if (_activePage === 'intel') { genEmerging(); mkInsider(); }
+  if (_activePage === 'news') mkFhNews();
+  if (_activePage === 'social') mkMent();
+  updateSectorCtxBar(_activePage || 'trading');
 
   // Re-fetch quotes for new watchlist
   if (D.fh) fetchAllQ();
