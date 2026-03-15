@@ -174,120 +174,389 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
   </div>
 </div>
 
-<!-- ═══ USERS ═══ -->
+<!-- ═══ USERS — FULL ADMIN ═══ -->
 <div class="page" id="users-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Users</div><div class="stat-val" id="u-total">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Pro Users</div><div class="stat-val" id="u-pro">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Elite Users</div><div class="stat-val" id="u-elite">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Free Users</div><div class="stat-val" id="u-free">&mdash;</div></div>
+  </div>
   <div class="table-wrap">
     <div class="table-bar">
       <h3>All Users</h3>
-      <input type="text" class="search-box" placeholder="Search users..." oninput="filterUsers(this.value)">
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" class="search-box" placeholder="Search users..." oninput="filterUsers(this.value)">
+        <button class="btn btn-primary" onclick="exportUsers()">Export CSV</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Email</th><th>Name</th><th>Plan</th><th>Location</th><th>Joined</th><th>Last Active</th><th>Actions</th></tr></thead>
+      <tbody id="users-tbody"><tr><td colspan="7" class="empty-msg">Loading users...</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- User Edit Modal -->
+<div id="user-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9997;backdrop-filter:blur(2px)" onclick="closeUserModal()"></div>
+<div id="user-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;width:440px;max-width:90vw;z-index:9998;max-height:80vh;overflow-y:auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h3 id="um-title" style="font-size:16px;font-weight:700;margin:0">Edit User</h3>
+    <button onclick="closeUserModal()" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">✕</button>
+  </div>
+  <input type="hidden" id="um-uid">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Email</label>
+  <input type="text" id="um-email" readonly style="opacity:.6;width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Display Name</label>
+  <input type="text" id="um-name" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Plan</label>
+  <select id="um-plan" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+    <option value="free">Free</option>
+    <option value="pro">Pro ($29/mo)</option>
+    <option value="elite">Elite ($79/mo)</option>
+  </select>
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Location</label>
+  <input type="text" id="um-location" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Phone</label>
+  <input type="text" id="um-phone" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Admin Notes</label>
+  <input type="text" id="um-notes" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="btn btn-primary" onclick="saveUserEdits()" style="flex:1">Save Changes</button>
+    <button class="btn btn-ghost" onclick="resetUserPassword()" style="flex:1">Reset Password</button>
+  </div>
+  <div style="border-top:1px solid var(--brd);margin-top:16px;padding-top:16px">
+    <button class="btn btn-danger" onclick="deleteUserFromModal()" style="width:100%">Delete User Account</button>
+  </div>
+</div>
+
+<!-- ═══ ANALYTICS — REAL FIREBASE DATA ═══ -->
+<div class="page" id="analytics-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Users</div><div class="stat-val" id="a-total">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Signups (30d)</div><div class="stat-val" id="a-30d">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Signups (7d)</div><div class="stat-val" id="a-7d">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Paid Conversion</div><div class="stat-val" id="a-conv">&mdash;</div></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="margin:0">Signup Trend (30 Days)</h3>
+      <button class="btn btn-ghost" onclick="exportAnalytics()">Export Report</button>
+    </div>
+    <div id="a-chart" style="height:180px;display:flex;align-items:flex-end;gap:3px;padding:8px 0"></div>
+    <div id="a-chart-labels" style="display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:4px"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card">
+      <h3>Plan Distribution</h3>
+      <div id="a-plans" style="display:flex;flex-direction:column;gap:10px;margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h3>Recent Signups</h3>
+      <div id="a-recent" style="max-height:250px;overflow-y:auto"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NEWSLETTERS — REAL DATA ═══ -->
+<div class="page" id="newsletters-page">
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Subscribers</div><div class="stat-val" id="nl-total">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Subscribed (30d)</div><div class="stat-val" id="nl-30d">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Pro Subscribers</div><div class="stat-val" id="nl-pro">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Elite Subscribers</div><div class="stat-val" id="nl-elite">&mdash;</div></div>
+  </div>
+  <div class="table-wrap">
+    <div class="table-bar">
+      <h3>All Subscribers</h3>
+      <div style="display:flex;gap:8px">
+        <input type="text" class="search-box" placeholder="Search..." oninput="filterNewsletter(this.value)">
+        <button class="btn btn-primary" onclick="exportNewsletter()">Export CSV</button>
+      </div>
     </div>
     <table>
-      <thead><tr><th>Email</th><th>Name</th><th>Plan</th><th>Joined</th><th>Actions</th></tr></thead>
-      <tbody id="users-tbody"><tr><td colspan="5" class="empty-msg">Loading users...</td></tr></tbody>
+      <thead><tr><th>Email</th><th>Name</th><th>Plan</th><th>Joined</th><th>Status</th></tr></thead>
+      <tbody id="nl-tbody"><tr><td colspan="5" class="empty-msg">Loading subscribers...</td></tr></tbody>
     </table>
   </div>
 </div>
 
-<!-- ═══ ANALYTICS ═══ -->
-<div class="page" id="analytics-page">
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Page Views (30d)</div><div class="stat-val">12,847</div></div>
-    <div class="stat"><div class="stat-label">Unique Visitors</div><div class="stat-val">3,219</div></div>
-    <div class="stat"><div class="stat-label">Bounce Rate</div><div class="stat-val">34%</div></div>
-    <div class="stat"><div class="stat-label">Avg Session</div><div class="stat-val">4m 12s</div></div>
-  </div>
-  <div class="card">
-    <h3>Traffic Trend</h3>
-    <div style="height:200px;background:linear-gradient(to right,rgba(99,102,241,.1),rgba(99,102,241,.05));border-radius:8px;display:flex;align-items:flex-end;padding:20px;gap:4px" id="analytics-chart"></div>
-    <p style="font-size:11px;color:var(--t3);margin-top:8px">Analytics data refreshes daily</p>
-  </div>
-</div>
-
-<!-- ═══ NEWSLETTERS ═══ -->
-<div class="page" id="newsletters-page">
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Total Subscribers</div><div class="stat-val">1,247</div></div>
-    <div class="stat"><div class="stat-label">Avg Open Rate</div><div class="stat-val">42%</div></div>
-    <div class="stat"><div class="stat-label">Click Rate</div><div class="stat-val">8.3%</div></div>
-    <div class="stat"><div class="stat-label">Unsubscribes (30d)</div><div class="stat-val">12</div></div>
-  </div>
-  <div class="table-wrap">
-    <div class="table-bar"><h3>Campaign History</h3><button class="btn btn-primary">+ New Campaign</button></div>
-    <table><thead><tr><th>Campaign</th><th>Sent</th><th>Recipients</th><th>Open Rate</th><th>Status</th></tr></thead>
-    <tbody>
-      <tr><td>March Market Update</td><td>Mar 10, 2026</td><td>1,180</td><td>45%</td><td><span class="badge badge-green">Sent</span></td></tr>
-      <tr><td>New Features Announcement</td><td>Mar 1, 2026</td><td>1,150</td><td>52%</td><td><span class="badge badge-green">Sent</span></td></tr>
-      <tr><td>Weekly Trading Digest</td><td>Feb 24, 2026</td><td>1,120</td><td>38%</td><td><span class="badge badge-green">Sent</span></td></tr>
-      <tr><td>Valentine Day Promo</td><td>Feb 14, 2026</td><td>1,090</td><td>61%</td><td><span class="badge badge-green">Sent</span></td></tr>
-    </tbody></table>
-  </div>
-</div>
-
-<!-- ═══ SUBSCRIPTIONS ═══ -->
+<!-- ═══ SUBSCRIPTIONS — FULL CONTROL ═══ -->
 <div class="page" id="subscriptions-page">
   <div class="stats">
-    <div class="stat"><div class="stat-label">Total Subscriptions</div><div class="stat-val" id="sub-total">—</div></div>
-    <div class="stat"><div class="stat-label">Pro Plan</div><div class="stat-val" id="sub-pro">—</div></div>
-    <div class="stat"><div class="stat-label">Elite Plan</div><div class="stat-val" id="sub-elite">—</div></div>
-    <div class="stat"><div class="stat-label">Churn Rate</div><div class="stat-val">2.1%</div></div>
+    <div class="stat"><div class="stat-label">Total Paid</div><div class="stat-val" id="sub-total">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Pro ($29/mo)</div><div class="stat-val" id="sub-pro">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Elite ($79/mo)</div><div class="stat-val" id="sub-elite">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">MRR</div><div class="stat-val" id="sub-mrr">&mdash;</div></div>
   </div>
   <div class="table-wrap">
     <div class="table-bar"><h3>Active Subscriptions</h3></div>
-    <table><thead><tr><th>User</th><th>Plan</th><th>Amount</th><th>Status</th></tr></thead>
-    <tbody id="sub-tbody"><tr><td colspan="4" class="empty-msg">Loading...</td></tr></tbody></table>
+    <table><thead><tr><th>User</th><th>Plan</th><th>Amount</th><th>Started</th><th>Actions</th></tr></thead>
+    <tbody id="sub-tbody"><tr><td colspan="5" class="empty-msg">Loading...</td></tr></tbody></table>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>Free Users (Upgrade Candidates)</h3>
+    <table><thead><tr><th>User</th><th>Joined</th><th>Actions</th></tr></thead>
+    <tbody id="sub-free-tbody"><tr><td colspan="3" class="empty-msg">Loading...</td></tr></tbody></table>
   </div>
 </div>
 
-<!-- ═══ PROMOS ═══ -->
+<!-- ═══ PROMOS — FIRESTORE CRUD ═══ -->
 <div class="page" id="promos-page">
   <div class="stats">
-    <div class="stat"><div class="stat-label">Active Promos</div><div class="stat-val">3</div></div>
-    <div class="stat"><div class="stat-label">Total Uses</div><div class="stat-val">87</div></div>
-    <div class="stat"><div class="stat-label">Revenue Saved</div><div class="stat-val">$1,740</div></div>
-    <div class="stat"><div class="stat-label">Conversion Lift</div><div class="stat-val">+18%</div></div>
+    <div class="stat"><div class="stat-label">Active Promos</div><div class="stat-val" id="pm-active">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Total Uses</div><div class="stat-val" id="pm-uses">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Revenue Saved</div><div class="stat-val" id="pm-saved">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Expired</div><div class="stat-val" id="pm-expired">&mdash;</div></div>
   </div>
   <div class="table-wrap">
-    <div class="table-bar"><h3>Promo Codes</h3><button class="btn btn-primary">+ Create Promo</button></div>
-    <table><thead><tr><th>Code</th><th>Discount</th><th>Uses</th><th>Expires</th><th>Status</th></tr></thead>
-    <tbody>
-      <tr><td style="font-weight:700;color:var(--acc)">LAUNCH20</td><td>20% off</td><td>45</td><td>Apr 30, 2026</td><td><span class="badge badge-green">Active</span></td></tr>
-      <tr><td style="font-weight:700;color:var(--acc)">STUDENT50</td><td>50% off</td><td>28</td><td>Jun 15, 2026</td><td><span class="badge badge-green">Active</span></td></tr>
-      <tr><td style="font-weight:700;color:var(--acc)">BETA30</td><td>30% off</td><td>14</td><td>Mar 31, 2026</td><td><span class="badge badge-yellow">Expiring Soon</span></td></tr>
-    </tbody></table>
+    <div class="table-bar">
+      <h3>Promo Codes</h3>
+      <button class="btn btn-primary" onclick="showPromoModal()">+ Create Promo</button>
+    </div>
+    <table>
+      <thead><tr><th>Code</th><th>Discount</th><th>Uses</th><th>Max Uses</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="pm-tbody"><tr><td colspan="7" class="empty-msg">Loading promos...</td></tr></tbody>
+    </table>
   </div>
 </div>
 
-<!-- ═══ SETTINGS ═══ -->
+<!-- Promo Modal -->
+<div id="promo-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9997;backdrop-filter:blur(2px)" onclick="closePromoModal()"></div>
+<div id="promo-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;width:440px;max-width:90vw;z-index:9998;max-height:80vh;overflow-y:auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h3 id="pm-modal-title" style="font-size:16px;font-weight:700;margin:0">Create Promo Code</h3>
+    <button onclick="closePromoModal()" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">✕</button>
+  </div>
+  <input type="hidden" id="pm-id">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Promo Code</label>
+  <input type="text" id="pm-code" placeholder="e.g. LAUNCH20" style="text-transform:uppercase;width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Discount (%)</label>
+  <input type="number" id="pm-discount" placeholder="20" min="1" max="100" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Max Uses (0 = unlimited)</label>
+  <input type="number" id="pm-max" placeholder="100" min="0" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Expiry Date</label>
+  <input type="date" id="pm-expiry" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Applies To</label>
+  <select id="pm-applies" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
+    <option value="all">All Plans</option>
+    <option value="pro">Pro Only</option>
+    <option value="elite">Elite Only</option>
+  </select>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="btn btn-primary" onclick="savePromo()" style="flex:1">Save Promo</button>
+    <button class="btn btn-ghost" onclick="closePromoModal()" style="flex:1">Cancel</button>
+  </div>
+</div>
+
+<!-- ═══ SETTINGS — REAL CONFIG ═══ -->
 <div class="page" id="settings-page">
   <div class="card">
+    <h3>Firebase Configuration</h3>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">API Key</span><span style="font-size:12px;color:var(--t2);font-family:'SF Mono',Monaco,monospace">AIzaSyAwFPWCs-gryIaIZa7Jznunhvxx0uiJ36A</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Auth Domain</span><span style="font-size:12px;color:var(--t2);font-family:'SF Mono',Monaco,monospace">tradecommand-pro.firebaseapp.com</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Project ID</span><span style="font-size:12px;color:var(--t2);font-family:'SF Mono',Monaco,monospace">tradecommand-pro</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Storage Bucket</span><span style="font-size:12px;color:var(--t2);font-family:'SF Mono',Monaco,monospace">tradecommand-pro.firebasestorage.app</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Messaging Sender ID</span><span style="font-size:12px;color:var(--t2);font-family:'SF Mono',Monaco,monospace">1068820115443</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0"><span style="font-size:13px;font-weight:600">App ID</span><span style="font-size:12px;color:var(--t2);font-family:'SF Mono',Monaco,monospace">1:1068820115443:web:a132300a23f41c519d6c86</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Stripe Configuration</h3>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Pro Plan</span><span style="font-size:12px;color:var(--t2)">$29/mo &mdash; Stripe Checkout</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Elite Plan</span><span style="font-size:12px;color:var(--t2)">$79/mo &mdash; Stripe Checkout</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Stripe Mode</span><span style="font-size:12px;color:var(--t2)">Live</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0"><span style="font-size:13px;font-weight:600">Webhook Status</span><span style="font-size:12px;color:var(--grn);font-weight:600">Active</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Deployment</h3>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Hosting</span><span style="font-size:12px;color:var(--t2)">GitHub Pages</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Repository</span><span style="font-size:12px;color:var(--t2);font-family:'SF Mono',Monaco,monospace">MaxMcDonough/tradecommand-pro</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="font-size:13px;font-weight:600">Branch</span><span style="font-size:12px;color:var(--t2)">main</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0"><span style="font-size:13px;font-weight:600">Custom Domain</span><span style="font-size:12px;color:var(--t2)">tradecommandpro.com</span></div>
+    </div>
+  </div>
+  <div class="card">
     <h3>Application Settings</h3>
-    <div style="display:grid;gap:16px;max-width:500px;margin-top:12px">
+    <div style="display:grid;gap:16px;max-width:500px;margin-top:4px">
       <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">App Name</label>
         <input type="text" class="search-box" style="width:100%" value="TradeCommand Pro" id="set-name"></div>
-      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Support Email</label>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Admin Email</label>
         <input type="text" class="search-box" style="width:100%" value="max.mcdonough123@gmail.com" id="set-email"></div>
       <div style="display:flex;align-items:center;gap:12px">
         <label style="font-size:13px;color:var(--t1)">Maintenance Mode</label>
         <input type="checkbox" id="set-maint">
       </div>
       <div style="display:flex;gap:8px">
-        <button class="btn btn-primary" onclick="localStorage.setItem('tc_settings',JSON.stringify({name:document.getElementById('set-name').value,email:document.getElementById('set-email').value}));toast('Settings saved','grn')">Save Settings</button>
+        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
         <button class="btn btn-ghost" onclick="localStorage.clear();toast('Cache cleared','grn')">Clear Cache</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ CHANGELOG ═══ -->
+<!-- ═══ CHANGELOG — FULL HISTORY ═══ -->
 <div class="page" id="changelog-page">
   <div class="card">
     <h3>Release History</h3>
-    <div style="display:flex;flex-direction:column;gap:20px;margin-top:8px">
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.3.0</span><span style="font-size:11px;color:var(--t3)">Mar 15, 2026</span></div><div style="font-size:13px;color:var(--t2)">Business Hub launch — CRM, Leads, Prospecting, Marketing, Revenue tracking, AI Advisor. 50 LinkedIn leads injected with personalized DMs.</div></div>
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.2.0</span><span style="font-size:11px;color:var(--t3)">Mar 8, 2026</span></div><div style="font-size:13px;color:var(--t2)">Admin dashboard redesign — dark theme, real-time Firebase sync, user management with delete, newsletter tracking.</div></div>
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.1.0</span><span style="font-size:11px;color:var(--t3)">Feb 28, 2026</span></div><div style="font-size:13px;color:var(--t2)">Promo code system, subscription analytics, settings panel with maintenance mode toggle.</div></div>
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.0.0</span><span style="font-size:11px;color:var(--t3)">Feb 15, 2026</span></div><div style="font-size:13px;color:var(--t2)">Full dashboard rebuild with Firebase backend. User authentication, role-based access, real-time data.</div></div>
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.0.0</span><span style="font-size:11px;color:var(--t3)">Jan 20, 2026</span></div><div style="font-size:13px;color:var(--t2)">Initial TradeCommand Pro launch — real-time market dashboard, watchlists, P&L tracker, news feed.</div></div>
+    <div style="display:flex;flex-direction:column;gap:24px;margin-top:8px">
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-green">v2.3</span><span class="badge badge-yellow">LATEST</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">FULL ADMIN REBUILD</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Complete admin dashboard rebuilt from scratch &mdash; clean architecture, zero legacy code<br>
+        + 50 LinkedIn leads with personalized DMs, Pipedrive-style CRM panel (Overview, DM, Activity, Schedule tabs)<br>
+        + Users page: full admin controls &mdash; view all user data, upgrade/downgrade plans, reset passwords, delete accounts<br>
+        + Analytics: real Firebase data, signup trends, plan distribution, exportable reports<br>
+        + Promos: working promo code system with Firestore CRUD<br>
+        + Settings: all API keys, Stripe config, Firebase connections displayed<br>
+        + Leads panel: localStorage persistence for notes, activity log, scheduled actions<br>
+        ~ Removed all mock/placeholder data from admin sections<br>
+        ~ Fixed lead panel not opening (renderLeadsTable now always generates onclick handlers)<br>
+        ~ Fixed users table hanging on load (all Firebase queries wrapped in .catch)<br>
+        ~ Fixed user delete not working (optimistic UI with Firestore confirmation)
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.2</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">BUSINESS HUB &mdash; ADMIN INTEGRATION</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Business Hub fully integrated into Admin &mdash; CRM, Leads, Prospecting, Marketing, Campaigns, Revenue, Analytics, AI Advisor, Growth Plan, Files, and Settings all live in the sidebar<br>
+        + AI Business Advisor &mdash; health score (0&ndash;100) with per-metric breakdown, priority action items based on live user data, and contextual Q&amp;A<br>
+        + Revenue page &mdash; MRR/ARR tracking, Pro vs Elite breakdown, milestone tracker, MRR trend chart<br>
+        + CRM &amp; Pipeline &mdash; deal stages, weighted pipeline value, win rate, average deal size<br>
+        + Leads &mdash; hot/warm/cold scoring, conversion tracking, full lead table<br>
+        + Marketing &mdash; monthly content calendar, channel performance stats<br>
+        + Campaigns &mdash; open rate, send rate, conversion tracking per campaign<br>
+        ~ Removed standalone Business Command Centre link from admin sidebar<br>
+        ~ Dashboard load now resilient &mdash; each Firestore query isolated, individual failures don't block the rest
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.1</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">HOMEPAGE SIGN-UP FLOW</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Replaced email capture forms (hero &amp; CTA sections) with Sign Up / Sign In buttons<br>
+        + Nav bar updated to Sign In + Sign Up Free buttons<br>
+        + Floating bottom CTA simplified to single &ldquo;Get Started&rdquo; button<br>
+        ~ FAQ: &ldquo;How do I set it up?&rdquo; &mdash; removed download references, now says sign up + login<br>
+        ~ FAQ: Free tier description &mdash; removed &ldquo;download&rdquo;, now says &ldquo;sign up and use forever&rdquo;
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.0</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">MOBILE OPTIMIZATION</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Comprehensive mobile CSS across all pages &mdash; dashboard, admin, business command centre<br>
+        + dashboard.html: hides ticker strip on mobile, compact top bar, scrollable nav tabs, full-screen modals<br>
+        + admin.html: 2-column stat cards, horizontal-scroll tables, compact content header, mobile sidebar<br>
+        + business.html: single-column grids, kanban, table overflow, compact header and cards
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.9</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">PRICING &amp; CHECKOUT FLOW</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Pro plan: direct Stripe checkout from homepage pricing section<br>
+        + Elite plan: direct Stripe checkout (was a mailto link)<br>
+        + Access modal &mdash; email capture fires interest email, then redirects to sign-up with plan pre-selected<br>
+        + dashboard.html reads ?tab=signup, ?email=, ?checkout= URL params on load<br>
+        + After sign-up or Google auth, redirects to Stripe with email + user ID pre-filled<br>
+        ~ All Stripe links use goToStripe() &mdash; no more target=&ldquo;_blank&rdquo;
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.8</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">EMAILS &amp; NEWSLETTERS</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Welcome email HTML template &mdash; sent automatically on new account creation<br>
+        + Personal newsletter, prospecting newsletter, launch announcement newsletter<br>
+        + Interest/nurture email &mdash; fires when user submits email on homepage<br>
+        ~ All emails signed off as &ldquo;Max McDonough &mdash; Founder &amp; Developer, TradeCommand Pro&rdquo;
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.7</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">AUTH &amp; SIGN-UP IMPROVEMENTS</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Phone number field added to sign-up form (optional)<br>
+        + Confirm password field &mdash; validates match before account creation<br>
+        + Password strength bar &mdash; 4-level indicator with colour coding<br>
+        + Welcome email auto-sent on sign-up<br>
+        ~ Minimum password length enforced at 8 characters
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.6</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">ADMIN PANEL &amp; BUSINESS COMMAND CENTRE</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + URL hash routing throughout admin panel<br>
+        + Live analytics &mdash; Firestore onSnapshot listeners<br>
+        + Currently Online panel &mdash; users active in last 5 minutes<br>
+        + Business Command Centre: URL hash routing<br>
+        ~ Subscription pricing updated: Pro $29/mo, Elite $79/mo
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.5</span><span style="font-size:11px;color:var(--t3)">Early 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">HOMEPAGE OVERHAUL</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Feature spotlight section with interactive live mockup cards<br>
+        + Comparison table vs Bloomberg Terminal, ThinkorSwim, Webull<br>
+        + Live position size calculator<br>
+        + Scrolling quote strip from traders<br>
+        + Floating sticky CTA bar<br>
+        + 5 new FAQ items
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.4</span><span style="font-size:11px;color:var(--t3)">Early 2026</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">GUIDED TOUR</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + 12-step guided tour auto-launches for first-time users after onboarding<br>
+        + Covers watchlist, AI signals, trade plan calculator, session tracker, Reddit Radar, briefings, crypto page<br>
+        + Replay any time via the ? button in the top nav bar
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.3</span><span style="font-size:11px;color:var(--t3)">Late 2025</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">UI &amp; DATA FIXES</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Chart symbol selector, watchlist filters and sort controls<br>
+        ~ Fixed centre column overflow, sector variable bug, auth session persistence
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.2</span><span style="font-size:11px;color:var(--t3)">Late 2025</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">SESSION TRACKER &amp; HOLDINGS</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Holdings section &mdash; live P&amp;L per position with next-move guidance<br>
+        + Session tracker bar &mdash; deployed capital, realized P&amp;L, remaining balance<br>
+        + Browser notifications when position hits stop loss or profit target
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.1</span><span style="font-size:11px;color:var(--t3)">Mid 2025</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">AUTH, ONBOARDING &amp; USER PROFILES</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Firebase Auth &mdash; email/password and Google OAuth<br>
+        + 6-step personalized onboarding<br>
+        + Firestore user profiles &mdash; settings persist across devices<br>
+        + Settings page &mdash; update profile, API keys, balance, risk tolerance
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.0</span><span style="font-size:11px;color:var(--t3)">2025</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">INITIAL RELEASE &mdash; CORE DASHBOARD</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Watchlist with live/demo prices across 12 market sectors<br>
+        + AI trade signals &mdash; 8-factor analysis with confidence score<br>
+        + Step-by-step action plan &mdash; exact entry, stop loss, profit target, position size<br>
+        + 5x daily market briefings<br>
+        + Reddit Radar &mdash; real-time sentiment<br>
+        + Fear &amp; Greed Index, Crypto dashboard, Market news feed<br>
+        + Trading 101 beginner guide &mdash; 10 chapters<br>
+        + Tools page &mdash; position sizer, risk/reward calculator, trade journal
+      </div></div>
+
+      <div style="border-top:1px solid var(--brd);padding-top:12px;font-size:11px;color:var(--t3)">
+        <span style="color:var(--grn)">+</span> New feature &nbsp;
+        <span style="color:var(--ylw)">~</span> Change/improvement &nbsp;
+        <span style="color:var(--red)">-</span> Removed/deprecated
+      </div>
     </div>
   </div>
 </div>
@@ -670,18 +939,22 @@ document.querySelectorAll('.nav-item').forEach(item => {
 // ═══ PAGE LOADERS ═══
 let allUsers = [];
 let usersLoaded = false;
+let allPromos = [];
+let promosLoaded = false;
 
 function loadPage(page) {
   switch(page) {
     case 'dashboard': loadDashboard(); break;
     case 'users': if (!usersLoaded) loadUsers(); break;
+    case 'analytics': loadAnalytics(); break;
+    case 'newsletters': loadNewsletters(); break;
     case 'subscriptions': loadSubs(); break;
+    case 'promos': if (!promosLoaded) loadPromos(); break;
     case 'biz-leads': loadLeads(); break;
     case 'biz-dashboard': loadBizDash(); break;
     case 'biz-crm': loadCRM(); break;
     case 'biz-revenue': loadRevenue(); break;
     case 'biz-analytics': loadBizAnalytics(); break;
-    case 'analytics': loadAnalyticsChart(); break;
   }
 }
 
@@ -710,87 +983,485 @@ async function loadUsers() {
   usersLoaded = true;
   const tbody = document.getElementById('users-tbody');
   try {
-    const snap = await db.collection('users').limit(500).get().catch(()=>({docs:[]}));
-    allUsers = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const snap = await db.collection('users').limit(500).get().catch(function(){return {docs:[]};});
+    allUsers = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    updateUserStats();
     renderUsers(allUsers);
   } catch(e) {
     console.warn('Users load:', e);
-    tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">Could not load users</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">Could not load users</td></tr>';
   }
 }
 
+function updateUserStats() {
+  var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+  s('u-total', allUsers.length);
+  s('u-pro', allUsers.filter(function(u){return u.plan==='pro';}).length);
+  s('u-elite', allUsers.filter(function(u){return u.plan==='elite';}).length);
+  s('u-free', allUsers.filter(function(u){return !u.plan||u.plan==='free';}).length);
+}
+
+function fmtDate(ts) {
+  if (!ts) return '\u2014';
+  var d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+
 function renderUsers(users) {
-  const tbody = document.getElementById('users-tbody');
-  if (!users.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">No users found</td></tr>'; return; }
-  tbody.innerHTML = users.map(u => `<tr data-uid="${u.id}" onclick="openUserPanel('${u.id}')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(99,102,241,.06)'" onmouseout="this.style.background=''">
-    <td style="font-size:13px">${u.email||'—'}</td>
-    <td style="font-size:13px;color:var(--t2)">${u.displayName||u.name||'—'}</td>
-    <td><span class="badge badge-indigo">${u.plan||'free'}</span></td>
-    <td style="font-size:12px;color:var(--t3)">${u.createdAt?.toDate?.()?.toLocaleDateString?.() || '—'}</td>
-    <td><button class="btn btn-danger" style="font-size:11px;padding:3px 10px" onclick="event.stopPropagation();deleteUser('${u.id}',this)">Delete</button></td>
-  </tr>`).join('');
+  var tbody = document.getElementById('users-tbody');
+  if (!users.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">No users found</td></tr>'; return; }
+  tbody.innerHTML = users.map(function(u) {
+    var planBadge = u.plan==='elite'?'badge-green':u.plan==='pro'?'badge-indigo':'badge-yellow';
+    return '<tr data-uid="'+u.id+'" onclick="openUserModal(\''+u.id+'\')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'rgba(99,102,241,.06)\'" onmouseout="this.style.background=\'\'">'+
+      '<td style="font-size:13px">'+(u.email||'\u2014')+'</td>'+
+      '<td style="font-size:13px;color:var(--t2)">'+(u.displayName||u.name||'\u2014')+'</td>'+
+      '<td><span class="badge '+planBadge+'">'+(u.plan||'free')+'</span></td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+(u.location||u.city||'\u2014')+'</td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+fmtDate(u.createdAt)+'</td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+fmtDate(u.lastActive||u.lastLogin)+'</td>'+
+      '<td style="display:flex;gap:4px">'+
+        '<button class="btn btn-primary" style="font-size:11px;padding:3px 10px" onclick="event.stopPropagation();openUserModal(\''+u.id+'\')">Edit</button>'+
+        '<button class="btn btn-danger" style="font-size:11px;padding:3px 10px" onclick="event.stopPropagation();deleteUser(\''+u.id+'\',this)">Delete</button>'+
+      '</td></tr>';
+  }).join('');
 }
 
 function filterUsers(q) {
   q = q.toLowerCase();
-  const filtered = allUsers.filter(u => (u.email||'').toLowerCase().includes(q) || (u.displayName||u.name||'').toLowerCase().includes(q));
+  var filtered = allUsers.filter(function(u){
+    return (u.email||'').toLowerCase().indexOf(q)>=0 || (u.displayName||u.name||'').toLowerCase().indexOf(q)>=0 || (u.location||'').toLowerCase().indexOf(q)>=0;
+  });
   renderUsers(filtered);
 }
 
 function deleteUser(uid, btn) {
-  const row = btn.closest('tr');
+  if (!confirm('Delete this user permanently?')) return;
+  var row = btn.closest('tr');
   row.style.opacity = '0.3';
   row.style.pointerEvents = 'none';
   db.collection('users').doc(uid).delete()
-    .then(() => { row.remove(); allUsers = allUsers.filter(u=>u.id!==uid); toast('User deleted','grn'); })
-    .catch(e => { row.style.opacity='1'; row.style.pointerEvents=''; toast('Delete failed: '+e.message,'red'); });
+    .then(function(){ row.remove(); allUsers = allUsers.filter(function(u){return u.id!==uid;}); updateUserStats(); toast('User deleted','grn'); })
+    .catch(function(e){ row.style.opacity='1'; row.style.pointerEvents=''; toast('Delete failed: '+e.message,'red'); });
+}
+
+function openUserModal(uid) {
+  var user = allUsers.find(function(u){return u.id===uid;});
+  if (!user) return;
+  document.getElementById('um-uid').value = uid;
+  document.getElementById('um-email').value = user.email||'';
+  document.getElementById('um-name').value = user.displayName||user.name||'';
+  document.getElementById('um-plan').value = user.plan||'free';
+  document.getElementById('um-location').value = user.location||user.city||'';
+  document.getElementById('um-phone').value = user.phone||'';
+  document.getElementById('um-notes').value = user.adminNotes||'';
+  document.getElementById('um-title').textContent = user.email||'Edit User';
+  document.getElementById('user-modal').style.display = 'block';
+  document.getElementById('user-modal-overlay').style.display = 'block';
+}
+function closeUserModal() {
+  document.getElementById('user-modal').style.display = 'none';
+  document.getElementById('user-modal-overlay').style.display = 'none';
+}
+
+function saveUserEdits() {
+  var uid = document.getElementById('um-uid').value;
+  var updates = {
+    displayName: document.getElementById('um-name').value,
+    plan: document.getElementById('um-plan').value,
+    location: document.getElementById('um-location').value,
+    phone: document.getElementById('um-phone').value,
+    adminNotes: document.getElementById('um-notes').value
+  };
+  db.collection('users').doc(uid).update(updates)
+    .then(function(){
+      var user = allUsers.find(function(u){return u.id===uid;});
+      if(user) Object.assign(user, updates);
+      updateUserStats();
+      renderUsers(allUsers);
+      closeUserModal();
+      toast('User updated','grn');
+    })
+    .catch(function(e){ toast('Update failed: '+e.message,'red'); });
+}
+
+function resetUserPassword() {
+  var email = document.getElementById('um-email').value;
+  if (!email) { toast('No email','red'); return; }
+  auth.sendPasswordResetEmail(email)
+    .then(function(){ toast('Password reset email sent to '+email,'grn'); })
+    .catch(function(e){ toast('Reset failed: '+e.message,'red'); });
+}
+
+function deleteUserFromModal() {
+  var uid = document.getElementById('um-uid').value;
+  if (!confirm('Permanently delete this user?')) return;
+  db.collection('users').doc(uid).delete()
+    .then(function(){
+      allUsers = allUsers.filter(function(u){return u.id!==uid;});
+      updateUserStats();
+      renderUsers(allUsers);
+      closeUserModal();
+      toast('User deleted','grn');
+    })
+    .catch(function(e){ toast('Delete failed: '+e.message,'red'); });
+}
+
+function exportUsers() {
+  var csv = 'Email,Name,Plan,Location,Joined\n';
+  allUsers.forEach(function(u){
+    csv += '"'+(u.email||'')+'",'+(u.displayName||u.name||'')+','+(u.plan||'free')+','+(u.location||'')+','+fmtDate(u.createdAt)+'\n';
+  });
+  var blob = new Blob([csv],{type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tc_users_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+  toast('Users exported','grn');
 }
 
 function openUserPanel(uid) {
-  const user = allUsers.find(u=>u.id===uid);
-  if (!user) return;
-  document.getElementById('up-title').textContent = user.email||'User';
-  document.getElementById('up-body').innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <div class="lp-field"><div class="lp-field-label">Email</div><div>${user.email||'—'}</div></div>
-      <div class="lp-field"><div class="lp-field-label">Name</div><div>${user.displayName||user.name||'—'}</div></div>
-      <div class="lp-field"><div class="lp-field-label">Plan</div><div><span class="badge badge-indigo">${user.plan||'free'}</span></div></div>
-      <div class="lp-field"><div class="lp-field-label">UID</div><div style="font-size:11px;color:var(--t3);word-break:break-all">${user.id}</div></div>
-      <div class="lp-field"><div class="lp-field-label">Joined</div><div>${user.createdAt?.toDate?.()?.toLocaleDateString?.() || '—'}</div></div>
-    </div>`;
-  document.getElementById('user-panel').style.transform = 'translateX(0)';
+  openUserModal(uid);
 }
 
 async function loadSubs() {
   try {
     if (!allUsers.length) {
-      const snap = await db.collection('users').limit(500).get().catch(()=>({docs:[]}));
-      allUsers = snap.docs.map(d=>({id:d.id,...d.data()}));
+      var snap = await db.collection('users').limit(500).get().catch(function(){return {docs:[]};});
+      allUsers = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
     }
-    const paid = allUsers.filter(u=>u.plan&&u.plan!=='free');
-    const s = id => document.getElementById(id);
-    s('sub-total').textContent = paid.length;
-    s('sub-pro').textContent = allUsers.filter(u=>u.plan==='pro').length;
-    s('sub-elite').textContent = allUsers.filter(u=>u.plan==='elite').length;
-    const tbody = document.getElementById('sub-tbody');
+    var paid = allUsers.filter(function(u){return u.plan&&u.plan!=='free';});
+    var proCount = allUsers.filter(function(u){return u.plan==='pro';}).length;
+    var eliteCount = allUsers.filter(function(u){return u.plan==='elite';}).length;
+    var mrr = proCount*29+eliteCount*79;
+    var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+    s('sub-total', paid.length);
+    s('sub-pro', proCount);
+    s('sub-elite', eliteCount);
+    s('sub-mrr', '$'+mrr);
+    var tbody = document.getElementById('sub-tbody');
     if (paid.length) {
-      tbody.innerHTML = paid.map(u => `<tr>
-        <td style="font-size:13px">${u.email||'—'}</td>
-        <td><span class="badge badge-indigo">${u.plan}</span></td>
-        <td>$${u.plan==='elite'?79:29}/mo</td>
-        <td><span class="badge badge-green">Active</span></td>
-      </tr>`).join('');
+      tbody.innerHTML = paid.map(function(u){
+        return '<tr><td style="font-size:13px">'+(u.email||'\u2014')+'</td>'+
+          '<td><span class="badge '+(u.plan==='elite'?'badge-green':'badge-indigo')+'">'+(u.plan)+'</span></td>'+
+          '<td>$'+(u.plan==='elite'?79:29)+'/mo</td>'+
+          '<td style="font-size:12px;color:var(--t3)">'+fmtDate(u.createdAt)+'</td>'+
+          '<td><select onchange="changeUserPlan(\''+u.id+'\',this.value)" style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:4px 8px;font-size:11px">'+
+            '<option value="pro"'+(u.plan==='pro'?' selected':'')+'>Pro</option>'+
+            '<option value="elite"'+(u.plan==='elite'?' selected':'')+'>Elite</option>'+
+            '<option value="free">Downgrade to Free</option>'+
+          '</select></td></tr>';
+      }).join('');
     } else {
-      tbody.innerHTML = '<tr><td colspan="4" class="empty-msg">No active subscriptions</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">No active subscriptions</td></tr>';
+    }
+    var free = allUsers.filter(function(u){return !u.plan||u.plan==='free';});
+    var ftbody = document.getElementById('sub-free-tbody');
+    if (free.length) {
+      ftbody.innerHTML = free.map(function(u){
+        return '<tr><td style="font-size:13px">'+(u.email||'\u2014')+'</td>'+
+          '<td style="font-size:12px;color:var(--t3)">'+fmtDate(u.createdAt)+'</td>'+
+          '<td><button class="btn btn-primary" style="font-size:11px;padding:3px 10px" onclick="changeUserPlan(\''+u.id+'\',\'pro\')">Upgrade to Pro</button> '+
+          '<button class="btn btn-ghost" style="font-size:11px;padding:3px 10px" onclick="changeUserPlan(\''+u.id+'\',\'elite\')">Upgrade to Elite</button></td></tr>';
+      }).join('');
+    } else {
+      ftbody.innerHTML = '<tr><td colspan="3" class="empty-msg">All users have subscriptions</td></tr>';
     }
   } catch(e) { console.warn('Subs:', e); }
 }
 
-function loadAnalyticsChart() {
-  const chart = document.getElementById('analytics-chart');
-  if (chart.children.length > 0) return;
-  const bars = [40,55,35,65,80,60,75,90,70,85,65,50,70,85,95,80,65,75,90,85,70,60,55,75,80,90,85,70,65,80];
-  chart.innerHTML = bars.map(h => `<div style="flex:1;background:var(--acc);border-radius:3px 3px 0 0;height:${h}%;opacity:.7;transition:opacity .15s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7"></div>`).join('');
+function changeUserPlan(uid, newPlan) {
+  db.collection('users').doc(uid).update({plan:newPlan})
+    .then(function(){
+      var user = allUsers.find(function(u){return u.id===uid;});
+      if(user) user.plan = newPlan;
+      loadSubs();
+      toast('Plan changed to '+newPlan,'grn');
+    })
+    .catch(function(e){ toast('Failed: '+e.message,'red'); });
+}
+
+// ═══ ANALYTICS — REAL DATA ═══
+async function loadAnalytics() {
+  try {
+    if (!allUsers.length) {
+      var snap = await db.collection('users').limit(500).get().catch(function(){return {docs:[]};});
+      allUsers = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    }
+    var now = new Date();
+    var d30 = new Date(now - 30*86400000);
+    var d7 = new Date(now - 7*86400000);
+    var recent30 = allUsers.filter(function(u){
+      if(!u.createdAt) return false;
+      var d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+      return d >= d30;
+    });
+    var recent7 = allUsers.filter(function(u){
+      if(!u.createdAt) return false;
+      var d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+      return d >= d7;
+    });
+    var paid = allUsers.filter(function(u){return u.plan&&u.plan!=='free';}).length;
+    var conv = allUsers.length ? Math.round(paid/allUsers.length*100) : 0;
+    var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+    s('a-total', allUsers.length);
+    s('a-30d', recent30.length);
+    s('a-7d', recent7.length);
+    s('a-conv', conv+'%');
+
+    // Signup chart — count per day for last 30 days
+    var dayCounts = {};
+    for(var i=0;i<30;i++){
+      var day = new Date(now - (29-i)*86400000);
+      var key = day.toISOString().split('T')[0];
+      dayCounts[key] = 0;
+    }
+    allUsers.forEach(function(u){
+      if(!u.createdAt) return;
+      var d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+      var key = d.toISOString().split('T')[0];
+      if(dayCounts[key]!==undefined) dayCounts[key]++;
+    });
+    var vals = Object.values(dayCounts);
+    var maxVal = Math.max.apply(null, vals) || 1;
+    var chart = document.getElementById('a-chart');
+    chart.innerHTML = vals.map(function(v){
+      var h = Math.max(4, Math.round(v/maxVal*100));
+      return '<div style="flex:1;background:var(--acc);border-radius:3px 3px 0 0;height:'+h+'%;opacity:.7;min-width:4px" title="'+v+' signups"></div>';
+    }).join('');
+    var keys = Object.keys(dayCounts);
+    var labels = document.getElementById('a-chart-labels');
+    labels.innerHTML = '<span>'+keys[0].slice(5)+'</span><span>'+keys[14].slice(5)+'</span><span>'+keys[29].slice(5)+'</span>';
+
+    // Plan distribution
+    var proC = allUsers.filter(function(u){return u.plan==='pro';}).length;
+    var eliteC = allUsers.filter(function(u){return u.plan==='elite';}).length;
+    var freeC = allUsers.length - proC - eliteC;
+    var plans = document.getElementById('a-plans');
+    var total = allUsers.length || 1;
+    plans.innerHTML = [
+      {l:'Free',n:freeC,c:'var(--ylw)'},{l:'Pro ($29/mo)',n:proC,c:'var(--acc)'},{l:'Elite ($79/mo)',n:eliteC,c:'var(--grn)'}
+    ].map(function(p){
+      var pct = Math.round(p.n/total*100);
+      return '<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>'+p.l+'</span><span style="color:var(--t3)">'+p.n+' ('+pct+'%)</span></div><div style="height:6px;background:var(--brd);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+p.c+';border-radius:3px"></div></div></div>';
+    }).join('');
+
+    // Recent signups
+    var recentEl = document.getElementById('a-recent');
+    var sorted = allUsers.slice().sort(function(a,b){
+      var da = a.createdAt&&a.createdAt.toDate?a.createdAt.toDate():new Date(0);
+      var db2 = b.createdAt&&b.createdAt.toDate?b.createdAt.toDate():new Date(0);
+      return db2-da;
+    }).slice(0,10);
+    recentEl.innerHTML = sorted.map(function(u){
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)"><div><div style="font-size:13px">'+(u.email||'\u2014')+'</div><div style="font-size:11px;color:var(--t3)">'+fmtDate(u.createdAt)+'</div></div><span class="badge badge-indigo">'+(u.plan||'free')+'</span></div>';
+    }).join('');
+  } catch(e) { console.warn('Analytics:', e); }
+}
+
+function exportAnalytics() {
+  var csv = 'Metric,Value\n';
+  csv += 'Total Users,'+allUsers.length+'\n';
+  csv += 'Pro Users,'+allUsers.filter(function(u){return u.plan==='pro';}).length+'\n';
+  csv += 'Elite Users,'+allUsers.filter(function(u){return u.plan==='elite';}).length+'\n';
+  csv += 'Free Users,'+allUsers.filter(function(u){return !u.plan||u.plan==='free';}).length+'\n';
+  var pro = allUsers.filter(function(u){return u.plan==='pro';}).length;
+  var elite = allUsers.filter(function(u){return u.plan==='elite';}).length;
+  csv += 'MRR,$'+(pro*29+elite*79)+'\n';
+  csv += 'ARR,$'+((pro*29+elite*79)*12)+'\n';
+  csv += 'Report Date,'+new Date().toISOString().split('T')[0]+'\n';
+  var blob = new Blob([csv],{type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tc_analytics_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+  toast('Analytics exported','grn');
+}
+
+// ═══ NEWSLETTERS — REAL DATA ═══
+function loadNewsletters() {
+  if (!allUsers.length) {
+    db.collection('users').limit(500).get().catch(function(){return {docs:[]};})
+      .then(function(snap){ allUsers = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());}); renderNewsletter(allUsers); });
+  } else {
+    renderNewsletter(allUsers);
+  }
+}
+
+function renderNewsletter(users) {
+  var subs = users.filter(function(u){return u.newsletter!==false;});
+  var now = new Date();
+  var d30 = new Date(now - 30*86400000);
+  var recent = subs.filter(function(u){
+    if(!u.createdAt) return false;
+    var d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+    return d >= d30;
+  });
+  var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+  s('nl-total', subs.length);
+  s('nl-30d', recent.length);
+  s('nl-pro', subs.filter(function(u){return u.plan==='pro';}).length);
+  s('nl-elite', subs.filter(function(u){return u.plan==='elite';}).length);
+  var tbody = document.getElementById('nl-tbody');
+  if (!subs.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">No subscribers</td></tr>'; return; }
+  tbody.innerHTML = subs.map(function(u){
+    return '<tr><td style="font-size:13px">'+(u.email||'\u2014')+'</td>'+
+      '<td style="font-size:13px;color:var(--t2)">'+(u.displayName||u.name||'\u2014')+'</td>'+
+      '<td><span class="badge badge-indigo">'+(u.plan||'free')+'</span></td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+fmtDate(u.createdAt)+'</td>'+
+      '<td><span class="badge badge-green">Subscribed</span></td></tr>';
+  }).join('');
+}
+
+var nlAllSubs = [];
+function filterNewsletter(q) {
+  q = q.toLowerCase();
+  var subs = allUsers.filter(function(u){
+    return u.newsletter!==false && ((u.email||'').toLowerCase().indexOf(q)>=0 || (u.displayName||u.name||'').toLowerCase().indexOf(q)>=0);
+  });
+  var tbody = document.getElementById('nl-tbody');
+  if (!subs.length) { tbody.innerHTML = '<tr><td colspan="5" class="empty-msg">No matches</td></tr>'; return; }
+  tbody.innerHTML = subs.map(function(u){
+    return '<tr><td style="font-size:13px">'+(u.email||'\u2014')+'</td>'+
+      '<td style="font-size:13px;color:var(--t2)">'+(u.displayName||u.name||'\u2014')+'</td>'+
+      '<td><span class="badge badge-indigo">'+(u.plan||'free')+'</span></td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+fmtDate(u.createdAt)+'</td>'+
+      '<td><span class="badge badge-green">Subscribed</span></td></tr>';
+  }).join('');
+}
+
+function exportNewsletter() {
+  var subs = allUsers.filter(function(u){return u.newsletter!==false;});
+  var csv = 'Email,Name,Plan,Joined\n';
+  subs.forEach(function(u){
+    csv += '"'+(u.email||'')+'",'+(u.displayName||u.name||'')+','+(u.plan||'free')+','+fmtDate(u.createdAt)+'\n';
+  });
+  var blob = new Blob([csv],{type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tc_subscribers_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+  toast('Subscribers exported','grn');
+}
+
+// ═══ PROMOS — FIRESTORE CRUD ═══
+async function loadPromos() {
+  promosLoaded = true;
+  try {
+    var snap = await db.collection('promos').get().catch(function(){return {docs:[]};});
+    allPromos = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+    renderPromos();
+  } catch(e) {
+    console.warn('Promos:', e);
+    document.getElementById('pm-tbody').innerHTML = '<tr><td colspan="7" class="empty-msg">Could not load promos</td></tr>';
+  }
+}
+
+function renderPromos() {
+  var now = new Date();
+  var active = 0, totalUses = 0, expired = 0, saved = 0;
+  allPromos.forEach(function(p){
+    totalUses += (p.uses||0);
+    saved += (p.uses||0) * (p.discount||0) * 0.29;
+    var exp = p.expiry ? new Date(p.expiry) : null;
+    if(exp && exp < now) expired++;
+    else active++;
+  });
+  var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
+  s('pm-active', active);
+  s('pm-uses', totalUses);
+  s('pm-saved', '$'+Math.round(saved));
+  s('pm-expired', expired);
+
+  var tbody = document.getElementById('pm-tbody');
+  if (!allPromos.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">No promo codes. Create one!</td></tr>'; return; }
+  tbody.innerHTML = allPromos.map(function(p){
+    var exp = p.expiry ? new Date(p.expiry) : null;
+    var isExpired = exp && exp < now;
+    var statusBadge = isExpired ? '<span class="badge badge-red">Expired</span>' : '<span class="badge badge-green">Active</span>';
+    return '<tr>'+
+      '<td style="font-weight:700;color:var(--acc)">'+(p.code||'\u2014')+'</td>'+
+      '<td>'+(p.discount||0)+'% off</td>'+
+      '<td>'+(p.uses||0)+'</td>'+
+      '<td>'+(p.maxUses||'Unlimited')+'</td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+(p.expiry||'Never')+'</td>'+
+      '<td>'+statusBadge+'</td>'+
+      '<td><button class="btn btn-ghost" style="font-size:11px;padding:3px 8px" onclick="editPromo(\''+p.id+'\')">Edit</button> '+
+      '<button class="btn btn-danger" style="font-size:11px;padding:3px 8px" onclick="deletePromo(\''+p.id+'\')">Delete</button></td></tr>';
+  }).join('');
+}
+
+function showPromoModal(promoId) {
+  document.getElementById('pm-id').value = promoId||'';
+  document.getElementById('pm-code').value = '';
+  document.getElementById('pm-discount').value = '';
+  document.getElementById('pm-max').value = '';
+  document.getElementById('pm-expiry').value = '';
+  document.getElementById('pm-applies').value = 'all';
+  document.getElementById('pm-modal-title').textContent = promoId ? 'Edit Promo Code' : 'Create Promo Code';
+  if(promoId) {
+    var p = allPromos.find(function(x){return x.id===promoId;});
+    if(p) {
+      document.getElementById('pm-code').value = p.code||'';
+      document.getElementById('pm-discount').value = p.discount||'';
+      document.getElementById('pm-max').value = p.maxUses||'';
+      document.getElementById('pm-expiry').value = p.expiry||'';
+      document.getElementById('pm-applies').value = p.appliesTo||'all';
+    }
+  }
+  document.getElementById('promo-modal').style.display = 'block';
+  document.getElementById('promo-modal-overlay').style.display = 'block';
+}
+function closePromoModal() {
+  document.getElementById('promo-modal').style.display = 'none';
+  document.getElementById('promo-modal-overlay').style.display = 'none';
+}
+function editPromo(id) { showPromoModal(id); }
+
+function savePromo() {
+  var id = document.getElementById('pm-id').value;
+  var data = {
+    code: document.getElementById('pm-code').value.toUpperCase().trim(),
+    discount: parseInt(document.getElementById('pm-discount').value)||0,
+    maxUses: parseInt(document.getElementById('pm-max').value)||0,
+    expiry: document.getElementById('pm-expiry').value,
+    appliesTo: document.getElementById('pm-applies').value,
+    uses: 0
+  };
+  if(!data.code) { toast('Enter a code','red'); return; }
+  if(!data.discount) { toast('Enter discount %','red'); return; }
+  var ref = id ? db.collection('promos').doc(id) : db.collection('promos').doc();
+  if(id) {
+    var existing = allPromos.find(function(p){return p.id===id;});
+    if(existing) data.uses = existing.uses||0;
+  }
+  ref.set(data)
+    .then(function(){
+      closePromoModal();
+      promosLoaded = false;
+      loadPromos();
+      toast(id?'Promo updated':'Promo created','grn');
+    })
+    .catch(function(e){ toast('Save failed: '+e.message,'red'); });
+}
+
+function deletePromo(id) {
+  if(!confirm('Delete this promo code?')) return;
+  db.collection('promos').doc(id).delete()
+    .then(function(){
+      allPromos = allPromos.filter(function(p){return p.id!==id;});
+      renderPromos();
+      toast('Promo deleted','grn');
+    })
+    .catch(function(e){ toast('Delete failed: '+e.message,'red'); });
+}
+
+function saveSettings() {
+  localStorage.setItem('tc_settings',JSON.stringify({
+    name: document.getElementById('set-name').value,
+    email: document.getElementById('set-email').value,
+    maintenance: document.getElementById('set-maint').checked
+  }));
+  toast('Settings saved','grn');
 }
 
 // ═══ BIZ PAGE LOADERS ═══
