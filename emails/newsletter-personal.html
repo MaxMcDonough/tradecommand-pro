@@ -1,86 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hey — I built something. Wanted you to see it.</title>
-  <style>
-    body { margin: 0; padding: 0; background: #f4f5f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-    .header { background: #0a0e17; padding: 36px 40px 28px; }
-    .logo { font-size: 22px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
-    .logo span { color: #3b82f6; }
-    .badge { display: inline-block; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #93c5fd; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-top: 10px; }
-    .body { padding: 40px; }
-    .greeting { font-size: 28px; font-weight: 700; color: #111827; line-height: 1.2; margin-bottom: 6px; }
-    .subhead { font-size: 15px; color: #6b7280; margin-bottom: 32px; }
-    p { font-size: 16px; color: #374151; line-height: 1.7; margin: 0 0 20px; }
-    .highlight-box { background: #f0f7ff; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 28px 0; }
-    .highlight-box p { margin: 0; font-size: 15px; color: #1e40af; }
-    .feature-list { list-style: none; padding: 0; margin: 24px 0; }
-    .feature-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 15px; color: #374151; margin-bottom: 14px; }
-    .feature-list li .icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-    .cta-wrap { text-align: center; margin: 36px 0 28px; }
-    .cta-btn { display: inline-block; background: #3b82f6; color: #ffffff; font-size: 16px; font-weight: 600; padding: 14px 36px; border-radius: 8px; text-decoration: none; letter-spacing: 0.3px; }
-    .cta-btn:hover { background: #2563eb; }
-    .cta-sub { font-size: 13px; color: #9ca3af; margin-top: 10px; }
-    .divider { border: none; border-top: 1px solid #e5e7eb; margin: 32px 0; }
-    .ps { font-size: 14px; color: #6b7280; font-style: italic; line-height: 1.6; }
-    .footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 24px 40px; text-align: center; }
-    .footer p { font-size: 12px; color: #9ca3af; margin: 0 0 6px; }
-    .footer a { color: #6b7280; text-decoration: none; }
-    @media (max-width: 600px) {
-      .body { padding: 28px 24px; }
-      .header { padding: 28px 24px 22px; }
-      .footer { padding: 20px 24px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hey, I built something — want to check it out?</title>
 </head>
-<body>
-  <div class="wrapper">
-    <div class="header">
-      <div class="logo">⚡ Trade<span>Command</span> Pro</div>
-      <div class="badge">From Max McDonough — Founder &amp; Developer</div>
-    </div>
-    <div class="body">
-      <div class="greeting">Hey — I built something and wanted you to see it first.</div>
-      <div class="subhead">It's called TradeCommand Pro.</div>
+<body style="margin:0;padding:0;background:#0a0e1a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
 
-      <p>I've been working on this for a while and it's finally ready. It's a trading dashboard — AI signals, daily market briefings, trade plans, sentiment data — everything in one place instead of scattered across a dozen tabs.</p>
+<!-- Preview text -->
+<div style="display:none;max-height:0;overflow:hidden;color:#0a0e1a;font-size:1px;">
+  Hey, it's Max. I've been quietly building something for the past few months and I'd love for you to see it.
+</div>
 
-      <div class="highlight-box">
-        <p>It's a web app. No install, no setup. You're in and running in under a minute.</p>
-      </div>
+<!-- Wrapper -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0a0e1a;">
+  <tr>
+    <td align="center" style="padding:40px 16px;">
 
-      <p>Here's what's inside:</p>
+      <!-- Card -->
+      <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#111827;border-radius:16px;overflow:hidden;border:1px solid #1e293b;">
 
-      <ul class="feature-list">
-        <li><span class="icon">🤖</span><div>AI trade signals — flagged setups with a confidence score and a plain-English reason behind each one.</div></li>
-        <li><span class="icon">📋</span><div>Step-by-step trade plans with entry, stop loss, target, and position sizing calculated for your account.</div></li>
-        <li><span class="icon">🗞️</span><div>5 AI-written market briefings a day so you always know what's moving and why.</div></li>
-        <li><span class="icon">📊</span><div>Reddit and social sentiment radar — see what retail is piling into before it moves.</div></li>
-        <li><span class="icon">🇨🇦</span><div>Built for Canadian traders — Wealthsimple, TSX tickers, CAD pricing included.</div></li>
-      </ul>
+        <!-- Minimal header -->
+        <tr>
+          <td style="padding:32px 40px 24px;border-bottom:1px solid #1e293b;">
+            <p style="margin:0;font-size:13px;color:#475569;letter-spacing:1px;">from Max McDonough</p>
+          </td>
+        </tr>
 
-      <p>You're some of the first people I'm telling about this, and I genuinely want you to be the first ones using it and supporting it. There's a 7-day free trial to get started, then $29/month for Pro.</p>
+        <!-- Body -->
+        <tr>
+          <td style="padding:36px 40px;">
 
-      <div class="cta-wrap">
-        <a href="https://tradecommand.pro" class="cta-btn">Start your free trial →</a>
-        <div class="cta-sub">7-day free trial · $29/mo after · Cancel anytime</div>
-      </div>
+            <p style="margin:0 0 20px;font-size:17px;color:#e2e8f0;line-height:1.8;font-weight:400;">
+              Hey — it's Max.
+            </p>
 
-      <hr class="divider">
+            <p style="margin:0 0 20px;font-size:16px;color:#94a3b8;line-height:1.8;">
+              I've been heads down building something for the past few months and honestly I'm pretty proud of how it turned out. Figured I'd reach out to people I actually know before doing the big public launch thing.
+            </p>
 
-      <p class="ps">P.S. — Would mean a lot to have you as one of the first paying members. Your support at the start is what makes this thing real. 🙏</p>
+            <p style="margin:0 0 20px;font-size:16px;color:#94a3b8;line-height:1.8;">
+              It's called <strong style="color:#e2e8f0;">TradeCommand Pro</strong> — a trading dashboard I built from scratch because I couldn't find anything I actually liked. Real-time market data, AI stock analysis, portfolio tracking, all in one place. Dark mode. Fast. No fluff.
+            </p>
 
-      <p style="margin-top:24px;margin-bottom:2px;">— Max McDonough</p>
-      <p style="font-size:13px;color:#9ca3af;margin:0;">Founder &amp; Developer, TradeCommand Pro</p>
-    </div>
-    <div class="footer">
-      <p style="font-size:13px;color:#6b7280;font-weight:600;margin-bottom:6px;">Max McDonough — Founder &amp; Developer, TradeCommand Pro</p>
-      <p>You're getting this because Max sent it to you directly.</p>
-      <p><a href="#">Unsubscribe</a> · <a href="https://tradecommand.pro">tradecommand.pro</a></p>
-    </div>
-  </div>
+            <p style="margin:0 0 20px;font-size:16px;color:#94a3b8;line-height:1.8;">
+              I'm not trying to pitch you hard here. I just genuinely think it's useful and I'd love to hear what you think. Whether you trade actively, casually follow the market, or just want to see what I've been up to — it's worth a look.
+            </p>
+
+            <!-- Screenshot / visual callout -->
+            <table width="100%" cellpadding="24" cellspacing="0" border="0" style="background:#0f172a;border-radius:12px;margin-bottom:28px;text-align:center;border:1px dashed #1e293b;">
+              <tr>
+                <td>
+                  <p style="margin:0 0 8px;font-size:32px;">⚡</p>
+                  <p style="margin:0 0 4px;font-size:18px;font-weight:700;color:#e2e8f0;">TradeCommand Pro</p>
+                  <p style="margin:0;font-size:14px;color:#64748b;">maxmcdonough.github.io/tradecommand-pro</p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 20px;font-size:16px;color:#94a3b8;line-height:1.8;">
+              It's free to sign up — no credit card, no hassle. You can poke around the free tier and if you want more features there are paid options, but honestly the free version is solid on its own.
+            </p>
+
+            <p style="margin:0 0 32px;font-size:16px;color:#94a3b8;line-height:1.8;">
+              If you do check it out, let me know what you think. Seriously. Good or bad, I want the feedback.
+            </p>
+
+            <!-- CTA — subtle, not pushy -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+              <tr>
+                <td align="center">
+                  <a href="https://maxmcdonough.github.io/tradecommand-pro/dashboard.html?tab=signup"
+                     style="display:inline-block;padding:15px 36px;background:#1e293b;color:#e2e8f0;text-decoration:none;border-radius:10px;font-size:15px;font-weight:600;border:1px solid #334155;">
+                    Check it out →
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 8px;font-size:16px;color:#94a3b8;line-height:1.8;">
+              Thanks for taking a minute to read this. Hope you're doing well.
+            </p>
+
+            <p style="margin:0;font-size:16px;color:#e2e8f0;line-height:1.8;">
+              — Max
+            </p>
+
+            <!-- P.S. -->
+            <p style="margin:24px 0 0;font-size:13px;color:#475569;line-height:1.7;border-top:1px solid #1e293b;padding-top:20px;">
+              <strong style="color:#64748b;">P.S.</strong> If you know anyone else who trades or follows the market, feel free to pass it along. Would mean a lot.
+            </p>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#0a0e1a;padding:20px 40px;border-top:1px solid #1e293b;">
+            <p style="margin:0;font-size:12px;color:#334155;text-align:center;line-height:1.7;">
+              Sent by Max McDonough · TradeCommand Pro<br>
+              <a href="#" style="color:#475569;text-decoration:none;">Unsubscribe</a> &nbsp;·&nbsp;
+              <a href="https://maxmcdonough.github.io/tradecommand-pro/" style="color:#475569;text-decoration:none;">tradecommand-pro</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
 </body>
 </html>

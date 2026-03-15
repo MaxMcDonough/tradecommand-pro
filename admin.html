@@ -7,6 +7,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
@@ -88,7 +89,17 @@
       padding: 16px 0;
     }
 
-    .nav-item {
+    .nav-section-label {
+      padding: 8px 16px 4px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--t3);
+      margin-top: 8px;
+      border-top: 1px solid var(--brd);
+    }
+        .nav-item {
       padding: 12px 16px;
       color: var(--t2);
       cursor: pointer;
@@ -135,7 +146,7 @@
     }
 
     .hamburger {
-      display: none;
+      display: none !important;
       background: none;
       border: none;
       color: var(--t1);
@@ -752,22 +763,16 @@
       }
 
       .sidebar {
-        width: 100%;
-        height: auto;
-        max-height: 0;
-        border-right: none;
-        border-bottom: 1px solid var(--brd);
-        overflow: hidden;
-        transition: max-height 0.3s ease;
+        width: 200px;
+        min-width: 200px;
+        border-right: 1px solid var(--brd);
+        border-bottom: none;
+        height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
       }
-
-      .sidebar.open {
-        max-height: 500px;
-      }
-
-      .hamburger {
-        display: block;
-      }
+      .sidebar .sidebar-title { font-size:13px; }
+      .hamburger { display: none; }
 
       .main-content {
         height: calc(100vh - 60px);
@@ -907,6 +912,19 @@
         <div class="nav-item" data-page="promos">🎁 Promos</div>
         <div class="nav-item" data-page="settings">⚙️ Settings</div>
         <div class="nav-item" data-page="changelog">📋 Changelog</div>
+        <div class="nav-section-label">Business Hub</div>
+        <div class="nav-item" data-page="biz-dashboard">📊 Biz Dashboard</div>
+        <div class="nav-item" data-page="biz-crm">🎯 CRM &amp; Pipeline</div>
+        <div class="nav-item" data-page="biz-prospecting">🔍 Prospecting</div>
+        <div class="nav-item" data-page="biz-leads">👥 Leads</div>
+        <div class="nav-item" data-page="biz-marketing">📣 Marketing</div>
+        <div class="nav-item" data-page="biz-campaigns">📢 Campaigns</div>
+        <div class="nav-item" data-page="biz-revenue">💰 Revenue</div>
+        <div class="nav-item" data-page="biz-analytics">📈 Biz Analytics</div>
+        <div class="nav-item" data-page="biz-advisor">🤖 AI Advisor</div>
+        <div class="nav-item" data-page="biz-plan">📋 Growth Plan</div>
+        <div class="nav-item" data-page="biz-files">📁 Files</div>
+        <div class="nav-item" data-page="biz-settings">⚙️ Biz Settings</div>
       </div>
     </div>
 
@@ -970,6 +988,35 @@
                 <div class="stat-value" id="conversionRateValue">-</div>
               </div>
             </div>
+
+          <!-- LIVE NOW CARD -->
+          <div style="margin-top:20px;padding:20px;background:var(--card);border:1px solid var(--brd);border-radius:12px;margin-bottom:20px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <div style="width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;animation:pulse 2s infinite"></div>
+              <h3 style="font-size:15px;font-weight:700;color:var(--t1)">🟢 Live Now</h3>
+              <span style="font-size:11px;background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:20px;font-weight:700" id="liveUserCount">0 online</span>
+            </div>
+            <div id="liveUsersList" style="display:flex;flex-wrap:wrap;gap:8px">
+              <span style="font-size:12px;color:var(--t3)">No users currently active</span>
+            </div>
+          </div>
+
+          <!-- QUICK ACTIONS -->
+          <div style="padding:20px;background:var(--card);border:1px solid var(--brd);border-radius:12px;margin-bottom:20px">
+            <h3 style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:14px">⚡ Quick Actions</h3>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+              <button class="btn btn-primary btn-sm" onclick="document.querySelector('[data-page=promos]').click()">🎁 Create Promo</button>
+              <button class="btn btn-success btn-sm" onclick="openQuickUpgradeModal()">⬆️ Upgrade a User</button>
+              <button class="btn btn-secondary btn-sm" onclick="openAnnouncementModal()">📧 Send Announcement</button>
+            </div>
+          </div>
+
+          <!-- LIVE ACTIVITY FEED -->
+          <div style="padding:20px;background:var(--card);border:1px solid var(--brd);border-radius:12px;margin-bottom:20px">
+            <h3 style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:14px">⚡ Live Activity</h3>
+            <div id="liveActivityFeed" style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;color:var(--t3)">Loading activity...</span>
+            </div>
           </div>
 
           <div class="charts-grid">
@@ -1024,13 +1071,9 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Plan</th>
-                    <th>Subscription</th>
-                    <th>Revenue</th>
-                    <th>Trial Ends</th>
                     <th>Last Active</th>
-                    <th>Trades</th>
                     <th>Status</th>
-                    <th></th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="usersTableBody">
@@ -1051,6 +1094,7 @@
                 <button class="btn btn-secondary btn-sm" id="batchDisable">Disable Selected</button>
                 <button class="btn btn-success btn-sm" id="batchEnable">Enable Selected</button>
                 <button class="btn btn-secondary btn-sm" id="batchExtendTrial">Extend Trial</button>
+                <button class="btn btn-danger btn-sm" id="batchDelete" onclick="batchDeleteUsers()">🗑 Delete Selected</button>
               </div>
             </div>
           </div>
@@ -1219,13 +1263,20 @@
 
             <div class="chart-container" style="height: auto; padding: 24px;">
               <h3 style="font-size: 16px; font-weight: 600; color: var(--t1); margin-bottom: 20px;">Subscription Settings</h3>
-              <div class="form-group">
-                <label class="form-label">Monthly Price (CAD)</label>
-                <input type="number" class="form-input" id="monthlyPrice" value="12.99" step="0.01">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Annual Price (CAD)</label>
-                <input type="number" class="form-input" id="annualPrice" value="109.99" step="0.01">
+              <div style="margin-bottom:14px;padding:12px;background:var(--bg2);border-radius:8px;border-left:3px solid var(--acc)">
+                <div style="font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Pricing Tiers</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                  <div style="padding:10px;background:var(--card);border-radius:6px;border:1px solid var(--brd)">
+                    <div style="font-size:12px;font-weight:700;color:var(--acc)">Pro</div>
+                    <div style="font-size:18px;font-weight:800;color:var(--t1)">$29<span style="font-size:11px;color:var(--t3)">/mo</span></div>
+                    <div style="font-size:10px;color:var(--t3)">$290/yr (save 17%)</div>
+                  </div>
+                  <div style="padding:10px;background:var(--card);border-radius:6px;border:1px solid var(--brd)">
+                    <div style="font-size:12px;font-weight:700;color:#a78bfa">Elite</div>
+                    <div style="font-size:18px;font-weight:800;color:var(--t1)">$79<span style="font-size:11px;color:var(--t3)">/mo</span></div>
+                    <div style="font-size:10px;color:var(--t3)">$790/yr (save 17%)</div>
+                  </div>
+                </div>
               </div>
               <div class="form-group">
                 <label class="form-label">Trial Duration (days)</label>
@@ -1325,6 +1376,8 @@
               <div class="form-group">
                 <label class="form-label">Type</label>
                 <select class="form-select" id="promoType">
+                  <option value="upgrade-pro">⬆️ Free Pro Upgrade (permanent)</option>
+                  <option value="upgrade-elite">👑 Free Elite Upgrade (permanent)</option>
                   <option value="extended-trial">Extended Trial (days)</option>
                   <option value="free-pro-month">Free Pro Month</option>
                   <option value="discount">Discount (%)</option>
@@ -1404,12 +1457,12 @@
               </div>
               <div class="form-group">
                 <label class="form-label">Monthly Payment Link</label>
-                <input type="text" class="form-input" id="monthlyPaymentLink" placeholder="https://buy.stripe.com/...">
+                <input type="text" class="form-input" id="monthlyPaymentLink" placeholder="https://buy.stripe.com/..." value="https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200">
                 <button class="btn btn-secondary btn-sm" style="width: 100%; margin-top: 8px;" onclick="testPaymentLink('monthlyPaymentLink')">Test Link</button>
               </div>
               <div class="form-group">
                 <label class="form-label">Annual Payment Link</label>
-                <input type="text" class="form-input" id="annualPaymentLink" placeholder="https://buy.stripe.com/...">
+                <input type="text" class="form-input" id="annualPaymentLink" placeholder="https://buy.stripe.com/..." value="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201">
                 <button class="btn btn-secondary btn-sm" style="width: 100%; margin-top: 8px;" onclick="testPaymentLink('annualPaymentLink')">Test Link</button>
               </div>
               <div class="form-group">
@@ -1705,6 +1758,1926 @@
 
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
+
+
+        <!-- === BIZ: DASHBOARD === -->
+<div class="page" id="biz-dashboard-page">
+                    <div class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">⚡ Business Dashboard</div>
+
+                    <!-- Metrics Grid -->
+                    <div class="metric-grid" id="metricsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Revenue Chart -->
+                    <div class="card">
+                        <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Monthly Revenue Trend</h3>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Pipeline Summary -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Pipeline Overview</h3>
+                    <div class="pipeline-summary" id="pipelineSummary">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Activity Feed -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Recent Activity</h3>
+                    <div class="activity-feed" id="activityFeed">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Quick Actions</h3>
+                    <div class="btn-grid">
+                        <button class="btn btn-primary" id="quickAddLead">➕ Add Lead</button>
+                        <button class="btn btn-primary" id="quickNewCampaign">📧 New Campaign</button>
+                        <button class="btn btn-primary" id="quickLogActivity">📞 Log Activity</button>
+                        <button class="btn btn-primary" id="quickCreateDeal">💼 Create Deal</button>
+                        <button class="btn btn-primary" id="quickViewReport">📊 View Report</button>
+                        <button class="btn btn-primary" id="quickAskAI">🧠 Ask AI Advisor</button>
+                    </div>
+                <
+
+        <!-- === BIZ: CRM === -->
+<div class="page" id="biz-crm-page">
+                    <div class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">🎯 CRM & Pipeline</div>
+
+                    <!-- Pipeline Stats -->
+                    <div class="card">
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalPipelineValue">$0</div>
+                                <div class="stat-label">Total Pipeline Value</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="weightedPipeline">$0</div>
+                                <div class="stat-label">Weighted Pipeline</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="avgDealSize">$0</div>
+                                <div class="stat-label">Avg Deal Size</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="winRate">0%</div>
+                                <div class="stat-label">Win Rate</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filters-bar">
+                        <div class="search-box">
+                            <input type="search" placeholder="Search deals..." id="dealSearch">
+                        </div>
+                        <select id="dealStageFilter">
+                            <option value="">All Stages</option>
+                            <option value="lead">Lead</option>
+                            <option value="qualified">Qualified</option>
+                            <option value="demo">Demo Scheduled</option>
+                            <option value="proposal">Proposal Sent</option>
+                            <option value="negotiation">Negotiation</option>
+                            <option value="won">Closed Won</option>
+                            <option value="lost">Closed Lost</option>
+                        </select>
+                        <button class="btn btn-primary" id="addDealBtn">+ Add Deal</button>
+                    </div>
+
+                    <!-- Kanban Board -->
+                    <div class="kanban-board" id="kanbanBoard">
+                        <!-- Populated by JS -->
+                    </div>
+                <
+
+        <!-- === BIZ: PROSPECTING === -->
+<div class="page" id="biz-prospecting-page">
+                    <div class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">🔍 Prospecting</div>
+
+                    <!-- ICP Card -->
+                    <div class="card">
+                        <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Ideal Customer Profile (ICP)</h3>
+                        <div class="grid-2">
+                            <div>
+                                <div class="form-label">Target Roles</div>
+                                <div class="form-label" style="color: var(--t1); text-transform: none; font-weight: 400; margin-top: 5px;">Day traders, retail investors, trading enthusiasts</div>
+                            </div>
+                            <div>
+                                <div class="form-label">Demographics</div>
+                                <div class="form-label" style="color: var(--t1); text-transform: none; font-weight: 400; margin-top: 5px;">25-55, tech-savvy, income $50K+</div>
+                            </div>
+                            <div>
+                                <div class="form-label">Pain Points</div>
+                                <div class="form-label" style="color: var(--t1); text-transform: none; font-weight: 400; margin-top: 5px;">Information overload, slow data, expensive tools</div>
+                            </div>
+                            <div>
+                                <div class="form-label">Where They Hang Out</div>
+                                <div class="form-label" style="color: var(--t1); text-transform: none; font-weight: 400; margin-top: 5px;">Reddit (WSB, daytrading), Twitter, Discord, YouTube</div>
+                            </div>
+                            <div>
+                                <div class="form-label">Budget</div>
+                                <div class="form-label" style="color: var(--t1); text-transform: none; font-weight: 400; margin-top: 5px;">$10-50/month</div>
+                            </div>
+                            <div>
+                                <div class="form-label">Decision Triggers</div>
+                                <div class="form-label" style="color: var(--t1); text-transform: none; font-weight: 400; margin-top: 5px;">Trial expiry, market volatility, peer recommendation</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prospecting Channels -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Prospecting Channels</h3>
+                    <div class="grid-3" id="prospectingChannels">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Prospect List -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Prospect List</h3>
+                    <div class="filters-bar">
+                        <div class="search-box">
+                            <input type="search" placeholder="Search prospects..." id="prospectSearch">
+                        </div>
+                        <select id="prospectSourceFilter">
+                            <option value="">All Sources</option>
+                            <option value="reddit">Reddit</option>
+                            <option value="twitter">Twitter/X</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="referral">Referral</option>
+                            <option value="organic">Organic</option>
+                            <option value="ads">Paid Ads</option>
+                        </select>
+                        <button class="btn btn-primary" id="addProspectBtn">+ Add Prospect</button>
+                        <button class="btn btn-secondary" id="importCSVBtn">📥 Import CSV</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="prospectsTable">
+                            <thead>
+                                <tr>
+                                    <th>Score</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Source</th>
+                                    <th>Status</th>
+                                    <th>Last Contact</th>
+                                    <th>Next Action</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prospectsTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Prospecting Playbook -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Prospecting Playbook</h3>
+                    <div id="playbookContainer">
+                        <!-- Populated by JS -->
+                    </div>
+                <
+
+        <!-- === BIZ: LEADS === -->
+<div class="page" id="biz-leads-page">
+                    <div class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">👥 Leads Management</div>
+
+                    <!-- Lead Scoring Dashboard -->
+                    <div class="card">
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalLeads">0</div>
+                                <div class="stat-label">Total Leads</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="hotLeads">0</div>
+                                <div class="stat-label">🔥 Hot Leads</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="warmLeads">0</div>
+                                <div class="stat-label">🔆 Warm Leads</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="coldLeads">0</div>
+                                <div class="stat-label">❄️ Cold Leads</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="leadConversionRate">0%</div>
+                                <div class="stat-label">Conversion Rate</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lead Funnel -->
+                    <div class="card">
+                        <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Lead Funnel</h3>
+                        <div class="funnel-container" id="leadFunnel">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Leads Table -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">All Leads</h3>
+                    <div class="filters-bar">
+                        <div class="search-box">
+                            <input type="search" placeholder="Search leads..." id="leadsSearch">
+                        </div>
+                        <select id="leadsStageFilter">
+                            <option value="">All Stages</option>
+                            <option value="visitor">Visitor</option>
+                            <option value="signup">Signup</option>
+                            <option value="trial">Trial</option>
+                            <option value="active">Active</option>
+                            <option value="pro">Pro</option>
+                        </select>
+                        <button class="btn btn-primary" id="addLeadBtn">+ Add Lead</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="leadsTable">
+                            <thead>
+                                <tr>
+                                    <th>Score</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Company</th>
+                                    <th>Source</th>
+                                    <th>Stage</th>
+                                    <th>Value</th>
+                                    <th>Last Activity</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leadsTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Lead Sources -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Lead Sources Analytics</h3>
+                    <div class="chart-container" style="height: 400px;">
+                        <canvas id="leadsSourceChart"></canvas>
+                    </div>
+                <
+
+        <!-- === BIZ: MARKETING === -->
+<div class="page" id="biz-marketing-page">
+                    <div class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">📣 Marketing Hub</div>
+
+                    <!-- Marketing Metrics -->
+                    <div class="metric-grid" id="marketingMetrics">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Campaign Manager -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Campaign Manager</h3>
+                    <div class="filters-bar">
+                        <div class="search-box">
+                            <input type="search" placeholder="Search campaigns..." id="campaignSearch">
+                        </div>
+                        <select id="campaignStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="draft">Draft</option>
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                            <option value="paused">Paused</option>
+                        </select>
+                        <button class="btn btn-primary" id="newCampaignBtn">+ New Campaign</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="campaignsTable">
+                            <thead>
+                                <tr>
+                                    <th>Campaign Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Budget</th>
+                                    <th>Spent</th>
+                                    <th>Leads</th>
+                                    <th>Conversions</th>
+                                    <th>ROI</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="campaignsTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Content Calendar -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Content Calendar</h3>
+                    <div class="card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <button class="btn btn-secondary btn-sm" id="prevMonth">← Previous</button>
+                            <div style="font-size: 16px; font-weight: 600;" id="currentMonth">March 2026</div>
+                            <button class="btn btn-secondary btn-sm" id="nextMonth">Next →</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;" id="calendarGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Marketing Assets Library -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Marketing Assets Library</h3>
+                    <div class="grid-3" id="marketingAssets">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Social Media Planner -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">Social Media Planner</h3>
+                    <div class="table-container">
+                        <table id="socialMediaTable">
+                            <thead>
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>Scheduled Posts</th>
+                                    <th>Last Posted</th>
+                                    <th>Next Scheduled</th>
+                                    <th>Engagement Rate</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="socialMediaTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- SEO Tracker -->
+                    <h3 class="content-title" style="font-size:20px;font-weight:700;color:var(--t1);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--brd)">SEO Tracker</h3>
+                    <div class="table-container">
+                        <table id="seoTable">
+                            <thead>
+                                <tr>
+                                    <th>Keyword</th>
+                                    <th>Current Rank</th>
+                                    <th>Target Rank</th>
+                                    <th>Search Volume</th>
+                                    <th>Difficulty</th>
+                                    <th>Trend</th>
+                                    <th>Page URL</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="seoTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                <
+
+        <!-- === BIZ: CAMPAIGNS === -->
+<div class="page" id="biz-campaigns-page">
+                    <h2>Email Campaigns</h2>
+                    
+                    <!-- Email Dashboard Row -->
+                    <div class="email-dashboard-row">
+                        <div class="email-stat-card">
+                            <div class="email-stat-value">1,247</div>
+                            <div class="email-stat-label">Emails Sent</div>
+                        </div>
+                        <div class="email-stat-card">
+                            <div class="email-stat-value">28.3%</div>
+                            <div class="email-stat-label">Open Rate</div>
+                        </div>
+                        <div class="email-stat-card">
+                            <div class="email-stat-value">5.1%</div>
+                            <div class="email-stat-label">Click Rate</div>
+                        </div>
+                        <div class="email-stat-card">
+                            <div class="email-stat-value">0.8%</div>
+                            <div class="email-stat-label">Unsubscribe Rate</div>
+                        </div>
+                        <div class="email-stat-card">
+                            <div class="email-stat-value">2.3%</div>
+                            <div class="email-stat-label">Bounce Rate</div>
+                        </div>
+                    </div>
+
+                    <!-- Email Sequence Builder -->
+                    <div class="sequence-builder">
+                        <h3>Create Email Sequence</h3>
+                        <div class="builder-controls">
+                            <input type="text" id="seqName" placeholder="Sequence Name" value="New Sequence">
+                            <button onclick="addSequenceStep()">+ Add Step</button>
+                        </div>
+                        <div id="sequenceSteps"></div>
+                    </div>
+
+                    <!-- Pre-built Sequences -->
+                    <h3>Pre-built Sequences</h3>
+                    <div class="prebuilt-sequences">
+                        <div class="sequence-card" onclick="loadPrebuiltSequence('welcome')">
+                            <h4>Welcome Sequence</h4>
+                            <div class="sequence-card-steps">
+                                Day 0: Welcome<br>
+                                Day 1: Getting Started<br>
+                                Day 3: Tips<br>
+                                Day 7: Mid-Trial Check
+                            </div>
+                        </div>
+                        <div class="sequence-card" onclick="loadPrebuiltSequence('trialExpiry')">
+                            <h4>Trial Expiry</h4>
+                            <div class="sequence-card-steps">
+                                Day 5: 2 Days Left<br>
+                                Day 7: Expired<br>
+                                Day 10: Miss Us?
+                            </div>
+                        </div>
+                        <div class="sequence-card" onclick="loadPrebuiltSequence('onboarding')">
+                            <h4>Onboarding</h4>
+                            <div class="sequence-card-steps">
+                                Day 0: Account Setup<br>
+                                Day 2: First Trade Signal<br>
+                                Day 5: Advanced Features
+                            </div>
+                        </div>
+                        <div class="sequence-card" onclick="loadPrebuiltSequence('reengagement')">
+                            <h4>Re-engagement</h4>
+                            <div class="sequence-card-steps">
+                                Day 30: We Miss You<br>
+                                Day 45: What's New<br>
+                                Day 60: Special Offer
+                            </div>
+                        </div>
+                        <div class="sequence-card" onclick="loadPrebuiltSequence('upsell')">
+                            <h4>Upsell to Pro</h4>
+                            <div class="sequence-card-steps">
+                                Day 3: Pro Features<br>
+                                Day 5: Limited Offer<br>
+                                Day 7: Last Chance
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single Email Composer -->
+                    <div class="single-email-composer">
+                        <h3>Send Single Email</h3>
+                        <div class="email-form-grid">
+                            <div class="form-group">
+                                <label>To</label>
+                                <select id="emailTo">
+                                    <option>All Users</option>
+                                    <option>Trial Users</option>
+                                    <option>Pro Users</option>
+                                    <option>Custom List</option>
+                                    <option>Single Email</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Subject Line</label>
+                                <input type="text" id="emailSubject" placeholder="Email subject" value="Check out these trading tips">
+                            </div>
+                        </div>
+                        <div class="email-form-grid full">
+                            <div class="form-group">
+                                <label>Body</label>
+                                <div class="formatting-toolbar">
+                                    <button onclick="insertVariable('{{name}}')">{{name}}</button>
+                                    <button onclick="insertVariable('{{email}}')">{{email}}</button>
+                                    <button onclick="insertVariable('{{plan}}')">{{plan}}</button>
+                                    <button onclick="insertVariable('{{trial_days_left}}')">{{trial_days}}</button>
+                                </div>
+                                <textarea id="emailBody" placeholder="Write your email here...">Hi {{name}},
+
+We've noticed you're getting great results with TradeCommand Pro. Keep crushing your trading goals!
+
+Best regards,
+The TC Pro Team</textarea>
+                            </div>
+                        </div>
+                        <div class="email-preview">
+                            <h4>Preview</h4>
+                            <div class="email-preview-content" id="emailPreview">
+                                <strong>To:</strong> john.smith@example.com<br>
+                                <strong>Subject:</strong> Check out these trading tips<br><br>
+                                Hi John,<br><br>
+                                We've noticed you're getting great results with TradeCommand Pro. Keep crushing your trading goals!<br><br>
+                                Best regards,<br>
+                                The TC Pro Team
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                            <button onclick="showToast('Email scheduled for tomorrow at 9am', 'success')" style="flex: 1; padding: 0.6rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600;">Schedule</button>
+                            <button onclick="showToast('Email sent to 234 users', 'success')" style="flex: 1; padding: 0.6rem; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 0.35rem; cursor: pointer; font-weight: 600;">Send Now</button>
+                            <button onclick="showToast('Template saved', 'success')" style="flex: 1; padding: 0.6rem; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 0.35rem; cursor: pointer; font-weight: 600;">Save Template</button>
+                        </div>
+                    </div>
+
+                    <!-- Email Templates Gallery -->
+                    <h3>Email Templates</h3>
+                    <div class="email-template-grid">
+                        <div class="template-card">
+                            <div class="template-preview">📬</div>
+                            <div class="template-name">Welcome Email</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                        <div class="template-card">
+                            <div class="template-preview">⏰</div>
+                            <div class="template-name">Trial Reminder</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                        <div class="template-card">
+                            <div class="template-preview">🚀</div>
+                            <div class="template-name">Feature Announcement</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                        <div class="template-card">
+                            <div class="template-preview">📰</div>
+                            <div class="template-name">Newsletter</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                        <div class="template-card">
+                            <div class="template-preview">💰</div>
+                            <div class="template-name">Promotion</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                        <div class="template-card">
+                            <div class="template-preview">⭐</div>
+                            <div class="template-name">Feedback Request</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                        <div class="template-card">
+                            <div class="template-preview">👥</div>
+                            <div class="template-name">Referral Invite</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                        <div class="template-card">
+                            <div class="template-preview">🔔</div>
+                            <div class="template-name">Account Update</div>
+                            <div class="template-actions">
+                                <button onclick="showToast('Template loaded', 'success')">Use</button>
+                                <button onclick="showToast('Editing template', 'success')">Edit</button>
+                                <button onclick="showToast('Template duplicated', 'success')">Dup</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email History Table -->
+                    <h3>Email History</h3>
+                    <div class="expense-table" style="margin-bottom: 2rem;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Type</th>
+                                    <th>Sent To</th>
+                                    <th>Sent Date</th>
+                                    <th>Delivered</th>
+                                    <th>Opened</th>
+                                    <th>Clicked</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Welcome to TradeCommand</td>
+                                    <td>Sequence</td>
+                                    <td>234 users</td>
+                                    <td>Mar 10</td>
+                                    <td>228 (97%)</td>
+                                    <td>64 (28%)</td>
+                                    <td>12 (5%)</td>
+                                </tr>
+                                <tr>
+                                    <td>Your trial expires in 2 days</td>
+                                    <td>Sequence</td>
+                                    <td>45 users</td>
+                                    <td>Mar 8</td>
+                                    <td>45 (100%)</td>
+                                    <td>31 (69%)</td>
+                                    <td>8 (18%)</td>
+                                </tr>
+                                <tr>
+                                    <td>New Features Released</td>
+                                    <td>Single</td>
+                                    <td>1,247 users</td>
+                                    <td>Mar 5</td>
+                                    <td>1,221 (98%)</td>
+                                    <td>315 (26%)</td>
+                                    <td>42 (3%)</td>
+                                </tr>
+                                <tr>
+                                    <td>We miss you - Come back</td>
+                                    <td>Sequence</td>
+                                    <td>89 users</td>
+                                    <td>Mar 1</td>
+                                    <td>87 (98%)</td>
+                                    <td>18 (21%)</td>
+                                    <td>3 (3%)</td>
+                                </tr>
+                                <tr>
+                                    <td>Pro features awaiting you</td>
+                                    <td>Single</td>
+                                    <td>234 users</td>
+                                    <td>Feb 25</td>
+                                    <td>231 (99%)</td>
+                                    <td>72 (31%)</td>
+                                    <td>18 (8%)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Email Analytics -->
+                    <h3>Email Analytics</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="chart-container">
+                            <h3>Open Rate Over Time</h3>
+                            <canvas id="openRateChart" height="100"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Best Send Times</h3>
+                            <canvas id="sendTimesChart" height="100"></canvas>
+                        </div>
+                    </div>
+                <
+
+        <!-- === BIZ: REVENUE === -->
+<div class="page" id="biz-revenue-page">
+                    <h2>Revenue & Finance</h2>
+
+                    <!-- Financial Overview Cards -->
+                    <div class="financial-overview">
+                        <div class="financial-card">
+                            <div class="financial-value">$18,750</div>
+                            <div class="financial-label">Total Revenue</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-value">$4,200</div>
+                            <div class="financial-label">Monthly Revenue</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-value">$50,400</div>
+                            <div class="financial-label">Annual Run Rate</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-value">$14,890</div>
+                            <div class="financial-label">Net Profit</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-value">$3,860</div>
+                            <div class="financial-label">Monthly Expenses</div>
+                        </div>
+                        <div class="financial-card">
+                            <div class="financial-value">79.4%</div>
+                            <div class="financial-label">Profit Margin</div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Breakdown -->
+                    <div class="revenue-breakdown">
+                        <div class="chart-container">
+                            <h3>Revenue by Plan</h3>
+                            <canvas id="planBreakdownChart" height="150"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Revenue Last 12 Months</h3>
+                            <canvas id="monthlyRevenueChart" height="150"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Expense Tracker -->
+                    <h3>Expense Tracker</h3>
+                    <div class="expense-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Recurring</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Mar 14</td>
+                                    <td>Hosting</td>
+                                    <td>Firebase Hosting Bill</td>
+                                    <td>$25.00</td>
+                                    <td>Monthly</td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 12</td>
+                                    <td>APIs</td>
+                                    <td>Finnhub API Credits</td>
+                                    <td>$299.00</td>
+                                    <td>Monthly</td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 10</td>
+                                    <td>Marketing</td>
+                                    <td>Reddit Ad Campaign</td>
+                                    <td>$500.00</td>
+                                    <td>One-time</td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 8</td>
+                                    <td>Tools</td>
+                                    <td>Stripe Processing Fees</td>
+                                    <td>$186.50</td>
+                                    <td>Monthly</td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 5</td>
+                                    <td>APIs</td>
+                                    <td>Alpha Vantage Credits</td>
+                                    <td>$80.00</td>
+                                    <td>Monthly</td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 1</td>
+                                    <td>Marketing</td>
+                                    <td>Twitter/X Ads</td>
+                                    <td>$250.00</td>
+                                    <td>One-time</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="showToast('Add expense modal opened', 'success')" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; margin-bottom: 2rem; margin-top: 1rem;">+ Add Expense</button>
+
+                    <!-- Profit & Loss Statement -->
+                    <h3>Profit & Loss Statement</h3>
+                    <div class="p-l-statement">
+                        <div class="p-l-section">
+                            <div class="p-l-section-title">Revenue</div>
+                            <div class="p-l-line">
+                                <span class="p-l-label">Pro Monthly Subscriptions</span>
+                                <span class="p-l-value">$2,400</span>
+                            </div>
+                            <div class="p-l-line">
+                                <span class="p-l-label">Pro Annual Subscriptions</span>
+                                <span class="p-l-value">$1,800</span>
+                            </div>
+                            <div class="p-l-line">
+                                <span class="p-l-label"><strong>Total Revenue</strong></span>
+                                <span class="p-l-value"><strong>$4,200</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="p-l-section">
+                            <div class="p-l-section-title">Expenses</div>
+                            <div class="p-l-line">
+                                <span class="p-l-label">API Costs (Finnhub, Alpha)</span>
+                                <span class="p-l-value">$379</span>
+                            </div>
+                            <div class="p-l-line">
+                                <span class="p-l-label">Hosting (Firebase)</span>
+                                <span class="p-l-value">$25</span>
+                            </div>
+                            <div class="p-l-line">
+                                <span class="p-l-label">Marketing & Ads</span>
+                                <span class="p-l-value">$750</span>
+                            </div>
+                            <div class="p-l-line">
+                                <span class="p-l-label">Processing & Tools</span>
+                                <span class="p-l-value">$186</span>
+                            </div>
+                            <div class="p-l-line">
+                                <span class="p-l-label"><strong>Total Expenses</strong></span>
+                                <span class="p-l-value"><strong>$1,340</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="p-l-section">
+                            <div class="p-l-line">
+                                <span class="p-l-label"><strong>Net Profit</strong></span>
+                                <span class="p-l-value" style="color: #66bb6a;"><strong>$2,860</strong></span>
+                            </div>
+                            <div class="p-l-line">
+                                <span class="p-l-label"><strong>Profit Margin</strong></span>
+                                <span class="p-l-value" style="color: #66bb6a;"><strong>68.1%</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Projections -->
+                    <h3>Financial Projections</h3>
+                    <div class="financial-projections">
+                        <div class="scenarios-grid">
+                            <div class="scenario-input">
+                                <label>Monthly Price ($)</label>
+                                <input type="number" value="29" onchange="updateProjection()">
+                            </div>
+                            <div class="scenario-input">
+                                <label>Annual Price ($)</label>
+                                <input type="number" value="290" onchange="updateProjection()">
+                            </div>
+                            <div class="scenario-input">
+                                <label>Conversion Rate (%)</label>
+                                <input type="number" value="3.5" onchange="updateProjection()">
+                            </div>
+                            <div class="scenario-input">
+                                <label>Monthly Churn (%)</label>
+                                <input type="number" value="5" onchange="updateProjection()">
+                            </div>
+                        </div>
+                        <canvas id="projectionChart" height="150" style="margin-top: 1.5rem;"></canvas>
+                    </div>
+
+                    <!-- Invoices / Payment History -->
+                    <h3>Payment History</h3>
+                    <div class="expense-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Plan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Mar 14</td>
+                                    <td>John Smith</td>
+                                    <td>$29.00</td>
+                                    <td>Pro Monthly</td>
+                                    <td><span style="color: #66bb6a;">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 12</td>
+                                    <td>Sarah Johnson</td>
+                                    <td>$290.00</td>
+                                    <td>Pro Annual</td>
+                                    <td><span style="color: #66bb6a;">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 10</td>
+                                    <td>Mike Chen</td>
+                                    <td>$29.00</td>
+                                    <td>Pro Monthly</td>
+                                    <td><span style="color: #66bb6a;">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 8</td>
+                                    <td>Emma Davis</td>
+                                    <td>$290.00</td>
+                                    <td>Pro Annual</td>
+                                    <td><span style="color: #66bb6a;">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 5</td>
+                                    <td>James Wilson</td>
+                                    <td>$29.00</td>
+                                    <td>Pro Monthly</td>
+                                    <td><span style="color: #66bb6a;">Paid</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="exportCSV('payments')" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; margin-top: 1rem;">📥 Export CSV</button>
+                <
+
+        <!-- === BIZ: ANALYTICS === -->
+<div class="page" id="biz-analytics-page">
+                    <h2>Insights & Analytics</h2>
+
+                    <!-- Key Insights Cards -->
+                    <h3>Key Insights</h3>
+                    <div class="insights-grid">
+                        <div class="insight-card">
+                            <div class="insight-icon">📈</div>
+                            <div class="insight-content">
+                                <div class="insight-text">Your conversion rate increased 15% this week — Reddit campaigns are driving results</div>
+                                <button class="insight-action">View Details</button>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">⏰</div>
+                            <div class="insight-content">
+                                <div class="insight-text">3 leads haven't been contacted in 7+ days — follow up to prevent going cold</div>
+                                <button class="insight-action">Take Action</button>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">📧</div>
+                            <div class="insight-content">
+                                <div class="insight-text">Tuesday at 2pm is your best email send time — 42% open rate vs 28% average</div>
+                                <button class="insight-action">Use Schedule</button>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">💚</div>
+                            <div class="insight-content">
+                                <div class="insight-text">Monthly churn is 5.2% — below the 7% SaaS average. Keep it up!</div>
+                                <button class="insight-action">View Trend</button>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">🎯</div>
+                            <div class="insight-content">
+                                <div class="insight-text">Trial users from Product Hunt convert 3.2x better than other sources</div>
+                                <button class="insight-action">Scale Channel</button>
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-icon">👥</div>
+                            <div class="insight-content">
+                                <div class="insight-text">Day traders make up 68% of your user base — tailor your messaging</div>
+                                <button class="insight-action">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Behavior Analytics -->
+                    <h3>User Behavior Analytics</h3>
+                    <div class="behavior-analytics">
+                        <div class="analytics-panel">
+                            <h3>Most Popular Tickers</h3>
+                            <canvas id="tickersChart" height="200"></canvas>
+                        </div>
+                        <div class="analytics-panel">
+                            <h3>Most Used Sectors</h3>
+                            <canvas id="sectorsChart" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="behavior-analytics">
+                        <div class="analytics-panel">
+                            <h3>Peak Usage Times</h3>
+                            <div class="heatmap-grid">
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.3);">Mon<br>9a</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.5);">Tue<br>9a</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.9);">Wed<br>9a</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.7);">Thu<br>9a</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.4);">Fri<br>9a</div>
+                                <div class="heatmap-cell" style="background: rgba(244, 67, 54, 0.2);">Sat<br>9a</div>
+                                <div class="heatmap-cell" style="background: rgba(244, 67, 54, 0.1);">Sun<br>9a</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.2);">Mon<br>2p</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.3);">Tue<br>2p</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.6);">Wed<br>2p</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.5);">Thu<br>2p</div>
+                                <div class="heatmap-cell" style="background: rgba(76, 175, 80, 0.3);">Fri<br>2p</div>
+                                <div class="heatmap-cell" style="background: rgba(244, 67, 54, 0.1);">Sat<br>2p</div>
+                                <div class="heatmap-cell" style="background: rgba(244, 67, 54, 0.05);">Sun<br>2p</div>
+                            </div>
+                        </div>
+                        <div class="analytics-panel">
+                            <h3>Session Stats</h3>
+                            <div style="padding: 1rem 0;">
+                                <div style="margin-bottom: 1.5rem;">
+                                    <div style="color: var(--text2); font-size: 0.8rem; margin-bottom: 0.4rem;">Avg Session Duration</div>
+                                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent);">14m 32s</div>
+                                </div>
+                                <div style="margin-bottom: 1.5rem;">
+                                    <div style="color: var(--text2); font-size: 0.8rem; margin-bottom: 0.4rem;">Sessions / User / Month</div>
+                                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent);">12.4</div>
+                                </div>
+                                <div>
+                                    <div style="color: var(--text2); font-size: 0.8rem; margin-bottom: 0.4rem;">Bounce Rate</div>
+                                    <div style="font-size: 1.8rem; font-weight: 700; color: var(--accent);">8.3%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Funnel Analytics -->
+                    <h3>Conversion Funnel</h3>
+                    <div class="analytics-panel">
+                        <div class="funnel-stage">
+                            <div class="funnel-label">Visit</div>
+                            <div class="funnel-value">10,000</div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="funnel-label">Signup (5.2%)</div>
+                            <div class="funnel-value">520</div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="funnel-label">Activate (62%)</div>
+                            <div class="funnel-value">323</div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="funnel-label">Trial (78%)</div>
+                            <div class="funnel-value">252</div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="funnel-label">Convert (18%)</div>
+                            <div class="funnel-value">45</div>
+                        </div>
+                        <div class="funnel-stage">
+                            <div class="funnel-label">Retained (94%)</div>
+                            <div class="funnel-value">42</div>
+                        </div>
+                    </div>
+
+                    <!-- Cohort Analysis -->
+                    <h3>Cohort Retention Analysis</h3>
+                    <div class="cohort-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cohort</th>
+                                    <th>M0</th>
+                                    <th>M1</th>
+                                    <th>M2</th>
+                                    <th>M3</th>
+                                    <th>M4</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Jan 2026</td>
+                                    <td class="cohort-cell high">100%</td>
+                                    <td class="cohort-cell high">94%</td>
+                                    <td class="cohort-cell medium">87%</td>
+                                    <td class="cohort-cell medium">82%</td>
+                                    <td class="cohort-cell medium">78%</td>
+                                </tr>
+                                <tr>
+                                    <td>Feb 2026</td>
+                                    <td class="cohort-cell high">100%</td>
+                                    <td class="cohort-cell high">96%</td>
+                                    <td class="cohort-cell high">91%</td>
+                                    <td class="cohort-cell medium">86%</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Mar 2026</td>
+                                    <td class="cohort-cell high">100%</td>
+                                    <td class="cohort-cell high">95%</td>
+                                    <td class="cohort-cell high">89%</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Growth Metrics -->
+                    <h3>Growth Metrics</h3>
+                    <div class="growth-metrics">
+                        <div class="chart-container">
+                            <h4>User Growth (MoM)</h4>
+                            <canvas id="growthChart" height="150"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Revenue Growth Rate</h4>
+                            <canvas id="revenueGrowthChart" height="150"></canvas>
+                        </div>
+                        <div class="analytics-panel">
+                            <h4>Key Ratios</h4>
+                            <div style="padding: 1rem 0;">
+                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem;">
+                                    <span>DAU/MAU Ratio</span>
+                                    <span style="color: var(--accent); font-weight: 600;">34%</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem;">
+                                    <span>Net Promoter Score</span>
+                                    <span style="color: var(--accent); font-weight: 600;">67</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.85rem;">
+                                    <span>CAC Payback Period</span>
+                                    <span style="color: var(--accent); font-weight: 600;">2.3 mo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <
+
+        <!-- === BIZ: ADVISOR === -->
+<div class="page" id="biz-advisor-page">
+                    <h2>AI Advisor</h2>
+
+                    <!-- Today's Priority Actions -->
+                    <h3>Today's Priority Actions</h3>
+                    <div class="priority-actions">
+                        <div class="action-item">
+                            <div class="action-priority-badge critical">🔴 CRITICAL</div>
+                            <div class="action-content">
+                                <div class="action-description">Follow up with 4 hot leads — they viewed the dashboard 3+ times but haven't subscribed</div>
+                                <div class="action-context">Sarah Johnson, Mike Chen, Emma Davis, James Wilson</div>
+                                <div class="action-buttons">
+                                    <button onclick="showToast('Follow-up emails queued', 'success')">Do It Now</button>
+                                </div>
+                            </div>
+                            <div class="action-impact">Est. Impact: +2 conversions</div>
+                        </div>
+
+                        <div class="action-item">
+                            <div class="action-priority-badge critical">🔴 CRITICAL</div>
+                            <div class="action-content">
+                                <div class="action-description">Send trial expiry email to 12 users expiring in 2 days</div>
+                                <div class="action-context">Batch send to users: John Smith, Lisa Anderson, +10 more</div>
+                                <div class="action-buttons">
+                                    <button onclick="showToast('Emails scheduled', 'success')">Send Now</button>
+                                </div>
+                            </div>
+                            <div class="action-impact">Est. Impact: 35% conversion</div>
+                        </div>
+
+                        <div class="action-item">
+                            <div class="action-priority-badge important">🟡 IMPORTANT</div>
+                            <div class="action-content">
+                                <div class="action-description">Post in r/daytrading — last post was 5 days ago, your best acquisition channel</div>
+                                <div class="action-context">You averaged 8 signups per post last month from this channel</div>
+                                <div class="action-buttons">
+                                    <button onclick="showToast('Opened Reddit in new tab', 'success')">Go There</button>
+                                </div>
+                            </div>
+                            <div class="action-impact">Est. Impact: 5-8 signups</div>
+                        </div>
+
+                        <div class="action-item">
+                            <div class="action-priority-badge important">🟡 IMPORTANT</div>
+                            <div class="action-content">
+                                <div class="action-description">Create a case study from your top Pro user's trading results</div>
+                                <div class="action-context">They've made 15+ winning trades using TradeCommand signals</div>
+                                <div class="action-buttons">
+                                    <button onclick="showToast('Case study template opened', 'success')">Draft Now</button>
+                                </div>
+                            </div>
+                            <div class="action-impact">Est. Impact: 3-5 conversions</div>
+                        </div>
+
+                        <div class="action-item">
+                            <div class="action-priority-badge nice">🟢 NICE TO HAVE</div>
+                            <div class="action-content">
+                                <div class="action-description">A/B test a new pricing page — current conversion is 4.2%</div>
+                                <div class="action-context">Competitor benchmarks show 5.8% is achievable</div>
+                                <div class="action-buttons">
+                                    <button onclick="showToast('A/B test setup form opened', 'success')">Create Test</button>
+                                </div>
+                            </div>
+                            <div class="action-impact">Est. Impact: +1.6pp conversion</div>
+                        </div>
+                    </div>
+
+                    <!-- Business Health Score -->
+                    <h3>Business Health Score</h3>
+                    <div class="health-score-container">
+                        <div class="health-gauge">
+                            <canvas id="healthScoreGauge" width="200" height="200"></canvas>
+                        </div>
+                        <div class="health-breakdown">
+                            <div class="health-breakdown-item">
+                                <span class="health-name">Revenue Health (25%)</span>
+                                <div class="health-bar">
+                                    <div class="health-bar-fill" style="width: 85%; background: #66bb6a;"></div>
+                                </div>
+                                <span class="health-score">85</span>
+                            </div>
+                            <div class="health-breakdown-item">
+                                <span class="health-name">Growth Rate (25%)</span>
+                                <div class="health-bar">
+                                    <div class="health-bar-fill" style="width: 72%; background: #ffb300;"></div>
+                                </div>
+                                <span class="health-score">72</span>
+                            </div>
+                            <div class="health-breakdown-item">
+                                <span class="health-name">Customer Satisfaction (20%)</span>
+                                <div class="health-bar">
+                                    <div class="health-bar-fill" style="width: 78%; background: #66bb6a;"></div>
+                                </div>
+                                <span class="health-score">78</span>
+                            </div>
+                            <div class="health-breakdown-item">
+                                <span class="health-name">Pipeline Health (15%)</span>
+                                <div class="health-bar">
+                                    <div class="health-bar-fill" style="width: 68%; background: #ffb300;"></div>
+                                </div>
+                                <span class="health-score">68</span>
+                            </div>
+                            <div class="health-breakdown-item">
+                                <span class="health-name">Marketing Effectiveness (15%)</span>
+                                <div class="health-bar">
+                                    <div class="health-bar-fill" style="width: 82%; background: #66bb6a;"></div>
+                                </div>
+                                <span class="health-score">82</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Review Generator -->
+                    <h3>Weekly Review</h3>
+                    <button onclick="generateWeeklyReview()" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; margin-bottom: 1rem;">📋 Generate Weekly Review</button>
+                    
+                    <div class="weekly-review" id="weeklyReviewContent" style="display: none;">
+                        <div class="review-section">
+                            <h4>✨ This Week's Wins</h4>
+                            <div class="review-item">• Conversion rate increased from 3.2% to 3.8% (+18.75%)</div>
+                            <div class="review-item">• Acquired 23 new users (best week yet)</div>
+                            <div class="review-item">• 2 new Pro subscribers from Reddit campaign</div>
+                            <div class="review-item">• Email open rate averaged 31% (above target)</div>
+                        </div>
+
+                        <div class="review-section">
+                            <h4>⚠️ Areas for Improvement</h4>
+                            <div class="review-item">• Trial conversion rate at 18% (target: 25%)</div>
+                            <div class="review-item">• 3 leads still haven't been contacted</div>
+                            <div class="review-item">• Marketing spend increased 20% without proportional return</div>
+                            <div class="review-item">• Twitter/X engagement declined 12%</div>
+                        </div>
+
+                        <div class="review-section">
+                            <h4>📊 Key Metrics</h4>
+                            <div class="review-item"><strong>Users:</strong> 287 (↑12 vs last week)</div>
+                            <div class="review-item"><strong>Revenue:</strong> $1,247 (↑8%)</div>
+                            <div class="review-item"><strong>Churn:</strong> 1 user (0.35%)</div>
+                            <div class="review-item"><strong>NPS:</strong> 67 (↑2 points)</div>
+                        </div>
+
+                        <div class="review-section">
+                            <h4>🎯 Top Priorities Next Week</h4>
+                            <div class="review-item">1. Follow up with 4 hot leads (estimated +2 conversions)</div>
+                            <div class="review-item">2. Test new email subject lines for trial expiry sequence</div>
+                            <div class="review-item">3. Publish weekly post to r/daytrading</div>
+                            <div class="review-item">4. Optimize marketing spend allocation</div>
+                        </div>
+                    </div>
+
+                    <!-- Growth Playbook -->
+                    <h3>Growth Playbook</h3>
+                    <div class="growth-playbook">
+                        <div class="playbook-card">
+                            <div class="playbook-header" onclick="togglePlaybook(this)">
+                                <span>Get Your First 100 Users</span>
+                                <span>▼</span>
+                            </div>
+                            <div class="playbook-content">
+                                <div class="playbook-checklist">
+                                    <div class="checklist-item">
+                                        <input type="checkbox" checked> Launch on Product Hunt
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox" checked> Create Reddit posts in r/daytrading
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Build influencer partnerships (3+)
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Guest post on trading blogs
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Set up referral incentives
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="playbook-card">
+                            <div class="playbook-header" onclick="togglePlaybook(this)">
+                                <span>Optimize Conversion Rate</span>
+                                <span>▼</span>
+                            </div>
+                            <div class="playbook-content">
+                                <div class="playbook-checklist">
+                                    <div class="checklist-item">
+                                        <input type="checkbox" checked> A/B test landing pages
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Test pricing tiers
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Improve trial onboarding
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Create demo video walkthrough
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="playbook-card">
+                            <div class="playbook-header" onclick="togglePlaybook(this)">
+                                <span>Reduce Churn</span>
+                                <span>▼</span>
+                            </div>
+                            <div class="playbook-content">
+                                <div class="playbook-checklist">
+                                    <div class="checklist-item">
+                                        <input type="checkbox" checked> Send weekly trade signals
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Monthly feature updates
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Customer success check-ins
+                                    </div>
+                                    <div class="checklist-item">
+                                        <input type="checkbox"> Win-back campaigns for churned users
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Decision Tool -->
+                    <h3>Quick Decision Tool</h3>
+                    <div class="quick-decision-tool">
+                        <div class="decision-input-area">
+                            <label style="color: var(--text2); font-size: 0.9rem;">I'm deciding whether to...</label>
+                            <textarea id="decisionText" placeholder="Enter your decision question here...">Should I increase marketing spend from $500 to $1000/month?</textarea>
+                            <button onclick="getDecisionAdvice()" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600;">💡 Get Advice</button>
+                        </div>
+                        <div class="decision-analysis" id="decisionAnalysis" style="display: none;">
+                            <div class="decision-pros">
+                                <h4>✅ Pros</h4>
+                                <div class="decision-list">
+                                    <div class="decision-item">• You have strong CAC payback (2.3 months), so can afford higher spend</div>
+                                    <div class="decision-item">• Reddit posts currently driving 35% of new signups with minimal spend</div>
+                                    <div class="decision-item">• You have 79% profit margins — ROI threshold is high</div>
+                                    <div class="decision-item">• Growth is decelerating week-over-week</div>
+                                </div>
+                            </div>
+                            <div class="decision-cons">
+                                <h4>❌ Cons</h4>
+                                <div class="decision-list">
+                                    <div class="decision-item">• Current spend is already unprofitable ($750/mo) relative to revenue</div>
+                                    <div class="decision-item">• Email and organic channels have better ROI</div>
+                                    <div class="decision-item">• Need to validate current campaigns first</div>
+                                </div>
+                            </div>
+                            <div class="decision-recommendation">
+                                📊 Recommendation: Test 2x spend on Reddit only ($200 → $400) first. If ROI stays positive, then expand. Don't double overall spend yet.
+                            </div>
+                        </div>
+                    </div>
+                <
+
+        <!-- === BIZ: PLAN === -->
+<div class="page" id="biz-plan-page">
+                    <h2>Business Plan</h2>
+
+                    <div class="plan-controls">
+                        <button onclick="fillWithCurrentData()" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600;">📊 Fill with Current Data</button>
+                        <button onclick="exportPDF()" style="padding: 0.6rem 1rem; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 0.35rem; cursor: pointer; font-weight: 600;">📄 Export as PDF</button>
+                        <button onclick="exportMarkdown()" style="padding: 0.6rem 1rem; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 0.35rem; cursor: pointer; font-weight: 600;">📝 Export as Markdown</button>
+                    </div>
+
+                    <!-- Executive Summary -->
+                    <div class="plan-section">
+                        <h3>Executive Summary</h3>
+                        <textarea class="plan-textarea" id="execSummary" onblur="savePlanSection('execSummary')">TradeCommand Pro is a SaaS platform that provides AI-powered stock trading signals and technical analysis for retail day traders. We focus on removing the complexity of technical analysis and helping traders identify high-probability trading setups in real-time.
+
+Mission: Democratize professional trading tools for every retail trader
+Vision: Become the #1 trusted trading signals platform by 2028
+Value Proposition: Get verified trading signals + professional-grade analysis for $29/month</textarea>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="plan-section">
+                        <h3>Product Description</h3>
+                        <textarea class="plan-textarea" id="productDesc" onblur="savePlanSection('productDesc')">TradeCommand Pro features:
+• Real-time trading signal alerts
+• Technical indicator scanner (20+ indicators)
+• Backtesting engine for strategy validation
+• Market trend analysis (bullish/bearish/consolidation)
+• Entry/exit price recommendations
+• Risk management tools (position sizing calculator)
+• Community trading journal
+
+Differentiators:
+- Fastest signal delivery (average 2 seconds)
+- Most accurate signals (72% win rate)
+- Most affordable pricing ($29/mo vs $200+ competitors)
+- Beginner-friendly interface
+- No coding required</textarea>
+                    </div>
+
+                    <!-- Target Market -->
+                    <div class="plan-section">
+                        <h3>Target Market</h3>
+                        <textarea class="plan-textarea" id="targetMarket" onblur="savePlanSection('targetMarket')">Ideal Customer Profile:
+Age: 25-45
+Income: $50k-150k
+Technical level: Beginner to intermediate traders
+Location: North America (90%), other English-speaking markets
+
+Total Addressable Market (TAM): $8.4B (estimated 2.8M retail traders in US)
+Serviceable Addressable Market (SAM): $420M (150k aspiring day traders)
+Serviceable Obtainable Market (SOM): $2.1M Year 1 (5k customers at $35 ARPU)</textarea>
+                    </div>
+
+                    <!-- Revenue Model -->
+                    <div class="plan-section">
+                        <h3>Revenue Model</h3>
+                        <textarea class="plan-textarea" id="revenueModel" onblur="savePlanSection('revenueModel')">Pricing Tiers:
+Pro Monthly: $29/month (most popular - 68% of users)
+Pro Annual: $290/year = $24.17/month (20% discount, 32% of users)
+
+Unit Economics:
+CAC: $80 (average cost to acquire one customer)
+LTV: $920 (24-month average customer lifetime)
+LTV:CAC Ratio: 11.5x (healthy SaaS benchmark is 3x+)
+Payback Period: 2.3 months
+Gross Margin: 92%
+
+Expansion Revenue Opportunities:
+- Premium signals tier ($79/mo)
+- API access for trading bots ($199/mo)
+- Institutional licenses ($1000+/mo)</textarea>
+                    </div>
+
+                    <!-- Go-to-Market Strategy -->
+                    <div class="plan-section">
+                        <h3>Go-to-Market Strategy</h3>
+                        <textarea class="plan-textarea" id="gtmStrategy" onblur="savePlanSection('gtmStrategy')">Distribution Channels (by effectiveness):
+1. Reddit (r/daytrading, r/stocks, r/investing) - 35% of signups, $0 cost
+2. Twitter/X (trading community) - 28% of signups
+3. Organic search (SEO) - 22% of signups, compounding
+4. Product Hunt - initial launch, 8% of signups
+5. Email marketing - 5% of signups
+6. Influencer partnerships - 2% of signups
+
+Marketing Budget Allocation:
+Paid advertising: $250/mo (Reddit ads, Google Ads)
+Content creation: $300/mo (blog posts, guides, videos)
+Community management: Time only
+Influencer partnerships: $200/mo (negotiated splits)
+
+Timeline:
+Months 1-3: Focus on community (Reddit/Twitter)
+Months 4-6: Launch content strategy
+Months 7-12: Paid ads + influencer partnerships</textarea>
+                    </div>
+
+                    <!-- Competitive Analysis -->
+                    <div class="plan-section">
+                        <h3>Competitive Analysis</h3>
+                        <textarea class="plan-textarea" id="competitive" onblur="savePlanSection('competitive')">Direct Competitors:
+1. TradingView (Premium): $15-45/month, 30M users, strong community
+2. Thinkorswim: Free, professional tools, steep learning curve
+3. MarketWatch Alerts: Free basic, $200+ pro
+4. Benzinga Trade Alerts: $99-299/month
+
+Competitive Positioning:
+Advantage: Simplicity, Price, Accuracy
+Disadvantage: Brand recognition, Feature set
+
+SWOT Analysis:
+Strengths: Low churn (5.2%), high accuracy, pricing
+Weaknesses: No desktop app yet, brand awareness
+Opportunities: API market, enterprise sales, international
+Threats: Competition increasing, market saturation, regulation</textarea>
+                    </div>
+
+                    <!-- Financial Projections -->
+                    <div class="plan-section">
+                        <h3>Financial Projections (12 months)</h3>
+                        <textarea class="plan-textarea" id="financialProj" onblur="savePlanSection('financialProj')">Revenue Forecast:
+Month 1-3: $4.2k/month (42 customers)
+Month 4-6: $6.8k/month (68 customers, +60%)
+Month 7-9: $9.2k/month (92 customers, +35%)
+Month 10-12: $11.5k/month (115 customers, +25%)
+Year 1 Total: $78k (average 78 customers/month)
+
+Expense Forecast:
+API Costs: $380/month
+Hosting: $25/month
+Marketing: $750/month (average)
+Tools & Software: $200/month
+Stripe Fees: 2.9% + $0.30/transaction
+Total: ~$1,340/month average
+
+Year 1 Net Profit: $43k
+Year 1 Profit Margin: 55%</textarea>
+                    </div>
+
+                    <!-- Milestones & Roadmap -->
+                    <div class="plan-section">
+                        <h3>Milestones & Roadmap</h3>
+                        <textarea class="plan-textarea" id="milestones">0-3 Months (Launch & Validate):
+□ Public launch (Mar 2026)
+□ Reach 50 users
+□ Validate signal accuracy (70%+ win rate)
+□ Build community (Reddit + Twitter)
+
+3-6 Months (Growth & Optimize):
+□ Reach 150 users
+□ Improve signal accuracy to 75%
+□ Launch email sequence for onboarding
+□ Create comparison guide vs competitors
+
+6-12 Months (Scale & Expand):
+□ Reach 500+ users
+□ Launch Premium tier ($79/mo)
+□ Begin enterprise conversations
+□ Build API for trading bots
+□ Expand to international markets</textarea>
+                    </div>
+
+                    <!-- Team & Resources -->
+                    <div class="plan-section">
+                        <h3>Team & Resources</h3>
+                        <textarea class="plan-textarea" id="teamResources">Current Team:
+- Max McDonough (Founder): Product, Marketing, Customer Success
+- [Open] Developer: Feature development, Infrastructure
+
+Tools Used:
+- Firebase (Backend & Database)
+- Finnhub API (Market Data)
+- Alpha Vantage (Technical Analysis)
+- NewsAPI (News Integration)
+- Stripe (Payments)
+- GitHub (Version Control)
+
+Planned Hires:
+Month 6: Full-time Developer ($60k/year)
+Month 9: Part-time Community Manager ($2k/month)</textarea>
+                    </div>
+
+                    <!-- Risks & Mitigation -->
+                    <div class="plan-section">
+                        <h3>Risks & Mitigation</h3>
+                        <textarea class="plan-textarea" id="risks">Risk Register:
+
+HIGH:
+1. Market Saturation (Probability: 70%, Impact: High)
+   Mitigation: Focus on niche (retail day traders), differentiate on UX
+   
+2. Signal Accuracy Decline (Probability: 40%, Impact: Very High)
+   Mitigation: Continuous model training, backtesting, community validation
+
+3. Regulatory Changes (Probability: 50%, Impact: Medium)
+   Mitigation: Monitor SEC/FINRA rules, add disclaimers, legal review
+
+MEDIUM:
+4. Churn Increase (Probability: 40%, Impact: Medium)
+   Mitigation: Focus on retention, daily signals, community engagement
+
+5. API Rate Limits (Probability: 30%, Impact: Medium)
+   Mitigation: Self-host data, partner with alternative providers
+
+LOW:
+6. Competitor Price War (Probability: 20%, Impact: Low)
+   Mitigation: Lock in early customers, emphasize quality not price</textarea>
+                    </div>
+
+                    <!-- Version History -->
+                    <h3>Version History</h3>
+                    <div class="version-history">
+                        <div class="version-item">
+                            <div>
+                                <strong>Version 1.0</strong><br>
+                                <span class="version-date">Updated: Mar 14, 2026</span>
+                            </div>
+                            <div class="version-actions">
+                                <button onclick="showToast('Version restored', 'success')">Restore</button>
+                                <button onclick="showToast('Versions compared', 'success')">Compare</button>
+                            </div>
+                        </div>
+                        <div class="version-item">
+                            <div>
+                                <strong>Draft Version</strong><br>
+                                <span class="version-date">Created: Mar 10, 2026</span>
+                            </div>
+                            <div class="version-actions">
+                                <button onclick="showToast('Version restored', 'success')">Restore</button>
+                                <button onclick="showToast('Versions compared', 'success')">Compare</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="savePlanVersion()" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; margin-top: 1rem;">💾 Save New Version</button>
+                <
+
+        <!-- === BIZ: FILES === -->
+<div class="page" id="biz-files-page">
+                    <h2>Files & Assets</h2>
+
+                    <!-- Asset Tabs -->
+                    <div class="asset-tabs">
+                        <button class="asset-tab active" onclick="switchAssetTab('marketing', this)">Marketing</button>
+                        <button class="asset-tab" onclick="switchAssetTab('templates', this)">Email Templates</button>
+                        <button class="asset-tab" onclick="switchAssetTab('docs', this)">Documents</button>
+                        <button class="asset-tab" onclick="switchAssetTab('screenshots', this)">Screenshots</button>
+                        <button class="asset-tab" onclick="switchAssetTab('presentations', this)">Presentations</button>
+                    </div>
+
+                    <!-- Upload Zone -->
+                    <div class="upload-zone" onclick="triggerFileUpload()">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📤</div>
+                        <div class="upload-zone-text">Click to upload or drag and drop<br>PNG, JPG, PDF, DOCX (max 10MB)</div>
+                    </div>
+
+                    <!-- File Grid -->
+                    <div id="fileGridContainer">
+                        <div class="file-grid">
+                            <div class="file-card">
+                                <div class="file-icon">🎨</div>
+                                <div class="file-info">
+                                    <div class="file-name">Logo_Horizontal</div>
+                                    <div class="file-meta">PNG • 2.4 MB • Mar 10</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-card">
+                                <div class="file-icon">🎨</div>
+                                <div class="file-info">
+                                    <div class="file-name">Logo_Square</div>
+                                    <div class="file-meta">PNG • 1.1 MB • Mar 10</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-card">
+                                <div class="file-icon">🖼️</div>
+                                <div class="file-info">
+                                    <div class="file-name">Social_Banner_1200x630</div>
+                                    <div class="file-meta">PNG • 3.8 MB • Mar 8</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-card">
+                                <div class="file-icon">🖼️</div>
+                                <div class="file-info">
+                                    <div class="file-name">Twitter_Header_1500x500</div>
+                                    <div class="file-meta">PNG • 2.1 MB • Mar 5</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-card">
+                                <div class="file-icon">🖼️</div>
+                                <div class="file-info">
+                                    <div class="file-name">Product_Screenshot_v1</div>
+                                    <div class="file-meta">PNG • 1.9 MB • Feb 28</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-card">
+                                <div class="file-icon">📊</div>
+                                <div class="file-info">
+                                    <div class="file-name">Pitch_Deck_2026</div>
+                                    <div class="file-meta">PDF • 4.2 MB • Mar 1</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-card">
+                                <div class="file-icon">📄</div>
+                                <div class="file-info">
+                                    <div class="file-name">Business_Plan_v2</div>
+                                    <div class="file-meta">DOCX • 1.5 MB • Mar 12</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="file-card">
+                                <div class="file-icon">📄</div>
+                                <div class="file-info">
+                                    <div class="file-name">Financial_Report_Q1</div>
+                                    <div class="file-meta">PDF • 0.8 MB • Mar 10</div>
+                                    <div class="file-actions">
+                                        <button onclick="downloadFile()">DL</button>
+                                        <button onclick="deleteFile()">Del</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <h3>Brand & Quick Access</h3>
+                    <div class="quick-links">
+                        <h3>Brand Resources</h3>
+                        <div class="quick-links-grid">
+                            <div class="quick-link-item">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎨</div>
+                                <div>Logo Files</div>
+                                <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.3rem;">PNG, SVG, AI</div>
+                            </div>
+                            <div class="quick-link-item">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎯</div>
+                                <div>Brand Colors</div>
+                                <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.3rem;">Hex Codes & Palettes</div>
+                            </div>
+                            <div class="quick-link-item">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📱</div>
+                                <div>Social Templates</div>
+                                <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.3rem;">Canva & Figma</div>
+                            </div>
+                            <div class="quick-link-item">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎤</div>
+                                <div>Pitch Deck</div>
+                                <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.3rem;">Investor Presentation</div>
+                            </div>
+                            <div class="quick-link-item">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🖥️</div>
+                                <div>Screenshots</div>
+                                <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.3rem;">Product Demo Images</div>
+                            </div>
+                            <div class="quick-link-item">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📖</div>
+                                <div>Brand Guide</div>
+                                <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.3rem;">Brand Standards</div>
+                            </div>
+                        </div>
+                    </div>
+                <
+
+        <!-- === BIZ: SETTINGS === -->
+<div class="page" id="biz-settings-page">
+                    <h2>Settings</h2>
+
+                    <div class="settings-grid">
+                        <!-- Company Profile -->
+                        <div class="settings-section">
+                            <h3>Company Profile</h3>
+                            <div class="settings-form-group">
+                                <label>Business Name</label>
+                                <input type="text" value="TradeCommand Pro" onchange="saveSettings()">
+                            </div>
+                            <div class="settings-form-group">
+                                <label>Owner Name</label>
+                                <input type="text" value="Max McDonough" onchange="saveSettings()">
+                            </div>
+                            <div class="settings-form-group">
+                                <label>Business Email</label>
+                                <input type="email" value="max.mcdonough123@gmail.com" onchange="saveSettings()">
+                            </div>
+                            <div class="settings-form-group">
+                                <label>Website</label>
+                                <input type="url" value="maxmcdonough.github.io/tradecommand-pro" onchange="saveSettings()">
+                            </div>
+                            <div class="settings-form-group">
+                                <label>Founded</label>
+                                <input type="text" value="2026" onchange="saveSettings()">
+                            </div>
+                            <button onclick="showToast('Company profile updated', 'success')" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; margin-top: 1rem;">Save Profile</button>
+                        </div>
+
+                        <!-- Integration Settings -->
+                        <div class="settings-section">
+                            <h3>Integration Settings</h3>
+                            
+                            <div class="integration-card">
+                                <div class="integration-header">
+                                    <div class="integration-name">Firebase</div>
+                                    <span class="integration-status connected">🟢 Connected</span>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text2); margin-bottom: 0.75rem;">Project ID: tradecommand-prod-123</div>
+                                <div class="integration-actions">
+                                    <button onclick="testIntegration('firebase')" style="padding: 0.4rem 0.75rem; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 0.2rem; cursor: pointer; font-size: 0.75rem;">Test</button>
+                                    <button onclick="configureIntegration('firebase')" style="padding: 0.4rem 0.75rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.2rem; cursor: pointer; font-size: 0.75rem;">Configure</button>
+                                </div>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-header">
+                                    <div class="integration-name">Stripe</div>
+                                    <span class="integration-status connected">🟢 Connected</span>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text2); margin-bottom: 0.75rem;">Live Mode • $19.2k processed</div>
+                                <div class="integration-actions">
+                                    <button onclick="testIntegration('stripe')" style="padding: 0.4rem 0.75rem; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 0.2rem; cursor: pointer; font-size: 0.75rem;">Test</button>
+                                    <button onclick="openStripePortal()" style="padding: 0.4rem 0.75rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.2rem; cursor: pointer; font-size: 0.75rem;">Portal</button>
+                                </div>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-header">
+                                    <div class="integration-name">Finnhub API</div>
+                                    <span class="integration-status connected">🟢 Connected</span>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text2); margin-bottom: 0.75rem;">Premium Plan • 14.2M calls/month</div>
+                                <div class="integration-actions">
+                                    <button onclick="testIntegration('finnhub')" style="padding: 0.4rem 0.75rem; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 0.2rem; cursor: pointer; font-size: 0.75rem;">Test</button>
+                                    <button onclick="configureIntegration('finnhub')" style="padding: 0.4rem 0.75rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.2rem; cursor: pointer; font-size: 0.75rem;">Configure</button>
+                                </div>
+                            </div>
+
+                            <div class="integration-card">
+                                <div class="integration-header">
+                                    <div class="integration-name">Google Analytics</div>
+                                    <span class="integration-status disconnected">🔴 Not Connected</span>
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text2); margin-bottom: 0.75rem;">Track visitor behavior and conversions</div>
+                                <div class="integration-actions">
+                                    <button onclick="connectIntegration('analytics')" style="padding: 0.4rem 0.75rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.2rem; cursor: pointer; font-size: 0.75rem;">Connect</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notification Preferences -->
+                        <div class="settings-section">
+                            <h3>Notification Preferences</h3>
+                            <div class="notification-toggle">
+                                <span class="toggle-label">New Signup Alert</span>
+                                <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                            </div>
+                            <div class="notification-toggle">
+                                <span class="toggle-label">Payment Received</span>
+                                <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                            </div>
+                            <div class="notification-toggle">
+                                <span class="toggle-label">Trial Expiring Soon</span>
+                                <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                            </div>
+                            <div class="notification-toggle">
+                                <span class="toggle-label">Lead Score Change</span>
+                                <div class="toggle-switch" onclick="toggleNotification(this)"></div>
+                            </div>
+                            <div class="notification-toggle">
+                                <span class="toggle-label">Weekly Digest</span>
+                                <div class="toggle-switch active" onclick="toggleNotification(this)"></div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management -->
+                        <div class="settings-section">
+                            <h3>Data Management</h3>
+                            <button onclick="exportData('json')" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; margin-bottom: 0.75rem; text-align: left;">📥 Export All Data (JSON)</button>
+                            <button onclick="exportData('csv_users')" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; margin-bottom: 0.75rem; text-align: left;">📊 Export Users CSV</button>
+                            <button onclick="exportData('csv_revenue')" style="padding: 0.6rem 1rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; margin-bottom: 0.75rem; text-align: left;">💰 Export Revenue CSV</button>
+                            <button onclick="importData()" style="padding: 0.6rem 1rem; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; margin-bottom: 0.75rem; text-align: left;">📤 Import Data</button>
+                            <button onclick="resetDemo()" style="padding: 0.6rem 1rem; background: var(--bg2); color: var(--text); border: 1px solid var(--border); border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; text-align: left;">🔄 Reset Demo Data</button>
+                        </div>
+
+                        <!-- API Keys -->
+                        <div class="settings-section">
+                            <h3>API Keys</h3>
+                            <div style="font-size: 0.8rem; color: var(--text2); margin-bottom: 1rem;">These keys are used for Pro subscribers who don't have their own</div>
+                            
+                            <div class="settings-form-group">
+                                <label>Finnhub API Key</label>
+                                <div class="api-key-display">sk-••••••••••••••••••••••••••••••••••</div>
+                                <button onclick="showToast('Key rotated', 'success')" style="padding: 0.4rem 0.8rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-top: 0.4rem;">Rotate Key</button>
+                            </div>
+
+                            <div class="settings-form-group">
+                                <label>Alpha Vantage API Key</label>
+                                <div class="api-key-display">av-••••••••••••••••••••••••••••••••••</div>
+                                <button onclick="showToast('Key rotated', 'success')" style="padding: 0.4rem 0.8rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-top: 0.4rem;">Rotate Key</button>
+                            </div>
+
+                            <div class="settings-form-group">
+                                <label>NewsAPI Key</label>
+                                <div class="api-key-display">na-••••••••••••••••••••••••••••••••••</div>
+                                <button onclick="showToast('Key rotated', 'success')" style="padding: 0.4rem 0.8rem; background: var(--accent); color: var(--bg); border: none; border-radius: 0.25rem; cursor: pointer; font-size: 0.75rem; margin-top: 0.4rem;">Rotate Key</button>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone -->
+                        <div class="settings-section">
+                            <div class="danger-zone">
+                                <h3>Danger Zone</h3>
+                                <p style="color: var(--text2); font-size: 0.9rem; margin: 0.5rem 0 1rem 0;">Irreversible actions — use with caution</p>
+                                
+                                <button onclick="confirmAction('delete_leads')" style="padding: 0.6rem 1rem; background: #ef5350; color: white; border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; margin-bottom: 0.75rem; text-align: left;">🗑️ Delete All Leads</button>
+                                <button onclick="confirmAction('reset_pipeline')" style="padding: 0.6rem 1rem; background: #ef5350; color: white; border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; margin-bottom: 0.75rem; text-align: left;">🔄 Reset Pipeline</button>
+                                <button onclick="confirmAction('clear_emails')" style="padding: 0.6rem 1rem; background: #ef5350; color: white; border: none; border-radius: 0.35rem; cursor: pointer; font-weight: 600; width: 100%; text-align: left;">🗑️ Clear Email History</button>
+                            </div>
+                        </div>
+                    </div>
+                <
 
   <script>
     // Firebase Setup
@@ -2521,6 +4494,13 @@
             <td>${formatTime(user.lastActive?.toDate?.() || new Date(user.lastActive))}</td>
             <td>${user.totalTrades || 0}</td>
             <td><span class="status-badge ${user.disabled ? 'offline' : 'online'}"><div class="status-indicator"></div>${user.disabled ? 'Disabled' : 'Active'}</span></td>
+            <td>
+              <div style="display:flex;gap:4px;flex-wrap:wrap">
+                <button class="btn btn-success btn-sm" style="font-size:10px;padding:3px 7px" onclick="upgradeUser('${userId}','pro','${user.email}')">⬆️ Pro</button>
+                <button class="btn btn-primary btn-sm" style="font-size:10px;padding:3px 7px;background:rgba(139,92,246,.3);border-color:rgba(139,92,246,.5);color:#a78bfa" onclick="upgradeUser('${userId}','elite','${user.email}')">👑 Elite</button>
+                <button class="btn btn-danger btn-sm" style="font-size:10px;padding:3px 7px" onclick="deleteUser('${userId}','${user.email}')">🗑</button>
+              </div>
+            </td>
             <td><button class="btn btn-secondary btn-sm" onclick="event.stopPropagation()">→</button></td>
           </tr>
         `;
@@ -3540,6 +5520,176 @@
     // Initial Load
     renderNewslettersTable();
     renderPromosTable();
+
+    // ─── RTDB init for presence ───
+    let rtdb = null;
+    try { rtdb = firebase.database(); } catch(e) {}
+
+    // ─── upgradeUser ───
+    async function upgradeUser(uid, plan, email) {
+      if (!confirm(`Upgrade ${email} to ${plan.toUpperCase()}?`)) return;
+      try {
+        await db.collection('users').doc(uid).set({
+          plan: plan,
+          subscriptionStatus: 'active',
+          planActivatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          planActivatedBy: 'admin'
+        }, { merge: true });
+        showToast(`✅ ${email} upgraded to ${plan}`, 'success');
+        loadUsers();
+      } catch(e) { showToast('Error upgrading user: ' + e.message, 'error'); }
+    }
+
+    // ─── deleteUser ───
+    async function deleteUser(uid, email) {
+      if (!confirm(`DELETE ${email}?\nThis will disable their account permanently. Are you sure?`)) return;
+      try {
+        // Archive to deleted_users
+        const userData = await db.collection('users').doc(uid).get();
+        if (userData.exists) {
+          await db.collection('deleted_users').doc(uid).set({
+            ...userData.data(),
+            deletedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            deletedBy: auth.currentUser?.email || 'admin'
+          });
+        }
+        // Disable in users collection
+        await db.collection('users').doc(uid).set({
+          disabled: true,
+          deletedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        showToast(`🗑 ${email} deleted`, 'success');
+        // Remove row from table
+        const row = document.querySelector(`tr[data-uid="${uid}"]`);
+        if (row) row.remove();
+      } catch(e) { showToast('Error deleting user: ' + e.message, 'error'); }
+    }
+
+    // ─── batchDeleteUsers ───
+    async function batchDeleteUsers() {
+      const checked = document.querySelectorAll('#usersTableBody input[type=checkbox]:checked');
+      if (!checked.length) return;
+      if (!confirm(`Delete ${checked.length} user(s)? This cannot be undone.`)) return;
+      for (const cb of checked) {
+        const row = cb.closest('tr');
+        const uid = row?.getAttribute('data-uid');
+        const email = row?.querySelector('td:nth-child(3)')?.textContent;
+        if (uid) await deleteUser(uid, email || uid);
+      }
+    }
+
+    // ─── redeemPromoCode ───
+    async function redeemPromoCode(code, uid) {
+      try {
+        const promoRef = db.collection('promos').doc(code.toUpperCase());
+        const promoDoc = await promoRef.get();
+        if (!promoDoc.exists) return { ok: false, msg: 'Promo code not found' };
+        const promo = promoDoc.data();
+        if (!promo.active) return { ok: false, msg: 'Promo code is inactive' };
+        if (promo.expires && new Date(promo.expires) < new Date()) return { ok: false, msg: 'Promo code expired' };
+        if (promo.limit && promo.usedBy?.length >= promo.limit) return { ok: false, msg: 'Promo code usage limit reached' };
+        // Apply the promo
+        const updates = {};
+        if (promo.type === 'upgrade-pro') { updates.plan = 'pro'; updates.subscriptionStatus = 'active'; }
+        else if (promo.type === 'upgrade-elite') { updates.plan = 'elite'; updates.subscriptionStatus = 'active'; }
+        else if (promo.type === 'free-pro-month') { updates.plan = 'pro'; updates.subscriptionStatus = 'trial'; }
+        else if (promo.type === 'extended-trial') { 
+          const d = new Date(); d.setDate(d.getDate() + parseInt(promo.value || 14));
+          updates.trialEnds = d.toISOString(); updates.plan = 'trial';
+        }
+        updates.planActivatedAt = firebase.firestore.FieldValue.serverTimestamp();
+        updates.promoUsed = code.toUpperCase();
+        await db.collection('users').doc(uid).set(updates, { merge: true });
+        await promoRef.update({ usedBy: firebase.firestore.FieldValue.arrayUnion(uid) });
+        return { ok: true, msg: 'Promo applied!' };
+      } catch(e) { return { ok: false, msg: e.message }; }
+    }
+
+    // ─── loadLiveUsers (RTDB presence) ───
+    function loadLiveUsers() {
+      if (!rtdb) return;
+      rtdb.ref('presence').on('value', snap => {
+        const data = snap.val() || {};
+        const now = Date.now();
+        const online = Object.entries(data).filter(([uid, info]) => {
+          return info.online || (info.lastSeen && (now - info.lastSeen) < 5 * 60 * 1000);
+        });
+        const countEl = document.getElementById('liveUserCount');
+        const listEl = document.getElementById('liveUsersList');
+        if (countEl) countEl.textContent = online.length + ' online';
+        if (listEl) {
+          if (!online.length) {
+            listEl.innerHTML = '<span style="font-size:12px;color:var(--t3)">No users currently active</span>';
+          } else {
+            listEl.innerHTML = online.map(([uid, info]) => {
+              const mins = Math.floor((now - (info.lastSeen || now)) / 60000);
+              const timeStr = mins < 1 ? 'now' : mins + 'm ago';
+              return `<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg2);border-radius:20px;font-size:11px">
+                <div style="width:6px;height:6px;border-radius:50%;background:#10b981"></div>
+                <span style="color:var(--t1);font-weight:600">${info.email || uid.slice(0,8)+'...'}</span>
+                <span style="color:var(--t3)">${timeStr}</span>
+              </div>`;
+            }).join('');
+          }
+        }
+      });
+    }
+
+    // ─── loadLiveActivity ───
+    function loadLiveActivity() {
+      if (!FIREBASE_CONFIGURED()) return;
+      db.collection('activity')
+        .orderBy('timestamp', 'desc')
+        .limit(10)
+        .onSnapshot(snap => {
+          const feedEl = document.getElementById('liveActivityFeed');
+          if (!feedEl) return;
+          if (snap.empty) {
+            feedEl.innerHTML = '<span style="font-size:12px;color:var(--t3)">No recent activity</span>';
+            return;
+          }
+          const icons = { trade: '📈', login: '🔑', signup: '✨', upgrade: '⬆️', view: '👁' };
+          feedEl.innerHTML = snap.docs.map(doc => {
+            const d = doc.data();
+            const ts = d.timestamp?.toDate?.() || new Date();
+            const ago = Math.floor((Date.now() - ts) / 60000);
+            const timeStr = ago < 1 ? 'just now' : ago + 'm ago';
+            const icon = icons[d.type] || '•';
+            return `<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--bg2);border-radius:6px;font-size:12px">
+              <span>${icon}</span>
+              <span style="flex:1;color:var(--t1)">${d.description || d.type}</span>
+              <span style="color:var(--t3);font-size:10px">${timeStr}</span>
+            </div>`;
+          }).join('');
+        }, () => {
+          // activity collection may not exist yet
+          const feedEl = document.getElementById('liveActivityFeed');
+          if (feedEl) feedEl.innerHTML = '<span style="font-size:12px;color:var(--t3)">Activity tracking not yet configured</span>';
+        });
+    }
+
+    // ─── openQuickUpgradeModal ───
+    function openQuickUpgradeModal() {
+      const email = prompt('Enter user email to upgrade:');
+      if (!email) return;
+      const plan = prompt('Enter plan (pro or elite):')?.toLowerCase();
+      if (!['pro','elite'].includes(plan)) { alert('Invalid plan. Enter "pro" or "elite"'); return; }
+      db.collection('users').where('email', '==', email).limit(1).get().then(snap => {
+        if (snap.empty) { showToast('User not found: ' + email, 'error'); return; }
+        const uid = snap.docs[0].id;
+        upgradeUser(uid, plan, email);
+      }).catch(e => showToast('Error: ' + e.message, 'error'));
+    }
+
+    // ─── openAnnouncementModal ───
+    function openAnnouncementModal() {
+      const subject = prompt('Announcement subject:');
+      if (!subject) return;
+      const body = prompt('Announcement message:');
+      if (!body) return;
+      showToast('📧 Announcement queued (wire up EmailJS to send)', 'info');
+    }
+
   </script>
 </body>
 </html>

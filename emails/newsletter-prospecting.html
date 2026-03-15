@@ -1,197 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stop trading blind. There's a better way.</title>
-  <style>
-    body { margin: 0; padding: 0; background: #f4f5f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
-    .header { background: linear-gradient(135deg, #0a0e17 0%, #111827 100%); padding: 36px 40px 28px; }
-    .logo { font-size: 22px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
-    .logo span { color: #3b82f6; }
-    .tagline { font-size: 13px; color: #64748b; margin-top: 6px; }
-    .hero-stat { display: flex; gap: 20px; margin-top: 24px; flex-wrap: wrap; }
-    .stat { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 14px 18px; flex: 1; min-width: 130px; }
-    .stat-val { font-size: 22px; font-weight: 700; color: #ffffff; }
-    .stat-lbl { font-size: 11px; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .body { padding: 40px; }
-    .headline { font-size: 26px; font-weight: 700; color: #111827; line-height: 1.25; margin-bottom: 8px; }
-    .subhead { font-size: 15px; color: #6b7280; margin-bottom: 32px; }
-    p { font-size: 16px; color: #374151; line-height: 1.7; margin: 0 0 20px; }
-    .problem-box { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 20px 24px; margin: 24px 0; }
-    .problem-box .label { font-size: 11px; font-weight: 700; color: #ea580c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-    .problem-box ul { padding: 0 0 0 18px; margin: 0; }
-    .problem-box li { font-size: 14px; color: #9a3412; margin-bottom: 8px; line-height: 1.5; }
-    .solution-header { font-size: 14px; font-weight: 700; color: #1d4ed8; text-transform: uppercase; letter-spacing: 1px; margin: 32px 0 16px; }
-    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
-    .feat { background: #f8faff; border: 1px solid #dbeafe; border-radius: 8px; padding: 16px; }
-    .feat-icon { font-size: 22px; margin-bottom: 8px; }
-    .feat-title { font-size: 14px; font-weight: 600; color: #1e40af; margin-bottom: 4px; }
-    .feat-desc { font-size: 13px; color: #4b5563; line-height: 1.5; }
-    .social-proof { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px 24px; margin: 28px 0; }
-    .quote { font-size: 15px; color: #166534; font-style: italic; line-height: 1.6; margin-bottom: 10px; }
-    .quote-attr { font-size: 13px; color: #4b5563; font-weight: 600; }
-    .pricing { background: #0a0e17; border-radius: 10px; padding: 28px; margin: 28px 0; text-align: center; }
-    .pricing-eyebrow { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-    .pricing-price { font-size: 36px; font-weight: 700; color: #ffffff; }
-    .pricing-price span { font-size: 16px; font-weight: 400; color: #64748b; }
-    .pricing-list { list-style: none; padding: 0; margin: 18px 0; text-align: left; display: inline-block; }
-    .pricing-list li { font-size: 14px; color: #94a3b8; margin-bottom: 8px; padding-left: 20px; position: relative; }
-    .pricing-list li::before { content: '✓'; position: absolute; left: 0; color: #10b981; font-weight: 700; }
-    .cta-wrap { text-align: center; margin: 32px 0 24px; }
-    .cta-btn { display: inline-block; background: #3b82f6; color: #ffffff; font-size: 16px; font-weight: 600; padding: 15px 40px; border-radius: 8px; text-decoration: none; }
-    .cta-sub { font-size: 13px; color: #9ca3af; margin-top: 10px; }
-    .compare { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
-    .compare th { background: #f9fafb; padding: 10px 14px; text-align: left; color: #374151; font-weight: 600; border-bottom: 2px solid #e5e7eb; }
-    .compare td { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; color: #374151; }
-    .compare tr:last-child td { border-bottom: none; }
-    .compare .ck { color: #10b981; font-weight: 700; }
-    .compare .cx { color: #ef4444; }
-    .compare .hl { background: #eff6ff; }
-    .footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 24px 40px; text-align: center; }
-    .footer p { font-size: 12px; color: #9ca3af; margin: 0 0 6px; }
-    .footer a { color: #6b7280; text-decoration: none; }
-    @media (max-width: 600px) {
-      .body { padding: 28px 20px; }
-      .feature-grid { grid-template-columns: 1fr; }
-      .hero-stat { flex-direction: column; gap: 12px; }
-      .header { padding: 28px 20px 22px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Are you leaving money on the table?</title>
 </head>
-<body>
-  <div class="wrapper">
-    <div class="header">
-      <div class="logo">⚡ Trade<span>Command</span> Pro</div>
-      <div class="tagline">Your AI-powered trading dashboard</div>
-      <div class="hero-stat">
-        <div class="stat"><div class="stat-val">5×</div><div class="stat-lbl">Daily Briefings</div></div>
-        <div class="stat"><div class="stat-val">AI</div><div class="stat-lbl">Trade Signals</div></div>
-        <div class="stat"><div class="stat-val">$29</div><div class="stat-lbl">Per Month</div></div>
-      </div>
-    </div>
-    <div class="body">
-      <div class="headline">Stop trading blind. There's a better way.</div>
-      <div class="subhead">Most traders make the same mistake: they open positions without a real plan.</div>
+<body style="margin:0;padding:0;background:#0a0e1a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
 
-      <div class="problem-box">
-        <div class="label">Sound familiar?</div>
-        <ul>
-          <li>You see a ticker moving and jump in without knowing your exact exit</li>
-          <li>You're scanning Reddit and Twitter trying to piece together what's actually happening</li>
-          <li>You size your positions by gut feel instead of actual risk calculations</li>
-          <li>You don't have a daily briefing so you miss setups until it's too late</li>
-        </ul>
-      </div>
+<!-- Preview text -->
+<div style="display:none;max-height:0;overflow:hidden;color:#0a0e1a;font-size:1px;">
+  Most traders are flying blind. Here's how to fix that — for free.
+</div>
 
-      <p>TradeCommand Pro was built specifically to solve this. It's a web-based trading dashboard that gives you everything you need — AI signals, structured trade plans, live sentiment data, and daily briefings — in one place.</p>
+<!-- Wrapper -->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0a0e1a;">
+  <tr>
+    <td align="center" style="padding:40px 16px;">
 
-      <div class="solution-header">What you get with TradeCommand Pro</div>
+      <!-- Card -->
+      <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#111827;border-radius:16px;overflow:hidden;border:1px solid #1e293b;">
 
-      <div class="feature-grid">
-        <div class="feat">
-          <div class="feat-icon">🤖</div>
-          <div class="feat-title">AI Trade Signals</div>
-          <div class="feat-desc">Flagged setups with confidence scores and clear reasoning. Never chase a move again.</div>
-        </div>
-        <div class="feat">
-          <div class="feat-icon">📋</div>
-          <div class="feat-title">Full Trade Plans</div>
-          <div class="feat-desc">Entry, stop loss, target, and position size calculated for your account size.</div>
-        </div>
-        <div class="feat">
-          <div class="feat-icon">🗞️</div>
-          <div class="feat-title">5× Daily Briefings</div>
-          <div class="feat-desc">Pre-market, mid-morning, lunch, afternoon, and close-of-day market summaries.</div>
-        </div>
-        <div class="feat">
-          <div class="feat-icon">📊</div>
-          <div class="feat-title">Reddit Sentiment Radar</div>
-          <div class="feat-desc">Real-time scan of WallStreetBets, stocks, and options subreddits.</div>
-        </div>
-        <div class="feat">
-          <div class="feat-icon">🎯</div>
-          <div class="feat-title">Session Tracker</div>
-          <div class="feat-desc">Log trades, track your P&L, and build a portfolio view in seconds.</div>
-        </div>
-        <div class="feat">
-          <div class="feat-icon">🇨🇦</div>
-          <div class="feat-title">Canadian-Friendly</div>
-          <div class="feat-desc">TSX tickers, Wealthsimple support, and CAD pricing built in.</div>
-        </div>
-      </div>
+        <!-- Header -->
+        <tr>
+          <td style="padding:36px 40px 28px;border-bottom:1px solid #1e293b;">
+            <p style="margin:0 0 4px;font-size:12px;letter-spacing:2px;color:#f59e0b;text-transform:uppercase;font-weight:600;">TradeCommand Pro</p>
+            <h1 style="margin:0;font-size:28px;font-weight:800;color:#ffffff;line-height:1.2;">Are you leaving money<br>on the table?</h1>
+          </td>
+        </tr>
 
-      <p>Compare that to the alternatives:</p>
+        <!-- Body -->
+        <tr>
+          <td style="padding:36px 40px;">
 
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th class="hl">TradeCommand Pro</th>
-            <th>Bloomberg</th>
-            <th>ThinkorSwim</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>AI Trade Signals</td>
-            <td class="hl ck">✓</td>
-            <td class="cx">✗</td>
-            <td class="cx">✗</td>
-          </tr>
-          <tr>
-            <td>Step-by-step Trade Plans</td>
-            <td class="hl ck">✓</td>
-            <td class="cx">✗</td>
-            <td class="cx">✗</td>
-          </tr>
-          <tr>
-            <td>Daily AI Briefings</td>
-            <td class="hl ck">✓</td>
-            <td class="ck">✓</td>
-            <td class="cx">✗</td>
-          </tr>
-          <tr>
-            <td>Reddit Sentiment</td>
-            <td class="hl ck">✓</td>
-            <td class="cx">✗</td>
-            <td class="cx">✗</td>
-          </tr>
-          <tr>
-            <td>Monthly price</td>
-            <td class="hl" style="color:#10b981;font-weight:700;">$29</td>
-            <td>$600+</td>
-            <td>Free*</td>
-          </tr>
-        </tbody>
+            <p style="margin:0 0 20px;font-size:16px;color:#94a3b8;line-height:1.7;">
+              Here's the honest truth: most retail traders make decisions based on delayed data, cluttered platforms, and gut feeling. That's a recipe for preventable losses.
+            </p>
+            <p style="margin:0 0 28px;font-size:16px;color:#94a3b8;line-height:1.7;">
+              The traders who consistently win have one thing in common — they have a clear, organized view of the market <em>before</em> they trade.
+            </p>
+
+            <!-- Pain + solution block -->
+            <table width="100%" cellpadding="20" cellspacing="0" border="0" style="background:#0f172a;border-radius:12px;margin-bottom:28px;border-left:3px solid #f59e0b;">
+              <tr>
+                <td>
+                  <p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#fbbf24;">Sound familiar?</p>
+                  <p style="margin:0 0 8px;font-size:14px;color:#64748b;line-height:1.7;">❌ &nbsp;Switching between 5 different tabs to get a full picture</p>
+                  <p style="margin:0 0 8px;font-size:14px;color:#64748b;line-height:1.7;">❌ &nbsp;Missing entries because you weren't watching the right levels</p>
+                  <p style="margin:0 0 8px;font-size:14px;color:#64748b;line-height:1.7;">❌ &nbsp;No clear record of what you traded and why</p>
+                  <p style="margin:0;font-size:14px;color:#64748b;line-height:1.7;">❌ &nbsp;Spending more time setting up charts than actually trading</p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 24px;font-size:16px;color:#e2e8f0;font-weight:600;line-height:1.7;">
+              TradeCommand Pro fixes all of that — in one dashboard.
+            </p>
+
+            <!-- Benefits checklist -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;">
+              <tr><td style="padding:8px 0;font-size:15px;color:#94a3b8;border-bottom:1px solid #1e293b;">
+                <span style="color:#22c55e;font-weight:700;margin-right:10px;">✓</span> Live market heatmap — see what's moving at a glance
+              </td></tr>
+              <tr><td style="padding:8px 0;font-size:15px;color:#94a3b8;border-bottom:1px solid #1e293b;">
+                <span style="color:#22c55e;font-weight:700;margin-right:10px;">✓</span> AI stock analysis — get an instant breakdown of any ticker
+              </td></tr>
+              <tr><td style="padding:8px 0;font-size:15px;color:#94a3b8;border-bottom:1px solid #1e293b;">
+                <span style="color:#22c55e;font-weight:700;margin-right:10px;">✓</span> Trade journal — log entries, exits, and lessons learned
+              </td></tr>
+              <tr><td style="padding:8px 0;font-size:15px;color:#94a3b8;border-bottom:1px solid #1e293b;">
+                <span style="color:#22c55e;font-weight:700;margin-right:10px;">✓</span> Portfolio tracker — live P&L so you always know where you stand
+              </td></tr>
+              <tr><td style="padding:8px 0;font-size:15px;color:#94a3b8;">
+                <span style="color:#22c55e;font-weight:700;margin-right:10px;">✓</span> Custom alerts — never miss a setup again
+              </td></tr>
+            </table>
+
+            <!-- Social proof placeholder -->
+            <table width="100%" cellpadding="20" cellspacing="0" border="0" style="background:#0f172a;border-radius:12px;margin-bottom:32px;">
+              <tr>
+                <td>
+                  <p style="margin:0 0 8px;font-size:22px;">⭐⭐⭐⭐⭐</p>
+                  <p style="margin:0 0 12px;font-size:15px;color:#e2e8f0;line-height:1.6;font-style:italic;">"Finally a dashboard that shows me everything without the noise. I stopped losing track of setups the first week I used it."</p>
+                  <p style="margin:0;font-size:13px;color:#475569;">— Early access user</p>
+                </td>
+              </tr>
+            </table>
+
+            <!-- CTA -->
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+              <tr>
+                <td align="center">
+                  <a href="https://maxmcdonough.github.io/tradecommand-pro/dashboard.html?tab=signup"
+                     style="display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#d97706,#f59e0b);color:#0a0e1a;text-decoration:none;border-radius:10px;font-size:16px;font-weight:800;letter-spacing:0.3px;">
+                    Try TradeCommand Pro Free →
+                  </a>
+                  <p style="margin:12px 0 0;font-size:13px;color:#475569;">Free to sign up. No credit card needed. Upgrade anytime.</p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0;font-size:14px;color:#475569;line-height:1.7;">
+              Stop flying blind. Your competition isn't.<br><br>
+              — Max<br>
+              <span style="color:#475569;">TradeCommand Pro</span>
+            </p>
+
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#0a0e1a;padding:24px 40px;border-top:1px solid #1e293b;">
+            <p style="margin:0;font-size:12px;color:#334155;text-align:center;line-height:1.7;">
+              TradeCommand Pro · Built for serious traders<br>
+              You received this because you expressed interest in trading tools.<br>
+              <a href="#" style="color:#475569;text-decoration:none;">Unsubscribe</a> &nbsp;·&nbsp;
+              <a href="https://maxmcdonough.github.io/tradecommand-pro/" style="color:#475569;text-decoration:none;">Visit Site</a>
+            </p>
+          </td>
+        </tr>
+
       </table>
+    </td>
+  </tr>
+</table>
 
-      <div class="pricing">
-        <div class="pricing-eyebrow">TradeCommand Pro</div>
-        <div class="pricing-price">$29 <span>/ month CAD</span></div>
-        <ul class="pricing-list">
-          <li>All AI signals &amp; trade plans</li>
-          <li>5× daily market briefings</li>
-          <li>Reddit &amp; social sentiment radar</li>
-          <li>Session portfolio tracker</li>
-          <li>Crypto dashboard</li>
-          <li>Cancel anytime</li>
-        </ul>
-      </div>
-
-      <div class="cta-wrap">
-        <a href="https://tradecommand.pro" class="cta-btn">Start your free trial →</a>
-        <div class="cta-sub">7-day free trial · No credit card required</div>
-      </div>
-
-      <p style="font-size:14px;color:#6b7280;text-align:center;">Questions? Just reply to this email.</p>
-    </div>
-    <div class="footer">
-      <p style="font-size:13px;color:#6b7280;font-weight:600;margin-bottom:6px;">Max McDonough — Founder &amp; Developer, TradeCommand Pro</p>
-      <p>You received this because you opted in or were referred.</p>
-      <p><a href="#">Unsubscribe</a> · <a href="https://tradecommand.pro">tradecommand.pro</a></p>
-    </div>
-  </div>
 </body>
 </html>
