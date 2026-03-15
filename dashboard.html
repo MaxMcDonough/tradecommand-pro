@@ -31,6 +31,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 <style>
 :root{--bg:#0a0e17;--bg2:#111827;--card:#1a2236;--card2:#1f2a42;--brd:#2a3550;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--acc:#3b82f6;--grn:#10b981;--grn2:rgba(16,185,129,.12);--red:#ef4444;--red2:rgba(239,68,68,.12);--ylw:#f59e0b;--ylw2:rgba(245,158,11,.12);--pur:#8b5cf6;--pur2:rgba(139,92,246,.12);--cyn:#06b6d4;--cyn2:rgba(6,182,212,.12);--org:#f97316;--org2:rgba(249,115,22,.12)}
@@ -223,6 +224,7 @@ a{color:var(--acc);text-decoration:none}
 .g2{grid-template-columns:1fr 1fr}
 .g3{grid-template-columns:1fr 1fr 1fr}
 .g23{grid-template-columns:2fr 1fr}
+.g-trading-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}
 .c{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px}
 .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .ct{font-size:12px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
@@ -433,6 +435,322 @@ a{color:var(--acc);text-decoration:none}
 .ol-seg{display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
 @media(max-width:1200px){.g3{grid-template-columns:1fr 1fr}.g23{grid-template-columns:1fr}.modal-grid2{grid-template-columns:1fr}}
 @media(max-width:768px){.g2,.g3,.g23{grid-template-columns:1fr}.nav{gap:2px;padding:4px 8px}.page{padding:8px}}
+
+/* ===== MOBILE — 480px (iPhone 15 Pro Max and smaller) ===== */
+
+
+
+/* ===== MOBILE RESPONSIVE — 768px ===== */
+@media(max-width:768px){
+  .g2,.g3,.g23,.g-trading-top{grid-template-columns:1fr}
+  .nav{gap:2px;padding:4px 8px}
+  .page{padding:8px}
+}
+
+/* ===== MOBILE RESPONSIVE — 480px ===== */
+@media(max-width:480px){
+
+  /* ── TOP BAR ── */
+  .top{padding:0;flex-wrap:nowrap;height:48px;min-height:48px;position:sticky;top:0;z-index:100}
+  .logo{font-size:14px;padding:0 10px;flex-shrink:0}
+  .tickers{display:none}
+  /* Right side of top bar: compress everything */
+  .top-r{gap:4px;padding:0 8px;font-size:10px;flex-shrink:0}
+  .top-r #src-ct{display:none}
+  .top-r [onclick*="startTour"]{display:none}
+  #user-name{display:none !important}
+  #admin-link{font-size:9px}
+  #admin-link a{padding:3px 6px;background:rgba(255,255,255,.06);border-radius:4px;white-space:nowrap}
+  #btn-upgrade{padding:4px 8px;font-size:10px}
+  #btn-manage-sub{padding:4px 8px;font-size:10px}
+  /* Clock + market status */
+  .mkt-wrap{gap:3px}
+  #m-st{font-size:10px;font-weight:600}
+  #clock{font-size:10px}
+  .dot{width:5px;height:5px}
+  .mkt-tooltip{right:-8px;width:240px;top:calc(100% + 8px)}
+  .trial-badge{font-size:9px;padding:2px 5px}
+
+  /* ── NAV TABS ── */
+  .nav{
+    padding:0;
+    gap:0;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    border-bottom:1px solid var(--brd);
+    background:var(--bg2);
+    display:flex;
+    align-items:stretch;
+    height:38px;
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .nav button{
+    padding:0 11px;
+    font-size:11px;
+    font-weight:600;
+    border-radius:0;
+    border:none;
+    border-bottom:2px solid transparent;
+    background:transparent;
+    color:var(--t3);
+    white-space:nowrap;
+    flex-shrink:0;
+    height:100%;
+  }
+  .nav button.on{
+    color:var(--acc);
+    background:rgba(59,130,246,.08);
+    border-bottom-color:var(--acc);
+  }
+
+  /* ── SECTOR NAV ── */
+  .sector-nav{padding:3px 6px;gap:4px;-webkit-overflow-scrolling:touch;height:34px}
+  .sec-btn{padding:3px 10px;font-size:10px}
+  .sec-nav-label{display:none}
+  #sector-ctx-bar{padding:4px 8px;font-size:10px}
+
+  /* ── SESSION BAR ── */
+  #session-bar{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    gap:0;
+    padding:4px 6px;
+    flex-wrap:nowrap;
+    scrollbar-width:none;
+    font-size:10px;
+  }
+  #session-bar::-webkit-scrollbar{display:none}
+  #session-bar .sb-item{min-width:64px;padding:3px 8px;border-right:1px solid var(--brd)}
+  #session-bar .sb-label{font-size:8px;letter-spacing:.2px}
+  #session-bar .sb-val{font-size:11px}
+  #session-bar .sb-port-btn{padding:3px 8px;font-size:10px;margin-left:4px}
+  #session-bar .sb-end-btn{padding:3px 8px;font-size:10px;white-space:nowrap}
+
+  /* ── DEMO BANNER ── */
+  #demo-banner{flex-direction:column;align-items:flex-start;gap:6px;padding:7px 10px;font-size:10px}
+  .demo-key-row{width:100%;display:flex;gap:6px}
+  .demo-key-row input{flex:1;min-width:0}
+
+  /* ── PAGE CONTENT ── */
+  .page{padding:6px 8px}
+
+  /* ── SETUP SCREEN ── */
+  #setup{padding:12px}
+  .sbox{padding:18px 14px;border-radius:12px}
+  .sbox h1{font-size:18px}
+  .srow{flex-direction:column;gap:8px}
+  .ssec{padding:10px 12px}
+
+  /* ── AUTH OVERLAY ── */
+  #auth-overlay{padding:10px;align-items:flex-start;padding-top:40px}
+  .auth-box{padding:20px 16px;border-radius:12px;max-width:100%;margin:0}
+  .auth-logo{font-size:20px}
+  .auth-title{font-size:16px}
+  #checkout-plan-banner{font-size:12px;padding:8px 12px;border-radius:0}
+
+  /* ── CARDS ── */
+  .c{padding:10px 12px;border-radius:8px}
+
+  /* ── TRADING PAGE — 3-COL → 1-COL ── */
+  .g,.g-trading-top{grid-template-columns:1fr !important}
+  .g2,.g3,.g23{grid-template-columns:1fr}
+
+  /* ── CHART ── */
+  .cbox{height:200px !important}
+  .cbox canvas{height:200px !important}
+
+  /* ── SYM SELECTOR (chart symbol tabs) ── */
+  #sym-selector{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    display:flex;
+    gap:4px;
+    flex-wrap:nowrap;
+    scrollbar-width:none;
+    padding:2px 0 4px;
+  }
+  #sym-selector::-webkit-scrollbar{display:none}
+  #sym-selector>*{flex-shrink:0}
+
+  /* ── INDICATORS GRID ── */
+  .ig{grid-template-columns:1fr 1fr}
+  .ib{padding:6px}
+  .ib-v{font-size:12px}
+  .ib-l{font-size:8px}
+
+  /* ── FEAR & GREED / YIELDS ── */
+  .gv{font-size:30px}
+  #yields-row{flex-wrap:wrap;gap:6px}
+
+  /* ── WATCHLIST ── */
+  .wl{grid-template-columns:1fr auto auto auto;gap:4px;padding:5px 6px;font-size:11px}
+  .wl-filter-row{flex-wrap:wrap;gap:3px}
+  .wl-fbtn{padding:3px 7px;font-size:10px}
+  .wl-sort-row{font-size:10px;gap:4px}
+  .wl-sbtn{padding:2px 5px;font-size:9px}
+  #wl{max-height:240px}
+
+  /* ── ACTION PLAN ── */
+  .ap-row{grid-template-columns:1fr 1fr}
+  .ap-box{padding:6px 8px}
+
+  /* ── TRADE SIGNALS ── */
+  .sig-h{flex-wrap:wrap;gap:4px}
+  .sig-m{flex-wrap:wrap;gap:6px}
+  .sig-s{font-size:13px}
+
+  /* ── SECTOR HEATMAP ── */
+  .hg{grid-template-columns:repeat(3,1fr);gap:3px}
+  .hc{padding:5px 3px}
+  .hc-v{font-size:10px}
+  .hc-n{font-size:7px}
+
+  /* ── HOLDINGS ── */
+  .holdings-grid{grid-template-columns:1fr}
+  .hc-summary{flex-wrap:wrap;gap:8px}
+  .hc-sum-item{min-width:calc(50% - 8px)}
+  .holding-card{padding:10px 12px}
+
+  /* ── SECTOR PORTFOLIOS ── */
+  .sec-port-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .sec-port-card{padding:8px 10px}
+  .spc-tickers{display:none}
+  .spc-perf{font-size:18px}
+
+  /* ── NEWS ── */
+  .ni-h{font-size:11px}
+  .ni-t{font-size:9px}
+
+  /* ── REDDIT TABS ── */
+  #r-tabs{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:3px;
+    gap:3px;
+  }
+  #r-tabs::-webkit-scrollbar{display:none}
+  #r-tabs .itab{white-space:nowrap;flex-shrink:0}
+
+  /* ── ITABS (signal filter tabs) ── */
+  .itabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:3px}
+  .itabs::-webkit-scrollbar{display:none}
+  .itab{white-space:nowrap;flex-shrink:0;padding:4px 8px;font-size:10px}
+
+  /* ── CRYPTO ── */
+  .cr{grid-template-columns:16px 1fr auto;gap:5px}
+  .cr-rk{display:none}
+
+  /* ── CALCULATOR ── */
+  .cr2{flex-wrap:wrap;gap:6px}
+  .cf{min-width:calc(50% - 4px)}
+
+  /* ── BRIEFINGS ── */
+  .brief{padding:12px}
+  .brief-h{font-size:13px}
+  .brief-card{padding:12px 10px}
+  .brief-t{font-size:9px}
+  .brief-sec p{font-size:11px}
+
+  /* ── STOCK MODAL ── */
+  #modal-bg{padding:0}
+  .modal{border-radius:0;max-width:100%;width:100%;min-height:100dvh;margin:0}
+  .modal-top{padding:12px 14px;gap:8px}
+  .modal-name{font-size:16px}
+  .modal-logo{width:36px;height:36px;font-size:15px}
+  .modal-price .mp{font-size:20px}
+  .modal-price .mc{font-size:11px}
+  .modal-close{width:28px;height:28px;font-size:14px;margin-left:6px}
+  /* Actions row: scrollable horizontal */
+  .modal-actions{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap;
+    scrollbar-width:none;
+    padding:8px 12px;
+    gap:6px;
+  }
+  .modal-actions::-webkit-scrollbar{display:none}
+  .act-btn{white-space:nowrap;flex-shrink:0;padding:7px 10px;font-size:11px;gap:4px}
+  /* Modal tabs: scrollable */
+  .modal-tabs{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap;
+    scrollbar-width:none;
+  }
+  .modal-tabs::-webkit-scrollbar{display:none}
+  .modal-tab{padding:9px 13px;font-size:11px;white-space:nowrap;flex-shrink:0}
+  .modal-body{padding:12px 14px}
+  .modal-grid2,.modal-grid3{grid-template-columns:1fr}
+  #ai-levels{grid-template-columns:repeat(2,1fr) !important}
+
+  /* ── UPGRADE PROMPT ── */
+  #upgrade-prompt{padding:0;align-items:flex-start;overflow-y:auto}
+  .up-box{padding:18px 14px;border-radius:0;margin:0;min-height:100dvh;overflow-y:auto}
+  .up-cards{grid-template-columns:1fr;gap:10px}
+  .up-title{font-size:18px}
+  .up-card{padding:14px 12px}
+  .pricing-container{grid-template-columns:1fr}
+
+  /* ── ONBOARDING ── */
+  #onboarding-overlay{align-items:flex-start;padding:0}
+  .onboard-box{padding:20px 14px 32px;max-height:100dvh;overflow-y:auto;border-radius:0;width:100%}
+  .ob-tiers{flex-direction:column;gap:10px;align-items:center}
+  .ob-tier{max-width:100%;width:100%}
+  .ob-tier-row{flex-direction:column;gap:10px;align-items:center}
+  .ob-risk-row,.ob-focus-row{flex-wrap:wrap;justify-content:center}
+  .ob-risk-card,.ob-focus-card{max-width:calc(50% - 8px);min-width:110px}
+  .ob-launch-headline{font-size:22px}
+  .ob-launch-sub{font-size:13px}
+  .ob-launch{text-align:center}
+
+  /* ── TERMS GATE ── */
+  .tg-box{border-radius:0;max-height:100dvh;overflow-y:auto}
+  #terms-gate{padding:0;align-items:flex-start}
+
+  /* ── MODALS (generic) ── */
+  .modal-overlay{padding:0}
+  .modal-inner{border-radius:0;max-width:100%;max-height:100dvh;overflow-y:auto;width:100%;margin:0}
+  #modal-overlay{padding:0}
+
+  /* ── PORTFOLIO MODAL ── */
+  #portfolio-modal{padding:0}
+  .pf-modal{max-width:100%;border-radius:0;width:100%}
+  .pf-summary{grid-template-columns:repeat(2,1fr)}
+  .pf-chart-row{grid-template-columns:1fr}
+  .pf-top{padding:10px 12px}
+  .pf-body{padding:10px 12px}
+
+  /* ── UPGRADE MODAL ── */
+  #upgrade-modal{padding:0;align-items:flex-start}
+  .upgrade-box{border-radius:0;max-width:100%;padding:16px 12px;max-height:100dvh;overflow-y:auto}
+
+  /* ── INVEST SIZER ── */
+  .invest-row{flex-wrap:wrap;gap:6px}
+  .invest-btn{min-width:calc(33% - 5px);padding:6px 8px;font-size:11px}
+  .invest-commit-row{gap:6px}
+  .btn-commit{font-size:12px;padding:10px 12px}
+  .btn-skip{padding:10px 8px;font-size:10px}
+
+  /* ── SETTINGS ── */
+  #p-settings{padding:0 0 30px}
+  .settings-input{min-width:0;max-width:100%;width:100%}
+
+  /* ── TABLES ── */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;-ms-overflow-style:-ms-autohiding-scrollbar}
+
+  /* ── NEXT TOAST ── */
+  #next-toast{width:calc(100vw - 24px);right:12px;bottom:12px}
+
+  /* ── TRIAL BOX ── */
+  .trial-box{padding:16px 12px;border-radius:12px;margin:0 8px}
+
+  /* ── VOLUME CHART ── */
+  #vchart{height:90px !important}
+}
 
 /* ===== SECTOR NAV ===== */
 .sector-nav{display:flex;align-items:center;gap:6px;padding:6px 14px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--brd);overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:85}
@@ -1037,7 +1355,7 @@ a{color:var(--acc);text-decoration:none}
           <li><span class="up-x">✗</span> Options flow alerts</li>
           <li><span class="up-x">✗</span> Unusual Whales data</li>
         </ul>
-        <a href="https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200" target="_blank" class="up-cta outline">Upgrade to Pro</a>
+        <a href="javascript:void(0)" onclick="goToStripe('pro')" class="up-cta outline">Upgrade to Pro</a>
       </div>
       <!-- ELITE -->
       <div class="up-card best">
@@ -1055,7 +1373,7 @@ a{color:var(--acc);text-decoration:none}
           <li><span class="up-chk">✓</span> Personal trade coach AI</li>
           <li><span class="up-chk">✓</span> Early access to new features</li>
         </ul>
-        <a href="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201" target="_blank" class="up-cta accent">Upgrade to Elite</a>
+        <a href="javascript:void(0)" onclick="goToStripe('elite')" class="up-cta accent">Upgrade to Elite</a>
       </div>
     </div>
     <div class="up-footer">
@@ -1414,7 +1732,7 @@ a{color:var(--acc);text-decoration:none}
             <li><span class="ob-x">✗</span> Options flow alerts</li>
             <li><span class="ob-x">✗</span> Unusual Whales</li>
           </ul>
-          <a href="https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200" target="_blank" class="ob-tier-btn ob-outline">Upgrade to Pro →</a>
+          <a href="javascript:void(0)" onclick="goToStripe('pro')" class="ob-tier-btn ob-outline">Upgrade to Pro →</a>
         </div>
         <!-- Elite -->
         <div class="ob-tier ob-best">
@@ -1432,7 +1750,7 @@ a{color:var(--acc);text-decoration:none}
             <li><span class="ob-ck">✓</span> Priority support</li>
             <li><span class="ob-ck">✓</span> Early feature access</li>
           </ul>
-          <a href="https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201" target="_blank" class="ob-tier-btn ob-accent">Upgrade to Elite →</a>
+          <a href="javascript:void(0)" onclick="goToStripe('elite')" class="ob-tier-btn ob-accent">Upgrade to Elite →</a>
         </div>
       </div>
       <div class="ob-continue-row" style="display:flex;align-items:center;gap:12px;justify-content:center">
@@ -1716,7 +2034,7 @@ a{color:var(--acc);text-decoration:none}
 
 <!-- PAGE: TRADING -->
 <div class="page on" id="p-trading">
-<div class="g" style="margin-bottom:12px;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)">
+<div class="g g-trading-top" style="margin-bottom:12px">
   <div class="c">
     <div class="ch"><span class="ct">📋 Watchlist</span><span class="badge" style="background:var(--grn2);color:var(--grn)" id="wl-ct">0</span></div>
     <div class="wl-header">
@@ -2083,6 +2401,22 @@ a{color:var(--acc);text-decoration:none}
   </div>
 </div>
 
+<!-- Promo Code -->
+<div class="settings-section" style="border-color:rgba(245,158,11,.2)">
+  <h3 style="color:#f59e0b">🎟️ Promo Code</h3>
+  <div class="settings-row">
+    <div>
+      <div class="settings-row-lbl">Have a promo code?</div>
+      <div class="settings-row-val">Enter a code to unlock Pro or Elite access</div>
+    </div>
+    <div class="settings-input-group">
+      <input id="promo-code-input" type="text" class="settings-input" placeholder="Enter code..." maxlength="32" style="text-transform:uppercase;max-width:180px;">
+      <button class="btn-settings-save" onclick="applyPromoCode()" style="background:linear-gradient(135deg,#d97706,#f59e0b);">Apply</button>
+    </div>
+  </div>
+  <div id="promo-code-msg" style="display:none;font-size:13px;margin-top:10px;padding:8px 12px;border-radius:7px;"></div>
+</div>
+
 <!-- Danger Zone -->
 <div class="settings-section" style="border-color:rgba(239,68,68,.2)">
   <h3 style="color:#f87171">⚠ Danger Zone</h3>
@@ -2313,6 +2647,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+let rtdb = null;
+try { rtdb = firebase.database(); } catch(e) { console.warn('RTDB not available:', e); }
 
 const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
 
@@ -2448,6 +2784,14 @@ async function authSignUp() {
       totalTrades: 0,
       disabled: false
     });
+    // If user came from a pricing CTA, redirect to Stripe checkout
+    if (window._pendingCheckout) {
+      const base = STRIPE_LINKS[window._pendingCheckout];
+      if (base) {
+        window.location.href = base + '?prefilled_email=' + encodeURIComponent(email) + '&client_reference_id=' + user.uid;
+        return;
+      }
+    }
   } catch(e) {
     showAuthError('signup', e.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim());
   } finally {
@@ -2479,6 +2823,14 @@ async function authGoogle() {
         totalTrades: 0, disabled: false
       });
     }
+    // If user came from a pricing CTA, redirect to Stripe checkout (new and returning users)
+    if (window._pendingCheckout) {
+      const base = STRIPE_LINKS[window._pendingCheckout];
+      if (base) {
+        window.location.href = base + '?prefilled_email=' + encodeURIComponent(user.email) + '&client_reference_id=' + user.uid;
+        return;
+      }
+    }
   } catch(e) {
     showAuthError('signin', e.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim());
   }
@@ -2505,7 +2857,7 @@ async function authForgot() {
 
 function authSignOut() {
   localStorage.removeItem('tcp_local_admin');
-  auth.signOut().then(() => {
+  (() => { if(rtdb && auth.currentUser){ rtdb.ref('presence/'+auth.currentUser.uid).set({online:false,email:auth.currentUser.email,lastSeen:Date.now()}).finally(()=>auth.signOut()); } else { auth.signOut(); } })().then(() => {
     D.isAdmin = false;
     showAuth();
   }).catch(e => console.error(e));
@@ -2971,6 +3323,22 @@ async function handleAuthState(user) {
       loginCount: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     hideAuth();
+    // ── RTDB Presence: mark this user online ──
+    if (rtdb && user) {
+      const presenceRef = rtdb.ref('presence/' + user.uid);
+      presenceRef.set({
+        online: true,
+        email: user.email,
+        displayName: user.displayName || userData.displayName || 'User',
+        plan: userData.plan || 'trial',
+        lastSeen: Date.now()
+      }).catch(e => console.warn('Presence set error:', e));
+      presenceRef.onDisconnect().set({
+        online: false,
+        email: user.email,
+        lastSeen: Date.now()
+      }).catch(e => console.warn('onDisconnect error:', e));
+    }
     // Always pre-fill input fields with whatever keys/name we have
     const kfhEl = document.getElementById('k-fh');
     const kavEl = document.getElementById('k-av');
@@ -3077,6 +3445,59 @@ window.addEventListener('beforeunload', () => {
   if (D.session && D.session.tradeCount > 0) saveSessionToStorage();
 });
 
+// ===== STRIPE REDIRECT HELPER =====
+const STRIPE_LINKS = {
+  pro:   'https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200',
+  elite: 'https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201'
+};
+function goToStripe(plan) {
+  const base = STRIPE_LINKS[plan];
+  if (!base) return;
+  const user = firebase.auth().currentUser;
+  let url = base;
+  if (user) url += '?prefilled_email=' + encodeURIComponent(user.email) + '&client_reference_id=' + user.uid;
+  window.location.href = url;
+}
+
+// ===== CHECKOUT PLAN BANNER =====
+function showCheckoutBanner(plan) {
+  const existing = document.getElementById('checkout-plan-banner');
+  if (existing) existing.remove();
+  const planNames  = { pro: 'Pro — $29/mo', elite: 'Elite — $79/mo' };
+  const planColors = { pro: '#3b82f6',       elite: '#8b5cf6' };
+  const name  = planNames[plan]  || plan;
+  const color = planColors[plan] || '#3b82f6';
+  const banner = document.createElement('div');
+  banner.id = 'checkout-plan-banner';
+  banner.style.cssText = `background:${color}18;border:1px solid ${color}40;border-radius:8px;padding:10px 14px;margin-bottom:14px;text-align:center;font-size:13px;line-height:1.4;`;
+  banner.innerHTML = `<span style="color:${color};font-weight:700;">📦 ${name}</span> <span style="color:var(--t2)">— Create an account to complete checkout</span>`;
+  const authBox = document.querySelector('.auth-box');
+  const tabs = authBox && authBox.querySelector('.auth-tabs');
+  if (tabs) tabs.insertAdjacentElement('beforebegin', banner);
+}
+
+// ===== URL PARAM HANDLER (from index.html access modal) =====
+function applyURLParams() {
+  const params   = new URLSearchParams(window.location.search);
+  const tab      = params.get('tab');
+  const email    = params.get('email');
+  const checkout = params.get('checkout');
+  if (checkout === 'pro' || checkout === 'elite') window._pendingCheckout = checkout;
+  if (tab === 'signup') switchAuthTab('signup');
+  if (email) {
+    const su = document.getElementById('signup-email');
+    const si = document.getElementById('signin-email');
+    if (su) su.value = decodeURIComponent(email);
+    if (si) si.value = decodeURIComponent(email);
+  }
+  if (window._pendingCheckout) showCheckoutBanner(window._pendingCheckout);
+  // Clean checkout params from URL so refreshing doesn't re-trigger
+  if (tab || email || checkout) {
+    const clean = window.location.pathname + (window.location.hash || '');
+    window.history.replaceState({}, document.title, clean);
+  }
+}
+
 // Auto-launch on page open — pre-fill form fields from D defaults then launch
 window.addEventListener('DOMContentLoaded', () => {
   // Check local admin bypass first (for when Firebase isn't configured)
@@ -3099,6 +3520,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   // Handle payment return params
   handlePaymentReturn();
+  // Apply URL params from index.html access modal (tab=signup, email=, checkout=)
+  applyURLParams();
   // Render pricing cards in modals
   renderPricingCards('trial-pricing-container');
   renderPricingCards('upgrade-modal-pricing');
@@ -3697,6 +4120,67 @@ async function stgSendPasswordReset() {
     if (btn) btn.textContent = 'Send reset email';
   }
 }
+async function applyPromoCode() {
+  const input = document.getElementById('promo-code-input');
+  const msgEl = document.getElementById('promo-code-msg');
+  const code = (input.value || '').trim().toUpperCase();
+  if (!code) { showPromoMsg('Please enter a promo code.', false); return; }
+  const user = auth.currentUser;
+  if (!user) { showPromoMsg('You must be signed in to apply a promo code.', false); return; }
+  const btn = document.querySelector('[onclick="applyPromoCode()"]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Checking...'; }
+  try {
+    const promoSnap = await db.collection('promoCodes').doc(code).get();
+    if (!promoSnap.exists) {
+      showPromoMsg('Invalid promo code. Please check and try again.', false);
+      return;
+    }
+    const promo = promoSnap.data();
+    const now = Date.now();
+    if (!promo.active) { showPromoMsg('This promo code is no longer active.', false); return; }
+    if (promo.expiresAt && promo.expiresAt < now) { showPromoMsg('This promo code has expired.', false); return; }
+    if (promo.maxUses && promo.useCount >= promo.maxUses) { showPromoMsg('This promo code has reached its usage limit.', false); return; }
+    // Check if already used by this user
+    const usedSnap = await db.collection('promoUses').where('uid','==',user.uid).where('code','==',code).get();
+    if (!usedSnap.empty) { showPromoMsg('You have already used this promo code.', false); return; }
+    // Determine new plan
+    let newPlan = 'pro';
+    if (promo.type === 'upgrade-elite') newPlan = 'elite';
+    // Apply upgrade
+    const upgradeData = {
+      plan: newPlan,
+      promoApplied: code,
+      promoUpgradedAt: now,
+      subscriptionEnd: now + 365 * 24 * 60 * 60 * 1000 // 1 year
+    };
+    await db.collection('users').doc(user.uid).update(upgradeData);
+    // Record usage
+    await db.collection('promoUses').add({ uid: user.uid, email: user.email, code, appliedAt: now });
+    // Increment use count
+    await db.collection('promoCodes').doc(code).update({ useCount: firebase.firestore.FieldValue.increment(1) });
+    const planLabel = newPlan === 'elite' ? '💎 Elite' : '⚡ Pro';
+    showPromoMsg(`🎉 Success! Your account has been upgraded to ${planLabel}. Refresh to see all features.`, true);
+    // Update the plan display
+    const planEl = document.getElementById('stg-plan-val');
+    if (planEl) planEl.textContent = planLabel;
+    input.value = '';
+  } catch(e) {
+    console.error('Promo code error:', e);
+    showPromoMsg('Something went wrong. Please try again.', false);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Apply'; }
+  }
+}
+function showPromoMsg(msg, success) {
+  const el = document.getElementById('promo-code-msg');
+  if (!el) return;
+  el.style.display = 'block';
+  el.textContent = msg;
+  el.style.background = success ? 'rgba(16,185,129,.12)' : 'rgba(239,68,68,.1)';
+  el.style.color = success ? '#10b981' : '#f87171';
+  el.style.border = success ? '1px solid rgba(16,185,129,.25)' : '1px solid rgba(239,68,68,.2)';
+}
+
 function stgClearLocal() {
   if (!confirm('Clear all local data? Your Firestore profile is untouched.')) return;
   try { localStorage.removeItem('tcp_v2'); } catch(e) {}
@@ -5484,22 +5968,26 @@ function checkSubscription() {
 function handlePaymentReturn() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('payment') === 'success') {
-    showToast('✅ Welcome to Pro! Your subscription is active.', 'green');
+    const plan      = params.get('plan') || 'pro_monthly';
+    const isElite   = plan.startsWith('elite');
+    const isAnnual  = plan.endsWith('annual');
+    const planLabel = isElite ? 'Elite' : 'Pro';
+    showToast(`✅ Welcome to ${planLabel}! Your subscription is active.`, 'green');
     const user = firebase.auth().currentUser;
     if (user) {
-      // Client-side update (should be done via webhook in production)
-      const plan = params.get('plan') || 'pro_monthly';
+      // Client-side update (Stripe webhook should also update this in production)
       firebase.firestore().collection('users').doc(user.uid).update({
         plan: plan,
         subscriptionStart: new Date(),
-        subscriptionEnd: new Date(new Date().getTime() + (plan === 'pro_annual' ? 365 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000))
+        subscriptionEnd: new Date(Date.now() + (isAnnual ? 365 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000))
       });
       checkSubscription();
     }
+    window._pendingCheckout = null;
     // Clean URL
     window.history.replaceState({}, document.title, window.location.pathname);
   } else if (params.get('payment') === 'cancel') {
-    showToast('Payment cancelled. You can upgrade anytime.', 'info');
+    showToast('Payment cancelled. You can upgrade anytime from the dashboard.', 'info');
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 }
@@ -5536,3 +6024,4 @@ function handlePaymentReturn() {
 </script>
 </body>
 </html>
+
