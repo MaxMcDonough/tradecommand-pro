@@ -6067,6 +6067,15 @@ function handlePaymentReturn() {
   }
 }
 
+/* ── Mobile session bar toggle ── */
+function toggleMobileSession(){
+  const bar = document.getElementById('session-bar');
+  const arrow = document.getElementById('mob-pnl-arrow');
+  if(!bar) return;
+  bar.classList.toggle('mob-open');
+  if(arrow) arrow.classList.toggle('open');
+}
+
 </script>
 
 <!-- ===== UPGRADE MODAL ===== -->
