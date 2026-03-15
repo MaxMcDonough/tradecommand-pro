@@ -901,7 +901,6 @@
       <div class="sidebar-header">
         <div class="sidebar-title">⚡ TC Pro Admin</div>
         <a href="dashboard.html" class="sidebar-back">← Back to Dashboard</a>
-        <a href="business.html" style="display:block;margin-top:8px;padding:8px 12px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-align:center;text-decoration:none">🚀 Business Command Center</a>
       </div>
       <div class="sidebar-nav">
         <div class="nav-item active" data-page="dashboard">📊 Dashboard</div>
@@ -2441,6 +2440,18 @@
     const closeModal = () => {
       document.getElementById('modal').classList.remove('active');
     };
+
+    // Reparent biz pages into content-body regardless of parsed DOM position
+    (function() {
+      const contentBody = document.querySelector('.content-body');
+      if (!contentBody) return;
+      ['biz-dashboard','biz-crm','biz-leads','biz-prospecting','biz-marketing',
+       'biz-campaigns','biz-revenue','biz-analytics','biz-advisor','biz-plan',
+       'biz-files','biz-settings'].forEach(function(page) {
+        const el = document.getElementById(page + '-page');
+        if (el && el.parentElement !== contentBody) contentBody.appendChild(el);
+      });
+    })();
 
     // Navigation
     document.querySelectorAll('.nav-item').forEach(item => {
