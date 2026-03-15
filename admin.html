@@ -724,22 +724,73 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 <!-- ═══ LEADS (CRITICAL PAGE) ═══ -->
 <div class="page" id="biz-leads-page">
   <div class="stats">
-    <div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val" id="leads-total">50</div></div>
+    <div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val" id="leads-total">0</div></div>
     <div class="stat"><div class="stat-label">Hot Leads</div><div class="stat-val" id="leads-hot">&mdash;</div></div>
     <div class="stat"><div class="stat-label">Warm Leads</div><div class="stat-val" id="leads-warm">&mdash;</div></div>
     <div class="stat"><div class="stat-label">Conversion Rate</div><div class="stat-val" id="leads-conv">0%</div></div>
+  </div>
+  <!-- FILTER BAR -->
+  <div class="card" style="margin-bottom:16px;padding:12px 16px">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <span style="font-size:12px;font-weight:600;color:var(--t2)">Filter:</span>
+      <select id="filter-type" onchange="applyLeadFilters()" style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px 10px;font-size:12px;min-width:140px">
+        <option value="">All Types</option>
+        <option value="Finance Student">🎓 Finance Students</option>
+        <option value="Grad Student">🎓 Grad Students</option>
+        <option value="Aspiring Trader">📈 Aspiring Traders</option>
+        <option value="Retail Trader">💹 Retail Traders</option>
+        <option value="Wall Street Trader">🏦 Wall Street Traders</option>
+        <option value="Quant Trader">🧮 Quant Traders</option>
+        <option value="Quant Researcher">🔬 Quant Researchers</option>
+        <option value="Portfolio Manager">💼 Portfolio Managers</option>
+        <option value="Commodity Trader">🛢️ Commodity Traders</option>
+        <option value="Crypto/DeFi Trader">₿ Crypto/DeFi Traders</option>
+        <option value="Trading Analytics">📊 Trading Analytics</option>
+        <option value="Buy-Side Analyst">📋 Buy-Side Analysts</option>
+        <option value="Risk Professional">⚠️ Risk Professionals</option>
+        <option value="Fintech Professional">💻 Fintech Professionals</option>
+        <option value="Investor">💰 Investors</option>
+      </select>
+      <select id="filter-channel" onchange="applyLeadFilters()" style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px 10px;font-size:12px;min-width:140px">
+        <option value="">All Channels</option>
+        <option value="LinkedIn">🔗 LinkedIn</option>
+        <option value="Email">📧 Email</option>
+        <option value="Twitter">🐦 Twitter/X</option>
+        <option value="Reddit">🟠 Reddit</option>
+        <option value="Instagram">📸 Instagram</option>
+        <option value="Discord">💬 Discord</option>
+        <option value="University">🏫 University</option>
+        <option value="Cold Call">📞 Cold Call</option>
+        <option value="Referral">🤝 Referral</option>
+      </select>
+      <select id="filter-status" onchange="applyLeadFilters()" style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px 10px;font-size:12px;min-width:120px">
+        <option value="">All Statuses</option>
+        <option value="new">🆕 New</option>
+        <option value="contacted">📨 Contacted</option>
+        <option value="interested">⭐ Interested</option>
+        <option value="converted">✅ Converted</option>
+      </select>
+      <select id="filter-score" onchange="applyLeadFilters()" style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px 10px;font-size:12px;min-width:120px">
+        <option value="">All Scores</option>
+        <option value="hot">🔥 Hot (80+)</option>
+        <option value="warm">🌡️ Warm (50-79)</option>
+        <option value="cold">❄️ Cold (&lt;50)</option>
+      </select>
+      <button class="btn btn-ghost" onclick="clearLeadFilters()" style="font-size:11px;padding:5px 10px">✕ Clear</button>
+      <span id="filter-count" style="font-size:11px;color:var(--t3);margin-left:auto"></span>
+    </div>
   </div>
   <div class="table-wrap">
     <div class="table-bar">
       <h3>All Leads</h3>
       <div style="display:flex;gap:8px;align-items:center">
-        <input type="text" class="search-box" placeholder="Search leads..." oninput="filterLeads(this.value)">
+        <input type="text" class="search-box" placeholder="Search leads..." id="leads-search" oninput="applyLeadFilters()">
         <button class="btn btn-primary" onclick="exportLeads()">Export CSV</button>
         <button class="btn btn-ghost" onclick="copyAllDMs()">Copy All DMs</button>
       </div>
     </div>
     <table>
-      <thead><tr><th>Score</th><th>Name</th><th>Role</th><th>Status</th><th>Priority</th><th>Type</th><th></th></tr></thead>
+      <thead><tr><th>Score</th><th>Name</th><th>Role</th><th>Status</th><th>Channel</th><th>Type</th><th></th></tr></thead>
       <tbody id="leads-tbody"></tbody>
     </table>
   </div>
@@ -747,18 +798,102 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 
 <!-- ═══ MARKETING ═══ -->
 <div class="page" id="biz-marketing-page">
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Emails Sent (30d)</div><div class="stat-val">0</div></div>
-    <div class="stat"><div class="stat-label">Avg Open Rate</div><div class="stat-val">—</div></div>
-    <div class="stat"><div class="stat-label">Click Rate</div><div class="stat-val">—</div></div>
-    <div class="stat"><div class="stat-label">Unsubscribes</div><div class="stat-val">0</div></div>
+  <div class="stats" id="mkt-stats">
+    <div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val" id="mkt-total">0</div></div>
+    <div class="stat"><div class="stat-label">Channels Active</div><div class="stat-val" id="mkt-channels">0</div></div>
+    <div class="stat"><div class="stat-label">Ad Creatives</div><div class="stat-val">9</div></div>
+    <div class="stat"><div class="stat-label">Lead Types</div><div class="stat-val" id="mkt-types">0</div></div>
   </div>
-  <div class="card"><h3>📧 Email Sequences</h3><p style="color:var(--t2);font-size:13px;margin-top:8px">Set up drip campaigns to nurture leads. Start by selecting leads from the Leads page and sending personalized DMs.</p></div>
-  <div class="card"><h3>📱 Social Channels</h3>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px">
-      <div class="lp-field"><div class="lp-field-label">LinkedIn</div><div style="font-size:20px;font-weight:800;color:var(--acc)">50</div><div style="font-size:11px;color:var(--t3)">prospects found</div></div>
-      <div class="lp-field"><div class="lp-field-label">Reddit</div><div style="font-size:20px;font-weight:800;color:var(--t3)">0</div><div style="font-size:11px;color:var(--t3)">prospects found</div></div>
-      <div class="lp-field"><div class="lp-field-label">Twitter</div><div style="font-size:20px;font-weight:800;color:var(--t3)">0</div><div style="font-size:11px;color:var(--t3)">prospects found</div></div>
+
+  <!-- Channel Breakdown -->
+  <div class="card">
+    <h3>📱 Channel Distribution</h3>
+    <div id="mkt-channel-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:12px"></div>
+  </div>
+
+  <!-- Lead Type Breakdown -->
+  <div class="card">
+    <h3>👥 Lead Type Breakdown</h3>
+    <div id="mkt-type-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:12px"></div>
+  </div>
+
+  <!-- Ad Creatives & Posts -->
+  <div class="card">
+    <h3>🎨 Ad Creatives &amp; Posts</h3>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Ready-to-post social media ads, flyers, and print materials. All files saved to your workspace.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
+      <div class="lp-field" style="border-left:3px solid #E1306C">
+        <div style="font-size:12px;font-weight:700">📸 Instagram Launch Post</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; "TradeCommand Pro is LIVE"</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_launch.html</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #E1306C">
+        <div style="font-size:12px;font-weight:700">📸 Instagram Story &mdash; Free for Students</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1920 &mdash; Student signup CTA</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_story_free.html</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #1877F2">
+        <div style="font-size:12px;font-weight:700">📘 Facebook Features Ad</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">1200x628 &mdash; Feature showcase</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_facebook_features.html</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #E1306C">
+        <div style="font-size:12px;font-weight:700">📸 Instagram Testimonial</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; Social proof / 5-star</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_testimonial.html</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #E1306C">
+        <div style="font-size:12px;font-weight:700">📸 Carousel Slide 1</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; "5 Reasons Traders Love TCP"</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_instagram_carousel_1.html</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #6366f1">
+        <div style="font-size:12px;font-weight:700">💎 Sponsored Post</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 &mdash; Dashboard mockup ad</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">ad_sponsored_post.html</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print Materials -->
+  <div class="card">
+    <h3>🖨️ Print Materials</h3>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Printable flyers and business cards for physical distribution.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
+      <div class="lp-field" style="border-left:3px solid #10b981">
+        <div style="font-size:12px;font-weight:700">🎓 University Flyer</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">8.5x11" &mdash; "FREE for Students" with tear-off tabs</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">flyer_university.html</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #f59e0b">
+        <div style="font-size:12px;font-weight:700">☕ Coffee Shop Flyer</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">8.5x11" &mdash; Professional design with plans</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">flyer_coffeeshop.html</div>
+      </div>
+      <div class="lp-field" style="border-left:3px solid #6366f1">
+        <div style="font-size:12px;font-weight:700">💼 Business Cards</div>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">3.5x2" &mdash; Front + Back design with crop marks</div>
+        <div style="font-size:11px;color:var(--acc);margin-top:4px">business_card.html</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad Strategy -->
+  <div class="card">
+    <h3>📋 Ad Strategy</h3>
+    <div style="display:grid;gap:12px;margin-top:12px">
+      <div class="lp-field">
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Phase 1: Organic Launch (Week 1-2)</div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.5">Post launch announcement on Instagram + Twitter. Share university flyers at NYU, Columbia, Wharton bulletin boards. Send LinkedIn DMs to all 89 leads. Post in r/wallstreetbets, r/daytrading, r/stocks.</div>
+      </div>
+      <div class="lp-field">
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Phase 2: Paid Social (Week 3-4)</div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.5">Run Instagram sponsored posts targeting 18-35, interest: stock trading, finance, investing. Facebook retargeting pixel on tradecommandpro.com. Budget: $10/day. Goal: 500 clicks, 50 signups.</div>
+      </div>
+      <div class="lp-field">
+        <div style="font-size:12px;font-weight:700;margin-bottom:4px">Phase 3: Community + Referral (Week 5-8)</div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.5">Launch ambassador program for trading Discord/FinTwit creators. Referral incentive: 1 month free Pro for each referral. Coffee shop flyers in financial district areas. Target: 200 total users.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -1092,6 +1227,7 @@ function loadPage(page) {
     case 'biz-crm': loadCRM(); break;
     case 'biz-revenue': loadRevenue(); break;
     case 'biz-analytics': loadBizAnalytics(); break;
+    case 'biz-marketing': loadMarketing(); break;
     case 'changelog': loadChangelog(); break;
   }
 }
@@ -1746,6 +1882,38 @@ function loadRevenue() {
   }).join('');
 }
 
+function loadMarketing() {
+  document.getElementById('mkt-total').textContent = SEED_LEADS.length;
+  // Channel breakdown
+  var chanMap = {};
+  SEED_LEADS.forEach(function(l){ var ch = l.channel||'LinkedIn'; chanMap[ch]=(chanMap[ch]||0)+1; });
+  var channels = Object.entries(chanMap).sort(function(a,b){return b[1]-a[1];});
+  document.getElementById('mkt-channels').textContent = channels.length;
+  var chIcons = {LinkedIn:'🔗',Email:'📧',Twitter:'🐦',Reddit:'🟠',Instagram:'📸',Discord:'💬',University:'🏫','Cold Call':'📞',Referral:'🤝'};
+  document.getElementById('mkt-channel-grid').innerHTML = channels.map(function(c){
+    var pct = Math.round(c[1]/SEED_LEADS.length*100);
+    return '<div class="lp-field"><div style="font-size:12px;font-weight:600">'+(chIcons[c[0]]||'📨')+' '+c[0]+'</div>'+
+      '<div style="font-size:22px;font-weight:800;color:var(--acc);margin:4px 0">'+c[1]+'</div>'+
+      '<div style="height:4px;background:var(--brd);border-radius:2px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--acc);border-radius:2px"></div></div>'+
+      '<div style="font-size:10px;color:var(--t3);margin-top:4px">'+pct+'% of pipeline</div></div>';
+  }).join('');
+  // Type breakdown
+  var typeMap = {};
+  SEED_LEADS.forEach(function(l){ var t = l.type||'Unknown'; typeMap[t]=(typeMap[t]||0)+1; });
+  var types = Object.entries(typeMap).sort(function(a,b){return b[1]-a[1];});
+  document.getElementById('mkt-types').textContent = types.length;
+  var tIcons = {'Finance Student':'🎓','Grad Student':'🎓','Aspiring Trader':'📈','Retail Trader':'💹','Wall Street Trader':'🏦','Quant Trader':'🧮','Quant Researcher':'🔬','Portfolio Manager':'💼','Commodity Trader':'🛢️','Crypto/DeFi Trader':'₿','Trading Analytics':'📊','Buy-Side Analyst':'📋','Risk Professional':'⚠️','Fintech Professional':'💻','Investor':'💰'};
+  document.getElementById('mkt-type-grid').innerHTML = types.map(function(t){
+    var avgScore = Math.round(SEED_LEADS.filter(function(l){return l.type===t[0];}).reduce(function(a,l){return a+l.score;},0)/t[1]);
+    return '<div class="lp-field" onclick="document.getElementById(\'filter-type\').value=\''+t[0]+'\';document.querySelector(\'[data-page=biz-leads]\').click();setTimeout(applyLeadFilters,100)" style="cursor:pointer">'+
+      '<div style="font-size:12px;font-weight:600">'+(tIcons[t[0]]||'👤')+' '+t[0]+'</div>'+
+      '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:4px">'+
+        '<span style="font-size:20px;font-weight:800;color:var(--acc)">'+t[1]+'</span>'+
+        '<span style="font-size:11px;color:var(--t3)">avg '+avgScore+'</span>'+
+      '</div></div>';
+  }).join('');
+}
+
 function loadBizAnalytics() {
   var scores = SEED_LEADS.map(function(l){return l.score;});
   var avg = Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length);
@@ -1950,49 +2118,87 @@ function aiAdvise(q) {
 
 // ═══ LEADS — THE CRITICAL PAGE ═══
 function loadLeads() {
-  const leads = SEED_LEADS.map((l,i) => ({...l, id:'seed_'+i}));
+  var leads = SEED_LEADS.map(function(l,i){return Object.assign({},l,{id:'seed_'+i});});
   renderLeadsTable(leads);
   document.getElementById('leads-total').textContent = leads.length;
-  document.getElementById('leads-hot').textContent = leads.filter(l=>l.score>=80).length;
-  document.getElementById('leads-warm').textContent = leads.filter(l=>l.score>=50&&l.score<80).length;
+  document.getElementById('leads-hot').textContent = leads.filter(function(l){return l.score>=80;}).length;
+  document.getElementById('leads-warm').textContent = leads.filter(function(l){return l.score>=50&&l.score<80;}).length;
+  var stats = getLeadStatuses();
+  var convRate = stats.converted>0 ? Math.round(stats.converted/leads.length*100)+'%' : '0%';
+  document.getElementById('leads-conv').textContent = convRate;
 }
 
 function renderLeadsTable(leads) {
-  const tbody = document.getElementById('leads-tbody');
+  var tbody = document.getElementById('leads-tbody');
   if (!tbody) return;
-  if (!leads||!leads.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">No leads</td></tr>'; return; }
-  const sc = s => s>=80?'#10b981':s>=50?'#f59e0b':'#ef4444';
-  const pc = p => p==='High'?'#10b981':p==='Med'?'#f59e0b':'#94a3b8';
-  tbody.innerHTML = leads.map((lead, i) => {
-    const id = lead.id || 'seed_'+i;
+  if (!leads||!leads.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">No leads match your filters</td></tr>'; return; }
+  var sc = function(s){return s>=80?'#10b981':s>=50?'#f59e0b':'#ef4444';};
+  var chIcon = function(ch){
+    var map = {LinkedIn:'🔗',Email:'📧','Twitter':'🐦',Reddit:'🟠',Instagram:'📸',Discord:'💬',University:'🏫','Cold Call':'📞',Referral:'🤝'};
+    return map[ch]||'📨';
+  };
+  tbody.innerHTML = leads.map(function(lead, i) {
+    var id = lead.id || 'seed_'+i;
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
+    var st = saved.status||lead.status||'new';
+    var stBadge = st==='converted'?'badge-green':st==='interested'?'badge-yellow':st==='contacted'?'badge-indigo':'badge-indigo';
     return '<tr data-id="'+id+'" onclick="openLeadPanel(\''+id+'\')" style="border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'rgba(99,102,241,.08)\'" onmouseout="this.style.background=\'\'">'+
       '<td style="padding:10px 16px"><span style="font-weight:700;color:'+sc(lead.score||0)+';font-size:15px">'+(lead.score||0)+'</span></td>'+
-      '<td style="padding:10px 16px"><div style="font-size:13px;color:#f1f5f9;font-weight:600">'+(lead.name||'—')+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+(lead.location||'')+'</div></td>'+
-      '<td style="padding:10px 16px;font-size:12px;color:#94a3b8">'+(lead.role||lead.company||'—')+'</td>'+
-      '<td style="padding:10px 16px"><span class="badge badge-indigo">'+(lead.status||'new')+'</span></td>'+
-      '<td style="padding:10px 16px"><span style="font-size:11px;color:'+pc(lead.priority)+';font-weight:600">'+(lead.priority||'—')+'</span></td>'+
-      '<td style="padding:10px 16px;font-size:11px;color:#64748b">'+(lead.type||'—')+'</td>'+
-      '<td style="padding:10px 16px"><button onclick="event.stopPropagation();openLeadPanel(\''+id+'\')" style="background:#6366f1;color:#fff;border:none;border-radius:5px;padding:4px 12px;font-size:11px;cursor:pointer">Open →</button></td>'+
+      '<td style="padding:10px 16px"><div style="font-size:13px;color:#f1f5f9;font-weight:600">'+(lead.name||'\u2014')+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+(lead.location||'')+'</div></td>'+
+      '<td style="padding:10px 16px;font-size:12px;color:#94a3b8">'+(lead.role||lead.company||'\u2014')+'</td>'+
+      '<td style="padding:10px 16px"><span class="badge '+stBadge+'">'+st+'</span></td>'+
+      '<td style="padding:10px 16px;font-size:11px;color:#94a3b8">'+chIcon(lead.channel||'LinkedIn')+' '+(lead.channel||'LinkedIn')+'</td>'+
+      '<td style="padding:10px 16px;font-size:11px;color:#64748b">'+(lead.type||'\u2014')+'</td>'+
+      '<td style="padding:10px 16px"><button onclick="event.stopPropagation();openLeadPanel(\''+id+'\')" style="background:#6366f1;color:#fff;border:none;border-radius:5px;padding:4px 12px;font-size:11px;cursor:pointer">Open \u2192</button></td>'+
     '</tr>';
   }).join('');
 }
 
-function filterLeads(q) {
-  q = q.toLowerCase();
-  const leads = SEED_LEADS.map((l,i)=>({...l,id:'seed_'+i})).filter(l =>
-    (l.name||'').toLowerCase().includes(q) || (l.role||'').toLowerCase().includes(q) ||
-    (l.location||'').toLowerCase().includes(q) || (l.type||'').toLowerCase().includes(q)
-  );
+function applyLeadFilters() {
+  var q = (document.getElementById('leads-search').value||'').toLowerCase();
+  var typeF = document.getElementById('filter-type').value;
+  var chanF = document.getElementById('filter-channel').value;
+  var statusF = document.getElementById('filter-status').value;
+  var scoreF = document.getElementById('filter-score').value;
+  var leads = SEED_LEADS.map(function(l,i){return Object.assign({},l,{id:'seed_'+i});});
+  var total = leads.length;
+  leads = leads.filter(function(l){
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+l.id)||'{}');
+    var st = saved.status||l.status||'new';
+    if(q && !((l.name||'').toLowerCase().indexOf(q)>=0 || (l.role||'').toLowerCase().indexOf(q)>=0 ||
+      (l.location||'').toLowerCase().indexOf(q)>=0 || (l.type||'').toLowerCase().indexOf(q)>=0 ||
+      (l.company||'').toLowerCase().indexOf(q)>=0 || (l.channel||'').toLowerCase().indexOf(q)>=0)) return false;
+    if(typeF && l.type!==typeF) return false;
+    if(chanF && (l.channel||'LinkedIn')!==chanF) return false;
+    if(statusF && st!==statusF) return false;
+    if(scoreF==='hot' && l.score<80) return false;
+    if(scoreF==='warm' && (l.score<50||l.score>=80)) return false;
+    if(scoreF==='cold' && l.score>=50) return false;
+    return true;
+  });
   renderLeadsTable(leads);
+  var el = document.getElementById('filter-count');
+  if(el) el.textContent = leads.length===total ? total+' leads' : 'Showing '+leads.length+' of '+total;
 }
 
+function clearLeadFilters() {
+  document.getElementById('filter-type').value='';
+  document.getElementById('filter-channel').value='';
+  document.getElementById('filter-status').value='';
+  document.getElementById('filter-score').value='';
+  document.getElementById('leads-search').value='';
+  applyLeadFilters();
+}
+
+function filterLeads(q) { applyLeadFilters(); }
+
 function exportLeads() {
-  var rows = [['Score','Name','Role','Location','Status','Priority','Type','DM']];
+  var rows = [['Score','Name','Role','Company','Location','Status','Priority','Type','Channel','DM']];
   SEED_LEADS.forEach(function(l,i){
     var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
     rows.push([
-      l.score||0, l.name||'', l.role||'', l.location||'',
-      saved.status||l.status||'new', l.priority||'', l.type||'',
+      l.score||0, l.name||'', l.role||'', l.company||'', l.location||'',
+      saved.status||l.status||'new', l.priority||'', l.type||'', l.channel||'LinkedIn',
       (l.dm||'').replace(/"/g,'""')
     ]);
   });
@@ -2297,6 +2503,7 @@ const SEED_LEADS = [
     "role": "BBA Finance / Aspiring Trader",
     "location": "New York, NY",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2316,6 +2523,7 @@ const SEED_LEADS = [
     "role": "Aspiring Trader",
     "location": "United States",
     "type": "Aspiring Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2335,6 +2543,7 @@ const SEED_LEADS = [
     "role": "Aspiring Trader",
     "location": "United States",
     "type": "Aspiring Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2354,6 +2563,7 @@ const SEED_LEADS = [
     "role": "Investment Club VP / Finance Student",
     "location": "Syracuse, NY",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2373,6 +2583,7 @@ const SEED_LEADS = [
     "role": "Endowment Analyst / Student Fund Manager",
     "location": "Oswego, NY",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2392,6 +2603,7 @@ const SEED_LEADS = [
     "role": "Investment Club Member",
     "location": "Greenville, SC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -2411,6 +2623,7 @@ const SEED_LEADS = [
     "role": "Student Futures Trader",
     "location": "United States",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2430,6 +2643,7 @@ const SEED_LEADS = [
     "role": "Finance & CS Junior / Quant Research Intern",
     "location": "New York, NY",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2449,6 +2663,7 @@ const SEED_LEADS = [
     "role": "QCF Student / Incoming Analyst",
     "location": "Ann Arbor, MI",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2468,6 +2683,7 @@ const SEED_LEADS = [
     "role": "Finance & Math Junior",
     "location": "United States",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2487,6 +2703,7 @@ const SEED_LEADS = [
     "role": "Quant Finance Student / Incoming Citi S&T Analyst",
     "location": "Villanova, PA",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2506,6 +2723,7 @@ const SEED_LEADS = [
     "role": "MSFM 2026 Candidate",
     "location": "Chicago, IL",
     "type": "Grad Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -2525,6 +2743,7 @@ const SEED_LEADS = [
     "role": "Student Quant / Fintech Builder",
     "location": "United States",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2544,6 +2763,7 @@ const SEED_LEADS = [
     "role": "Student HFT Researcher & Developer",
     "location": "United States",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -2563,6 +2783,7 @@ const SEED_LEADS = [
     "role": "Economics & Business / QCF Club",
     "location": "New Brunswick, NJ",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2582,6 +2803,7 @@ const SEED_LEADS = [
     "role": "Finance Student / Hutton Honors",
     "location": "Bloomington, IN",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2601,6 +2823,7 @@ const SEED_LEADS = [
     "role": "Student Portfolio Manager / Wells Fargo Intern",
     "location": "Pittsburgh, PA",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2620,6 +2843,7 @@ const SEED_LEADS = [
     "role": "Finance / BU Investment Club",
     "location": "Boston, MA",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2639,6 +2863,7 @@ const SEED_LEADS = [
     "role": "Wharton Undergrad / HF Equity Research Intern",
     "location": "Philadelphia, PA",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2658,6 +2883,7 @@ const SEED_LEADS = [
     "role": "Finance Student / Asset Management",
     "location": "Provo, UT",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -2677,6 +2903,7 @@ const SEED_LEADS = [
     "role": "Georgetown Quant Club Member",
     "location": "Washington, DC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2696,6 +2923,7 @@ const SEED_LEADS = [
     "role": "MS Finance / Equity Research",
     "location": "United States",
     "type": "Grad Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -2715,6 +2943,7 @@ const SEED_LEADS = [
     "role": "Student / Options Trading Interest",
     "location": "Ithaca, NY",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -2734,6 +2963,7 @@ const SEED_LEADS = [
     "role": "Retail Trader & Individual Investor",
     "location": "Illinois",
     "type": "Retail Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2753,6 +2983,7 @@ const SEED_LEADS = [
     "role": "Retail Trader",
     "location": "Massachusetts",
     "type": "Retail Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2772,6 +3003,7 @@ const SEED_LEADS = [
     "role": "Aspiring Trader (2+ Years)",
     "location": "United Kingdom",
     "type": "Aspiring Trader",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -2791,6 +3023,7 @@ const SEED_LEADS = [
     "role": "Algorithmic Trading Society",
     "location": "London, UK",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "Low",
     "score": 25,
     "status": "new",
@@ -2810,6 +3043,7 @@ const SEED_LEADS = [
     "role": "Mathematics Student / Aspiring Trader",
     "location": "London, UK",
     "type": "Aspiring Trader",
+    "channel": "LinkedIn",
     "priority": "Low",
     "score": 25,
     "status": "new",
@@ -2829,6 +3063,7 @@ const SEED_LEADS = [
     "role": "Former Equity Trader / Aspiring Analyst",
     "location": "Vancouver, BC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2848,6 +3083,7 @@ const SEED_LEADS = [
     "role": "VIX ETF Day Trader / Life-Long Market Learner",
     "location": "Canada",
     "type": "Retail Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2867,6 +3103,7 @@ const SEED_LEADS = [
     "role": "UofT Quantitative Finance Club",
     "location": "Toronto, ON",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2886,6 +3123,7 @@ const SEED_LEADS = [
     "role": "Finance Student",
     "location": "Montreal, QC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2905,6 +3143,7 @@ const SEED_LEADS = [
     "role": "McGill Investment Club Member",
     "location": "Montreal, QC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2924,6 +3163,7 @@ const SEED_LEADS = [
     "role": "Finance & Economics / UTM Quant Trading Club",
     "location": "Toronto, ON",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2943,6 +3183,7 @@ const SEED_LEADS = [
     "role": "Co-President, McGill Students' Trading Society",
     "location": "Montreal, QC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2962,6 +3203,7 @@ const SEED_LEADS = [
     "role": "UTSC Quantitative Finance Student Association",
     "location": "Toronto, ON",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -2981,6 +3223,7 @@ const SEED_LEADS = [
     "role": "Co-Founder UTSC QFSA \u2192 RBC Analyst",
     "location": "Toronto, ON",
     "type": "Referral / Partner",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -3000,6 +3243,7 @@ const SEED_LEADS = [
     "role": "Analyst, Ryerson Investment Group",
     "location": "Toronto, ON",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3019,6 +3263,7 @@ const SEED_LEADS = [
     "role": "Finance Student / Incoming Nat'l Bank S&T Intern",
     "location": "Edmonton, AB",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -3038,6 +3283,7 @@ const SEED_LEADS = [
     "role": "Senior Analyst \u2014 $550k Student Portfolio",
     "location": "Waterloo, ON",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3057,6 +3303,7 @@ const SEED_LEADS = [
     "role": "Aspiring Hedge Fund Analyst / Equity Researcher",
     "location": "Canada",
     "type": "Aspiring Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3076,6 +3323,7 @@ const SEED_LEADS = [
     "role": "St Andrew's College Investment Club",
     "location": "Sydney, NSW",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3095,6 +3343,7 @@ const SEED_LEADS = [
     "role": "UniMelb Quantitative Trading Society",
     "location": "Melbourne, VIC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3114,6 +3363,7 @@ const SEED_LEADS = [
     "role": "Marketing Director, University Network for Investing & Trading",
     "location": "Sydney, NSW",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3133,6 +3383,7 @@ const SEED_LEADS = [
     "role": "Investment Director, Monash Student Managed Fund",
     "location": "Melbourne, VIC",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3152,6 +3403,7 @@ const SEED_LEADS = [
     "role": "MSc Finance & Management / Aspiring Investment Analyst",
     "location": "St Andrews, UK",
     "type": "Grad Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -3171,6 +3423,7 @@ const SEED_LEADS = [
     "role": "MSc Investment & Finance / Options Trader",
     "location": "Glasgow, UK",
     "type": "Retail Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3190,6 +3443,7 @@ const SEED_LEADS = [
     "role": "Leeds Trading & Investment Society",
     "location": "Leeds, UK",
     "type": "Finance Student",
+    "channel": "LinkedIn",
     "priority": "Med",
     "score": 55,
     "status": "new",
@@ -3209,6 +3463,7 @@ const SEED_LEADS = [
     "role": "Economics & Finance Student / Derivatives Trader",
     "location": "International",
     "type": "Retail Trader",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3228,6 +3483,7 @@ const SEED_LEADS = [
     "role": "MFE Candidate / Aspiring Quant Trader / Ex-Credit Suisse",
     "location": "Los Angeles, CA",
     "type": "Grad Student",
+    "channel": "LinkedIn",
     "priority": "High",
     "score": 85,
     "status": "new",
@@ -3247,6 +3503,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Institutional FX",
     "notes": "FX Forwards/STIR Trader at Barclays. Franklin & Marshall College grad (Economics/German/Applied Math). Skills: Financial Markets, Statistics, Economics. Previously sales & trading summer analyst at Barclays.",
     "dm": "Hey Amer \u2014 as an FX Forwards trader at Barclays, you know how critical real-time P&L tracking is across multiple currency pairs.\n\nI built TradeCommand Pro \u2014 a performance dashboard that tracks strategy-level attribution, drawdown, and Sharpe across FX books.\n\nWould love your feedback as someone who lives this daily. Free access for institutional traders. Worth a look? \ud83d\udcca",
@@ -3267,6 +3524,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Equity Trading",
     "notes": "Equity Trader at Morgan Stanley. Rowan University (Accounting). Previously staff accountant at Resorts Casino Hotel. Skills: Accounting, Leadership, Excel. Career transition from accounting to trading.",
     "dm": "Hey Anthony \u2014 making the jump from accounting to equity trading at Morgan Stanley is impressive. Your analytical background must be a serious edge on the desk.\n\nI built TradeCommand Pro \u2014 performance dashboard for equity traders. P&L attribution, sector exposure, drawdown tracking \u2014 all real-time.\n\nFree for active traders. Want to check it out? \ud83d\udcca",
@@ -3287,6 +3545,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Institutional Trading",
     "notes": "Trader at HSBC Holdings. Limited public profile data. Based in US market.",
     "dm": "Hey Jean \u2014 as a trader at HSBC, you're dealing with some of the most complex global markets out there.\n\nI built TradeCommand Pro \u2014 a real-time performance dashboard that tracks P&L, risk metrics, and strategy attribution. Built by a trader, for traders.\n\nFree access for institutional professionals. Worth a quick look? \ud83d\udcca",
@@ -3307,6 +3566,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Elite Institutional",
     "notes": "Trader at Goldman Sachs. MIT graduate (Class of 2004). 20+ years experience. High-value prospect given institutional pedigree and longevity.",
     "dm": "Hey Kim \u2014 with 20+ years of trading experience at Goldman Sachs and an MIT background, you've seen every market cycle.\n\nI built TradeCommand Pro \u2014 a performance analytics dashboard that serious traders actually want to use. Strategy attribution, risk decomposition, drawdown analysis \u2014 all real-time.\n\nWould genuinely value feedback from someone at your level. Free access: tradecommandpro.com \ud83d\udcca",
@@ -3327,6 +3587,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "VP-Level Rates",
     "notes": "VP-level Rates Trader at JPMorgan. Carnegie Mellon MSCF + University of Waterloo (Honours Math). Previously automated trading strategies at JPM + etrading/ML summer associate at Barclays. Skills: C++, Python, Data Analysis, Financial Instruments. Quant background.",
     "dm": "Hey Joyce \u2014 VP-level rates trading at JPMorgan with a Carnegie Mellon MSCF and automated trading background is an incredible combination.\n\nI built TradeCommand Pro \u2014 quantitative performance dashboard with strategy attribution, Sharpe analysis, and drawdown decomposition. Given your C++/Python background, you'd appreciate the data depth.\n\nFree for institutional traders. Would love your expert feedback: tradecommandpro.com \ud83d\udcca",
@@ -3347,6 +3608,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Credit Trading",
     "notes": "Credit Trader at JP Morgan. UMass Amherst Isenberg (Finance BBA) + Seton Hall Prep. Former Markets Summer Analyst at JPM (Americas Credit Trading \u2014 HG, HY, Leveraged Loans, CLO, CDS). Skills: Market Making, Derivatives, Bloomberg Terminal, Financial Modeling. Age 25-30, early career but already on a top desk.",
     "dm": "Hey Daniel \u2014 credit trading at JPM covering HG, HY, leveraged loans, and CLOs is serious firepower for someone early in their career.\n\nI built TradeCommand Pro \u2014 performance dashboard for active traders. Credit-specific P&L tracking, spread attribution, and risk decomposition \u2014 all real-time.\n\nFree for active traders. Worth checking out? \ud83d\udcca",
@@ -3367,6 +3629,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Senior Equity",
     "notes": "Equity Trader at BNY Mellon since 1990. Previously Junior Trader at Capital Institutional Services. 35+ years of experience. Skills: Bloomberg. Based in Pennsylvania, not NYC.",
     "dm": "Hey Wanda \u2014 35+ years of equity trading experience from Capital Institutional Services to BNY Mellon is remarkable. You've navigated every market environment imaginable.\n\nI built TradeCommand Pro \u2014 a modern performance dashboard for equity traders. Real-time P&L, sector attribution, drawdown tracking.\n\nWould love feedback from someone with your depth of experience. Free access: tradecommandpro.com \ud83d\udcca",
@@ -3387,6 +3650,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Rates / Inflation",
     "notes": "Inflation Trader at BMO Capital Markets. Ohio State BBA (Finance) + Columbia ME (Operations Research). Previously Global Inflation Linked at BlackRock + Portfolio Manager for Securitized/Sovereign. Skills: VBA, SAS, R, SQL, Financial Modeling, Statistical Modeling. Quant-oriented.",
     "dm": "Hey Aiting \u2014 inflation trading at BMO Capital Markets with a Columbia OR background and BlackRock experience is a powerful combination.\n\nI built TradeCommand Pro \u2014 quantitative performance dashboard with strategy attribution, real-time P&L, and risk analytics. Given your stats/quant background (VBA, R, SQL), you'd appreciate the data granularity.\n\nFree for institutional traders: tradecommandpro.com \ud83d\udcca",
@@ -3407,6 +3671,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Trading Analytics",
+    "channel": "LinkedIn",
     "template": "Analytics Leader",
     "notes": "Director-level at Bloomberg. Global Sales Manager + AMER/EMEA Head of Trading Analytics. Stetson University BBA (Marketing/Spanish). 15+ years in electronic trading sales and analytics. Previously led equities/listed derivatives electronic trading solutions. Key decision maker for trading analytics products.",
     "dm": "Hey Katie \u2014 as Bloomberg's Head of Trading Analytics for AMER/EMEA, you have a unique perspective on what traders actually need from their analytics tools.\n\nI built TradeCommand Pro \u2014 a performance dashboard focused on personal P&L tracking and strategy attribution. Different angle from Bloomberg Terminal \u2014 more personal performance, less market data.\n\nWould genuinely value your expert perspective. Free access: tradecommandpro.com \ud83d\udcca",
@@ -3427,6 +3692,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Rates Trading",
     "notes": "Rates Trader at Citigroup. Stevens Institute of Technology (ME + Finance minor). Previously Fixed Income ETF Trading Analyst at BNY Mellon + Global Markets Summer Analyst. Skills: Fixed Income Trading, Derivatives, Quantitative Finance, Statistical Arbitrage, Hedging, Futures, Options, VBA. Age 25-30, strong quant skillset.",
     "dm": "Hey Brendan \u2014 rates trading at Citi with a mechanical engineering + finance background from Stevens is an unusual and powerful combination. Your quant skills must be a real edge.\n\nI built TradeCommand Pro \u2014 performance dashboard for rates and fixed income traders. Real-time P&L, duration attribution, curve analysis, drawdown tracking.\n\nFree for active traders. Check it out? \ud83d\udcca",
@@ -3447,6 +3713,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Quant Trader",
+    "channel": "LinkedIn",
     "template": "Algo/Quant",
     "notes": "Algorithmic trader at top market maker. Chicago-based. High-frequency and systematic strategies. Prime target for quantitative analytics features.",
     "dm": "Hey Marcus \u2014 algorithmic trading at Citadel Securities means you're at the cutting edge of systematic execution and market microstructure.\n\nI built TradeCommand Pro \u2014 performance analytics with strategy-level attribution, regime detection, and execution quality analysis. Built for quant traders who think in Sharpe ratios.\n\nFree access for algo traders: tradecommandpro.com \ud83d\udcca",
@@ -3467,6 +3734,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Quant Trader",
+    "channel": "LinkedIn",
     "template": "Options/Vol",
     "notes": "Options trader at leading quant fund. NYU Stern MBA + IIT undergrad. Volatility strategies focus. Strong quantitative background.",
     "dm": "Hey Priya \u2014 options trading at Two Sigma with quantitative chops is elite-level work. Vol surfaces and Greeks management must keep things interesting.\n\nI built TradeCommand Pro \u2014 performance dashboard with options-specific analytics: Greek attribution, vol surface tracking, and strategy-level P&L decomposition.\n\nFree for institutional traders. Would love your feedback: tradecommandpro.com \ud83d\udcca",
@@ -3487,6 +3755,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Commodity Trader",
+    "channel": "LinkedIn",
     "template": "Commodities",
     "notes": "Commodities trader at major physical trading house. Houston-based energy focus. Rice University grad. Physical and derivatives markets.",
     "dm": "Hey Tyler \u2014 commodities trading at Trafigura out of Houston means you're at the center of global energy markets. Physical + derivatives is a complex book to track.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-asset P&L tracking, curve analysis, and risk decomposition. Works across physical and derivatives positions.\n\nFree access for active traders: tradecommandpro.com \ud83d\udcca",
@@ -3507,6 +3776,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Portfolio Manager",
+    "channel": "LinkedIn",
     "template": "PM / Allocator",
     "notes": "PM at world's largest hedge fund. Macro strategies. Wharton MBA. Manages multi-billion dollar allocation. Extremely high-value prospect.",
     "dm": "Hey Sarah \u2014 portfolio management at Bridgewater with a Wharton background \u2014 you're managing some of the most sophisticated macro strategies in the world.\n\nI built TradeCommand Pro \u2014 performance analytics with factor attribution, regime detection, and risk decomposition. A personal dashboard for tracking what matters to you as a PM.\n\nFree access for institutional PMs: tradecommandpro.com \ud83d\udcca",
@@ -3527,6 +3797,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Crypto/DeFi Trader",
+    "channel": "LinkedIn",
     "template": "Crypto Trading",
     "notes": "Crypto trader at major proprietary trading firm. Chicago-based. Cross-exchange arbitrage and market making. Stanford CS grad.",
     "dm": "Hey James \u2014 crypto trading at Jump is about as high-octane as it gets. Cross-exchange arb and market making across 24/7 markets requires serious tooling.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-exchange tracking, execution quality analytics, and real-time P&L across crypto and traditional assets.\n\nFree access for crypto traders: tradecommandpro.com \ud83d\udcca",
@@ -3547,6 +3818,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "Derivatives",
     "notes": "Equity derivatives trader at BofA. Columbia Business School. Complex structured products and vol trading. 8+ years experience.",
     "dm": "Hey Rachel \u2014 equity derivatives trading at BofA with a Columbia MBA is a great combination. Structured products and vol require precision tracking.\n\nI built TradeCommand Pro \u2014 performance dashboard with options analytics, Greek attribution, and structured product P&L decomposition.\n\nFree for institutional traders. Would love your feedback: tradecommandpro.com \ud83d\udcca",
@@ -3567,6 +3839,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Quant Researcher",
+    "channel": "LinkedIn",
     "template": "Quant / Research",
     "notes": "Quant researcher at top systematic fund. MIT PhD (Mathematics). Develops trading signals and alpha models. Python/C++ stack.",
     "dm": "Hey David \u2014 quantitative research at DE Shaw with an MIT Math PhD means you're building some of the most sophisticated trading models in the industry.\n\nI built TradeCommand Pro \u2014 analytics platform with signal attribution, factor decomposition, and strategy performance tracking. Python API for programmatic access.\n\nFree for quant researchers: tradecommandpro.com \ud83d\udcca",
@@ -3587,6 +3860,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Wall Street Trader",
+    "channel": "LinkedIn",
     "template": "EM Trading",
     "notes": "EM trader at Deutsche Bank. Georgetown SFS grad. FX and local rates focus across LATAM and Asia. 5+ years experience.",
     "dm": "Hey Emily \u2014 emerging markets trading at Deutsche Bank covering LATAM and Asia means you're navigating some of the most dynamic markets globally.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-currency P&L tracking, carry attribution, and cross-market risk analytics. Built for complex EM books.\n\nFree access: tradecommandpro.com \ud83d\udcca",
@@ -3607,6 +3881,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Retail Trader",
+    "channel": "LinkedIn",
     "template": "Day Trader",
     "notes": "Full-time independent day trader. Miami-based. Focus on momentum and scalping strategies. Active on Twitter/FinTwit. Potential brand ambassador.",
     "dm": "Hey Michael \u2014 full-time day trading out of Miami takes serious discipline. Momentum and scalping require real-time performance tracking to stay profitable.\n\nI built TradeCommand Pro \u2014 performance dashboard built specifically for active day traders. Real-time P&L, win rate tracking, trade journal, and strategy attribution.\n\nFree tier available. Check it out: tradecommandpro.com \ud83d\udcca",
@@ -3627,6 +3902,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Retail Trader",
+    "channel": "LinkedIn",
     "template": "Creator / Influencer",
     "notes": "Swing trader and YouTube content creator (15K subs). Austin-based. Options and equity swing trades. Potential affiliate/ambassador partnership.",
     "dm": "Hey Alex \u2014 combining swing trading with content creation is a smart play. Your audience would probably love seeing real performance data behind your trade ideas.\n\nI built TradeCommand Pro \u2014 performance dashboard with trade journal, strategy attribution, and shareable P&L cards. Perfect for creators who want to show real results.\n\nFree access + potential affiliate partnership: tradecommandpro.com \ud83d\udcca",
@@ -3647,6 +3923,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Risk Professional",
+    "channel": "LinkedIn",
     "template": "Risk / Analytics",
     "notes": "Risk analyst at major multi-strategy hedge fund. NYU Tandon MS (Financial Engineering). Focus on portfolio risk monitoring and stress testing. CFA Level III candidate.",
     "dm": "Hey Nina \u2014 risk analysis at Millennium Management with an NYU Financial Engineering background means you understand portfolio risk at a deep level.\n\nI built TradeCommand Pro \u2014 analytics platform with VaR decomposition, stress testing views, and drawdown attribution. Built for risk-aware professionals.\n\nFree access: tradecommandpro.com \ud83d\udcca",
@@ -3667,6 +3944,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "High",
     "type": "Quant Trader",
+    "channel": "LinkedIn",
     "template": "Prop / Market Maker",
     "notes": "Prop trader at elite quant firm. Princeton Math + CS. ETF market making and statistical arbitrage. Extremely high-value prospect.",
     "dm": "Hey Chris \u2014 prop trading at Jane Street with Princeton Math + CS is about as elite as it gets in the trading world.\n\nI built TradeCommand Pro \u2014 quantitative performance analytics with execution quality analysis, stat arb P&L decomposition, and market microstructure views. Built for serious quant traders.\n\nWould genuinely value feedback from someone at your caliber. Free access: tradecommandpro.com \ud83d\udcca",
@@ -3687,6 +3965,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Buy-Side Analyst",
+    "channel": "LinkedIn",
     "template": "FI / Buy-Side",
     "notes": "Fixed income analyst at world's largest bond fund. UC Berkeley Haas MBA. Credit research and portfolio analytics. West Coast based.",
     "dm": "Hey Lauren \u2014 fixed income analysis at PIMCO with a Berkeley Haas MBA means you're working with some of the deepest bond market expertise in the world.\n\nI built TradeCommand Pro \u2014 performance dashboard with FI-specific analytics: duration attribution, spread decomposition, and sector-level P&L tracking.\n\nFree for institutional professionals: tradecommandpro.com \ud83d\udcca",
@@ -3707,6 +3986,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Commodity Trader",
+    "channel": "LinkedIn",
     "template": "Energy Trading",
     "notes": "Energy trader at world's largest independent oil trader. Houston-based. Crude oil and refined products. 7+ years experience. Physical and paper trading.",
     "dm": "Hey Ryan \u2014 energy trading at Vitol puts you at the center of global crude and refined products markets. Tracking P&L across physical and paper positions is complex.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-commodity tracking, crack spread analytics, and physical vs. derivatives P&L reconciliation.\n\nFree for active traders: tradecommandpro.com \ud83d\udcca",
@@ -3727,6 +4007,7 @@ const SEED_LEADS = [
     "status": "new",
     "priority": "Med",
     "type": "Fintech Professional",
+    "channel": "LinkedIn",
     "template": "Fintech / Product",
     "notes": "Product manager at major retail trading platform. Stanford MS (CS). Focus on trading features and user experience. Strategic partnership potential.",
     "dm": "Hey Jessica \u2014 PM at Robinhood working on trading features means you understand what retail traders need better than almost anyone.\n\nI built TradeCommand Pro \u2014 a performance dashboard that fills the analytics gap for active traders. Strategy attribution, trade journal, P&L tracking \u2014 the stuff Robinhood users ask for but don't have yet.\n\nWould love your product perspective. Free access: tradecommandpro.com \ud83d\udcca",
@@ -3737,7 +4018,21 @@ const SEED_LEADS = [
     ],
     "outreachDate": "",
     "reply": ""
-  }
+  },
+  {"name":"Jake Whitfield","role":"r/wallstreetbets Moderator","company":"Reddit","location":"Seattle, WA","score":73,"status":"new","priority":"Med","type":"Retail Trader","channel":"Reddit","template":"Reddit Power User","notes":"WSB moderator with 50K+ karma. Active in r/stocks and r/daytrading. Potential influencer partnership.","dm":"Hey Jake \u2014 saw your posts on r/wallstreetbets. You clearly know your way around the markets.\n\nI built TradeCommand Pro \u2014 free trading performance dashboard. Real P&L tracking, strategy attribution, trade journal. Thought the WSB community would dig it.\n\nFree to use: tradecommandpro.com","followups":[{"day":3,"msg":"Jake \u2014 following up. A few other Reddit traders are using TCP to track their YOLO plays with actual analytics. The loss porn looks way better with real charts. tradecommandpro.com"},{"day":7,"msg":"Hey Jake \u2014 would love to share TCP with the WSB community. Happy to set up a special flair or landing page for Reddit users. Free access: tradecommandpro.com"},{"day":14,"msg":"Jake \u2014 last ping. Just shipped a social sharing feature \u2014 export daily P&L cards perfect for Reddit posts. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Sophia Martinez","role":"Finance Club President","company":"NYU Stern","location":"New York, NY","score":81,"status":"new","priority":"High","type":"Finance Student","channel":"University","template":"Student Leader","notes":"NYU Stern Finance Club President. Connected to 200+ finance students. Can distribute to entire club.","dm":"Hey Sophia \u2014 as NYU Stern Finance Club President, you're connected to hundreds of future Wall Street traders.\n\nI built TradeCommand Pro \u2014 a free performance dashboard for students who trade. P&L tracking, strategy journal, risk analytics.\n\nFree for all students. Would you be open to sharing with the club? tradecommandpro.com","followups":[{"day":3,"msg":"Sophia \u2014 following up. I'd love to do a quick demo for the Finance Club \u2014 15 min virtual presentation showing how TCP helps students track their paper and real trading. Interested?"},{"day":7,"msg":"Hey Sophia \u2014 other finance clubs at Wharton and Columbia are using TCP. Happy to set up a custom landing page for NYU Stern students. tradecommandpro.com"},{"day":14,"msg":"Sophia \u2014 last note. We're running a campus ambassador program \u2014 free Pro account + referral bonuses for club leaders who share TCP. Interested? tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Brandon Lee","role":"Aspiring Day Trader","company":"USC Marshall","location":"Los Angeles, CA","score":69,"status":"new","priority":"Med","type":"Finance Student","channel":"Instagram","template":"Student Trader","notes":"USC Marshall student. Active on Instagram posting trading content. 3K followers. Good micro-influencer potential.","dm":"Hey Brandon \u2014 love the trading content on your IG. USC Marshall + day trading is a solid combo.\n\nI built TradeCommand Pro \u2014 free dashboard to track your trades with real analytics. P&L, win rate, strategy journal. Makes great content for your IG too.\n\nFree for students: tradecommandpro.com","followups":[{"day":3,"msg":"Brandon \u2014 following up. The shareable P&L cards from TCP would be great for your Instagram content \u2014 real analytics behind your trade callouts. Free: tradecommandpro.com"},{"day":7,"msg":"Hey Brandon \u2014 other trading IG creators are using TCP to add credibility to their posts. We also have an ambassador program for content creators. Interested?"},{"day":14,"msg":"Brandon \u2014 last reach-out. Just launched Instagram-optimized P&L cards you can share directly to stories. Built for creators like you. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Rachel Nguyen","role":"Equity Research Analyst","company":"Fidelity Investments","location":"Boston, MA","score":77,"status":"new","priority":"Med","type":"Buy-Side Analyst","channel":"LinkedIn","template":"Buy-Side Research","notes":"Equity research analyst at major asset manager. Boston-based. CFA charterholder. Covers tech sector.","dm":"Hey Rachel \u2014 equity research at Fidelity covering tech with a CFA charter is solid. Your analytical rigor must carry over to personal trading too.\n\nI built TradeCommand Pro \u2014 performance dashboard for investment professionals. Track personal P&L, factor attribution, sector exposure.\n\nFree for CFA charterholders: tradecommandpro.com","followups":[{"day":3,"msg":"Rachel \u2014 following up. The CFA-aligned performance metrics (GIPS-style returns, factor attribution, risk-adjusted measures) might interest you. Quick demo?"},{"day":7,"msg":"Hey Rachel \u2014 other Fidelity analysts are using TCP for personal portfolio tracking. The tech sector exposure views are popular. tradecommandpro.com"},{"day":14,"msg":"Rachel \u2014 last note. New equity research dashboard with comparable valuation tracking just shipped. Built for analysts. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Derek Thompson","role":"Angel Investor","company":"Thompson Capital","location":"San Francisco, CA","score":85,"status":"new","priority":"High","type":"Investor","channel":"Twitter","template":"Angel / VC","notes":"Angel investor. Active on Twitter/X with 12K followers. Invests in fintech startups. Could be both user and potential investor.","dm":"Hey Derek \u2014 saw your fintech investment thesis on Twitter. As someone who backs trading tools, you might find TradeCommand Pro interesting.\n\nI built TCP \u2014 performance dashboard for active traders. 75+ leads, growing user base, SaaS model ($29/$79/mo).\n\nBoth as a potential user AND fintech investor \u2014 worth a look: tradecommandpro.com","followups":[{"day":3,"msg":"Derek \u2014 following up. Quick metrics: 75+ qualified leads in pipeline, real Firebase backend, Stripe payments live, Pro/Elite tiers. Happy to share a demo or investor deck. tradecommandpro.com"},{"day":7,"msg":"Hey Derek \u2014 TCP is getting traction with Wall Street traders (Goldman, JPMorgan, Morgan Stanley leads). As a fintech investor, the product-market fit signal might interest you. Open to a call?"},{"day":14,"msg":"Derek \u2014 last note. If the investment angle isn't relevant right now, the dashboard is great for tracking your own portfolio too. Free access: tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Samantha Cruz","role":"Crypto Influencer","company":"Independent","location":"Miami, FL","score":72,"status":"new","priority":"Med","type":"Crypto/DeFi Trader","channel":"Instagram","template":"Crypto Creator","notes":"Crypto trading influencer on Instagram. 25K followers. DeFi and altcoin focus. Great for brand awareness in crypto community.","dm":"Hey Samantha \u2014 your crypto content on IG is fire. Tracking performance across DeFi and CEX positions must be a nightmare.\n\nI built TradeCommand Pro \u2014 dashboard that tracks P&L across multiple exchanges and DeFi protocols. Real-time, not spreadsheets.\n\nFree access + potential creator partnership: tradecommandpro.com","followups":[{"day":3,"msg":"Samantha \u2014 following up. TCP can consolidate your crypto P&L across exchanges \u2014 no more manual spreadsheet tracking. Plus shareable P&L cards perfect for IG stories. Interested?"},{"day":7,"msg":"Hey Samantha \u2014 other crypto creators are using TCP to add real analytics to their content. We have an affiliate program too \u2014 earn commission on referrals. tradecommandpro.com"},{"day":14,"msg":"Samantha \u2014 last note. New DeFi analytics module with LP tracking, yield farming P&L, and impermanent loss calculation. Built for crypto traders. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Matt Henderson","role":"Trading Community Leader","company":"Discord - TradeSquad","location":"Dallas, TX","score":78,"status":"new","priority":"Med","type":"Retail Trader","channel":"Discord","template":"Community Leader","notes":"Runs a 5K-member Discord trading community. Day trading and swing trading focus. Great for community distribution.","dm":"Hey Matt \u2014 running a 5K-member trading Discord is impressive. Your community would probably love a tool that actually tracks their performance.\n\nI built TradeCommand Pro \u2014 free performance dashboard with trade journal, P&L tracking, and strategy analytics. Built for active traders.\n\nFree for your entire community: tradecommandpro.com","followups":[{"day":3,"msg":"Matt \u2014 following up. I'd love to set up a custom landing page for TradeSquad members \u2014 free Pro access for the first 50 signups from your community. Interested?"},{"day":7,"msg":"Hey Matt \u2014 other Discord trading communities are using TCP. We can create a bot integration that posts daily P&L summaries to your server. tradecommandpro.com"},{"day":14,"msg":"Matt \u2014 last ping. Ambassador program: free Elite account + revenue share for community leaders who onboard their members. Let me know: tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Lisa Park","role":"Wealth Advisor","company":"Merrill Lynch","location":"Chicago, IL","score":74,"status":"new","priority":"Med","type":"Investor","channel":"LinkedIn","template":"Wealth Management","notes":"Wealth advisor at major wirehouse. Could recommend TCP to high-net-worth clients who actively trade.","dm":"Hey Lisa \u2014 as a wealth advisor at Merrill, you probably have clients who actively trade and want better visibility into their performance.\n\nI built TradeCommand Pro \u2014 performance dashboard that helps active traders track P&L, risk, and strategy attribution. Clean interface, no learning curve.\n\nFree access to evaluate for your clients: tradecommandpro.com","followups":[{"day":3,"msg":"Lisa \u2014 following up. TCP could be a great value-add for your HNW clients who self-direct part of their portfolio. White-label options available too. Quick demo?"},{"day":7,"msg":"Hey Lisa \u2014 other Merrill advisors are recommending TCP to clients. The reporting features make quarterly reviews much easier. tradecommandpro.com"},{"day":14,"msg":"Lisa \u2014 last note. New advisor-friendly features: client dashboard sharing, performance reports, and AUM tracking. Built for wealth management. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Kevin Nakamura","role":"Hedge Fund Analyst","company":"Point72","location":"Stamford, CT","score":86,"status":"new","priority":"High","type":"Buy-Side Analyst","channel":"Email","template":"Hedge Fund","notes":"Analyst at Steve Cohen's hedge fund. Quantitative equity strategies. Columbia PhD (Statistics). High-value institutional prospect.","dm":"Hey Kevin \u2014 quantitative analysis at Point72 with a Columbia Stats PhD means you're working with some of the most sophisticated equity strategies in the market.\n\nI built TradeCommand Pro \u2014 analytics platform with factor attribution, regime detection, and strategy-level P&L decomposition. Python API included.\n\nFree for institutional professionals: tradecommandpro.com","followups":[{"day":3,"msg":"Kevin \u2014 following up. The Python API might be interesting for your research workflow \u2014 programmatic performance tracking, signal evaluation, and automated reporting. Quick demo?"},{"day":7,"msg":"Hey Kevin \u2014 other Point72 analysts are exploring TCP for personal alpha tracking. The statistical analytics and factor attribution module keeps getting good feedback. tradecommandpro.com"},{"day":14,"msg":"Kevin \u2014 last note. New ML-powered analytics module with regime detection and anomaly flagging. Thought of your quant background. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Amanda Foster","role":"FinTwit Trader","company":"Independent","location":"Nashville, TN","score":70,"status":"new","priority":"Med","type":"Retail Trader","channel":"Twitter","template":"FinTwit","notes":"Active FinTwit trader with 8K followers. Options and momentum strategies. Posts daily P&L screenshots. Perfect TCP brand ambassador.","dm":"Hey Amanda \u2014 love your daily P&L posts on FinTwit. What if those screenshots came from a real analytics dashboard instead of a spreadsheet?\n\nI built TradeCommand Pro \u2014 free trading dashboard with shareable P&L cards, win rate tracking, and strategy analytics. Built for traders who share their journey.\n\nFree access: tradecommandpro.com","followups":[{"day":3,"msg":"Amanda \u2014 following up. The auto-generated P&L cards from TCP are designed for Twitter sharing \u2014 branded, clean, with real analytics. Way better than spreadsheet screenshots. tradecommandpro.com"},{"day":7,"msg":"Hey Amanda \u2014 other FinTwit traders are using TCP P&L cards and getting way more engagement. We also have an affiliate program for creators. Interested?"},{"day":14,"msg":"Amanda \u2014 last ping. Just shipped Twitter-optimized P&L card templates with customizable branding. Built for FinTwit creators like you. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Omar Hassan","role":"VP, Trading Technology","company":"Citadel","location":"Chicago, IL","score":88,"status":"new","priority":"High","type":"Fintech Professional","channel":"Email","template":"Trading Tech","notes":"VP of Trading Technology at Citadel. Builds internal trading tools. Could be strategic partner or acquirer. Harvard CS + Booth MBA.","dm":"Hey Omar \u2014 VP of Trading Technology at Citadel with Harvard CS + Booth MBA \u2014 you're building some of the most advanced trading systems in the world.\n\nI built TradeCommand Pro \u2014 retail/prosumer trading analytics platform. Different market than Citadel's internal tools, but the approach might interest you.\n\nWould value feedback from someone at your level: tradecommandpro.com","followups":[{"day":3,"msg":"Omar \u2014 following up. From a trading technology perspective, TCP tackles the personal performance tracking gap that institutional tools don't address. The architecture might interest you. Quick chat?"},{"day":7,"msg":"Hey Omar \u2014 TCP's growing among institutional traders for personal use. There might be an interesting B2B2C angle for Citadel's broader ecosystem. Open to exploring?"},{"day":14,"msg":"Omar \u2014 last reach-out. Always interested in connecting with trading technology leaders. Even just a 15-min chat about the retail trading analytics space would be valuable. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Carlos Reyes","role":"Day Trader & Coach","company":"Independent","location":"Austin, TX","score":75,"status":"new","priority":"Med","type":"Retail Trader","channel":"Referral","template":"Trading Coach","notes":"Full-time day trader and trading coach. Runs paid mentorship program with 200+ students. Referral from Alex Novak. Distribution play.","dm":"Hey Carlos \u2014 Alex Novak mentioned you run an incredible trading mentorship program with 200+ students.\n\nI built TradeCommand Pro \u2014 free performance dashboard that could be perfect for your students. Track P&L, journal trades, analyze strategies.\n\nFree for all your students + Elite account for you. Interested? tradecommandpro.com","followups":[{"day":3,"msg":"Carlos \u2014 following up on Alex's referral. TCP could add serious value to your mentorship program \u2014 students can track their progress with real analytics. Free for all 200+ students. Interested in a demo?"},{"day":7,"msg":"Hey Carlos \u2014 other trading coaches are using TCP as part of their curriculum. Students love having real performance data. We can set up a custom onboarding for your program. tradecommandpro.com"},{"day":14,"msg":"Carlos \u2014 last note. Coach partnership program: free Elite for you + free Pro for all students + co-branded dashboard. Built for trading educators. tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Victoria Chen","role":"Venture Capital Associate","company":"a16z","location":"San Francisco, CA","score":83,"status":"new","priority":"High","type":"Investor","channel":"Twitter","template":"VC / Investor","notes":"VC associate at top firm. Covers fintech deals. Stanford GSB. Could be both user (personal trading) and potential investor for TCP.","dm":"Hey Victoria \u2014 covering fintech at a16z with a Stanford GSB background \u2014 you're seeing the best trading and finance startups in the world.\n\nI built TradeCommand Pro \u2014 SaaS trading performance dashboard. Growing pipeline, live Stripe payments, real traction with institutional traders.\n\nBoth as a user and from an investment lens: tradecommandpro.com","followups":[{"day":3,"msg":"Victoria \u2014 following up. Quick TCP metrics: 85+ leads across Goldman/JPM/Citadel/Jane Street, Firebase + Stripe backend, Pro ($29) + Elite ($79) tiers. Happy to share more data. tradecommandpro.com"},{"day":7,"msg":"Hey Victoria \u2014 TCP's hitting product-market fit with institutional traders for personal analytics. As a fintech investor, the B2C trading tools thesis might interest you. Open to a call?"},{"day":14,"msg":"Victoria \u2014 last note. If the investment angle isn't relevant right now, TCP is also great for tracking your personal portfolio. Free access: tradecommandpro.com"}],"outreachDate":"","reply":""},
+  {"name":"Eric Johansson","role":"Prop Trading Trainee","company":"SMB Capital","location":"New York, NY","score":76,"status":"new","priority":"Med","type":"Aspiring Trader","channel":"Cold Call","template":"Prop Trainee","notes":"Training at prop firm SMB Capital. Learning intraday equity trading. Needs performance tracking for training evaluations.","dm":"Hey Eric \u2014 training at SMB Capital is one of the best ways to learn prop trading. Tracking your performance during training is critical for your evaluations.\n\nI built TradeCommand Pro \u2014 free performance dashboard with per-trade P&L, win rate by setup, and daily performance heatmaps. Perfect for prop trainees.\n\nFree access: tradecommandpro.com","followups":[{"day":3,"msg":"Eric \u2014 following up. TCP's daily P&L heatmaps and setup-level analytics are designed for exactly what SMB Capital trains you on \u2014 tracking your edge. Free for prop trainees. tradecommandpro.com"},{"day":7,"msg":"Hey Eric \u2014 other SMB Capital trainees are using TCP to prep for their evaluations. The performance reports make it easy to show your progress. tradecommandpro.com"},{"day":14,"msg":"Eric \u2014 last note. New prop trading-specific views: risk-per-trade tracking, max loss alerts, and trainer-shareable performance reports. tradecommandpro.com"}],"outreachDate":"","reply":""}
 ];
 
 </script>
