@@ -2443,13 +2443,18 @@
       document.getElementById('modal').classList.remove('active');
     };
 
-    // Reparent biz pages into content-body regardless of parsed DOM position
+    // Reparent ALL pages into content-body regardless of parsed DOM position
+    // (browser HTML5 error recovery can move page divs outside the layout)
     (function() {
       const contentBody = document.querySelector('.content-body');
       if (!contentBody) return;
-      ['biz-dashboard','biz-crm','biz-leads','biz-prospecting','biz-marketing',
-       'biz-campaigns','biz-revenue','biz-analytics','biz-advisor','biz-plan',
-       'biz-files','biz-settings'].forEach(function(page) {
+      [
+        'dashboard','users','analytics','newsletters','subscriptions',
+        'promos','settings','changelog',
+        'biz-dashboard','biz-crm','biz-leads','biz-prospecting','biz-marketing',
+        'biz-campaigns','biz-revenue','biz-analytics','biz-advisor','biz-plan',
+        'biz-files','biz-settings'
+      ].forEach(function(page) {
         const el = document.getElementById(page + '-page');
         if (el && el.parentElement !== contentBody) contentBody.appendChild(el);
       });
