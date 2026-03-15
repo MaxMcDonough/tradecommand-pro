@@ -1968,221 +1968,8 @@
     </table>
   </div>
 
-<!-- ═══ LEAD DETAIL PANEL (Pipedrive-style) ═══════════════════════════════ -->
-<div id="lead-panel-overlay" onclick="closeLeadPanel()"
-  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8990;backdrop-filter:blur(2px)"></div>
-
-<div id="lead-panel"
-  style="position:fixed;top:0;right:0;width:520px;max-width:100vw;height:100vh;
-         background:#0d1117;border-left:1px solid rgba(99,102,241,.3);z-index:8999;
-         overflow-y:auto;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
-         box-shadow:-12px 0 40px rgba(0,0,0,.6);display:flex;flex-direction:column">
-
-  <!-- Panel Header -->
-  <div style="padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.08);
-              display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;
-              background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(16,185,129,.06))">
-    <div style="flex:1;min-width:0">
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <span id="lp-score" style="font-size:22px;font-weight:800"></span>
-        <span id="lp-name" style="font-size:18px;font-weight:700;color:#f1f5f9"></span>
-        <span id="lp-priority-tag" style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700"></span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap">
-        <span id="lp-role" style="font-size:12px;color:#94a3b8"></span>
-        <span style="color:#334155">·</span>
-        <span id="lp-location" style="font-size:12px;color:#64748b"></span>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap">
-        <a id="lp-linkedin" href="#" target="_blank"
-          style="font-size:11px;padding:4px 12px;background:#6366f1;color:#fff;
-                 border-radius:5px;text-decoration:none;font-weight:600">🔗 LinkedIn</a>
-        <select id="lp-status" onchange="saveLeadField(currentLeadId,'status',this.value)"
-          style="font-size:11px;padding:4px 10px;background:rgba(255,255,255,.06);
-                 border:1px solid rgba(255,255,255,.12);border-radius:5px;color:#f1f5f9;cursor:pointer">
-          <option value="new">🔵 New</option>
-          <option value="contacted">🟡 Contacted</option>
-          <option value="qualified">🟢 Qualified</option>
-          <option value="converted">✅ Converted</option>
-          <option value="dead">⚫ Dead</option>
-        </select>
-        <span id="lp-type-tag" style="font-size:10px;padding:3px 8px;border-radius:10px;
-              background:rgba(99,102,241,.15);color:#818cf8;font-weight:600"></span>
-      </div>
-    </div>
-    <button onclick="closeLeadPanel()"
-      style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-             color:#94a3b8;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;
-             margin-left:12px;flex-shrink:0;transition:background .15s"
-      onmouseover="this.style.background='rgba(239,68,68,.15)'"
-      onmouseout="this.style.background='rgba(255,255,255,.06)'">✕</button>
-  </div>
-
-  <!-- Tabs -->
-  <div style="display:flex;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0">
-    <button class="lp-tab active" data-tab="overview" onclick="switchLeadTab('overview',this)"
-      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
-             border:none;border-bottom:2px solid #6366f1;color:#6366f1;cursor:pointer">Overview</button>
-    <button class="lp-tab" data-tab="dm" onclick="switchLeadTab('dm',this)"
-      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
-             border:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer">📋 DM</button>
-    <button class="lp-tab" data-tab="activity" onclick="switchLeadTab('activity',this)"
-      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
-             border:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer">Activity</button>
-    <button class="lp-tab" data-tab="schedule" onclick="switchLeadTab('schedule',this)"
-      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
-             border:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer">Schedule</button>
-  </div>
-
-  <!-- Tab: Overview -->
-  <div id="lp-tab-overview" class="lp-tab-content" style="padding:20px 24px;flex:1">
-    <div style="margin-bottom:20px">
-      <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;
-                  letter-spacing:.08em;margin-bottom:8px">Analyst Notes</div>
-      <div id="lp-notes-display" style="font-size:13px;color:#cbd5e1;line-height:1.6;
-           padding:12px;background:rgba(255,255,255,.04);border-radius:8px;
-           border:1px solid rgba(255,255,255,.07)"></div>
-      <textarea id="lp-notes-edit" rows="5" placeholder="Add notes about this lead..."
-        onchange="saveLeadField(currentLeadId,'customNotes',this.value)"
-        style="width:100%;margin-top:8px;background:rgba(255,255,255,.04);
-               border:1px solid rgba(99,102,241,.3);border-radius:8px;
-               color:#f1f5f9;font-size:12px;padding:10px;resize:vertical;
-               font-family:inherit;display:none"></textarea>
-      <button onclick="toggleNotesEdit()"
-        style="margin-top:6px;font-size:11px;color:#6366f1;background:none;border:none;cursor:pointer;padding:0">
-        ✏️ Edit notes</button>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
-      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
-        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Source</div>
-        <div id="lp-source" style="font-size:13px;color:#f1f5f9"></div>
-      </div>
-      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
-        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Template</div>
-        <div id="lp-template" style="font-size:13px;color:#f1f5f9"></div>
-      </div>
-      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
-        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Outreach Date</div>
-        <input id="lp-outreach-date" type="date" onchange="saveLeadField(currentLeadId,'outreachDate',this.value)"
-          style="font-size:12px;color:#f1f5f9;background:transparent;border:none;width:100%;cursor:pointer">
-      </div>
-      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
-        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Reply Received</div>
-        <input id="lp-reply" type="text" placeholder="Note reply here..." onchange="saveLeadField(currentLeadId,'reply',this.value)"
-          style="font-size:12px;color:#f1f5f9;background:transparent;border:none;width:100%;outline:none">
-      </div>
-    </div>
-  </div>
-
-  <!-- Tab: DM -->
-  <div id="lp-tab-dm" class="lp-tab-content" style="padding:20px 24px;display:none;flex:1">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div style="font-size:13px;font-weight:600;color:#f1f5f9">Ready-to-Send LinkedIn DM</div>
-      <button id="lp-copy-dm" onclick="copyLeadDMPanel()"
-        style="background:#6366f1;color:#fff;border:none;border-radius:6px;
-               padding:6px 16px;font-size:12px;cursor:pointer;font-weight:600">📋 Copy DM</button>
-    </div>
-    <textarea id="lp-dm-text" rows="12"
-      style="width:100%;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.25);
-             border-radius:10px;color:#e2e8f0;font-size:13px;line-height:1.7;
-             padding:16px;font-family:inherit;resize:vertical"></textarea>
-    <div style="margin-top:16px;padding:12px;background:rgba(16,185,129,.08);
-                border:1px solid rgba(16,185,129,.2);border-radius:8px">
-      <div style="font-size:11px;font-weight:700;color:#10b981;margin-bottom:4px">📌 Sell Strategy</div>
-      <div id="lp-sell-strategy" style="font-size:12px;color:#94a3b8;line-height:1.6"></div>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button onclick="markContacted()"
-        style="flex:1;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);
-               color:#f59e0b;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">
-        ✉️ Mark as Contacted</button>
-      <button onclick="logActivity(currentLeadId,'dm_sent','DM sent via LinkedIn')"
-        style="flex:1;padding:8px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);
-               color:#818cf8;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">
-        ✓ Log DM Sent</button>
-    </div>
-  </div>
-
-  <!-- Tab: Activity -->
-  <div id="lp-tab-activity" class="lp-tab-content" style="padding:20px 24px;display:none;flex:1">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <div style="font-size:13px;font-weight:600;color:#f1f5f9">Activity History</div>
-      <button onclick="showLogForm()"
-        style="background:#6366f1;color:#fff;border:none;border-radius:6px;
-               padding:6px 14px;font-size:11px;cursor:pointer;font-weight:600">+ Log Activity</button>
-    </div>
-
-    <!-- Log Activity Form (hidden by default) -->
-    <div id="log-form" style="display:none;background:rgba(255,255,255,.04);border:1px solid rgba(99,102,241,.25);
-         border-radius:10px;padding:14px;margin-bottom:16px">
-      <div style="font-size:12px;font-weight:600;color:#f1f5f9;margin-bottom:10px">Log Activity</div>
-      <select id="log-type"
-        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.06);
-               border:1px solid rgba(255,255,255,.1);border-radius:6px;
-               color:#f1f5f9;padding:7px;font-size:12px">
-        <option value="dm_sent">📨 Sent DM</option>
-        <option value="reply">💬 Got Reply</option>
-        <option value="follow_up">🔄 Follow-up Sent</option>
-        <option value="call">📞 Call</option>
-        <option value="meeting">🤝 Meeting</option>
-        <option value="note">📝 Note</option>
-        <option value="no_response">🚫 No Response</option>
-      </select>
-      <textarea id="log-note" rows="2" placeholder="Note (optional)..."
-        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.04);
-               border:1px solid rgba(255,255,255,.1);border-radius:6px;
-               color:#f1f5f9;padding:7px;font-size:12px;font-family:inherit;resize:none"></textarea>
-      <div style="display:flex;gap:8px">
-        <button onclick="submitLogActivity()"
-          style="flex:1;padding:7px;background:#6366f1;color:#fff;border:none;
-                 border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">Save</button>
-        <button onclick="document.getElementById('log-form').style.display='none'"
-          style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,.1);
-                 color:#64748b;border-radius:6px;font-size:12px;cursor:pointer">Cancel</button>
-      </div>
-    </div>
-
-    <div id="lp-activity-list" style="display:flex;flex-direction:column;gap:8px">
-      <div style="text-align:center;padding:32px;color:#475569;font-size:13px">No activity yet</div>
-    </div>
-  </div>
-
-  <!-- Tab: Schedule -->
-  <div id="lp-tab-schedule" class="lp-tab-content" style="padding:20px 24px;display:none;flex:1">
-    <div style="font-size:13px;font-weight:600;color:#f1f5f9;margin-bottom:16px">Scheduled Actions</div>
-    <div id="lp-schedule-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
-
-    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(99,102,241,.25);
-                border-radius:10px;padding:16px">
-      <div style="font-size:12px;font-weight:600;color:#f1f5f9;margin-bottom:12px">+ Schedule Next Action</div>
-      <select id="sched-type"
-        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.06);
-               border:1px solid rgba(255,255,255,.1);border-radius:6px;
-               color:#f1f5f9;padding:7px;font-size:12px">
-        <option value="send_dm">📨 Send DM</option>
-        <option value="follow_up">🔄 Follow-up</option>
-        <option value="call">📞 Call</option>
-        <option value="check_profile">👁 Check Profile</option>
-        <option value="meeting">🤝 Meeting</option>
-      </select>
-      <input id="sched-date" type="date"
-        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.06);
-               border:1px solid rgba(255,255,255,.1);border-radius:6px;
-               color:#f1f5f9;padding:7px;font-size:12px">
-      <textarea id="sched-note" rows="2" placeholder="Notes about this action..."
-        style="width:100%;margin-bottom:10px;background:rgba(255,255,255,.04);
-               border:1px solid rgba(255,255,255,.1);border-radius:6px;
-               color:#f1f5f9;padding:7px;font-size:12px;font-family:inherit;resize:none"></textarea>
-      <button onclick="addScheduledAction()"
-        style="width:100%;padding:8px;background:#6366f1;color:#fff;border:none;
-               border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">Schedule</button>
-    </div>
-  </div>
-
 </div>
-<!-- ═══ END LEAD DETAIL PANEL ════════════════════════════════════════════════ -->
-</div>
+
 
 <!-- ═══════════════════════════════════════════════════
      BIZ: MARKETING
@@ -6511,5 +6298,223 @@ const SEED_LEADS = [
     // ═══ END LEAD PANEL ═════════════════════════════════════════════════════
 
   </script>
+
+
+<!-- ═══ LEAD DETAIL PANEL (Pipedrive-style) ═══════════════════════════════ -->
+<div id="lead-panel-overlay" onclick="closeLeadPanel()"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8990;backdrop-filter:blur(2px)"></div>
+
+<div id="lead-panel"
+  style="position:fixed;top:0;right:0;width:520px;max-width:100vw;height:100vh;
+         background:#0d1117;border-left:1px solid rgba(99,102,241,.3);z-index:8999;
+         overflow-y:auto;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+         box-shadow:-12px 0 40px rgba(0,0,0,.6);display:flex;flex-direction:column">
+
+  <!-- Panel Header -->
+  <div style="padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.08);
+              display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;
+              background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(16,185,129,.06))">
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span id="lp-score" style="font-size:22px;font-weight:800"></span>
+        <span id="lp-name" style="font-size:18px;font-weight:700;color:#f1f5f9"></span>
+        <span id="lp-priority-tag" style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap">
+        <span id="lp-role" style="font-size:12px;color:#94a3b8"></span>
+        <span style="color:#334155">·</span>
+        <span id="lp-location" style="font-size:12px;color:#64748b"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap">
+        <a id="lp-linkedin" href="#" target="_blank"
+          style="font-size:11px;padding:4px 12px;background:#6366f1;color:#fff;
+                 border-radius:5px;text-decoration:none;font-weight:600">🔗 LinkedIn</a>
+        <select id="lp-status" onchange="saveLeadField(currentLeadId,'status',this.value)"
+          style="font-size:11px;padding:4px 10px;background:rgba(255,255,255,.06);
+                 border:1px solid rgba(255,255,255,.12);border-radius:5px;color:#f1f5f9;cursor:pointer">
+          <option value="new">🔵 New</option>
+          <option value="contacted">🟡 Contacted</option>
+          <option value="qualified">🟢 Qualified</option>
+          <option value="converted">✅ Converted</option>
+          <option value="dead">⚫ Dead</option>
+        </select>
+        <span id="lp-type-tag" style="font-size:10px;padding:3px 8px;border-radius:10px;
+              background:rgba(99,102,241,.15);color:#818cf8;font-weight:600"></span>
+      </div>
+    </div>
+    <button onclick="closeLeadPanel()"
+      style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+             color:#94a3b8;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;
+             margin-left:12px;flex-shrink:0;transition:background .15s"
+      onmouseover="this.style.background='rgba(239,68,68,.15)'"
+      onmouseout="this.style.background='rgba(255,255,255,.06)'">✕</button>
+  </div>
+
+  <!-- Tabs -->
+  <div style="display:flex;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0">
+    <button class="lp-tab active" data-tab="overview" onclick="switchLeadTab('overview',this)"
+      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
+             border:none;border-bottom:2px solid #6366f1;color:#6366f1;cursor:pointer">Overview</button>
+    <button class="lp-tab" data-tab="dm" onclick="switchLeadTab('dm',this)"
+      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
+             border:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer">📋 DM</button>
+    <button class="lp-tab" data-tab="activity" onclick="switchLeadTab('activity',this)"
+      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
+             border:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer">Activity</button>
+    <button class="lp-tab" data-tab="schedule" onclick="switchLeadTab('schedule',this)"
+      style="flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;
+             border:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer">Schedule</button>
+  </div>
+
+  <!-- Tab: Overview -->
+  <div id="lp-tab-overview" class="lp-tab-content" style="padding:20px 24px;flex:1">
+    <div style="margin-bottom:20px">
+      <div style="font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;
+                  letter-spacing:.08em;margin-bottom:8px">Analyst Notes</div>
+      <div id="lp-notes-display" style="font-size:13px;color:#cbd5e1;line-height:1.6;
+           padding:12px;background:rgba(255,255,255,.04);border-radius:8px;
+           border:1px solid rgba(255,255,255,.07)"></div>
+      <textarea id="lp-notes-edit" rows="5" placeholder="Add notes about this lead..."
+        onchange="saveLeadField(currentLeadId,'customNotes',this.value)"
+        style="width:100%;margin-top:8px;background:rgba(255,255,255,.04);
+               border:1px solid rgba(99,102,241,.3);border-radius:8px;
+               color:#f1f5f9;font-size:12px;padding:10px;resize:vertical;
+               font-family:inherit;display:none"></textarea>
+      <button onclick="toggleNotesEdit()"
+        style="margin-top:6px;font-size:11px;color:#6366f1;background:none;border:none;cursor:pointer;padding:0">
+        ✏️ Edit notes</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
+        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Source</div>
+        <div id="lp-source" style="font-size:13px;color:#f1f5f9"></div>
+      </div>
+      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
+        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Template</div>
+        <div id="lp-template" style="font-size:13px;color:#f1f5f9"></div>
+      </div>
+      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
+        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Outreach Date</div>
+        <input id="lp-outreach-date" type="date" onchange="saveLeadField(currentLeadId,'outreachDate',this.value)"
+          style="font-size:12px;color:#f1f5f9;background:transparent;border:none;width:100%;cursor:pointer">
+      </div>
+      <div style="padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px">
+        <div style="font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Reply Received</div>
+        <input id="lp-reply" type="text" placeholder="Note reply here..." onchange="saveLeadField(currentLeadId,'reply',this.value)"
+          style="font-size:12px;color:#f1f5f9;background:transparent;border:none;width:100%;outline:none">
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: DM -->
+  <div id="lp-tab-dm" class="lp-tab-content" style="padding:20px 24px;display:none;flex:1">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:600;color:#f1f5f9">Ready-to-Send LinkedIn DM</div>
+      <button id="lp-copy-dm" onclick="copyLeadDMPanel()"
+        style="background:#6366f1;color:#fff;border:none;border-radius:6px;
+               padding:6px 16px;font-size:12px;cursor:pointer;font-weight:600">📋 Copy DM</button>
+    </div>
+    <textarea id="lp-dm-text" rows="12"
+      style="width:100%;background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.25);
+             border-radius:10px;color:#e2e8f0;font-size:13px;line-height:1.7;
+             padding:16px;font-family:inherit;resize:vertical"></textarea>
+    <div style="margin-top:16px;padding:12px;background:rgba(16,185,129,.08);
+                border:1px solid rgba(16,185,129,.2);border-radius:8px">
+      <div style="font-size:11px;font-weight:700;color:#10b981;margin-bottom:4px">📌 Sell Strategy</div>
+      <div id="lp-sell-strategy" style="font-size:12px;color:#94a3b8;line-height:1.6"></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="markContacted()"
+        style="flex:1;padding:8px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);
+               color:#f59e0b;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">
+        ✉️ Mark as Contacted</button>
+      <button onclick="logActivity(currentLeadId,'dm_sent','DM sent via LinkedIn')"
+        style="flex:1;padding:8px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);
+               color:#818cf8;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">
+        ✓ Log DM Sent</button>
+    </div>
+  </div>
+
+  <!-- Tab: Activity -->
+  <div id="lp-tab-activity" class="lp-tab-content" style="padding:20px 24px;display:none;flex:1">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:#f1f5f9">Activity History</div>
+      <button onclick="showLogForm()"
+        style="background:#6366f1;color:#fff;border:none;border-radius:6px;
+               padding:6px 14px;font-size:11px;cursor:pointer;font-weight:600">+ Log Activity</button>
+    </div>
+
+    <!-- Log Activity Form (hidden by default) -->
+    <div id="log-form" style="display:none;background:rgba(255,255,255,.04);border:1px solid rgba(99,102,241,.25);
+         border-radius:10px;padding:14px;margin-bottom:16px">
+      <div style="font-size:12px;font-weight:600;color:#f1f5f9;margin-bottom:10px">Log Activity</div>
+      <select id="log-type"
+        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.06);
+               border:1px solid rgba(255,255,255,.1);border-radius:6px;
+               color:#f1f5f9;padding:7px;font-size:12px">
+        <option value="dm_sent">📨 Sent DM</option>
+        <option value="reply">💬 Got Reply</option>
+        <option value="follow_up">🔄 Follow-up Sent</option>
+        <option value="call">📞 Call</option>
+        <option value="meeting">🤝 Meeting</option>
+        <option value="note">📝 Note</option>
+        <option value="no_response">🚫 No Response</option>
+      </select>
+      <textarea id="log-note" rows="2" placeholder="Note (optional)..."
+        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.04);
+               border:1px solid rgba(255,255,255,.1);border-radius:6px;
+               color:#f1f5f9;padding:7px;font-size:12px;font-family:inherit;resize:none"></textarea>
+      <div style="display:flex;gap:8px">
+        <button onclick="submitLogActivity()"
+          style="flex:1;padding:7px;background:#6366f1;color:#fff;border:none;
+                 border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">Save</button>
+        <button onclick="document.getElementById('log-form').style.display='none'"
+          style="padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,.1);
+                 color:#64748b;border-radius:6px;font-size:12px;cursor:pointer">Cancel</button>
+      </div>
+    </div>
+
+    <div id="lp-activity-list" style="display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:32px;color:#475569;font-size:13px">No activity yet</div>
+    </div>
+  </div>
+
+  <!-- Tab: Schedule -->
+  <div id="lp-tab-schedule" class="lp-tab-content" style="padding:20px 24px;display:none;flex:1">
+    <div style="font-size:13px;font-weight:600;color:#f1f5f9;margin-bottom:16px">Scheduled Actions</div>
+    <div id="lp-schedule-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
+
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(99,102,241,.25);
+                border-radius:10px;padding:16px">
+      <div style="font-size:12px;font-weight:600;color:#f1f5f9;margin-bottom:12px">+ Schedule Next Action</div>
+      <select id="sched-type"
+        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.06);
+               border:1px solid rgba(255,255,255,.1);border-radius:6px;
+               color:#f1f5f9;padding:7px;font-size:12px">
+        <option value="send_dm">📨 Send DM</option>
+        <option value="follow_up">🔄 Follow-up</option>
+        <option value="call">📞 Call</option>
+        <option value="check_profile">👁 Check Profile</option>
+        <option value="meeting">🤝 Meeting</option>
+      </select>
+      <input id="sched-date" type="date"
+        style="width:100%;margin-bottom:8px;background:rgba(255,255,255,.06);
+               border:1px solid rgba(255,255,255,.1);border-radius:6px;
+               color:#f1f5f9;padding:7px;font-size:12px">
+      <textarea id="sched-note" rows="2" placeholder="Notes about this action..."
+        style="width:100%;margin-bottom:10px;background:rgba(255,255,255,.04);
+               border:1px solid rgba(255,255,255,.1);border-radius:6px;
+               color:#f1f5f9;padding:7px;font-size:12px;font-family:inherit;resize:none"></textarea>
+      <button onclick="addScheduledAction()"
+        style="width:100%;padding:8px;background:#6366f1;color:#fff;border:none;
+               border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">Schedule</button>
+    </div>
+  </div>
+
+</div>
+<!-- ═══ END LEAD DETAIL PANEL ════════════════════════════════════════════════ -->
+
+
 </body>
 </html>
