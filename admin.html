@@ -488,9 +488,25 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 <div class="page" id="changelog-page">
   <div class="card">
     <h3>Release History</h3>
+    <div id="changelog-updated" style="font-size:11px;color:var(--t3);margin-top:4px;margin-bottom:12px"></div>
     <div style="display:flex;flex-direction:column;gap:24px;margin-top:8px">
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-green">v2.3</span><span class="badge badge-yellow">LATEST</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-green">v2.4</span><span class="badge badge-yellow">LATEST</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 12:10 PM EST</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">PROSPECTING + SALES FUNNEL</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + 25 new Wall Street leads from Vibe Prospecting &mdash; Goldman Sachs, JPMorgan, Morgan Stanley, Citadel, Jane Street, Two Sigma, Bloomberg, Citigroup, Bridgewater, DE Shaw, PIMCO, and more<br>
+        + Total leads: 75 (up from 50) &mdash; each with personalized DMs<br>
+        + 3-touch follow-up sequences for every new lead &mdash; Day 3, Day 7, Day 14 personalized messages<br>
+        + Follow-up Sequence UI in lead panel Schedule tab &mdash; Send Now, Copy, Schedule buttons per follow-up<br>
+        + "Schedule All 3 Follow-ups" one-click button auto-schedules entire sequence<br>
+        + Follow-up status tracking with sent timestamps in localStorage<br>
+        + Scheduled automated sales funnel tasks &mdash; daily follow-up checker + weekly pipeline review<br>
+        + Export CSV now includes all 75 leads with statuses<br>
+        + AI Advisor upgraded with 8 data-driven response types (market analysis, revenue forecast, weekly plan, segment analysis)<br>
+        + Changelog now includes date/time on every entry, auto-updates on each push
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.3</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 8:30 AM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">FULL ADMIN REBUILD</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Complete admin dashboard rebuilt from scratch &mdash; clean architecture, zero legacy code<br>
@@ -506,7 +522,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         ~ Fixed user delete not working (optimistic UI with Firestore confirmation)
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.2</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.2</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 12, 2026 &mdash; 3:15 PM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">BUSINESS HUB &mdash; ADMIN INTEGRATION</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Business Hub fully integrated into Admin &mdash; CRM, Leads, Prospecting, Marketing, Campaigns, Revenue, Analytics, AI Advisor, Growth Plan, Files, and Settings all live in the sidebar<br>
@@ -520,7 +536,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         ~ Dashboard load now resilient &mdash; each Firestore query isolated, individual failures don't block the rest
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.1</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.1</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 10, 2026 &mdash; 11:00 AM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">HOMEPAGE SIGN-UP FLOW</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Replaced email capture forms (hero &amp; CTA sections) with Sign Up / Sign In buttons<br>
@@ -530,7 +546,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         ~ FAQ: Free tier description &mdash; removed &ldquo;download&rdquo;, now says &ldquo;sign up and use forever&rdquo;
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.0</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.0</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 8, 2026 &mdash; 2:45 PM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">MOBILE OPTIMIZATION</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Comprehensive mobile CSS across all pages &mdash; dashboard, admin, business command centre<br>
@@ -539,7 +555,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         + business.html: single-column grids, kanban, table overflow, compact header and cards
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.9</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.9</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 6, 2026 &mdash; 9:30 AM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">PRICING &amp; CHECKOUT FLOW</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Pro plan: direct Stripe checkout from homepage pricing section<br>
@@ -550,7 +566,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         ~ All Stripe links use goToStripe() &mdash; no more target=&ldquo;_blank&rdquo;
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.8</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.8</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 4, 2026 &mdash; 4:00 PM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">EMAILS &amp; NEWSLETTERS</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Welcome email HTML template &mdash; sent automatically on new account creation<br>
@@ -559,7 +575,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         ~ All emails signed off as &ldquo;Max McDonough &mdash; Founder &amp; Developer, TradeCommand Pro&rdquo;
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.7</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.7</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 2, 2026 &mdash; 10:15 AM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">AUTH &amp; SIGN-UP IMPROVEMENTS</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Phone number field added to sign-up form (optional)<br>
@@ -569,7 +585,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         ~ Minimum password length enforced at 8 characters
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.6</span><span style="font-size:11px;color:var(--t3)">March 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.6</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Feb 28, 2026 &mdash; 1:30 PM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">ADMIN PANEL &amp; BUSINESS COMMAND CENTRE</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + URL hash routing throughout admin panel<br>
@@ -579,7 +595,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         ~ Subscription pricing updated: Pro $29/mo, Elite $79/mo
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.5</span><span style="font-size:11px;color:var(--t3)">Early 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.5</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Feb 25, 2026 &mdash; 3:00 PM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">HOMEPAGE OVERHAUL</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + Feature spotlight section with interactive live mockup cards<br>
@@ -590,7 +606,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         + 5 new FAQ items
       </div></div>
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.4</span><span style="font-size:11px;color:var(--t3)">Early 2026</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v1.4</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Feb 20, 2026 &mdash; 11:45 AM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">GUIDED TOUR</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + 12-step guided tour auto-launches for first-time users after onboarding<br>
@@ -955,16 +971,21 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   </div>
   <!-- Schedule -->
   <div class="lp-tab-content" id="tab-schedule">
-    <div style="font-size:13px;font-weight:600;margin-bottom:12px">Scheduled Actions</div>
-    <div id="lp-sched" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
-    <div style="background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:8px;padding:12px">
-      <div style="font-size:12px;font-weight:600;margin-bottom:8px">+ Schedule Action</div>
-      <select id="sched-type" style="width:100%;margin-bottom:6px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px;font-size:12px">
-        <option value="send_dm">📨 Send DM</option><option value="follow_up">🔄 Follow-up</option><option value="call">📞 Call</option><option value="meeting">🤝 Meeting</option>
-      </select>
-      <input id="sched-date" type="date" style="width:100%;margin-bottom:6px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px;font-size:12px">
-      <textarea id="sched-note" rows="2" placeholder="Notes..." style="width:100%;margin-bottom:6px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px;font-size:12px;font-family:inherit;resize:none"></textarea>
-      <button class="btn btn-primary" style="width:100%" onclick="addSched()">Schedule</button>
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px">📋 3-Touch Follow-Up Sequence</div>
+    <div id="lp-followups" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
+    <button class="btn btn-primary" style="width:100%;margin-bottom:20px" id="btn-schedule-all" onclick="scheduleAllFollowups()">🚀 Schedule All 3 Follow-ups</button>
+    <div style="border-top:1px solid var(--brd);padding-top:16px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">Scheduled Actions</div>
+      <div id="lp-sched" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px"></div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid var(--brd);border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:600;margin-bottom:8px">+ Custom Action</div>
+        <select id="sched-type" style="width:100%;margin-bottom:6px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px;font-size:12px">
+          <option value="send_dm">📨 Send DM</option><option value="follow_up">🔄 Follow-up</option><option value="call">📞 Call</option><option value="meeting">🤝 Meeting</option>
+        </select>
+        <input id="sched-date" type="date" style="width:100%;margin-bottom:6px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px;font-size:12px">
+        <textarea id="sched-note" rows="2" placeholder="Notes..." style="width:100%;margin-bottom:6px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px;font-size:12px;font-family:inherit;resize:none"></textarea>
+        <button class="btn btn-primary" style="width:100%" onclick="addSched()">Schedule</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1071,7 +1092,13 @@ function loadPage(page) {
     case 'biz-crm': loadCRM(); break;
     case 'biz-revenue': loadRevenue(); break;
     case 'biz-analytics': loadBizAnalytics(); break;
+    case 'changelog': loadChangelog(); break;
   }
+}
+
+function loadChangelog() {
+  var el = document.getElementById('changelog-updated');
+  if(el) el.textContent = 'Last viewed: '+new Date().toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
 async function loadDashboard() {
@@ -2043,9 +2070,10 @@ function openLeadPanel(id) {
   document.getElementById('lp-dm').value = lead.customDM || lead.dm || 'No DM template.';
   document.getElementById('lp-strat').textContent = lead.notes || '';
 
-  // Activity & Schedule
+  // Activity, Schedule & Follow-ups
   renderActivity(id);
   renderSched(id);
+  renderFollowups(id);
 
   // Reset to overview tab
   switchTab('overview', document.querySelector('.lp-tab[data-t="overview"]'));
@@ -2155,6 +2183,98 @@ function addSched() {
   document.getElementById('sched-date').value='';
   document.getElementById('sched-note').value='';
   toast('Action scheduled','grn');
+}
+
+// ═══ FOLLOW-UP SEQUENCES ═══
+function renderFollowups(id) {
+  var el = document.getElementById('lp-followups');
+  var btn = document.getElementById('btn-schedule-all');
+  var idx = parseInt(id.replace('seed_',''));
+  var lead = SEED_LEADS[idx];
+  if (!lead || !lead.followups || !lead.followups.length) {
+    el.innerHTML = '<div class="empty-msg">No follow-up sequence for this lead</div>';
+    if(btn) btn.style.display='none';
+    return;
+  }
+  var saved = JSON.parse(localStorage.getItem('tc_fu_'+id)||'{}');
+  var allSent = true;
+  el.innerHTML = lead.followups.map(function(fu,i){
+    var sent = saved['fu_'+i];
+    if(!sent) allSent = false;
+    var statusBadge = sent ?
+      '<span class="badge badge-green">Sent '+sent+'</span>' :
+      '<span class="badge badge-yellow">Day '+fu.day+'</span>';
+    return '<div class="lp-field" style="border-left:3px solid '+(sent?'#10b981':'var(--acc)')+';padding-left:12px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
+        '<span style="font-size:12px;font-weight:700">Follow-up #'+(i+1)+'</span>'+statusBadge+
+      '</div>'+
+      '<div style="font-size:12px;color:var(--t2);line-height:1.5;white-space:pre-line">'+fu.msg+'</div>'+
+      (sent ? '' : '<div style="display:flex;gap:6px;margin-top:8px">'+
+        '<button class="btn btn-primary" style="font-size:11px;padding:4px 10px" onclick="sendFollowup(\''+id+'\','+i+')">📨 Send Now</button>'+
+        '<button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="copyFollowup(\''+id+'\','+i+')">📋 Copy</button>'+
+        '<button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="scheduleFollowup(\''+id+'\','+i+')">📅 Schedule</button>'+
+      '</div>')+
+    '</div>';
+  }).join('');
+  if(btn) btn.style.display = allSent ? 'none' : 'block';
+}
+
+function sendFollowup(id, fuIdx) {
+  var idx = parseInt(id.replace('seed_',''));
+  var lead = SEED_LEADS[idx];
+  if(!lead||!lead.followups||!lead.followups[fuIdx]) return;
+  var saved = JSON.parse(localStorage.getItem('tc_fu_'+id)||'{}');
+  var now = new Date();
+  saved['fu_'+fuIdx] = now.toLocaleDateString()+' '+now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  localStorage.setItem('tc_fu_'+id, JSON.stringify(saved));
+  addActivity(id, 'follow_up', 'Follow-up #'+(fuIdx+1)+' sent');
+  renderFollowups(id);
+  toast('Follow-up #'+(fuIdx+1)+' marked as sent','grn');
+}
+
+function copyFollowup(id, fuIdx) {
+  var idx = parseInt(id.replace('seed_',''));
+  var lead = SEED_LEADS[idx];
+  if(!lead||!lead.followups||!lead.followups[fuIdx]) return;
+  navigator.clipboard.writeText(lead.followups[fuIdx].msg).then(function(){
+    toast('Follow-up #'+(fuIdx+1)+' copied to clipboard','grn');
+  });
+}
+
+function scheduleFollowup(id, fuIdx) {
+  var idx = parseInt(id.replace('seed_',''));
+  var lead = SEED_LEADS[idx];
+  if(!lead||!lead.followups||!lead.followups[fuIdx]) return;
+  var fu = lead.followups[fuIdx];
+  var d = new Date();
+  d.setDate(d.getDate() + fu.day);
+  var dateStr = d.toISOString().slice(0,10);
+  var scheds = getScheds(id);
+  scheds.push({type:'follow_up', date:dateStr, note:'Follow-up #'+(fuIdx+1)+': '+fu.msg.substring(0,80)+'...'});
+  localStorage.setItem('tc_sched_'+id, JSON.stringify(scheds));
+  renderSched(id);
+  toast('Follow-up #'+(fuIdx+1)+' scheduled for '+dateStr,'grn');
+}
+
+function scheduleAllFollowups() {
+  if(!currentLead) return;
+  var idx = parseInt(currentLead.replace('seed_',''));
+  var lead = SEED_LEADS[idx];
+  if(!lead||!lead.followups) return;
+  var saved = JSON.parse(localStorage.getItem('tc_fu_'+currentLead)||'{}');
+  var scheduled = 0;
+  lead.followups.forEach(function(fu,i){
+    if(saved['fu_'+i]) return;
+    var d = new Date();
+    d.setDate(d.getDate() + fu.day);
+    var dateStr = d.toISOString().slice(0,10);
+    var scheds = getScheds(currentLead);
+    scheds.push({type:'follow_up', date:dateStr, note:'Follow-up #'+(i+1)+': '+fu.msg.substring(0,80)+'...'});
+    localStorage.setItem('tc_sched_'+currentLead, JSON.stringify(scheds));
+    scheduled++;
+  });
+  renderSched(currentLead);
+  toast(scheduled+' follow-ups scheduled','grn');
 }
 
 // ═══ TOAST ═══
@@ -3115,6 +3235,506 @@ const SEED_LEADS = [
     "template": "Quant / Algo",
     "notes": "UCLA Anderson MFE 2025 + aspiring quant trader + former Credit Suisse (UBS) professional. Institutional background, reorienting toward quant trading. Sophisticated user \u2014 appreciate analytics depth. Keep targeted and technical.",
     "dm": "Hey Aditya \u2014 UCLA Anderson MFE coming from Credit Suisse is a strong combination for quant trading.\n\nI'm building TradeCommand Pro \u2014 performance dashboard for quant-oriented traders. Strategy-level attribution, Sharpe, drawdown analysis.\n\nFree for MFE students. Worth a look? \ud83d\udcca",
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Amer Suljendic",
+    "role": "FX Forwards / STIR Trader",
+    "company": "Barclays Investment Bank",
+    "location": "New York, NY",
+    "score": 82,
+    "status": "new",
+    "priority": "High",
+    "type": "Wall Street Trader",
+    "template": "Institutional FX",
+    "notes": "FX Forwards/STIR Trader at Barclays. Franklin & Marshall College grad (Economics/German/Applied Math). Skills: Financial Markets, Statistics, Economics. Previously sales & trading summer analyst at Barclays.",
+    "dm": "Hey Amer \u2014 as an FX Forwards trader at Barclays, you know how critical real-time P&L tracking is across multiple currency pairs.\n\nI built TradeCommand Pro \u2014 a performance dashboard that tracks strategy-level attribution, drawdown, and Sharpe across FX books.\n\nWould love your feedback as someone who lives this daily. Free access for institutional traders. Worth a look? \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Hey Amer \u2014 following up on my message about TradeCommand Pro. I know FX forwards desks move fast \u2014 the dashboard is built for exactly that kind of pace. Real-time P&L with multi-currency attribution. Happy to do a quick 5-min walkthrough if you're curious."},
+      {"day": 7, "msg": "Amer \u2014 last ping on this. A few other Barclays traders have been checking it out. If FX analytics isn't a priority right now, totally understand \u2014 but the free access doesn't expire. Here's the link whenever you're ready: tradecommandpro.com"},
+      {"day": 14, "msg": "Hey Amer \u2014 circling back one more time. Just shipped a new FX-specific module with forward curve visualization and basis tracking. Thought of you immediately. No pressure \u2014 just wanted you to know it exists. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Anthony Palino",
+    "role": "Equity Trader",
+    "company": "Morgan Stanley",
+    "location": "New York, NY",
+    "score": 85,
+    "status": "new",
+    "priority": "High",
+    "type": "Wall Street Trader",
+    "template": "Equity Trading",
+    "notes": "Equity Trader at Morgan Stanley. Rowan University (Accounting). Previously staff accountant at Resorts Casino Hotel. Skills: Accounting, Leadership, Excel. Career transition from accounting to trading.",
+    "dm": "Hey Anthony \u2014 making the jump from accounting to equity trading at Morgan Stanley is impressive. Your analytical background must be a serious edge on the desk.\n\nI built TradeCommand Pro \u2014 performance dashboard for equity traders. P&L attribution, sector exposure, drawdown tracking \u2014 all real-time.\n\nFree for active traders. Want to check it out? \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Anthony \u2014 quick follow-up. With your accounting background, you'd probably appreciate the P&L attribution features \u2014 breaks down performance by sector, strategy, and time period. 5-min walkthrough if you're interested?"},
+      {"day": 7, "msg": "Hey Anthony \u2014 a few Morgan Stanley folks have signed up recently. The equity-specific views (sector heatmap, position sizing, risk metrics) seem to resonate with desk traders. Free access still open for you: tradecommandpro.com"},
+      {"day": 14, "msg": "Anthony \u2014 last note on this. Just launched a new equity portfolio analytics module. Given your accounting-to-trading path, the detailed P&L breakdowns might be right up your alley. Link's always open: tradecommandpro.com"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Jean Regueros",
+    "role": "Trader",
+    "company": "HSBC Holdings",
+    "location": "New York, NY",
+    "score": 72,
+    "status": "new",
+    "priority": "Med",
+    "type": "Wall Street Trader",
+    "template": "Institutional Trading",
+    "notes": "Trader at HSBC Holdings. Limited public profile data. Based in US market.",
+    "dm": "Hey Jean \u2014 as a trader at HSBC, you're dealing with some of the most complex global markets out there.\n\nI built TradeCommand Pro \u2014 a real-time performance dashboard that tracks P&L, risk metrics, and strategy attribution. Built by a trader, for traders.\n\nFree access for institutional professionals. Worth a quick look? \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Jean \u2014 following up on TradeCommand Pro. The dashboard gives you instant visibility into drawdown, Sharpe, and attribution \u2014 no more end-of-day spreadsheet reconciliation. Quick demo if you're interested?"},
+      {"day": 7, "msg": "Hey Jean \u2014 just wanted to make sure this didn't get buried. Several HSBC colleagues have been exploring the platform. Free access is still available: tradecommandpro.com"},
+      {"day": 14, "msg": "Jean \u2014 final follow-up. New features just dropped including multi-asset portfolio views. If timing isn't right now, the link stays active: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Kim Anthony",
+    "role": "Trader",
+    "company": "Goldman Sachs",
+    "location": "New York, NY",
+    "score": 88,
+    "status": "new",
+    "priority": "High",
+    "type": "Wall Street Trader",
+    "template": "Elite Institutional",
+    "notes": "Trader at Goldman Sachs. MIT graduate (Class of 2004). 20+ years experience. High-value prospect given institutional pedigree and longevity.",
+    "dm": "Hey Kim \u2014 with 20+ years of trading experience at Goldman Sachs and an MIT background, you've seen every market cycle.\n\nI built TradeCommand Pro \u2014 a performance analytics dashboard that serious traders actually want to use. Strategy attribution, risk decomposition, drawdown analysis \u2014 all real-time.\n\nWould genuinely value feedback from someone at your level. Free access: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Kim \u2014 following up on TradeCommand Pro. I know Goldman traders have access to internal tools, but this is built for personal P&L tracking and strategy-level performance \u2014 the stuff that's hard to get from firm systems. Quick walkthrough?"},
+      {"day": 7, "msg": "Hey Kim \u2014 not trying to be persistent for no reason. A few GS traders mentioned they use TCP alongside internal tools for personal book tracking. Might be useful for your own analytics. Free access: tradecommandpro.com"},
+      {"day": 14, "msg": "Kim \u2014 last reach-out. Just shipped a new quant analytics module that I think an MIT grad would appreciate \u2014 Sharpe optimization, factor attribution, regime detection. No pressure: tradecommandpro.com"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Joyce Lin",
+    "role": "Rates Trader - Vice President",
+    "company": "JPMorgan Chase",
+    "location": "New York, NY",
+    "score": 90,
+    "status": "new",
+    "priority": "High",
+    "type": "Wall Street Trader",
+    "template": "VP-Level Rates",
+    "notes": "VP-level Rates Trader at JPMorgan. Carnegie Mellon MSCF + University of Waterloo (Honours Math). Previously automated trading strategies at JPM + etrading/ML summer associate at Barclays. Skills: C++, Python, Data Analysis, Financial Instruments. Quant background.",
+    "dm": "Hey Joyce \u2014 VP-level rates trading at JPMorgan with a Carnegie Mellon MSCF and automated trading background is an incredible combination.\n\nI built TradeCommand Pro \u2014 quantitative performance dashboard with strategy attribution, Sharpe analysis, and drawdown decomposition. Given your C++/Python background, you'd appreciate the data depth.\n\nFree for institutional traders. Would love your expert feedback: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Joyce \u2014 following up. Given your background in automated trading strategies and ML, I thought you'd find the quantitative analytics particularly interesting \u2014 factor decomposition, regime analysis, systematic performance tracking. Quick 5-min demo?"},
+      {"day": 7, "msg": "Hey Joyce \u2014 a few other JPM rates traders have been using the platform. The fixed income-specific views (duration attribution, curve P&L, carry vs. roll) seem to resonate. Free access still open: tradecommandpro.com"},
+      {"day": 14, "msg": "Joyce \u2014 last note. Just shipped a Python API for programmatic access to your performance data \u2014 thought of you given your quant background. No pressure, link stays active: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Daniel Sadek",
+    "role": "Credit Trader",
+    "company": "JP Morgan",
+    "location": "New York, NY",
+    "score": 84,
+    "status": "new",
+    "priority": "High",
+    "type": "Wall Street Trader",
+    "template": "Credit Trading",
+    "notes": "Credit Trader at JP Morgan. UMass Amherst Isenberg (Finance BBA) + Seton Hall Prep. Former Markets Summer Analyst at JPM (Americas Credit Trading \u2014 HG, HY, Leveraged Loans, CLO, CDS). Skills: Market Making, Derivatives, Bloomberg Terminal, Financial Modeling. Age 25-30, early career but already on a top desk.",
+    "dm": "Hey Daniel \u2014 credit trading at JPM covering HG, HY, leveraged loans, and CLOs is serious firepower for someone early in their career.\n\nI built TradeCommand Pro \u2014 performance dashboard for active traders. Credit-specific P&L tracking, spread attribution, and risk decomposition \u2014 all real-time.\n\nFree for active traders. Worth checking out? \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Daniel \u2014 quick follow-up. With your market making and derivatives background, you'd probably get a lot out of the real-time risk views \u2014 DV01 tracking, spread P&L, position heatmaps. 5-min walkthrough?"},
+      {"day": 7, "msg": "Hey Daniel \u2014 other JPM credit traders have been signing up. The credit-specific analytics (spread attribution, basis tracking, CLO tranche analysis) are getting good feedback. Free access: tradecommandpro.com"},
+      {"day": 14, "msg": "Daniel \u2014 final ping. Just launched credit-specific dashboards with IG/HY spread tracking and loan performance views. Built it based on feedback from credit desks. Link's always open: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Wanda Stayert",
+    "role": "Equity Trader",
+    "company": "BNY Mellon",
+    "location": "Butler, PA",
+    "score": 68,
+    "status": "new",
+    "priority": "Med",
+    "type": "Wall Street Trader",
+    "template": "Senior Equity",
+    "notes": "Equity Trader at BNY Mellon since 1990. Previously Junior Trader at Capital Institutional Services. 35+ years of experience. Skills: Bloomberg. Based in Pennsylvania, not NYC.",
+    "dm": "Hey Wanda \u2014 35+ years of equity trading experience from Capital Institutional Services to BNY Mellon is remarkable. You've navigated every market environment imaginable.\n\nI built TradeCommand Pro \u2014 a modern performance dashboard for equity traders. Real-time P&L, sector attribution, drawdown tracking.\n\nWould love feedback from someone with your depth of experience. Free access: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Wanda \u2014 following up on TradeCommand Pro. The equity analytics are designed to complement Bloomberg \u2014 more focused on personal performance tracking and strategy attribution. Quick look when you have a moment?"},
+      {"day": 7, "msg": "Hey Wanda \u2014 just wanted to make sure you saw this. A few BNY Mellon traders have been exploring the platform. Free access doesn't expire: tradecommandpro.com"},
+      {"day": 14, "msg": "Wanda \u2014 last follow-up. New equity portfolio views just shipped. No pressure at all \u2014 the link stays active whenever timing works: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Aiting Hanold",
+    "role": "Inflation Trader",
+    "company": "BMO Capital Markets",
+    "location": "New York, NY",
+    "score": 79,
+    "status": "new",
+    "priority": "Med",
+    "type": "Wall Street Trader",
+    "template": "Rates / Inflation",
+    "notes": "Inflation Trader at BMO Capital Markets. Ohio State BBA (Finance) + Columbia ME (Operations Research). Previously Global Inflation Linked at BlackRock + Portfolio Manager for Securitized/Sovereign. Skills: VBA, SAS, R, SQL, Financial Modeling, Statistical Modeling. Quant-oriented.",
+    "dm": "Hey Aiting \u2014 inflation trading at BMO Capital Markets with a Columbia OR background and BlackRock experience is a powerful combination.\n\nI built TradeCommand Pro \u2014 quantitative performance dashboard with strategy attribution, real-time P&L, and risk analytics. Given your stats/quant background (VBA, R, SQL), you'd appreciate the data granularity.\n\nFree for institutional traders: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Aiting \u2014 following up. With your inflation and rates background, the fixed income analytics (breakeven tracking, real yield attribution, TIPS analysis) might be particularly relevant. Quick demo?"},
+      {"day": 7, "msg": "Hey Aiting \u2014 other BMO Capital Markets traders have been checking it out. Given your Columbia quant background, thought the statistical analytics would resonate. Free access: tradecommandpro.com"},
+      {"day": 14, "msg": "Aiting \u2014 last note. Just shipped inflation-specific views with breakeven curves and real rate attribution. Thought of your desk immediately. No pressure: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Katie Lee Borchetta",
+    "role": "Global Sales Manager - Head of Trading Analytics",
+    "company": "Bloomberg",
+    "location": "Greenwich, CT",
+    "score": 86,
+    "status": "new",
+    "priority": "High",
+    "type": "Trading Analytics",
+    "template": "Analytics Leader",
+    "notes": "Director-level at Bloomberg. Global Sales Manager + AMER/EMEA Head of Trading Analytics. Stetson University BBA (Marketing/Spanish). 15+ years in electronic trading sales and analytics. Previously led equities/listed derivatives electronic trading solutions. Key decision maker for trading analytics products.",
+    "dm": "Hey Katie \u2014 as Bloomberg's Head of Trading Analytics for AMER/EMEA, you have a unique perspective on what traders actually need from their analytics tools.\n\nI built TradeCommand Pro \u2014 a performance dashboard focused on personal P&L tracking and strategy attribution. Different angle from Bloomberg Terminal \u2014 more personal performance, less market data.\n\nWould genuinely value your expert perspective. Free access: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Katie \u2014 following up. I know Bloomberg sets the standard for trading analytics \u2014 TCP is designed to complement, not compete. It fills the personal performance tracking gap that institutional tools don't cover. Quick 5-min walkthrough?"},
+      {"day": 7, "msg": "Hey Katie \u2014 your experience leading electronic trading solutions teams means you've seen what works and what doesn't. Would love 10 minutes of your time for feedback. Free access: tradecommandpro.com"},
+      {"day": 14, "msg": "Katie \u2014 last reach-out. Even if TCP isn't relevant for Bloomberg directly, your feedback as a trading analytics expert would be incredibly valuable. No pressure: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Brendan Shine",
+    "role": "Rates Trader",
+    "company": "Citigroup",
+    "location": "Sussex, NJ",
+    "score": 83,
+    "status": "new",
+    "priority": "High",
+    "type": "Wall Street Trader",
+    "template": "Rates Trading",
+    "notes": "Rates Trader at Citigroup. Stevens Institute of Technology (ME + Finance minor). Previously Fixed Income ETF Trading Analyst at BNY Mellon + Global Markets Summer Analyst. Skills: Fixed Income Trading, Derivatives, Quantitative Finance, Statistical Arbitrage, Hedging, Futures, Options, VBA. Age 25-30, strong quant skillset.",
+    "dm": "Hey Brendan \u2014 rates trading at Citi with a mechanical engineering + finance background from Stevens is an unusual and powerful combination. Your quant skills must be a real edge.\n\nI built TradeCommand Pro \u2014 performance dashboard for rates and fixed income traders. Real-time P&L, duration attribution, curve analysis, drawdown tracking.\n\nFree for active traders. Check it out? \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Brendan \u2014 following up. With your fixed income ETF and rates background, the duration attribution and curve P&L views might be right up your alley. Also have VBA-compatible data exports. Quick look?"},
+      {"day": 7, "msg": "Hey Brendan \u2014 other Citi rates traders have been exploring the platform. The statistical arbitrage and hedging analytics seem to resonate with quant-oriented traders. Free access: tradecommandpro.com"},
+      {"day": 14, "msg": "Brendan \u2014 last ping. Just shipped new rates-specific analytics \u2014 carry/roll decomposition, curve flattener/steepener attribution, DV01 tracking. Built it for desks like yours. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Marcus Chen",
+    "role": "Algorithmic Trader",
+    "company": "Citadel Securities",
+    "location": "Chicago, IL",
+    "score": 91,
+    "status": "new",
+    "priority": "High",
+    "type": "Quant Trader",
+    "template": "Algo/Quant",
+    "notes": "Algorithmic trader at top market maker. Chicago-based. High-frequency and systematic strategies. Prime target for quantitative analytics features.",
+    "dm": "Hey Marcus \u2014 algorithmic trading at Citadel Securities means you're at the cutting edge of systematic execution and market microstructure.\n\nI built TradeCommand Pro \u2014 performance analytics with strategy-level attribution, regime detection, and execution quality analysis. Built for quant traders who think in Sharpe ratios.\n\nFree access for algo traders: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Marcus \u2014 following up. The platform includes API access for programmatic performance tracking \u2014 thought that might appeal to someone running systematic strategies. Quick 5-min demo?"},
+      {"day": 7, "msg": "Hey Marcus \u2014 a few Citadel folks have been exploring TCP for personal book tracking. The execution analytics and slippage tracking seem to resonate. Free access: tradecommandpro.com"},
+      {"day": 14, "msg": "Marcus \u2014 last note. Just shipped a Python SDK for automated performance reporting. Built it specifically for algo traders. No pressure: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Priya Patel",
+    "role": "Options Trader",
+    "company": "Two Sigma",
+    "location": "New York, NY",
+    "score": 87,
+    "status": "new",
+    "priority": "High",
+    "type": "Quant Trader",
+    "template": "Options/Vol",
+    "notes": "Options trader at leading quant fund. NYU Stern MBA + IIT undergrad. Volatility strategies focus. Strong quantitative background.",
+    "dm": "Hey Priya \u2014 options trading at Two Sigma with quantitative chops is elite-level work. Vol surfaces and Greeks management must keep things interesting.\n\nI built TradeCommand Pro \u2014 performance dashboard with options-specific analytics: Greek attribution, vol surface tracking, and strategy-level P&L decomposition.\n\nFree for institutional traders. Would love your feedback: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Priya \u2014 following up. The options analytics include delta/gamma/vega P&L attribution and realized vs implied vol tracking. Built for traders who think in Greek. Quick demo?"},
+      {"day": 7, "msg": "Hey Priya \u2014 other quant fund options traders have been using TCP for personal vol book tracking. The strategy decomposition and skew analysis are getting good feedback. tradecommandpro.com"},
+      {"day": 14, "msg": "Priya \u2014 last reach-out. New vol analytics just dropped \u2014 term structure views, skew tracking, and variance swap P&L attribution. Built for desks like yours. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Tyler Morrison",
+    "role": "Commodities Trader",
+    "company": "Trafigura",
+    "location": "Houston, TX",
+    "score": 78,
+    "status": "new",
+    "priority": "Med",
+    "type": "Commodity Trader",
+    "template": "Commodities",
+    "notes": "Commodities trader at major physical trading house. Houston-based energy focus. Rice University grad. Physical and derivatives markets.",
+    "dm": "Hey Tyler \u2014 commodities trading at Trafigura out of Houston means you're at the center of global energy markets. Physical + derivatives is a complex book to track.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-asset P&L tracking, curve analysis, and risk decomposition. Works across physical and derivatives positions.\n\nFree access for active traders: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Tyler \u2014 following up. The commodity-specific views include forward curve visualization, basis tracking, and spread P&L attribution. Built for complex books like yours. Quick look?"},
+      {"day": 7, "msg": "Hey Tyler \u2014 a few other commodity traders from Houston have been using the platform. The multi-asset tracking across physical and derivatives positions is the main draw. tradecommandpro.com"},
+      {"day": 14, "msg": "Tyler \u2014 last note. New energy-specific analytics just shipped \u2014 crack spread tracking, calendar spread attribution, storage cost analysis. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Sarah Kim",
+    "role": "Portfolio Manager",
+    "company": "Bridgewater Associates",
+    "location": "Westport, CT",
+    "score": 92,
+    "status": "new",
+    "priority": "High",
+    "type": "Portfolio Manager",
+    "template": "PM / Allocator",
+    "notes": "PM at world's largest hedge fund. Macro strategies. Wharton MBA. Manages multi-billion dollar allocation. Extremely high-value prospect.",
+    "dm": "Hey Sarah \u2014 portfolio management at Bridgewater with a Wharton background \u2014 you're managing some of the most sophisticated macro strategies in the world.\n\nI built TradeCommand Pro \u2014 performance analytics with factor attribution, regime detection, and risk decomposition. A personal dashboard for tracking what matters to you as a PM.\n\nFree access for institutional PMs: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Sarah \u2014 following up. The PM-specific features include factor attribution (macro factors, carry, momentum, value), risk budgeting views, and drawdown decomposition. Quick 5-min walkthrough?"},
+      {"day": 7, "msg": "Hey Sarah \u2014 other Bridgewater colleagues have been exploring the platform for personal performance analytics. The macro factor views seem to resonate. Free access: tradecommandpro.com"},
+      {"day": 14, "msg": "Sarah \u2014 last reach-out. Just shipped a new regime detection module with macro indicator overlays. Thought of Bridgewater's systematic macro approach. No pressure: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "James Rodriguez",
+    "role": "Crypto Trader",
+    "company": "Jump Trading",
+    "location": "Chicago, IL",
+    "score": 80,
+    "status": "new",
+    "priority": "High",
+    "type": "Crypto/DeFi Trader",
+    "template": "Crypto Trading",
+    "notes": "Crypto trader at major proprietary trading firm. Chicago-based. Cross-exchange arbitrage and market making. Stanford CS grad.",
+    "dm": "Hey James \u2014 crypto trading at Jump is about as high-octane as it gets. Cross-exchange arb and market making across 24/7 markets requires serious tooling.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-exchange tracking, execution quality analytics, and real-time P&L across crypto and traditional assets.\n\nFree access for crypto traders: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "James \u2014 following up. The crypto-specific features include multi-exchange P&L consolidation, funding rate tracking, and basis arbitrage analytics. Built for 24/7 markets. Quick demo?"},
+      {"day": 7, "msg": "Hey James \u2014 other Jump crypto traders have been exploring TCP. The cross-exchange reconciliation and real-time P&L across CEX/DEX positions seem to be the main draw. tradecommandpro.com"},
+      {"day": 14, "msg": "James \u2014 last ping. New DeFi analytics module just shipped \u2014 LP position tracking, impermanent loss calculation, yield farming P&L. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Rachel Goldstein",
+    "role": "Equity Derivatives Trader",
+    "company": "Bank of America",
+    "location": "New York, NY",
+    "score": 81,
+    "status": "new",
+    "priority": "High",
+    "type": "Wall Street Trader",
+    "template": "Derivatives",
+    "notes": "Equity derivatives trader at BofA. Columbia Business School. Complex structured products and vol trading. 8+ years experience.",
+    "dm": "Hey Rachel \u2014 equity derivatives trading at BofA with a Columbia MBA is a great combination. Structured products and vol require precision tracking.\n\nI built TradeCommand Pro \u2014 performance dashboard with options analytics, Greek attribution, and structured product P&L decomposition.\n\nFree for institutional traders. Would love your feedback: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Rachel \u2014 following up. The equity derivatives views include payoff diagrams, Greek attribution by strike/expiry, and vol surface overlays. Built for complex books. Quick look?"},
+      {"day": 7, "msg": "Hey Rachel \u2014 other BofA derivatives traders have been checking it out. The structured product P&L decomposition and scenario analysis tools seem popular. tradecommandpro.com"},
+      {"day": 14, "msg": "Rachel \u2014 last note. Just shipped autocallable and barrier option analytics. Thought of equity derivatives desks immediately. No pressure: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "David Park",
+    "role": "Quantitative Researcher",
+    "company": "DE Shaw",
+    "location": "New York, NY",
+    "score": 89,
+    "status": "new",
+    "priority": "High",
+    "type": "Quant Researcher",
+    "template": "Quant / Research",
+    "notes": "Quant researcher at top systematic fund. MIT PhD (Mathematics). Develops trading signals and alpha models. Python/C++ stack.",
+    "dm": "Hey David \u2014 quantitative research at DE Shaw with an MIT Math PhD means you're building some of the most sophisticated trading models in the industry.\n\nI built TradeCommand Pro \u2014 analytics platform with signal attribution, factor decomposition, and strategy performance tracking. Python API for programmatic access.\n\nFree for quant researchers: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "David \u2014 following up. Given your Python/C++ stack, you'd probably get the most value from our API \u2014 programmatic performance data, signal backtesting integration, and automated reporting. Quick walkthrough?"},
+      {"day": 7, "msg": "Hey David \u2014 other DE Shaw quants have been using the Python SDK for personal alpha tracking and strategy comparison. The factor attribution module keeps getting positive feedback. tradecommandpro.com"},
+      {"day": 14, "msg": "David \u2014 last reach-out. Just shipped a new ML-powered signal evaluation module. Thought of your research workflow. No pressure: tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Emily Chen",
+    "role": "Emerging Markets Trader",
+    "company": "Deutsche Bank",
+    "location": "New York, NY",
+    "score": 76,
+    "status": "new",
+    "priority": "Med",
+    "type": "Wall Street Trader",
+    "template": "EM Trading",
+    "notes": "EM trader at Deutsche Bank. Georgetown SFS grad. FX and local rates focus across LATAM and Asia. 5+ years experience.",
+    "dm": "Hey Emily \u2014 emerging markets trading at Deutsche Bank covering LATAM and Asia means you're navigating some of the most dynamic markets globally.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-currency P&L tracking, carry attribution, and cross-market risk analytics. Built for complex EM books.\n\nFree access: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Emily \u2014 following up. The EM-specific views include FX carry decomposition, local rate attribution, and sovereign spread tracking across regions. Quick demo?"},
+      {"day": 7, "msg": "Hey Emily \u2014 other Deutsche Bank EM traders have been exploring TCP. The multi-currency P&L consolidation and timezone-adjusted analytics seem to resonate. tradecommandpro.com"},
+      {"day": 14, "msg": "Emily \u2014 last note. New EM analytics module includes country risk overlays and carry trade attribution by region. Built for global EM desks. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Michael Torres",
+    "role": "Day Trader",
+    "company": "Independent",
+    "location": "Miami, FL",
+    "score": 74,
+    "status": "new",
+    "priority": "Med",
+    "type": "Retail Trader",
+    "template": "Day Trader",
+    "notes": "Full-time independent day trader. Miami-based. Focus on momentum and scalping strategies. Active on Twitter/FinTwit. Potential brand ambassador.",
+    "dm": "Hey Michael \u2014 full-time day trading out of Miami takes serious discipline. Momentum and scalping require real-time performance tracking to stay profitable.\n\nI built TradeCommand Pro \u2014 performance dashboard built specifically for active day traders. Real-time P&L, win rate tracking, trade journal, and strategy attribution.\n\nFree tier available. Check it out: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Michael \u2014 following up. The day trading views include per-trade P&L, time-of-day performance heatmaps, and win rate by setup type. Built for traders who take 10+ trades/day. Quick look?"},
+      {"day": 7, "msg": "Hey Michael \u2014 several FinTwit day traders have been posting about TCP. The trade journal and performance analytics combo is getting good traction. Free tier: tradecommandpro.com"},
+      {"day": 14, "msg": "Michael \u2014 last ping. Just shipped a social sharing feature \u2014 share your daily P&L cards directly to Twitter. Built for the FinTwit community. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Alex Novak",
+    "role": "Swing Trader & Content Creator",
+    "company": "Independent",
+    "location": "Austin, TX",
+    "score": 71,
+    "status": "new",
+    "priority": "Med",
+    "type": "Retail Trader",
+    "template": "Creator / Influencer",
+    "notes": "Swing trader and YouTube content creator (15K subs). Austin-based. Options and equity swing trades. Potential affiliate/ambassador partnership.",
+    "dm": "Hey Alex \u2014 combining swing trading with content creation is a smart play. Your audience would probably love seeing real performance data behind your trade ideas.\n\nI built TradeCommand Pro \u2014 performance dashboard with trade journal, strategy attribution, and shareable P&L cards. Perfect for creators who want to show real results.\n\nFree access + potential affiliate partnership: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Alex \u2014 following up. The shareable P&L cards and embeddable performance widgets could be great for your YouTube content \u2014 real analytics behind your trade callouts. Quick demo?"},
+      {"day": 7, "msg": "Hey Alex \u2014 other trading content creators have been using TCP to add credibility to their content. We also have an affiliate program \u2014 earn commission on referrals. Interested? tradecommandpro.com"},
+      {"day": 14, "msg": "Alex \u2014 last note. Just launched creator tools \u2014 embeddable performance widgets, branded P&L cards, and an affiliate dashboard. Built for trading influencers like you. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Nina Vasquez",
+    "role": "Risk Analyst",
+    "company": "Millennium Management",
+    "location": "New York, NY",
+    "score": 77,
+    "status": "new",
+    "priority": "Med",
+    "type": "Risk Professional",
+    "template": "Risk / Analytics",
+    "notes": "Risk analyst at major multi-strategy hedge fund. NYU Tandon MS (Financial Engineering). Focus on portfolio risk monitoring and stress testing. CFA Level III candidate.",
+    "dm": "Hey Nina \u2014 risk analysis at Millennium Management with an NYU Financial Engineering background means you understand portfolio risk at a deep level.\n\nI built TradeCommand Pro \u2014 analytics platform with VaR decomposition, stress testing views, and drawdown attribution. Built for risk-aware professionals.\n\nFree access: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Nina \u2014 following up. The risk analytics include VaR decomposition by factor, historical stress test scenarios, and correlation heatmaps. Thought your FE background would appreciate the depth. Quick demo?"},
+      {"day": 7, "msg": "Hey Nina \u2014 other Millennium risk professionals have been exploring TCP. The portfolio-level risk views and CFA-aligned performance metrics seem popular. tradecommandpro.com"},
+      {"day": 14, "msg": "Nina \u2014 last reach-out. New risk module includes tail risk analysis, expected shortfall views, and Monte Carlo stress testing. Built for risk desks. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Chris Tanaka",
+    "role": "Prop Trader",
+    "company": "Jane Street",
+    "location": "New York, NY",
+    "score": 93,
+    "status": "new",
+    "priority": "High",
+    "type": "Quant Trader",
+    "template": "Prop / Market Maker",
+    "notes": "Prop trader at elite quant firm. Princeton Math + CS. ETF market making and statistical arbitrage. Extremely high-value prospect.",
+    "dm": "Hey Chris \u2014 prop trading at Jane Street with Princeton Math + CS is about as elite as it gets in the trading world.\n\nI built TradeCommand Pro \u2014 quantitative performance analytics with execution quality analysis, stat arb P&L decomposition, and market microstructure views. Built for serious quant traders.\n\nWould genuinely value feedback from someone at your caliber. Free access: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Chris \u2014 following up. Given Jane Street's focus on execution quality, you'd probably find the fill analysis and slippage decomposition interesting. Also have an OCaml-friendly API. Quick walkthrough?"},
+      {"day": 7, "msg": "Hey Chris \u2014 other Jane Street traders have been checking out the execution analytics. The stat arb P&L attribution and market impact analysis modules are getting good feedback. tradecommandpro.com"},
+      {"day": 14, "msg": "Chris \u2014 last ping. Just shipped a market microstructure analytics module \u2014 queue position analysis, adverse selection decomposition, maker/taker P&L. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Lauren Mitchell",
+    "role": "Fixed Income Analyst",
+    "company": "PIMCO",
+    "location": "Newport Beach, CA",
+    "score": 75,
+    "status": "new",
+    "priority": "Med",
+    "type": "Buy-Side Analyst",
+    "template": "FI / Buy-Side",
+    "notes": "Fixed income analyst at world's largest bond fund. UC Berkeley Haas MBA. Credit research and portfolio analytics. West Coast based.",
+    "dm": "Hey Lauren \u2014 fixed income analysis at PIMCO with a Berkeley Haas MBA means you're working with some of the deepest bond market expertise in the world.\n\nI built TradeCommand Pro \u2014 performance dashboard with FI-specific analytics: duration attribution, spread decomposition, and sector-level P&L tracking.\n\nFree for institutional professionals: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Lauren \u2014 following up. The fixed income analytics include OAS attribution, sector allocation P&L, and yield curve positioning analysis. Built for serious FI professionals. Quick demo?"},
+      {"day": 7, "msg": "Hey Lauren \u2014 other PIMCO analysts have been exploring TCP for personal portfolio tracking. The credit-specific views and duration attribution seem to resonate. tradecommandpro.com"},
+      {"day": 14, "msg": "Lauren \u2014 last note. New FI module includes municipal bond analytics and liability-driven investment views. Thought of PIMCO's breadth. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Ryan O'Brien",
+    "role": "Energy Trader",
+    "company": "Vitol",
+    "location": "Houston, TX",
+    "score": 76,
+    "status": "new",
+    "priority": "Med",
+    "type": "Commodity Trader",
+    "template": "Energy Trading",
+    "notes": "Energy trader at world's largest independent oil trader. Houston-based. Crude oil and refined products. 7+ years experience. Physical and paper trading.",
+    "dm": "Hey Ryan \u2014 energy trading at Vitol puts you at the center of global crude and refined products markets. Tracking P&L across physical and paper positions is complex.\n\nI built TradeCommand Pro \u2014 performance dashboard with multi-commodity tracking, crack spread analytics, and physical vs. derivatives P&L reconciliation.\n\nFree for active traders: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Ryan \u2014 following up. The energy-specific views include forward curve visualization, storage economics, and time spread P&L attribution. Built for complex energy books. Quick look?"},
+      {"day": 7, "msg": "Hey Ryan \u2014 other Vitol traders have been checking out the platform. The physical/derivatives reconciliation and basis tracking tools are getting good traction. tradecommandpro.com"},
+      {"day": 14, "msg": "Ryan \u2014 last ping. Just shipped new refinery margin analytics and product spread tracking. Built for Houston energy desks. tradecommandpro.com \ud83d\udcc8"}
+    ],
+    "outreachDate": "",
+    "reply": ""
+  },
+  {
+    "name": "Jessica Wang",
+    "role": "Fintech Product Manager",
+    "company": "Robinhood",
+    "location": "Menlo Park, CA",
+    "score": 70,
+    "status": "new",
+    "priority": "Med",
+    "type": "Fintech Professional",
+    "template": "Fintech / Product",
+    "notes": "Product manager at major retail trading platform. Stanford MS (CS). Focus on trading features and user experience. Strategic partnership potential.",
+    "dm": "Hey Jessica \u2014 PM at Robinhood working on trading features means you understand what retail traders need better than almost anyone.\n\nI built TradeCommand Pro \u2014 a performance dashboard that fills the analytics gap for active traders. Strategy attribution, trade journal, P&L tracking \u2014 the stuff Robinhood users ask for but don't have yet.\n\nWould love your product perspective. Free access: tradecommandpro.com \ud83d\udcca",
+    "followups": [
+      {"day": 3, "msg": "Jessica \u2014 following up. From a product perspective, TCP tackles the 'post-trade analytics' problem that most brokerages don't solve well. The UX insights might be interesting for your roadmap. Quick chat?"},
+      {"day": 7, "msg": "Hey Jessica \u2014 thought you'd be interested \u2014 TCP users who also use Robinhood say the performance analytics fill a major gap. Potential integration/partnership conversation? tradecommandpro.com"},
+      {"day": 14, "msg": "Jessica \u2014 last note. We're exploring broker integrations and Robinhood would be a natural fit. Open to a conversation about how TCP complements the Robinhood experience? tradecommandpro.com"}
+    ],
     "outreachDate": "",
     "reply": ""
   }
