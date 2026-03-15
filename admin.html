@@ -179,9 +179,9 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="nav-item" data-page="biz-revenue">💰 Revenue</div>
   <div class="nav-item" data-page="biz-analytics">📈 Biz Analytics</div>
   <div class="nav-item" data-page="biz-advisor">🤖 AI Advisor</div>
-  <div class="nav-item" data-page="biz-plan">📋 Growth Plan</div>
   <div class="nav-item" data-page="biz-scheduled">📅 Scheduled</div>
   <div class="nav-item" data-page="biz-beta">🚀 Beta Launch</div>
+  <div class="nav-item" data-page="biz-plan">📋 Growth Plan</div>
   <div class="nav-item" data-page="biz-newsletters">✉️ Email Templates</div>
   <div class="nav-item" data-page="biz-files">📁 Files</div>
   <div class="nav-item" data-page="biz-settings">⚙️ Biz Settings</div>
@@ -1051,22 +1051,27 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
 
       <div class="lp-field" style="border-left:3px solid #ffab40;cursor:pointer" onclick="toggleGrowthPhase('gp1')">
-        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q1: Launch &amp; Seed</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-yellow">In Progress</span><span style="color:var(--t3);font-size:14px" id="gp1-arrow">▸</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q1: Launch &amp; Seed</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-yellow">In Progress</span><span style="font-size:10px;color:var(--t3)" id="gp1-pct">0/10</span><span style="color:var(--t3);font-size:14px" id="gp1-arrow">▸</span></div></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">Mar 15 – Mar 31, 2026</div>
         <div style="font-size:12px;color:var(--t2);margin-top:4px">Find 100+ leads → Build pipeline → Get first 50 beta users → First paying customers</div>
-        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:60%;background:var(--ylw);border-radius:3px"></div></div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div id="gp1-bar" style="height:100%;width:0%;background:var(--ylw);border-radius:3px;transition:width .3s"></div></div>
         <div id="gp1" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
           <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
           <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',0,this.checked)" class="gp1-cb"> Build 89+ lead database <span class="badge badge-grn" style="font-size:9px">Done</span></label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',1,this.checked)" class="gp1-cb"> Personalize DMs for all leads <span class="badge badge-grn" style="font-size:9px">Done</span></label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',2,this.checked)" class="gp1-cb"> Create 6 ad creatives + 3 print materials <span class="badge badge-grn" style="font-size:9px">Done</span></label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',3,this.checked)" class="gp1-cb"> Build 6 newsletter templates <span class="badge badge-grn" style="font-size:9px">Done</span></label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',4,this.checked)" class="gp1-cb"> Set up 3-touch follow-up system <span class="badge badge-grn" style="font-size:9px">Done</span></label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',5,this.checked)" class="gp1-cb"> Submit to BetaList ($129 skip queue)</label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',6,this.checked)" class="gp1-cb"> Post on Reddit (8 subreddits)</label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',7,this.checked)" class="gp1-cb"> Print &amp; distribute 30 flyers</label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',8,this.checked)" class="gp1-cb"> Get 50 beta users by Thu Mar 19</label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',9,this.checked)" class="gp1-cb"> Convert 10 beta users to paid ($290 MRR)</label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',0,this.checked)" class="gp1-cb"> Build 89+ lead database <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',1,this.checked)" class="gp1-cb"> Personalize DMs for all leads <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',2,this.checked)" class="gp1-cb"> Create 6 ad creatives + 3 print materials <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',3,this.checked)" class="gp1-cb"> Build 6 newsletter templates <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',4,this.checked)" class="gp1-cb"> Set up 3-touch follow-up system <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',5,this.checked)" class="gp1-cb"> Submit to BetaList ($129 skip queue) <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 16</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',6,this.checked)" class="gp1-cb"> Post on Reddit (8 subreddits) <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 16</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',7,this.checked)" class="gp1-cb"> Print &amp; distribute 30 flyers <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 17</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',8,this.checked)" class="gp1-cb"> Get 50 beta users by Thu Mar 19 <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 19</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',9,this.checked)" class="gp1-cb"> Convert 10 beta users to paid ($290 MRR) <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 25</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',10,this.checked)" class="gp1-cb"> Set up Stripe payments + pricing page <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 20</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',11,this.checked)" class="gp1-cb"> Email welcome sequence live in Mailchimp <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 22</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',12,this.checked)" class="gp1-cb"> Collect 5 beta user testimonials <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 28</span></label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" onchange="saveGPCheck('gp1',13,this.checked)" class="gp1-cb"> Launch referral program (1 mo free per invite) <span style="font-size:10px;color:var(--t3);margin-left:auto">Mar 30</span></label>
           </div>
           <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
             <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--acc)">89</div><div style="font-size:10px;color:var(--t3)">LEADS</div></div>
@@ -1077,51 +1082,73 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
       </div>
 
       <div class="lp-field" style="border-left:3px solid #448aff;cursor:pointer" onclick="toggleGrowthPhase('gp2')">
-        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q2: Traction</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="color:var(--t3);font-size:14px" id="gp2-arrow">▸</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q2: Traction</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="font-size:10px;color:var(--t3)" id="gp2-pct">0/12</span><span style="color:var(--t3);font-size:14px" id="gp2-arrow">▸</span></div></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">Apr 1 – Jun 30, 2026</div>
         <div style="font-size:12px;color:var(--t2);margin-top:4px">Scale to 200 users → $3K MRR → Reddit/Twitter campaigns → Affiliate program</div>
-        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div id="gp2-bar" style="height:100%;width:0%;background:var(--acc);border-radius:3px;transition:width .3s"></div></div>
         <div id="gp2" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
           <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
           <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Launch paid Instagram + Facebook ads ($10/day)</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Start affiliate/referral program (1 mo free per referral)</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Partner with 3 trading Discord communities</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Launch Product Hunt (target: Top 5 of the Day)</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Build email automation (Mailchimp/ConvertKit)</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> SEO: publish 10 blog posts (trading tips, tool comparisons)</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Get 5 user testimonials for social proof</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',0,this.checked)" class="gp2-cb"> Launch paid Instagram + Facebook ads ($10/day) <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',1,this.checked)" class="gp2-cb"> Start affiliate/referral program (1 mo free per referral) <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 7</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',2,this.checked)" class="gp2-cb"> Partner with 3 trading Discord communities <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 14</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',3,this.checked)" class="gp2-cb"> Launch Product Hunt (target: Top 5 of the Day) <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 21</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',4,this.checked)" class="gp2-cb"> Build email automation (Mailchimp/ConvertKit) <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 28</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',5,this.checked)" class="gp2-cb"> SEO: publish 10 blog posts (trading tips, tool comparisons) <span style="font-size:10px;color:var(--t3);margin-left:auto">May 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',6,this.checked)" class="gp2-cb"> Get 5 user testimonials for social proof <span style="font-size:10px;color:var(--t3);margin-left:auto">May 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',7,this.checked)" class="gp2-cb"> Set up Google Analytics + conversion tracking <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 5</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',8,this.checked)" class="gp2-cb"> Build landing page with social proof + pricing <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 10</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',9,this.checked)" class="gp2-cb"> Launch Twitter/X account — post daily trading insights <span style="font-size:10px;color:var(--t3);margin-left:auto">Apr 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',10,this.checked)" class="gp2-cb"> Reach 200 total users <span style="font-size:10px;color:var(--t3);margin-left:auto">Jun 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp2',11,this.checked)" class="gp2-cb"> Hit $3K MRR milestone <span style="font-size:10px;color:var(--t3);margin-left:auto">Jun 30</span></label>
           </div>
         </div>
       </div>
 
       <div class="lp-field" style="border-left:3px solid #6366f1;cursor:pointer" onclick="toggleGrowthPhase('gp3')">
-        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q3: Scale</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="color:var(--t3);font-size:14px" id="gp3-arrow">▸</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q3: Scale</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="font-size:10px;color:var(--t3)" id="gp3-pct">0/12</span><span style="color:var(--t3);font-size:14px" id="gp3-arrow">▸</span></div></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">Jul 1 – Sep 30, 2026</div>
         <div style="font-size:12px;color:var(--t2);margin-top:4px">500+ users → $5K MRR → Mobile app → API integrations → Content marketing</div>
-        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div id="gp3-bar" style="height:100%;width:0%;background:var(--acc);border-radius:3px;transition:width .3s"></div></div>
         <div id="gp3" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
           <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
           <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Ship mobile-responsive dashboard</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Integrate TD Ameritrade, Robinhood, Webull APIs</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Scale ads to $30/day</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Hire 1 part-time content creator</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Build YouTube/TikTok presence (trading tips)</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',0,this.checked)" class="gp3-cb"> Ship mobile-responsive dashboard <span style="font-size:10px;color:var(--t3);margin-left:auto">Jul 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',1,this.checked)" class="gp3-cb"> Integrate TD Ameritrade, Robinhood, Webull APIs <span style="font-size:10px;color:var(--t3);margin-left:auto">Aug 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',2,this.checked)" class="gp3-cb"> Scale ads to $30/day <span style="font-size:10px;color:var(--t3);margin-left:auto">Jul 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',3,this.checked)" class="gp3-cb"> Hire 1 part-time content creator <span style="font-size:10px;color:var(--t3);margin-left:auto">Jul 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',4,this.checked)" class="gp3-cb"> Build YouTube/TikTok presence (trading tips) <span style="font-size:10px;color:var(--t3);margin-left:auto">Jul 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',5,this.checked)" class="gp3-cb"> Launch affiliate program with 10 trading influencers <span style="font-size:10px;color:var(--t3);margin-left:auto">Aug 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',6,this.checked)" class="gp3-cb"> Build webhook + Zapier integration <span style="font-size:10px;color:var(--t3);margin-left:auto">Aug 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',7,this.checked)" class="gp3-cb"> Add dark pool alerts + options flow data <span style="font-size:10px;color:var(--t3);margin-left:auto">Sep 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',8,this.checked)" class="gp3-cb"> Submit to 5 SaaS review sites (G2, Capterra, etc.) <span style="font-size:10px;color:var(--t3);margin-left:auto">Aug 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',9,this.checked)" class="gp3-cb"> Launch Student Ambassador program at 10 universities <span style="font-size:10px;color:var(--t3);margin-left:auto">Sep 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',10,this.checked)" class="gp3-cb"> Reach 500 total users <span style="font-size:10px;color:var(--t3);margin-left:auto">Sep 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp3',11,this.checked)" class="gp3-cb"> Hit $5K MRR milestone <span style="font-size:10px;color:var(--t3);margin-left:auto">Sep 30</span></label>
           </div>
         </div>
       </div>
 
       <div class="lp-field" style="border-left:3px solid #e91e63;cursor:pointer" onclick="toggleGrowthPhase('gp4')">
-        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q4: Optimize &amp; Expand</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="color:var(--t3);font-size:14px" id="gp4-arrow">▸</span></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q4: Optimize &amp; Expand</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="font-size:10px;color:var(--t3)" id="gp4-pct">0/12</span><span style="color:var(--t3);font-size:14px" id="gp4-arrow">▸</span></div></div>
+        <div style="font-size:11px;color:var(--t3);margin-top:2px">Oct 1 – Dec 31, 2026</div>
         <div style="font-size:12px;color:var(--t2);margin-top:4px">1000+ users → $10K MRR → Enterprise tier → Team features → Native mobile app</div>
-        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div style="height:100%;width:0%;background:var(--acc);border-radius:3px"></div></div>
+        <div style="height:6px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden"><div id="gp4-bar" style="height:100%;width:0%;background:var(--acc);border-radius:3px;transition:width .3s"></div></div>
         <div id="gp4" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
           <div style="font-size:12px;font-weight:700;margin-bottom:8px;color:var(--acc)">Action Items:</div>
           <div style="display:grid;gap:6px;font-size:12px;color:var(--t2)">
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Launch Enterprise tier ($199/mo)</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Build team collaboration features</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Ship native iOS + Android apps</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Apply to YC / raise seed round</label>
-            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" disabled> Hire first 2 full-time employees</label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',0,this.checked)" class="gp4-cb"> Launch Enterprise tier ($199/mo) <span style="font-size:10px;color:var(--t3);margin-left:auto">Oct 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',1,this.checked)" class="gp4-cb"> Build team collaboration features <span style="font-size:10px;color:var(--t3);margin-left:auto">Oct 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',2,this.checked)" class="gp4-cb"> Ship native iOS + Android apps <span style="font-size:10px;color:var(--t3);margin-left:auto">Nov 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',3,this.checked)" class="gp4-cb"> Apply to YC / raise seed round <span style="font-size:10px;color:var(--t3);margin-left:auto">Oct 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',4,this.checked)" class="gp4-cb"> Hire first 2 full-time employees <span style="font-size:10px;color:var(--t3);margin-left:auto">Nov 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',5,this.checked)" class="gp4-cb"> Launch advanced charting (TradingView-level) <span style="font-size:10px;color:var(--t3);margin-left:auto">Oct 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',6,this.checked)" class="gp4-cb"> Build social trading features (copy-trading) <span style="font-size:10px;color:var(--t3);margin-left:auto">Nov 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',7,this.checked)" class="gp4-cb"> Partner with 3 fintech companies for cross-promotion <span style="font-size:10px;color:var(--t3);margin-left:auto">Nov 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',8,this.checked)" class="gp4-cb"> Launch podcast: "The TradeCommand Show" <span style="font-size:10px;color:var(--t3);margin-left:auto">Oct 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',9,this.checked)" class="gp4-cb"> Get featured in TechCrunch / Business Insider <span style="font-size:10px;color:var(--t3);margin-left:auto">Dec 1</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',10,this.checked)" class="gp4-cb"> Reach 1,000 total users <span style="font-size:10px;color:var(--t3);margin-left:auto">Dec 15</span></label>
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" onchange="saveGPCheck('gp4',11,this.checked)" class="gp4-cb"> Hit $10K MRR milestone <span style="font-size:10px;color:var(--t3);margin-left:auto">Dec 31</span></label>
           </div>
         </div>
       </div>
@@ -1319,7 +1346,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 
   <!-- File Preview Modal -->
   <div id="file-preview-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999" onclick="closeFilePreview()"></div>
-  <div id="file-preview-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;max-width:560px;width:90%;z-index:1000;max-height:80vh;overflow-y:auto">
+  <div id="file-preview-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;max-width:900px;width:95%;z-index:1000;max-height:90vh;overflow-y:auto">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
       <h3 id="fp-title" style="margin:0;font-size:18px"></h3>
       <button onclick="closeFilePreview()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px">✕</button>
@@ -2647,59 +2674,151 @@ function loadMarketing() {
 }
 
 // ═══ SCHEDULED ═══
+function getScheduledTasks() {
+  return [
+    {cat:'🚀 Beta',text:'Text/DM 10 friends individually — personal 1:1 messages',pri:'high',followup:'Follow up with friends who haven\'t responded in 2 days',followupDays:2,
+      resources:[
+        {type:'template',label:'Close Friend DM Template',action:'copyTemplate(0)'},
+        {type:'template',label:'Family DM Template',action:'copyTemplate(1)'},
+        {type:'contacts',label:'Open Leads (sort by score)',action:'document.querySelector(\'[data-page=biz-leads]\').click()'},
+        {type:'campaign',label:'Friends & Family Campaign',action:'openCampaign(\'friends_family\')'}
+      ]},
+    {cat:'🚀 Beta',text:'Post Instagram Story with dashboard screenshot + "beta testers wanted"',pri:'high',followup:'Check story views and DMs, respond to all',followupDays:1,
+      resources:[
+        {type:'file',label:'📸 Instagram Launch Post',action:'previewFile(\'ig_launch\',\'📸 Instagram Launch Post\',\'1080x1080 launch ad\')'},
+        {type:'file',label:'📸 Instagram Story — Students',action:'previewFile(\'ig_story\',\'📸 Story\',\'1080x1920 student offer\')'},
+        {type:'link',label:'Open Instagram',action:'window.open(\'https://instagram.com\',\'_blank\')'}
+      ]},
+    {cat:'🚀 Beta',text:'Post on LinkedIn — "building something, looking for early feedback"',pri:'high',followup:'Reply to all LinkedIn comments and DMs',followupDays:1,
+      resources:[
+        {type:'link',label:'Open LinkedIn',action:'window.open(\'https://linkedin.com\',\'_blank\')'},
+        {type:'template',label:'LinkedIn Post Template',action:'copySchedText(\'🚀 Excited to share something I\\\'ve been building — TradeCommand Pro gives traders real-time portfolio tracking, AI signals, and risk management tools.\\n\\nLooking for 50 beta testers to help me stress-test before public launch. Free lifetime Pro access for early users.\\n\\nDrop a comment or DM me if you want in! #fintech #trading #startup\')'}
+      ]},
+    {cat:'🚀 Beta',text:'Submit to BetaList ($129 skip queue) — betalist.com/submit',pri:'high',followup:'Check BetaList listing status and signups',followupDays:3,
+      resources:[
+        {type:'link',label:'Open BetaList Submit',action:'window.open(\'https://betalist.com/submit\',\'_blank\')'},
+        {type:'info',label:'Expected: 30-50 signups when featured. $129 to skip 2-month queue.'}
+      ]},
+    {cat:'🚀 Beta',text:'Submit to BetaTesting.com (free, 400K+ testers)',pri:'med',followup:'Check BetaTesting.com for tester matches',followupDays:5,
+      resources:[
+        {type:'link',label:'Open BetaTesting.com',action:'window.open(\'https://betatesting.com\',\'_blank\')'},
+        {type:'info',label:'Free platform with 400K+ testers. Has fintech-specific pool.'}
+      ]},
+    {cat:'🚀 Beta',text:'Post on Indie Hackers "Show IH" section',pri:'med',followup:'Reply to all Indie Hackers comments',followupDays:2,
+      resources:[
+        {type:'link',label:'Open Indie Hackers',action:'window.open(\'https://indiehackers.com\',\'_blank\')'},
+        {type:'template',label:'IH Post Template',action:'copySchedText(\'Show IH: TradeCommand Pro — real-time trading dashboard with AI signals\\n\\nBuilt a trading analytics dashboard that gives traders portfolio tracking, AI-powered signals, position sizing, and risk management.\\n\\nLooking for 50 beta testers. Free lifetime Pro access ($29/mo value) in exchange for honest feedback.\\n\\nWould love your thoughts on the product and go-to-market strategy!\')'}
+      ]},
+    {cat:'💬 Reddit',text:'Post in r/alphaandbetausers — beta recruitment post',pri:'high',followup:'Reply to all Reddit comments within 2 hours',followupDays:1,
+      resources:[
+        {type:'link',label:'Open r/alphaandbetausers',action:'window.open(\'https://reddit.com/r/alphaandbetausers/submit\',\'_blank\')'},
+        {type:'template',label:'Reddit Post Template',action:'copyTemplate(2)'},
+        {type:'campaign',label:'Reddit Campaign Details',action:'openCampaign(\'reddit_beta\')'}
+      ]},
+    {cat:'💬 Reddit',text:'Post in r/SideProject — show build, ask for feedback',pri:'med',followup:'Check r/SideProject replies',followupDays:1,
+      resources:[
+        {type:'link',label:'Open r/SideProject',action:'window.open(\'https://reddit.com/r/SideProject/submit\',\'_blank\')'}
+      ]},
+    {cat:'💬 Reddit',text:'Post in r/daytrading — share tip, mention tool in comments',pri:'med',followup:'Monitor r/daytrading thread engagement',followupDays:1,
+      resources:[
+        {type:'link',label:'Open r/daytrading',action:'window.open(\'https://reddit.com/r/daytrading\',\'_blank\')'},
+        {type:'template',label:'Value-First Comment',action:'copySchedText(\'I actually built a free dashboard for this — tracks your portfolio in real-time, calculates position sizes based on your risk tolerance, and sends alerts when signals align. Happy to share if anyone wants to try the beta.\')'}
+      ]},
+    {cat:'👥 Leads',text:'Send DMs to top 10 hot leads (score 80+) from Leads page',pri:'high',followup:'Follow up with leads who haven\'t responded — Day 3 message',followupDays:3,
+      resources:[
+        {type:'contacts',label:'Open Leads (Hot filter)',action:'document.getElementById(\'filter-score\').value=\'hot\';document.querySelector(\'[data-page=biz-leads]\').click();setTimeout(applyLeadFilters,200)'},
+        {type:'action',label:'Copy All DMs',action:'copyAllDMs()'},
+        {type:'action',label:'Export Leads CSV',action:'exportLeads()'}
+      ]},
+    {cat:'👥 Leads',text:'Copy all DMs and begin LinkedIn outreach to finance students',pri:'med',followup:'Check LinkedIn message responses, update lead statuses',followupDays:2,
+      resources:[
+        {type:'contacts',label:'Open Student Leads',action:'document.getElementById(\'filter-type\').value=\'Finance Student\';document.querySelector(\'[data-page=biz-leads]\').click();setTimeout(applyLeadFilters,200)'},
+        {type:'link',label:'Open LinkedIn Messaging',action:'window.open(\'https://linkedin.com/messaging\',\'_blank\')'}
+      ]},
+    {cat:'👥 Leads',text:'Send follow-up #1 (Day 3) to any leads contacted earlier this week',pri:'med',followup:'Send follow-up #2 (Day 7) to non-responders',followupDays:4,
+      resources:[
+        {type:'contacts',label:'Open Contacted Leads',action:'document.getElementById(\'filter-status\').value=\'contacted\';document.querySelector(\'[data-page=biz-leads]\').click();setTimeout(applyLeadFilters,200)'},
+        {type:'info',label:'Check each lead\'s Schedule tab for pre-written follow-up messages'}
+      ]},
+    {cat:'📧 Email',text:'Set up email platform (Mailchimp/ConvertKit) and upload Welcome Email template',pri:'med',followup:'Send first welcome email to beta signup list',followupDays:2,
+      resources:[
+        {type:'file',label:'👋 Welcome Email Template',action:'previewFile(\'newsletter_welcome\',\'👋 Welcome Email\',\'Onboarding email\')'},
+        {type:'link',label:'Sign up for Mailchimp (free)',action:'window.open(\'https://mailchimp.com/pricing\',\'_blank\')'},
+        {type:'link',label:'Or ConvertKit (free)',action:'window.open(\'https://convertkit.com/pricing\',\'_blank\')'},
+        {type:'campaign',label:'Email Sequence Campaign',action:'openCampaign(\'email_sequence\')'}
+      ]},
+    {cat:'🎓 Campus',text:'Identify 5 finance club presidents at nearby universities to DM tomorrow',pri:'low',followup:'DM finance club presidents with demo offer',followupDays:1,
+      resources:[
+        {type:'template',label:'Finance Club DM Template',action:'copyTemplate(3)'},
+        {type:'campaign',label:'Campus Blitz Campaign',action:'openCampaign(\'campus_blitz\')'},
+        {type:'file',label:'🎓 University Flyer',action:'previewFile(\'uni_fly\',\'🎓 University Flyer\',\'8.5x11 tear-off flyer\')'}
+      ]},
+    {cat:'🖨️ Print',text:'Send university + coffee shop flyers to printer (or print at home)',pri:'low',followup:'Distribute printed flyers at campus locations',followupDays:2,
+      resources:[
+        {type:'file',label:'🎓 University Flyer',action:'previewFile(\'uni_fly\',\'🎓 University Flyer\',\'8.5x11 tear-off\')'},
+        {type:'file',label:'☕ Coffee Shop Flyer',action:'previewFile(\'cof_fly\',\'☕ Coffee Shop Flyer\',\'8.5x11 plans\')'},
+        {type:'file',label:'💼 Business Cards',action:'previewFile(\'biz_card\',\'💼 Business Cards\',\'3.5x2 front+back\')'}
+      ]}
+  ];
+}
+
 function loadScheduled() {
   var now = new Date();
-  var day = now.getDay(); // 0=Sun
+  var day = now.getDay();
   var dateStr = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   document.getElementById('sched-date').textContent = dateStr;
   var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('sched-header').textContent = '📅 Today\'s Schedule — ' + dayNames[day] + ', ' + now.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+  document.getElementById('sched-header').textContent = '📅 Today\'s Game Plan — ' + dayNames[day] + ', ' + now.toLocaleDateString('en-US',{month:'long',day:'numeric'});
 
-  // Build today's tasks based on beta plan day
   var betaState = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0}');
   document.getElementById('sched-beta').textContent = (betaState.count||0) + ' / 50';
 
-  var tasks = [];
-  // Always include these
-  tasks.push({cat:'🚀 Beta',text:'Text/DM 10 friends individually — personal 1:1 messages',pri:'high'});
-  tasks.push({cat:'🚀 Beta',text:'Post Instagram Story with dashboard screenshot + "beta testers wanted"',pri:'high'});
-  tasks.push({cat:'🚀 Beta',text:'Post on LinkedIn — "building something, looking for early feedback"',pri:'high'});
-  tasks.push({cat:'🚀 Beta',text:'Submit to BetaList ($129 skip queue) — betalist.com/submit',pri:'high'});
-  tasks.push({cat:'🚀 Beta',text:'Submit to BetaTesting.com (free, 400K+ testers)',pri:'med'});
-  tasks.push({cat:'🚀 Beta',text:'Post on Indie Hackers "Show IH" section',pri:'med'});
-  tasks.push({cat:'💬 Reddit',text:'Post in r/alphaandbetausers — beta recruitment post',pri:'high'});
-  tasks.push({cat:'💬 Reddit',text:'Post in r/SideProject — show build, ask for feedback',pri:'med'});
-  tasks.push({cat:'💬 Reddit',text:'Post in r/daytrading — share tip, mention tool in comments',pri:'med'});
-  tasks.push({cat:'👥 Leads',text:'Send DMs to top 10 hot leads (score 80+) from Leads page',pri:'high'});
-  tasks.push({cat:'👥 Leads',text:'Copy all DMs and begin LinkedIn outreach to finance students',pri:'med'});
-  tasks.push({cat:'👥 Leads',text:'Send follow-up #1 (Day 3) to any leads contacted earlier this week',pri:'med'});
-  tasks.push({cat:'📧 Email',text:'Set up email platform (Mailchimp/ConvertKit) and upload Welcome Email template',pri:'med'});
-  tasks.push({cat:'🎓 Campus',text:'Identify 5 finance club presidents at nearby universities to DM tomorrow',pri:'low'});
-  tasks.push({cat:'🖨️ Print',text:'Send university + coffee shop flyers to printer (or print at home)',pri:'low'});
-
+  var tasks = getScheduledTasks();
   document.getElementById('sched-total').textContent = tasks.length;
   var saved = JSON.parse(localStorage.getItem('tc_sched_checks') || '[]');
+  var fuSaved = JSON.parse(localStorage.getItem('tc_sched_followups') || '[]');
   var doneCount = saved.filter(function(v){return v;}).length;
   document.getElementById('sched-done').textContent = doneCount;
 
   var priColors = {high:'#ff5252',med:'#ffab40',low:'#448aff'};
   var priLabels = {high:'High',med:'Medium',low:'Low'};
+  var resIcons = {template:'📋',file:'📄',contacts:'👥',link:'🔗',campaign:'📢',action:'⚡',info:'💡'};
+
   document.getElementById('sched-tasks').innerHTML = tasks.map(function(t,i){
     var checked = saved[i] ? 'checked' : '';
-    var strike = saved[i] ? 'text-decoration:line-through;opacity:.5' : '';
-    return '<label style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:8px;cursor:pointer;border-left:3px solid '+priColors[t.pri]+';'+strike+'">'+
-      '<input type="checkbox" '+checked+' onchange="toggleSchedTask('+i+',this.checked)" style="margin-top:3px;flex-shrink:0">'+
-      '<div style="flex:1"><div style="font-size:13px;color:var(--t1)">'+t.text+'</div>'+
-      '<div style="display:flex;gap:6px;margin-top:4px"><span style="font-size:10px;color:var(--t3)">'+t.cat+'</span><span style="font-size:10px;color:'+priColors[t.pri]+'">'+priLabels[t.pri]+' Priority</span></div>'+
-      '</div></label>';
+    var done = saved[i];
+    var opacity = done ? 'opacity:.6' : '';
+    var fuScheduled = fuSaved[i];
+    var resHTML = (t.resources||[]).map(function(r){
+      if(r.type==='info') return '<div style="font-size:11px;color:var(--t3);padding:4px 0">💡 '+r.label+'</div>';
+      return '<button class="btn btn-ghost" style="font-size:11px;padding:3px 10px" onclick="event.stopPropagation();'+r.action+'">'+(resIcons[r.type]||'📎')+' '+r.label+'</button>';
+    }).join('');
+    var fuHTML = '';
+    if(done && t.followup) {
+      fuHTML = '<div style="margin-top:8px;padding:8px 10px;background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.15);border-radius:6px;font-size:11px">'+
+        '<span style="color:#00e676;font-weight:600">✓ Done!</span> Follow-up '+(fuScheduled?'<span style="color:#00e676">scheduled ✓</span>':'pending')+': '+
+        '<span style="color:var(--t2)">'+t.followup+' (in '+t.followupDays+' days)</span>'+
+        (!fuScheduled?' <button class="btn btn-ghost" style="font-size:10px;padding:2px 8px;margin-left:4px" onclick="event.stopPropagation();scheduleFollowupTask('+i+')">Schedule →</button>':'')+
+        '</div>';
+    }
+    return '<div style="border-left:3px solid '+priColors[t.pri]+';border-radius:8px;background:rgba(255,255,255,.03);'+opacity+'" onclick="toggleSchedExpand('+i+')">'+
+      '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer">'+
+        '<input type="checkbox" '+checked+' onchange="event.stopPropagation();toggleSchedTask('+i+',this.checked)" style="margin-top:3px;flex-shrink:0">'+
+        '<div style="flex:1"><div style="font-size:13px;color:var(--t1);'+(done?'text-decoration:line-through':'')+'">'+t.text+'</div>'+
+        '<div style="display:flex;gap:6px;margin-top:4px;align-items:center"><span style="font-size:10px;color:var(--t3)">'+t.cat+'</span><span style="font-size:10px;color:'+priColors[t.pri]+'">'+priLabels[t.pri]+'</span>'+
+        '<span style="font-size:10px;color:var(--t3);margin-left:auto">'+((t.resources||[]).length)+' resources ▾</span></div></div>'+
+      '</div>'+
+      '<div id="sched-expand-'+i+'" style="display:none;padding:0 12px 10px 36px;border-top:1px solid rgba(255,255,255,.04)">'+
+        '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">'+resHTML+'</div>'+fuHTML+
+      '</div></div>';
   }).join('');
 
-  // People to contact — top 15 leads by score
+  // People to contact
   var topLeads = SEED_LEADS.map(function(l,i){return Object.assign({},l,{idx:i});})
     .sort(function(a,b){return b.score-a.score;}).slice(0,15);
   document.getElementById('sched-contacts').innerHTML = topLeads.map(function(l){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+l.idx)||'{}');
-    var st = saved.status||l.status||'new';
+    var sv = JSON.parse(localStorage.getItem('tc_lead_seed_'+l.idx)||'{}');
+    var st = sv.status||l.status||'new';
     var stColor = st==='contacted'?'var(--ylw)':st==='interested'?'var(--acc)':st==='converted'?'var(--grn)':'var(--t3)';
     return '<div class="lp-field" style="cursor:pointer;padding:10px 12px" onclick="openLead('+l.idx+')">'+
       '<div style="display:flex;justify-content:space-between;align-items:center">'+
@@ -2713,11 +2832,35 @@ function loadScheduled() {
       '</div></div>';
   }).join('');
 }
+function toggleSchedExpand(idx) {
+  var el = document.getElementById('sched-expand-'+idx);
+  if(!el) return;
+  el.style.display = el.style.display==='none'?'block':'none';
+}
 function toggleSchedTask(idx, checked) {
   var saved = JSON.parse(localStorage.getItem('tc_sched_checks') || '[]');
   saved[idx] = checked;
   localStorage.setItem('tc_sched_checks', JSON.stringify(saved));
+  if(checked) {
+    var tasks = getScheduledTasks();
+    var t = tasks[idx];
+    if(t && t.followup) toast('✓ Done! Follow-up: '+t.followup+' ('+t.followupDays+' days)','grn');
+  }
   loadScheduled();
+}
+function scheduleFollowupTask(idx) {
+  var tasks = getScheduledTasks();
+  var t = tasks[idx];
+  if(!t) return;
+  var fuSaved = JSON.parse(localStorage.getItem('tc_sched_followups') || '[]');
+  fuSaved[idx] = true;
+  localStorage.setItem('tc_sched_followups', JSON.stringify(fuSaved));
+  toast('Follow-up scheduled: '+t.followup+' in '+t.followupDays+' days','grn');
+  loadScheduled();
+}
+function copySchedText(text) {
+  if(navigator.clipboard) { navigator.clipboard.writeText(text).then(function(){toast('Copied to clipboard','grn');}); }
+  else { var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied','grn'); }
 }
 
 // ═══ CAMPAIGNS DETAIL ═══
@@ -2731,18 +2874,41 @@ function openCampaign(id) {
   var data = getCampaignData(id);
   document.getElementById('campaign-list').style.display = 'none';
   document.getElementById('campaign-detail').style.display = 'block';
+  var saved = JSON.parse(localStorage.getItem('tc_camp_'+id)||'[]');
+  var doneCount = saved.filter(function(v){return v;}).length;
+  var totalCount = data.actions.length;
+  var pct = totalCount ? Math.round((doneCount/totalCount)*100) : 0;
+  var resIcons = {template:'📋',file:'📄',contacts:'👥',link:'🔗',campaign:'📢',action:'⚡',info:'💡',copy:'📎'};
   var el = document.getElementById('campaign-detail-content');
   el.innerHTML = '<h3>'+data.icon+' '+data.name+'</h3>'+
-    '<div style="display:flex;gap:8px;margin:12px 0"><span class="badge badge-'+data.statusClass+'" style="font-size:10px">'+data.status+'</span><span style="font-size:12px;color:var(--t3)">'+data.channel+'</span></div>'+
+    '<div style="display:flex;gap:8px;margin:12px 0;align-items:center"><span class="badge badge-'+data.statusClass+'" style="font-size:10px">'+data.status+'</span><span style="font-size:12px;color:var(--t3)">'+data.channel+'</span><span style="font-size:11px;color:var(--t3);margin-left:auto">'+doneCount+'/'+totalCount+' done</span></div>'+
+    '<div style="height:6px;background:var(--brd);border-radius:3px;margin-bottom:16px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--grn);border-radius:3px;transition:width .3s"></div></div>'+
     '<div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:16px">'+data.description+'</div>'+
-    '<div style="font-size:12px;font-weight:700;color:var(--acc);margin-bottom:8px">Action Checklist:</div>'+
+    '<div style="font-size:12px;font-weight:700;color:var(--acc);margin-bottom:8px">Action Checklist <span style="font-weight:400;color:var(--t3)">(click any action to expand resources)</span>:</div>'+
     '<div style="display:grid;gap:6px">'+data.actions.map(function(a,i){
-      var saved = JSON.parse(localStorage.getItem('tc_camp_'+id)||'[]');
       var chk = saved[i]?'checked':'';
-      var strike = saved[i]?'style="text-decoration:line-through;opacity:.5"':'';
-      return '<label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);cursor:pointer" '+strike+'><input type="checkbox" '+chk+' onchange="saveCampCheck(\''+id+'\','+i+',this.checked)"> '+a+'</label>';
+      var done = saved[i];
+      var opacity = done ? 'opacity:.6' : '';
+      var resources = a.resources || [];
+      var resHTML = resources.map(function(r){
+        if(r.type==='info') return '<div style="font-size:11px;color:var(--t3);padding:4px 0">💡 '+r.label+'</div>';
+        return '<button class="btn btn-ghost" style="font-size:11px;padding:3px 10px" onclick="event.stopPropagation();'+r.action+'">'+(resIcons[r.type]||'📎')+' '+r.label+'</button>';
+      }).join('');
+      return '<div style="border-left:3px solid '+(done?'var(--grn)':'var(--brd)')+';border-radius:8px;background:rgba(255,255,255,.03);'+opacity+'" onclick="toggleCampExpand(\''+id+'\','+i+')">'+
+        '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer">'+
+          '<input type="checkbox" '+chk+' onchange="event.stopPropagation();saveCampCheck(\''+id+'\','+i+',this.checked)" style="margin-top:3px;flex-shrink:0">'+
+          '<div style="flex:1"><div style="font-size:12px;color:var(--t1);'+(done?'text-decoration:line-through':'')+'">'+a.text+'</div>'+
+          (resources.length?'<div style="font-size:10px;color:var(--t3);margin-top:3px">'+resources.length+' resources ▾</div>':'')+
+        '</div></div>'+
+        '<div id="camp-exp-'+id+'-'+i+'" style="display:none;padding:0 12px 10px 36px;border-top:1px solid rgba(255,255,255,.04)">'+
+          '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">'+resHTML+'</div>'+
+        '</div></div>';
     }).join('')+'</div>'+
-    (data.template?'<div style="margin-top:16px;padding:14px;background:var(--bg);border:1px solid var(--brd);border-radius:8px"><div style="font-size:11px;font-weight:700;color:var(--acc);margin-bottom:6px">MESSAGE TEMPLATE:</div><div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap">'+data.template+'</div><button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="navigator.clipboard.writeText(document.querySelector(\'#campaign-detail-content pre,#campaign-detail-content [style*=pre-wrap]\').textContent);toast(\'Copied!\',\'grn\')">Copy Template</button></div>':'');
+    (data.template?'<div style="margin-top:16px;padding:14px;background:var(--bg);border:1px solid var(--brd);border-radius:8px"><div style="font-size:11px;font-weight:700;color:var(--acc);margin-bottom:6px">MESSAGE TEMPLATE:</div><div style="font-size:12px;color:var(--t2);line-height:1.6;white-space:pre-wrap" id="camp-tmpl-'+id+'">'+data.template+'</div><button class="btn btn-ghost" style="margin-top:8px;font-size:11px" onclick="navigator.clipboard.writeText(document.getElementById(\'camp-tmpl-'+id+'\').textContent);toast(\'Copied!\',\'grn\')">📎 Copy Template</button></div>':'');
+}
+function toggleCampExpand(id,idx) {
+  var el = document.getElementById('camp-exp-'+id+'-'+idx);
+  if(el) el.style.display = el.style.display==='none'?'block':'none';
 }
 function closeCampaignDetail() {
   document.getElementById('campaign-list').style.display = 'block';
@@ -2758,31 +2924,239 @@ function getCampaignData(id) {
   var campaigns = {
     linkedin_student: {icon:'🔗',name:'LinkedIn Student Outreach',channel:'LinkedIn DM',status:'Active',statusClass:'grn',
       description:'Direct LinkedIn DMs to finance students, aspiring traders, and quant researchers at top universities. Each message is personalized with their school, role, and interests. Goal: 30 conversations, 15 signups.',
-      actions:['Export top 30 student leads from Leads page','Personalize each DM using templates from lead panel','Send first batch of 10 DMs today','Send second batch of 10 DMs tomorrow','Send third batch of 10 DMs day 3','Follow up on non-responders at Day 3','Track responses in lead panel Activity tab','Convert interested leads to beta signups'],
+      actions:[
+        {text:'Export top 30 student leads from Leads page',resources:[
+          {type:'action',label:'Open Leads Page',action:"document.querySelector('[data-page=biz-leads]').click()"},
+          {type:'info',label:'Filter by Type: Student, then sort by score descending'}
+        ]},
+        {text:'Personalize each DM using templates from lead panel',resources:[
+          {type:'template',label:'Copy DM Template',action:"navigator.clipboard.writeText('Hey [Name] — I noticed you\\'re studying finance at [School]. I built a trading dashboard that gives you real-time portfolio tracking, AI signals, and risk management tools. We\\'re running a free beta right now and I\\'d love to get your feedback. Would you be down to check it out?');toast('Copied!','grn')"},
+          {type:'info',label:'Replace [Name] and [School] with real info from lead panel'}
+        ]},
+        {text:'Send first batch of 10 DMs today',resources:[
+          {type:'link',label:'Open LinkedIn',action:"window.open('https://www.linkedin.com/messaging/','_blank')"},
+          {type:'contacts',label:'View Student Leads',action:"document.querySelector('[data-page=biz-leads]').click()"}
+        ]},
+        {text:'Send second batch of 10 DMs tomorrow',resources:[
+          {type:'link',label:'Open LinkedIn',action:"window.open('https://www.linkedin.com/messaging/','_blank')"}
+        ]},
+        {text:'Send third batch of 10 DMs day 3',resources:[
+          {type:'link',label:'Open LinkedIn',action:"window.open('https://www.linkedin.com/messaging/','_blank')"}
+        ]},
+        {text:'Follow up on non-responders at Day 3',resources:[
+          {type:'template',label:'Copy Follow-up',action:"navigator.clipboard.writeText('Hey [Name] — just following up on my message about TradeCommand Pro. We\\'re almost at our 50-user beta limit, wanted to make sure you didn\\'t miss the free access. Let me know if you\\'re interested!');toast('Copied!','grn')"}
+        ]},
+        {text:'Track responses in lead panel Activity tab',resources:[
+          {type:'action',label:'Open Leads',action:"document.querySelector('[data-page=biz-leads]').click()"},
+          {type:'info',label:'Update status to "contacted" or "interested" for each lead'}
+        ]},
+        {text:'Convert interested leads to beta signups',resources:[
+          {type:'link',label:'Open TC Pro Site',action:"window.open('https://maxmcdonough.github.io/tradecommand-pro/','_blank')"},
+          {type:'action',label:'Open Beta Tracker',action:"document.querySelector('[data-page=biz-beta]').click()"}
+        ]}
+      ],
       template:'Hey [Name] — I noticed you\'re studying finance at [School]. I built a trading dashboard that gives you real-time portfolio tracking, AI signals, and risk management tools. We\'re running a free beta right now and I\'d love to get your feedback. Would you be down to check it out?'},
     reddit_beta: {icon:'🟠',name:'Reddit Beta Recruitment',channel:'Reddit',status:'Ready',statusClass:'ylw',
       description:'Post across 8 trading and startup subreddits. Lead with value (trading tips, tool reviews), then mention TradeCommand Pro naturally. Goal: 15 signups from Reddit alone.',
-      actions:['Post in r/alphaandbetausers (direct recruitment)','Post in r/SideProject (show your build)','Post in r/startups (beta testers wanted)','Comment in r/daytrading threads with helpful tips + link','Post in r/stocks offering free access','Post in r/fintech as builder-friendly pitch','Post in r/algotrading if relevant','Post in r/wallstreetbets (match the vibe!)','Reply to all comments within 1 hour','Track which subreddits drive signups'],
+      actions:[
+        {text:'Post in r/alphaandbetausers (direct recruitment)',resources:[
+          {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/alphaandbetausers/submit','_blank')"},
+          {type:'template',label:'Copy Post Template',action:"navigator.clipboard.writeText('[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals\\n\\nHey everyone! I\\'ve been building TradeCommand Pro — looking for 50 beta testers. Free lifetime Pro access ($29/mo value). Link: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+        ]},
+        {text:'Post in r/SideProject (show your build)',resources:[
+          {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/SideProject/submit','_blank')"},
+          {type:'info',label:'Frame as "show what I built" — focus on the journey, not the pitch'}
+        ]},
+        {text:'Post in r/startups (beta testers wanted)',resources:[
+          {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/startups/submit','_blank')"}
+        ]},
+        {text:'Comment in r/daytrading threads with helpful tips + link',resources:[
+          {type:'link',label:'Open r/daytrading',action:"window.open('https://www.reddit.com/r/daytrading/','_blank')"},
+          {type:'info',label:'Find threads asking for tool recommendations — add genuine value first, then mention TC Pro'}
+        ]},
+        {text:'Post in r/stocks offering free access',resources:[
+          {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/stocks/submit','_blank')"}
+        ]},
+        {text:'Post in r/fintech as builder-friendly pitch',resources:[
+          {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/fintech/submit','_blank')"}
+        ]},
+        {text:'Post in r/algotrading if relevant',resources:[
+          {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/algotrading/submit','_blank')"}
+        ]},
+        {text:'Post in r/wallstreetbets (match the vibe!)',resources:[
+          {type:'link',label:'Open Subreddit',action:"window.open('https://www.reddit.com/r/wallstreetbets/submit','_blank')"},
+          {type:'info',label:'WSB needs meme energy — lead with humor, mention the tool casually'}
+        ]},
+        {text:'Reply to all comments within 1 hour',resources:[
+          {type:'link',label:'Open Reddit Inbox',action:"window.open('https://www.reddit.com/message/inbox/','_blank')"}
+        ]},
+        {text:'Track which subreddits drive signups',resources:[
+          {type:'action',label:'Open Beta Tracker',action:"document.querySelector('[data-page=biz-beta]').click()"}
+        ]}
+      ],
       template:'[Beta] TradeCommand Pro — Real-time trading dashboard with AI signals & risk management\n\nHey everyone 👋 I\'ve been building TradeCommand Pro — a trading analytics dashboard with real-time portfolio tracking, AI-powered trade signals, and risk management tools.\n\nLooking for 50 beta testers. You\'ll get:\n✅ Free lifetime Pro access ($29/mo value)\n✅ Direct line to me for feature requests\n✅ Early access to all future updates'},
     instagram_launch: {icon:'📸',name:'Instagram Launch Campaign',channel:'Instagram',status:'Ready',statusClass:'ylw',
       description:'Three-phase Instagram campaign: organic story + feed post → carousel → paid sponsored post. Target: finance/trading audience ages 18-35.',
-      actions:['Post Launch Announcement (ad_instagram_launch.html) to feed','Post Student Story (ad_instagram_story_free.html)','Post Carousel Slide 1 (ad_instagram_carousel_1.html)','Add link in bio to tradecommandpro.com','Use hashtags: #daytrading #tradingtools #stocks #fintech','Engage with comments for first 2 hours after posting','Repost best content to stories','Set up $10/day promotion on best-performing post after 48h'],
+      actions:[
+        {text:'Post Launch Announcement to feed',resources:[
+          {type:'file',label:'Preview Launch Post',action:"previewFile('ad_instagram_launch','📸 Instagram Launch Post','1080x1080 launch announcement')"},
+          {type:'link',label:'Open Instagram',action:"window.open('https://www.instagram.com/','_blank')"}
+        ]},
+        {text:'Post Student Story (ad_instagram_story_free.html)',resources:[
+          {type:'file',label:'Preview Story',action:"previewFile('ad_instagram_story','📸 Student Story','1080x1920 student offer')"}
+        ]},
+        {text:'Post Carousel Slide 1 (ad_instagram_carousel_1.html)',resources:[
+          {type:'file',label:'Preview Carousel',action:"previewFile('ad_instagram_carousel','📸 Carousel','1080x1080 carousel slide')"}
+        ]},
+        {text:'Add link in bio to tradecommandpro.com',resources:[
+          {type:'copy',label:'Copy Link',action:"navigator.clipboard.writeText('https://maxmcdonough.github.io/tradecommand-pro/');toast('Link copied!','grn')"}
+        ]},
+        {text:'Use hashtags: #daytrading #tradingtools #stocks #fintech',resources:[
+          {type:'copy',label:'Copy Hashtags',action:"navigator.clipboard.writeText('#daytrading #tradingtools #stocks #fintech #trading #stockmarket #investingtips #portfoliotracker #tradingsignals #tradingtool');toast('Hashtags copied!','grn')"}
+        ]},
+        {text:'Engage with comments for first 2 hours after posting',resources:[
+          {type:'info',label:'Reply to every comment quickly — IG algorithm boosts engagement'}
+        ]},
+        {text:'Repost best content to stories',resources:[]},
+        {text:'Set up $10/day promotion on best-performing post after 48h',resources:[
+          {type:'link',label:'Open Meta Ads Manager',action:"window.open('https://adsmanager.facebook.com/','_blank')"},
+          {type:'info',label:'Target: 18-35, Interest: stock trading, investing, personal finance'}
+        ]}
+      ],
       template:null},
     facebook_ads: {icon:'📘',name:'Facebook Paid Ads',channel:'Facebook',status:'Planned',statusClass:'indigo',
       description:'Paid Facebook campaign targeting 18-35 year olds interested in stock trading, investing, and personal finance. Start after organic Instagram campaign proves messaging.',
-      actions:['Install Facebook Pixel on tradecommandpro.com','Create Custom Audience: website visitors','Create Lookalike Audience from email list','Upload ad_facebook_features.html creative','Set daily budget: $10/day','Target: 18-35, Interest: stock trading, investing, finance','A/B test 2 ad copies','Monitor CPA and pause underperformers after 72h','Retarget website visitors who didn\'t sign up'],
+      actions:[
+        {text:'Install Facebook Pixel on tradecommandpro.com',resources:[
+          {type:'link',label:'Get Pixel Code',action:"window.open('https://business.facebook.com/events_manager2/list/pixel/','_blank')"},
+          {type:'info',label:'Add pixel script tag to index.html <head> section'}
+        ]},
+        {text:'Create Custom Audience: website visitors',resources:[
+          {type:'link',label:'Open Audiences',action:"window.open('https://business.facebook.com/adsmanager/audiences','_blank')"}
+        ]},
+        {text:'Create Lookalike Audience from email list',resources:[
+          {type:'link',label:'Open Audiences',action:"window.open('https://business.facebook.com/adsmanager/audiences','_blank')"}
+        ]},
+        {text:'Upload ad_facebook_features.html creative',resources:[
+          {type:'file',label:'Preview FB Ad',action:"previewFile('ad_facebook_features','📘 Facebook Features Ad','1200x628 features showcase')"},
+          {type:'info',label:'Screenshot the HTML preview and upload as ad creative'}
+        ]},
+        {text:'Set daily budget: $10/day',resources:[
+          {type:'info',label:'Start with $10/day for 7 days = $70 test budget'}
+        ]},
+        {text:'Target: 18-35, Interest: stock trading, investing, finance',resources:[]},
+        {text:'A/B test 2 ad copies',resources:[
+          {type:'info',label:'Version A: "Track your portfolio in real-time" / Version B: "AI-powered trading signals"'}
+        ]},
+        {text:'Monitor CPA and pause underperformers after 72h',resources:[
+          {type:'link',label:'Open Ads Manager',action:"window.open('https://adsmanager.facebook.com/','_blank')"}
+        ]},
+        {text:'Retarget website visitors who didn\'t sign up',resources:[
+          {type:'info',label:'Create retarget campaign for visitors who didn\'t convert within 7 days'}
+        ]}
+      ],
       template:null},
     campus_blitz: {icon:'🎓',name:'Campus Blitz',channel:'University',status:'Ready',statusClass:'ylw',
       description:'Physical + digital campus outreach. Print flyers with tear-off tabs for bulletin boards, partner with finance clubs, reach professors who teach trading/investing courses.',
-      actions:['Print 20 university flyers (flyer_university.html)','Print 10 coffee shop flyers (flyer_coffeeshop.html)','Print 50 business cards (business_card.html)','Post flyers: NYU Stern, Columbia Business, Baruch','Post flyers: university library, student union, gym','Drop coffee shop flyers near campus','DM 5 finance club presidents offering free demo','Email 3 finance/investing professors','Post in university subreddit and Facebook groups','Ask student friends to share in class GroupMe/WhatsApp'],
+      actions:[
+        {text:'Print 20 university flyers',resources:[
+          {type:'file',label:'Preview Flyer',action:"previewFile('flyer_university','🎓 University Flyer','8.5×11 tear-off tabs')"},
+          {type:'link',label:'Open FedEx Print',action:"window.open('https://www.fedex.com/en-us/printing.html','_blank')"},
+          {type:'info',label:'Color, 8.5×11, 20 copies ≈ $12-15'}
+        ]},
+        {text:'Print 10 coffee shop flyers',resources:[
+          {type:'file',label:'Preview Flyer',action:"previewFile('flyer_coffeeshop','☕ Coffee Shop Flyer','8.5×11 plans comparison')"},
+          {type:'info',label:'Color, 8.5×11, 10 copies ≈ $6-8'}
+        ]},
+        {text:'Print 50 business cards',resources:[
+          {type:'file',label:'Preview Card',action:"previewFile('business_card','💼 Business Card','3.5×2 front+back')"},
+          {type:'link',label:'Order from Vistaprint',action:"window.open('https://www.vistaprint.com/business-cards','_blank')"},
+          {type:'info',label:'50 cards ≈ $12-20, arrives in 3-5 days'}
+        ]},
+        {text:'Post flyers: NYU Stern, Columbia Business, Baruch',resources:[
+          {type:'info',label:'Best spots: bulletin boards near elevators, student lounges, library entrance'}
+        ]},
+        {text:'Post flyers: university library, student union, gym',resources:[]},
+        {text:'Drop coffee shop flyers near campus',resources:[
+          {type:'info',label:'Ask barista for permission, leave stack near register or community board'}
+        ]},
+        {text:'DM 5 finance club presidents offering free demo',resources:[
+          {type:'template',label:'Copy Outreach DM',action:"navigator.clipboard.writeText('Hey! I\\'m a student and I built a trading dashboard with real-time portfolio tracking, trade signals, and risk management tools. Offering free Pro access to your finance club during beta. Would you be open to sharing with your group or letting me do a quick 10-min demo?');toast('Copied!','grn')"},
+          {type:'contacts',label:'View Student Leads',action:"document.querySelector('[data-page=biz-leads]').click()"}
+        ]},
+        {text:'Email 3 finance/investing professors',resources:[
+          {type:'template',label:'Copy Professor Email',action:"navigator.clipboard.writeText('Subject: Free Trading Dashboard for Your Students\\n\\nHi Professor [Name],\\n\\nI\\'m a student who built a trading analytics tool called TradeCommand Pro. I\\'m offering free Pro access to students during our beta period. Would you be open to sharing with your class? I\\'d also love any feedback on the tool from an academic perspective.\\n\\nBest,\\nMax');toast('Copied!','grn')"}
+        ]},
+        {text:'Post in university subreddit and Facebook groups',resources:[
+          {type:'info',label:'Search "[your university] trading" or "[your university] finance" on Reddit and Facebook'}
+        ]},
+        {text:'Ask student friends to share in class GroupMe/WhatsApp',resources:[
+          {type:'template',label:'Copy Share Message',action:"navigator.clipboard.writeText('Hey! My friend built this sick trading dashboard — free during beta. Check it out: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+        ]}
+      ],
       template:'Hey! I\'m a student and I built a trading dashboard with real-time portfolio tracking, trade signals, and risk management tools. Offering free Pro access to your finance club during beta. Would you be open to sharing with your group or letting me do a quick 10-min demo?'},
     email_sequence: {icon:'📧',name:'Email Drip Sequence',channel:'Email',status:'Ready',statusClass:'grn',
       description:'Automated 5-email sequence that nurtures new signups from onboarding through upgrade. Each email is drafted and ready to load into Mailchimp/ConvertKit.',
-      actions:['Sign up for Mailchimp or ConvertKit (free tier)','Upload Welcome Email (newsletter_01_welcome.html) as Day 0','Upload Trading Tips (newsletter_05_trading_tips.html) as Day 3','Upload Weekly Signals (newsletter_02_weekly_signals.html) as Day 7','Upload Elite Upgrade (newsletter_06_pro_upgrade.html) as Day 14','Set up automation triggers','Add signup form to tradecommandpro.com','Test full sequence with your own email','Upload Student Offer for campus leads segment'],
+      actions:[
+        {text:'Sign up for Mailchimp or ConvertKit (free tier)',resources:[
+          {type:'link',label:'Open Mailchimp',action:"window.open('https://mailchimp.com/pricing/','_blank')"},
+          {type:'link',label:'Open ConvertKit',action:"window.open('https://convertkit.com/pricing','_blank')"},
+          {type:'info',label:'Both have free tier for <500 subscribers — Mailchimp is easier to start, ConvertKit is better long-term'}
+        ]},
+        {text:'Upload Welcome Email as Day 0',resources:[
+          {type:'file',label:'Preview Welcome Email',action:"previewFile('newsletter_welcome','✉️ Welcome Email','Day 0 — onboarding + features')"},
+          {type:'action',label:'Open Email Templates',action:"document.querySelector('[data-page=biz-newsletters]').click()"}
+        ]},
+        {text:'Upload Trading Tips as Day 3',resources:[
+          {type:'file',label:'Preview Trading Tips',action:"previewFile('newsletter_tips','✉️ Trading Tips','Day 3 — 5 Rules')"}
+        ]},
+        {text:'Upload Weekly Signals as Day 7',resources:[
+          {type:'file',label:'Preview Signals Email',action:"previewFile('newsletter_signals','✉️ Weekly Signals','Day 7 — trade setups')"}
+        ]},
+        {text:'Upload Elite Upgrade as Day 14',resources:[
+          {type:'file',label:'Preview Upgrade Email',action:"previewFile('newsletter_upgrade','✉️ Pro → Elite','Day 14 — upsell')"}
+        ]},
+        {text:'Set up automation triggers',resources:[
+          {type:'info',label:'Trigger: "Subscribed to list" → Wait 3 days → Send Tips → Wait 4 days → Send Signals → Wait 7 days → Send Upgrade'}
+        ]},
+        {text:'Add signup form to tradecommandpro.com',resources:[
+          {type:'info',label:'Embed Mailchimp/ConvertKit form in footer or as popup'}
+        ]},
+        {text:'Test full sequence with your own email',resources:[
+          {type:'info',label:'Subscribe yourself, verify all 4 emails arrive on schedule'}
+        ]},
+        {text:'Upload Student Offer for campus leads segment',resources:[
+          {type:'file',label:'Preview Student Offer',action:"previewFile('newsletter_student','✉️ Student Offer','$9/mo student pricing')"}
+        ]}
+      ],
       template:null},
     friends_family: {icon:'🤝',name:'Friends & Family Beta',channel:'Personal DM',status:'Active',statusClass:'grn',
       description:'Personal 1:1 outreach to friends, family, and acquaintances. Fastest channel for first signups — no convincing needed, just ask. Target: 15 signups from warm network alone.',
-      actions:['List 30 friends/family who might be interested','Text 10 closest friends TODAY with personal message','Text 10 more friends tomorrow','Text family members who invest/trade','Ask each signup to invite 1 friend (2x multiplier)','Follow up after 48h with anyone who didn\'t respond','Thank everyone who signed up with a personal note'],
+      actions:[
+        {text:'List 30 friends/family who might be interested',resources:[
+          {type:'info',label:'Think: who trades, invests, is in finance, or just likes trying new apps?'}
+        ]},
+        {text:'Text 10 closest friends TODAY with personal message',resources:[
+          {type:'template',label:'Copy Text Template',action:"navigator.clipboard.writeText('Hey [name] — I\\'ve been building this trading dashboard tool and I\\'m looking for people to try the beta version before I launch it publicly. Would you be down to check it out and give me honest feedback? It\\'s free and takes like 2 min to set up. No pressure if it\\'s not your thing — but if you know anyone who trades or invests, I\\'d appreciate an intro too 🙏');toast('Copied!','grn')"},
+          {type:'copy',label:'Copy Signup Link',action:"navigator.clipboard.writeText('https://maxmcdonough.github.io/tradecommand-pro/');toast('Link copied!','grn')"}
+        ]},
+        {text:'Text 10 more friends tomorrow',resources:[
+          {type:'template',label:'Copy Text Template',action:"navigator.clipboard.writeText('Hey! Quick ask — I built a trading dashboard and I need beta testers. Free Pro access ($29/mo value) if you try it out. Takes 2 min: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+        ]},
+        {text:'Text family members who invest/trade',resources:[
+          {type:'template',label:'Copy Family Message',action:"navigator.clipboard.writeText('Hey! I\\'ve been working on this trading tool — it tracks your portfolio, gives AI signals, and manages risk. Would love your feedback on it. It\\'s free during beta: https://maxmcdonough.github.io/tradecommand-pro/');toast('Copied!','grn')"}
+        ]},
+        {text:'Ask each signup to invite 1 friend (2x multiplier)',resources:[
+          {type:'template',label:'Copy Referral Ask',action:"navigator.clipboard.writeText('Thanks for signing up! Quick favor — do you know one person who\\'d find this useful? Each early referral gets locked into free Pro for life.');toast('Copied!','grn')"}
+        ]},
+        {text:'Follow up after 48h with anyone who didn\'t respond',resources:[
+          {type:'template',label:'Copy Follow-up',action:"navigator.clipboard.writeText('Hey just following up — did you get a chance to check out the trading dashboard? No worries if not, just want to make sure the link worked!');toast('Copied!','grn')"}
+        ]},
+        {text:'Thank everyone who signed up with a personal note',resources:[
+          {type:'template',label:'Copy Thank You',action:"navigator.clipboard.writeText('Hey thanks so much for trying it out! Means a lot. Let me know if you have any feedback or run into any issues — I\\'m actively improving it every day.');toast('Copied!','grn')"},
+          {type:'action',label:'Update Beta Count',action:"document.querySelector('[data-page=biz-beta]').click()"}
+        ]}
+      ],
       template:'Hey [name] — I\'ve been building this trading dashboard tool and I\'m looking for people to try the beta version before I launch it publicly. Would you be down to check it out and give me honest feedback? It\'s free and takes like 2 min to set up.\n\nNo pressure if it\'s not your thing — but if you know anyone who trades or invests, I\'d appreciate an intro too 🙏'}
   };
   return campaigns[id] || {icon:'📢',name:id,channel:'—',status:'—',statusClass:'indigo',description:'',actions:[],template:null};
@@ -2791,11 +3165,12 @@ function getCampaignData(id) {
 // ═══ GROWTH PLAN ═══
 function loadGrowthPlan() {
   document.getElementById('gp-leads').textContent = SEED_LEADS.length;
-  // Load saved checkboxes
+  // Load saved checkboxes and update progress bars
   ['gp1','gp2','gp3','gp4'].forEach(function(phase){
     var saved = JSON.parse(localStorage.getItem('tc_'+phase+'_checks')||'[]');
     var cbs = document.querySelectorAll('.'+phase+'-cb');
     cbs.forEach(function(cb,i){ cb.checked = saved[i]||false; });
+    updateGPBar(phase);
   });
   loadBetaPlanChecks();
 }
@@ -2809,6 +3184,18 @@ function saveGPCheck(phase,idx,checked) {
   var saved = JSON.parse(localStorage.getItem('tc_'+phase+'_checks')||'[]');
   saved[idx] = checked;
   localStorage.setItem('tc_'+phase+'_checks', JSON.stringify(saved));
+  updateGPBar(phase);
+}
+function updateGPBar(phase) {
+  var saved = JSON.parse(localStorage.getItem('tc_'+phase+'_checks')||'[]');
+  var cbs = document.querySelectorAll('.'+phase+'-cb');
+  var total = cbs.length;
+  var done = saved.filter(function(v){return v;}).length;
+  var pct = total ? Math.round((done/total)*100) : 0;
+  var bar = document.getElementById(phase+'-bar');
+  var lbl = document.getElementById(phase+'-pct');
+  if(bar) bar.style.width = pct+'%';
+  if(lbl) lbl.textContent = done+'/'+total+' ('+pct+'%)';
 }
 
 // ═══ BETA PLAN CHECKLIST (in Growth Plan) ═══
@@ -2824,12 +3211,33 @@ function loadBetaPlanChecks() {
 }
 
 // ═══ FILE PREVIEW ═══
+var FILE_MAP = {
+  'ad_instagram_launch':'files/ad_instagram_launch.html','ad_instagram_story':'files/ad_instagram_story_free.html',
+  'ad_facebook_features':'files/ad_facebook_features.html','ad_instagram_testimonial':'files/ad_instagram_testimonial.html',
+  'ad_instagram_carousel':'files/ad_instagram_carousel_1.html','ad_sponsored_post':'files/ad_sponsored_post.html',
+  'flyer_university':'files/flyer_university.html','flyer_coffeeshop':'files/flyer_coffeeshop.html',
+  'business_card':'files/business_card.html','newsletter_welcome':'files/newsletter_01_welcome.html',
+  'newsletter_signals':'files/newsletter_02_weekly_signals.html','newsletter_student':'files/newsletter_03_student_offer.html',
+  'newsletter_update':'files/newsletter_04_product_update.html','newsletter_tips':'files/newsletter_05_trading_tips.html',
+  'newsletter_upgrade':'files/newsletter_06_pro_upgrade.html','beta_plan':'files/beta_launch_plan_50_by_thursday.html',
+  'ig_launch':'files/ad_instagram_launch.html','ig_story':'files/ad_instagram_story_free.html',
+  'fb_features':'files/ad_facebook_features.html','ig_test':'files/ad_instagram_testimonial.html',
+  'ig_car':'files/ad_instagram_carousel_1.html','spon':'files/ad_sponsored_post.html',
+  'uni_fly':'files/flyer_university.html','cof_fly':'files/flyer_coffeeshop.html','biz_card':'files/business_card.html',
+  'leads_xlsx':'#'
+};
 function previewFile(id, title, desc) {
+  var url = FILE_MAP[id];
   document.getElementById('fp-title').textContent = title;
   document.getElementById('fp-desc').textContent = desc;
-  document.getElementById('fp-actions').innerHTML =
-    '<button class="btn btn-primary" onclick="document.querySelector(\'[data-page=biz-files]\').click();closeFilePreview()">Open in Files</button>'+
-    '<button class="btn btn-ghost" onclick="closeFilePreview()">Close</button>';
+  var iframeHtml = '';
+  if(url && url !== '#') {
+    iframeHtml = '<iframe src="'+url+'" style="width:100%;height:50vh;border:1px solid var(--brd);border-radius:8px;margin-bottom:12px;background:#fff"></iframe>';
+  }
+  document.getElementById('fp-actions').innerHTML = iframeHtml +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+    (url&&url!=='#'?'<a href="'+url+'" target="_blank" class="btn btn-primary" style="text-decoration:none">Open Full Screen ↗</a>':'')+
+    '<button class="btn btn-ghost" onclick="closeFilePreview()">Close</button></div>';
   document.getElementById('file-preview-overlay').style.display = 'block';
   document.getElementById('file-preview-modal').style.display = 'block';
 }
@@ -2910,10 +3318,14 @@ function loadEmailTemplates() {
   // Nothing dynamic to load — page is static
 }
 function previewNewsletter(type) {
-  var files = {welcome:'newsletter_01_welcome.html',signals:'newsletter_02_weekly_signals.html',student:'newsletter_03_student_offer.html',update:'newsletter_04_product_update.html',tips:'newsletter_05_trading_tips.html',upgrade:'newsletter_06_pro_upgrade.html'};
-  var f = files[type];
-  if(!f) return;
-  toast('Newsletter file: '+f+' — open from your files folder','grn');
+  var map = {welcome:['newsletter_welcome','👋 Welcome Email','Onboarding email for new users with features overview and 3-step guide.'],
+    signals:['newsletter_signals','📊 Weekly Trading Signals','6 high-conviction setups with entry/target/stop levels and market outlook.'],
+    student:['newsletter_student','🎓 Student Offer','$9/mo student pricing with testimonials and urgency countdown.'],
+    update:['newsletter_update','🚀 Product Update v2.5','New features changelog with roadmap preview.'],
+    tips:['newsletter_tips','📈 5 Rules — Trading Tips','Educational content with product tie-ins for lead nurture.'],
+    upgrade:['newsletter_upgrade','👑 Elite Upgrade','Pro to Elite upsell with comparison and guarantee.']};
+  var d = map[type]; if(!d) return;
+  previewFile(d[0], d[1], d[2]);
 }
 function copyNewsletterFile(name) {
   if(navigator.clipboard) {
