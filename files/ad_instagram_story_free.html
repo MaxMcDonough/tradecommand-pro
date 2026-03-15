@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - Free for Students</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1920px;
+            background: linear-gradient(180deg, #0f172a 0%, #1a1f3a 50%, #0f172a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        .bg-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(99, 102, 241, 0.1) 0%, 
+                rgba(16, 185, 129, 0.05) 25%,
+                rgba(99, 102, 241, 0.1) 50%,
+                rgba(16, 185, 129, 0.05) 75%,
+                rgba(99, 102, 241, 0.1) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .top-section {
+            margin-bottom: 60px;
+        }
+
+        .emoji {
+            font-size: 120px;
+            margin-bottom: 30px;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .free-highlight {
+            background: linear-gradient(90deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 72px;
+        }
+
+        .subtext {
+            font-size: 18px;
+            color: #cbd5e1;
+            margin-bottom: 60px;
+            max-width: 600px;
+        }
+
+        .benefits {
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin-bottom: 60px;
+            backdrop-filter: blur(20px);
+        }
+
+        .benefit-item {
+            color: #e0e7ff;
+            font-size: 16px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .benefit-item::before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: 900;
+            margin-right: 10px;
+        }
+
+        .cta-section {
+            margin-top: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+            padding: 18px 60px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 800;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 50px rgba(16, 185, 129, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
+        }
+
+        .limited-time {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #f87171;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-url {
+            margin-top: 50px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <div class="top-section">
+            <div class="emoji">🎓</div>
+            <h1>FREE<br><span class="free-highlight">FOR STUDENTS</span></h1>
+            <p class="subtext">Master your trading skills with professional-grade analytics at zero cost.</p>
+        </div>
+
+        <div class="benefits">
+            <div class="benefit-item">Unlimited real-time P&L tracking</div>
+            <div class="benefit-item">Advanced strategy attribution</div>
+            <div class="benefit-item">Complete risk analytics suite</div>
+            <div class="benefit-item">Trade journal & performance reviews</div>
+            <div class="benefit-item">No credit card required</div>
+        </div>
+
+        <div class="cta-section">
+            <button class="cta-button">Sign Up Now</button>
+            <div class="limited-time">⏰ Claim Your Free Account Today</div>
+        </div>
+
+        <div class="footer-url">tradecommandpro.com/students</div>
+    </div>
+</body>
+</html>

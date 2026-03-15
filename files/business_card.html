@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - Business Card</title>
+    <!-- PRINT INSTRUCTIONS: Set margins to 0", paper size to Letter (8.5x11"), scaling to 100%, background graphics ON. Print 2 business cards per page (3.5x2 inches). Use cardstock or premium paper for best results. -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 8.5in;
+            height: 11in;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0.5in;
+            gap: 0.5in;
+        }
+
+        .card-pair {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3in;
+        }
+
+        .card {
+            width: 3.5in;
+            height: 2in;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0.2in;
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* CROP MARKS */
+        .card {
+            border: 1px solid #e5e7eb;
+        }
+
+        .crop-mark {
+            position: absolute;
+            width: 10px;
+            height: 1px;
+            background: #999;
+            z-index: 10;
+        }
+
+        .crop-mark-tl {
+            top: -5px;
+            left: -5px;
+        }
+
+        .crop-mark-tr {
+            top: -5px;
+            right: -5px;
+        }
+
+        .crop-mark-bl {
+            bottom: -5px;
+            left: -5px;
+        }
+
+        .crop-mark-br {
+            bottom: -5px;
+            right: -5px;
+        }
+
+        /* FRONT SIDE */
+        .card-front {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1.5in;
+            height: 1.5in;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .card-front::after {
+            content: '';
+            position: absolute;
+            bottom: -0.3in;
+            left: -0.3in;
+            width: 1in;
+            height: 1in;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .front-header {
+            position: relative;
+            z-index: 2;
+        }
+
+        .company-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.03in;
+        }
+
+        .company-name span {
+            color: #10b981;
+        }
+
+        .tagline {
+            font-size: 9px;
+            color: #a1a5bb;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .front-footer {
+            position: relative;
+            z-index: 2;
+            text-align: right;
+        }
+
+        .person-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.02in;
+        }
+
+        .person-title {
+            font-size: 8px;
+            color: #6366f1;
+            font-weight: 500;
+        }
+
+        /* BACK SIDE */
+        .card-back {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #d1d5db;
+            position: relative;
+            padding: 0.15in;
+            overflow: hidden;
+        }
+
+        .card-back::before {
+            content: '';
+            position: absolute;
+            bottom: -0.4in;
+            right: -0.4in;
+            width: 1.2in;
+            height: 1.2in;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .back-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            font-size: 8px;
+            line-height: 1.4;
+        }
+
+        .contact-block {
+            flex: 1;
+        }
+
+        .contact-label {
+            color: #6366f1;
+            font-weight: 600;
+            font-size: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.02in;
+        }
+
+        .contact-info {
+            font-size: 8px;
+            color: #d1d5db;
+            margin-bottom: 0.08in;
+            word-break: break-word;
+        }
+
+        .features-list {
+            border-top: 1px solid rgba(99, 102, 241, 0.3);
+            padding-top: 0.08in;
+            margin-top: 0.05in;
+            font-size: 7px;
+            color: #a1a5bb;
+        }
+
+        .features-list strong {
+            color: #10b981;
+            display: block;
+            margin-bottom: 0.02in;
+            font-size: 8px;
+        }
+
+        .feature-item {
+            margin-bottom: 0.02in;
+            padding-left: 0.08in;
+        }
+
+        .feature-item::before {
+            content: '•';
+            color: #10b981;
+            margin-right: 0.03in;
+            font-weight: bold;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            html, body {
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
+
+            body {
+                padding: 0.5in;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            .crop-mark {
+                display: block;
+            }
+        }
+
+        /* SCREEN PREVIEW */
+        @media screen {
+            body {
+                background: #f0f0f0;
+            }
+
+            .instruction {
+                width: 3.5in;
+                padding: 0.15in;
+                background: #e8f5e9;
+                border-left: 3px solid #10b981;
+                margin-bottom: 0.3in;
+                font-size: 11px;
+                color: #1b5e20;
+                border-radius: 4px;
+            }
+
+            .section-label {
+                text-align: center;
+                font-size: 12px;
+                font-weight: 700;
+                color: #555;
+                margin: 0.25in 0 0.1in;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="instruction">
+        Print on cardstock (3.5" x 2" cards). Set margins to 0", background graphics ON. Use crop marks as guides.
+    </div>
+
+    <div class="section-label">Front</div>
+
+    <div class="card-pair">
+        <div class="card card-front">
+            <div class="crop-mark crop-mark-tl"></div>
+            <div class="crop-mark crop-mark-tr"></div>
+            <div class="crop-mark crop-mark-bl"></div>
+            <div class="crop-mark crop-mark-br"></div>
+
+            <div class="front-header">
+                <div class="company-name">Trade<span>Command</span></div>
+                <div class="company-name" style="font-size: 16px;">Pro</div>
+                <div class="tagline">Trading Performance</div>
+            </div>
+
+            <div class="front-footer">
+                <div class="person-name">Max McDonough</div>
+                <div class="person-title">Founder & Developer</div>
+            </div>
+        </div>
+
+        <div class="card card-front">
+            <div class="crop-mark crop-mark-tl"></div>
+            <div class="crop-mark crop-mark-tr"></div>
+            <div class="crop-mark crop-mark-bl"></div>
+            <div class="crop-mark crop-mark-br"></div>
+
+            <div class="front-header">
+                <div class="company-name">Trade<span>Command</span></div>
+                <div class="company-name" style="font-size: 16px;">Pro</div>
+                <div class="tagline">Trading Performance</div>
+            </div>
+
+            <div class="front-footer">
+                <div class="person-name">Max McDonough</div>
+                <div class="person-title">Founder & Developer</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-label">Back</div>
+
+    <div class="card-pair">
+        <div class="card card-back">
+            <div class="crop-mark crop-mark-tl"></div>
+            <div class="crop-mark crop-mark-tr"></div>
+            <div class="crop-mark crop-mark-bl"></div>
+            <div class="crop-mark crop-mark-br"></div>
+
+            <div class="back-content">
+                <div class="contact-block">
+                    <div class="contact-label">Contact</div>
+                    <div class="contact-info">📧 max.mcdonough123@gmail.com</div>
+                    <div class="contact-info">🌐 tradecommandpro.com</div>
+                </div>
+
+                <div class="features-list">
+                    <strong>Platform Features:</strong>
+                    <div class="feature-item">Real-time P&L tracking</div>
+                    <div class="feature-item">Strategy attribution</div>
+                    <div class="feature-item">Risk analytics</div>
+                    <div class="feature-item">Trade journal & CRM</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-back">
+            <div class="crop-mark crop-mark-tl"></div>
+            <div class="crop-mark crop-mark-tr"></div>
+            <div class="crop-mark crop-mark-bl"></div>
+            <div class="crop-mark crop-mark-br"></div>
+
+            <div class="back-content">
+                <div class="contact-block">
+                    <div class="contact-label">Contact</div>
+                    <div class="contact-info">📧 max.mcdonough123@gmail.com</div>
+                    <div class="contact-info">🌐 tradecommandpro.com</div>
+                </div>
+
+                <div class="features-list">
+                    <strong>Platform Features:</strong>
+                    <div class="feature-item">Real-time P&L tracking</div>
+                    <div class="feature-item">Strategy attribution</div>
+                    <div class="feature-item">Risk analytics</div>
+                    <div class="feature-item">Trade journal & CRM</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

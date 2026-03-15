@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - Sponsored Post</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1080px;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #0f172a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated gradient glows */
+        .glow-orb-1 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -150px;
+            right: -150px;
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        .glow-orb-2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+            animation: pulse 6s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.15); opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .top-section {
+            margin-bottom: 40px;
+        }
+
+        .sponsored-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            color: #c7d2fe;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .highlight {
+            background: linear-gradient(90deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtext {
+            font-size: 18px;
+            color: #cbd5e1;
+            margin-bottom: 50px;
+        }
+
+        /* CSS Dashboard Mockup */
+        .dashboard-mockup {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 50px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .dashboard-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e0e7ff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .metric {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #a5b4fc;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .metric-change {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .metric-change.negative {
+            color: #ef4444;
+        }
+
+        .chart-visual {
+            position: relative;
+            height: 60px;
+            margin-top: 12px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+        }
+
+        .chart-bar {
+            width: 4px;
+            background: linear-gradient(180deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+            animation: barGrow 1s ease-out forwards;
+        }
+
+        @keyframes barGrow {
+            from { height: 0; }
+            to { height: var(--height); }
+        }
+
+        .bar-1 { --height: 30px; animation-delay: 0s; }
+        .bar-2 { --height: 45px; animation-delay: 0.1s; }
+        .bar-3 { --height: 25px; animation-delay: 0.2s; }
+        .bar-4 { --height: 50px; animation-delay: 0.3s; }
+        .bar-5 { --height: 35px; animation-delay: 0.4s; }
+        .bar-6 { --height: 55px; animation-delay: 0.5s; }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 16px 48px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.4);
+        }
+
+        .url {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+
+    <div class="container">
+        <div class="top-section">
+            <div class="sponsored-badge">SPONSORED</div>
+            <h1>Stop Guessing.<br><span class="highlight">Start Tracking.</span></h1>
+            <p class="subtext">Professional trading analytics designed for traders who take their performance seriously.</p>
+        </div>
+
+        <!-- Dashboard Mockup -->
+        <div class="dashboard-mockup">
+            <div class="dashboard-header">
+                <div class="dashboard-title">Performance Dashboard</div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="metric">
+                    <div class="metric-label">Total P&L</div>
+                    <div class="metric-value">+$4,250</div>
+                    <div class="metric-change">+12.3%</div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">Win Rate</div>
+                    <div class="metric-value">68%</div>
+                    <div class="metric-change">↑ +8%</div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">Max Drawdown</div>
+                    <div class="metric-value">-2.5%</div>
+                    <div class="metric-change negative">-4.2%</div>
+                </div>
+            </div>
+
+            <div class="chart-visual">
+                <div class="chart-bar bar-1"></div>
+                <div class="chart-bar bar-2"></div>
+                <div class="chart-bar bar-3"></div>
+                <div class="chart-bar bar-4"></div>
+                <div class="chart-bar bar-5"></div>
+                <div class="chart-bar bar-6"></div>
+            </div>
+        </div>
+
+        <button class="cta-button">Start Free Today</button>
+        <div class="url">tradecommandpro.com</div>
+    </div>
+</body>
+</html>
