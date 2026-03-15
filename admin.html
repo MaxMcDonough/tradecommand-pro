@@ -1711,7 +1711,11 @@
           return;
         }
         if (user.email !== ADMIN_EMAIL) {
-          document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0a0e17;color:#ef4444;font-family:sans-serif;font-size:18px">🚫 Admin access only</div>';
+          auth.signOut();
+          document.getElementById('auth-gate').style.display = 'flex';
+          const errEl = document.getElementById('gate-error');
+          errEl.textContent = '🚫 This account does not have admin access.';
+          errEl.style.display = 'block';
           return;
         }
         grantAdminAccess(user);

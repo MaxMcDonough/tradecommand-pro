@@ -4932,6 +4932,12 @@ LOW:
                 if (user && user.email === ADMIN_EMAIL) {
                     currentUser = user;
                     grantAdminAccess(user);
+                } else if (user && user.email !== ADMIN_EMAIL) {
+                    auth.signOut();
+                    document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'flex');
+                    document.getElementById('container') && (document.getElementById('container').style.display = 'none');
+                    const errEl = document.getElementById('gate-error');
+                    if (errEl) { errEl.textContent = '🚫 This account does not have access.'; errEl.style.display = 'block'; }
                 } else {
                     document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'flex');
                     document.getElementById('container') && (document.getElementById('container').style.display = 'none');
