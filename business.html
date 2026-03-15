@@ -2666,7 +2666,6 @@
         <input id="gate-password" type="password" placeholder="Password" style="width:100%;padding:10px 14px;background:#111827;border:1px solid #2a3550;border-radius:8px;color:#e2e8f0;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;" onkeydown="if(event.key==='Enter')adminGateLogin()">
         <div id="gate-error" style="color:#ef4444;font-size:12px;margin-bottom:10px;display:none"></div>
         <button onclick="adminGateLogin()" style="width:100%;padding:12px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;">Sign In</button>
-        <p style="color:#64748b;font-size:11px;margin-top:12px">No Firebase yet? Use password: <strong style="color:#f59e0b">TCPAdmin2026</strong></p>
       </div>
     </div>
     <div class="container" style="display:none">
@@ -4966,7 +4965,7 @@ LOW:
               localStorage.setItem('tcp_admin_session', JSON.stringify({ admin: true, ts: Date.now() }));
               grantAdminAccess({ email: ADMIN_EMAIL, displayName: 'Max', uid: 'local-admin' });
             } else {
-              errEl.textContent = 'Invalid credentials. Password hint: TCPAdmin2026';
+              errEl.textContent = 'Invalid credentials.';
               errEl.style.display = 'block';
             }
             return;
