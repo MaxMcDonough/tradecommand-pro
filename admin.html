@@ -1943,7 +1943,7 @@ async function loadDashboard() {
     s('d-users', allUsers.length);
     s('d-subs', paid);
     s('d-mrr', '$'+mrr);
-    s('d-leads', SEED_LEADS.length);
+    s('d-leads', (window._allLeads||SEED_LEADS).length);
     s('d-mrr2', '$'+mrr);
     s('d-arr', '$'+(mrr*12));
     s('d-pro-count', pro+' users');
@@ -2475,8 +2475,9 @@ function saveSettings() {
 // ═══ BIZ PAGE LOADERS ═══
 function getLeadStatuses() {
   var statuses = {new:0,contacted:0,interested:0,converted:0,lost:0};
-  SEED_LEADS.forEach(function(l,i){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+  (window._allLeads||SEED_LEADS).forEach(function(l,i){
+    var id = l.id||('seed_'+i);
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||l.status||'new';
     if(statuses[st]!==undefined) statuses[st]++;
   });
@@ -2486,7 +2487,7 @@ function getLeadStatuses() {
 function loadBizDash() {
   var statuses = getLeadStatuses();
   var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
-  s('bd-leads', SEED_LEADS.length);
+  s('bd-leads', (window._allLeads||SEED_LEADS).length);
   s('bd-contacted', statuses.contacted);
   s('bd-interested', statuses.interested);
   s('bd-converted', statuses.converted);
@@ -2505,7 +2506,7 @@ function loadBizDash() {
 
   // Geo distribution
   var geo = {};
-  SEED_LEADS.forEach(function(l){
+  (window._allLeads||SEED_LEADS).forEach(function(l){
     var loc = (l.location||'Unknown').split(',').pop().trim();
     geo[loc] = (geo[loc]||0)+1;
   });
@@ -2518,25 +2519,26 @@ function loadBizDash() {
   }).join('');
 
   // Top leads
-  var top5 = SEED_LEADS.filter(function(l){return l.score>=80;}).slice(0,8);
+  var top5 = (window._allLeads||SEED_LEADS).filter(function(l){return l.score>=80;}).slice(0,8);
   document.getElementById('bd-top-leads').innerHTML = top5.map(function(l,i){
-    var idx = SEED_LEADS.indexOf(l);
-    return '<tr onclick="openLeadPanel(\'seed_'+idx+'\')" style="cursor:pointer" onmouseover="this.style.background=\'rgba(99,102,241,.06)\'" onmouseout="this.style.background=\'\'">'+
-      '<td style="font-weight:600;font-size:13px">'+l.name+'</td>'+
-      '<td><span style="font-weight:700;color:var(--grn)">'+l.score+'</span></td>'+
-      '<td style="font-size:12px;color:var(--t2)">'+l.type+'</td>'+
-      '<td style="font-size:12px;color:var(--t3)">'+l.location+'</td>'+
-      '<td><button onclick="event.stopPropagation();openLeadPanel(\'seed_'+idx+'\')" class="btn btn-primary" style="font-size:11px;padding:3px 10px">Open</button></td></tr>';
+    var lid = l.id||('seed_'+i);
+    return '<tr onclick="openLeadPanel(\''+lid+'\')" style="cursor:pointer" onmouseover="this.style.background=\'rgba(99,102,241,.06)\'" onmouseout="this.style.background=\'\'">'+
+      '<td style="font-weight:600;font-size:13px">'+(l.name||'')+'</td>'+
+      '<td><span style="font-weight:700;color:var(--grn)">'+(l.score||0)+'</span></td>'+
+      '<td style="font-size:12px;color:var(--t2)">'+(l.type||'')+'</td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+(l.location||'')+'</td>'+
+      '<td><button onclick="event.stopPropagation();openLeadPanel(\''+lid+'\')" class="btn btn-primary" style="font-size:11px;padding:3px 10px">Open</button></td></tr>';
   }).join('');
 }
 
 function loadCRM() {
   var cols = {new:[],contacted:[],interested:[],converted:[]};
-  SEED_LEADS.forEach(function(l,i){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+  (window._allLeads||SEED_LEADS).forEach(function(l,i){
+    var id = l.id||('seed_'+i);
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||l.status||'new';
     if(!cols[st]) cols[st] = [];
-    cols[st].push({lead:l, idx:i});
+    cols[st].push({lead:l, id:id, idx:i});
   });
   var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
   s('crm-new', cols.new.length);
@@ -2577,15 +2579,15 @@ function loadRevenue() {
 }
 
 function loadMarketing() {
-  document.getElementById('mkt-total').textContent = SEED_LEADS.length;
+  document.getElementById('mkt-total').textContent = (window._allLeads||SEED_LEADS).length;
   // Channel breakdown
   var chanMap = {};
-  SEED_LEADS.forEach(function(l){ var ch = l.channel||'LinkedIn'; chanMap[ch]=(chanMap[ch]||0)+1; });
+  (window._allLeads||SEED_LEADS).forEach(function(l){ var ch = l.channel||'LinkedIn'; chanMap[ch]=(chanMap[ch]||0)+1; });
   var channels = Object.entries(chanMap).sort(function(a,b){return b[1]-a[1];});
   document.getElementById('mkt-channels').textContent = channels.length;
   var chIcons = {LinkedIn:'🔗',Email:'📧',Twitter:'🐦',Reddit:'🟠',Instagram:'📸',Discord:'💬',University:'🏫','Cold Call':'📞',Referral:'🤝'};
   document.getElementById('mkt-channel-grid').innerHTML = channels.map(function(c){
-    var pct = Math.round(c[1]/SEED_LEADS.length*100);
+    var pct = Math.round(c[1]/(window._allLeads||SEED_LEADS).length*100);
     return '<div class="lp-field"><div style="font-size:12px;font-weight:600">'+(chIcons[c[0]]||'📨')+' '+c[0]+'</div>'+
       '<div style="font-size:22px;font-weight:800;color:var(--acc);margin:4px 0">'+c[1]+'</div>'+
       '<div style="height:4px;background:var(--brd);border-radius:2px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--acc);border-radius:2px"></div></div>'+
@@ -2593,12 +2595,12 @@ function loadMarketing() {
   }).join('');
   // Type breakdown
   var typeMap = {};
-  SEED_LEADS.forEach(function(l){ var t = l.type||'Unknown'; typeMap[t]=(typeMap[t]||0)+1; });
+  (window._allLeads||SEED_LEADS).forEach(function(l){ var t = l.type||'Unknown'; typeMap[t]=(typeMap[t]||0)+1; });
   var types = Object.entries(typeMap).sort(function(a,b){return b[1]-a[1];});
   document.getElementById('mkt-types').textContent = types.length;
   var tIcons = {'Finance Student':'🎓','Grad Student':'🎓','Aspiring Trader':'📈','Retail Trader':'💹','Wall Street Trader':'🏦','Quant Trader':'🧮','Quant Researcher':'🔬','Portfolio Manager':'💼','Commodity Trader':'🛢️','Crypto/DeFi Trader':'₿','Trading Analytics':'📊','Buy-Side Analyst':'📋','Risk Professional':'⚠️','Fintech Professional':'💻','Investor':'💰'};
   document.getElementById('mkt-type-grid').innerHTML = types.map(function(t){
-    var avgScore = Math.round(SEED_LEADS.filter(function(l){return l.type===t[0];}).reduce(function(a,l){return a+l.score;},0)/t[1]);
+    var avgScore = Math.round((window._allLeads||SEED_LEADS).filter(function(l){return l.type===t[0];}).reduce(function(a,l){return a+l.score;},0)/t[1]);
     return '<div class="lp-field" onclick="document.getElementById(\'filter-type\').value=\''+t[0]+'\';document.querySelector(\'[data-page=biz-leads]\').click();setTimeout(applyLeadFilters,100)" style="cursor:pointer">'+
       '<div style="font-size:12px;font-weight:600">'+(tIcons[t[0]]||'👤')+' '+t[0]+'</div>'+
       '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:4px">'+
@@ -2749,13 +2751,13 @@ function loadScheduled() {
   }).join('');
 
   // People to contact
-  var topLeads = SEED_LEADS.map(function(l,i){return Object.assign({},l,{idx:i});})
+  var topLeads = (window._allLeads||SEED_LEADS).map(function(l,i){return Object.assign({},l,{idx:i,lid:l.id||('seed_'+i)});})
     .sort(function(a,b){return b.score-a.score;}).slice(0,15);
   document.getElementById('sched-contacts').innerHTML = topLeads.map(function(l){
-    var sv = JSON.parse(localStorage.getItem('tc_lead_seed_'+l.idx)||'{}');
+    var sv = JSON.parse(localStorage.getItem('tc_lead_'+l.lid)||'{}');
     var st = sv.status||l.status||'new';
     var stColor = st==='contacted'?'var(--ylw)':st==='interested'?'var(--acc)':st==='converted'?'var(--grn)':'var(--t3)';
-    return '<div class="lp-field" style="cursor:pointer;padding:10px 12px" onclick="openLead('+l.idx+')">'+
+    return '<div class="lp-field" style="cursor:pointer;padding:10px 12px" onclick="openLeadPanel(\''+l.lid+'\')">'+
       '<div style="display:flex;justify-content:space-between;align-items:center">'+
         '<div style="display:flex;align-items:center;gap:10px">'+
           '<span style="font-size:16px;font-weight:800;color:var(--acc)">'+l.score+'</span>'+
@@ -3099,7 +3101,7 @@ function getCampaignData(id) {
 
 // ═══ GROWTH PLAN ═══
 function loadGrowthPlan() {
-  document.getElementById('gp-leads').textContent = SEED_LEADS.length;
+  document.getElementById('gp-leads').textContent = (window._allLeads||SEED_LEADS).length;
   // Load saved checkboxes and update progress bars
   ['gp1','gp2','gp3','gp4'].forEach(function(phase){
     var saved = JSON.parse(localStorage.getItem('tc_'+phase+'_checks')||'[]');
@@ -3654,7 +3656,7 @@ function copyNewsletterFile(name) {
 }
 
 function loadBizAnalytics() {
-  var scores = SEED_LEADS.map(function(l){return l.score;});
+  var scores = (window._allLeads||SEED_LEADS).map(function(l){return l.score;});
   var avg = Math.round(scores.reduce(function(a,b){return a+b;},0)/scores.length);
   document.getElementById('ba-avg').textContent = avg;
   var hot = scores.filter(function(s){return s>=80;}).length;
@@ -3682,7 +3684,7 @@ function loadBizAnalytics() {
 
   // Lead types
   var types = {};
-  SEED_LEADS.forEach(function(l){ types[l.type] = (types[l.type]||0)+1; });
+  (window._allLeads||SEED_LEADS).forEach(function(l){ types[l.type] = (types[l.type]||0)+1; });
   var typeArr = Object.keys(types).map(function(k){return {l:k,n:types[k]};}).sort(function(a,b){return b.n-a.n;});
   var typeMax = typeArr[0]?typeArr[0].n:1;
   var typesEl = document.getElementById('ba-types');
@@ -3695,7 +3697,7 @@ function loadBizAnalytics() {
 
   // Source breakdown
   var sources = {};
-  SEED_LEADS.forEach(function(l){ var src=(l.source||'Unknown').split(' ')[0]; sources[src]=(sources[src]||0)+1; });
+  (window._allLeads||SEED_LEADS).forEach(function(l){ var src=(l.source||'Unknown').split(' ')[0]; sources[src]=(sources[src]||0)+1; });
   var srcArr = Object.keys(sources).map(function(k){return {l:k,n:sources[k]};}).sort(function(a,b){return b.n-a.n;});
   var sourcesEl = document.getElementById('ba-sources');
   if(sourcesEl) {
@@ -3708,15 +3710,16 @@ function loadBizAnalytics() {
 function aiAdvise(q) {
   if (!q) return;
   var chat = document.getElementById('ai-chat');
-  var hot = SEED_LEADS.filter(function(l){return l.score>=80;});
-  var warm = SEED_LEADS.filter(function(l){return l.score>=50&&l.score<80;});
-  var cold = SEED_LEADS.filter(function(l){return l.score<50;});
-  var avg = Math.round(SEED_LEADS.reduce(function(a,l){return a+l.score;},0)/SEED_LEADS.length);
+  var hot = (window._allLeads||SEED_LEADS).filter(function(l){return l.score>=80;});
+  var warm = (window._allLeads||SEED_LEADS).filter(function(l){return l.score>=50&&l.score<80;});
+  var cold = (window._allLeads||SEED_LEADS).filter(function(l){return l.score<50;});
+  var avg = Math.round((window._allLeads||SEED_LEADS).reduce(function(a,l){return a+l.score;},0)/(window._allLeads||SEED_LEADS).length);
 
   // Count statuses from localStorage
   var stats = {new:0,contacted:0,interested:0,converted:0};
-  SEED_LEADS.forEach(function(l,i){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+  (window._allLeads||SEED_LEADS).forEach(function(l,i){
+    var id = l.id||('seed_'+i);
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||l.status||'new';
     if(stats[st]!==undefined) stats[st]++;
     else stats['new']++;
@@ -3730,18 +3733,19 @@ function aiAdvise(q) {
 
   // Location breakdown
   var locMap = {};
-  SEED_LEADS.forEach(function(l){ var loc = (l.location||'Unknown').split(',')[0].trim(); locMap[loc] = (locMap[loc]||0)+1; });
+  (window._allLeads||SEED_LEADS).forEach(function(l){ var loc = (l.location||'Unknown').split(',')[0].trim(); locMap[loc] = (locMap[loc]||0)+1; });
   var topLocs = Object.entries(locMap).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
 
   // Type breakdown
   var typeMap = {};
-  SEED_LEADS.forEach(function(l){ var t = l.type||'Unknown'; typeMap[t]=(typeMap[t]||0)+1; });
+  (window._allLeads||SEED_LEADS).forEach(function(l){ var t = l.type||'Unknown'; typeMap[t]=(typeMap[t]||0)+1; });
   var topTypes = Object.entries(typeMap).sort(function(a,b){return b[1]-a[1];});
 
   // Uncontacted hot leads
   var uncontactedHot = [];
-  SEED_LEADS.forEach(function(l,i){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+  (window._allLeads||SEED_LEADS).forEach(function(l,i){
+    var id = l.id||('seed_'+i);
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||l.status||'new';
     if(l.score>=80 && st==='new') uncontactedHot.push({lead:l,idx:i});
   });
@@ -3755,7 +3759,7 @@ function aiAdvise(q) {
         '✅ All hot leads have been contacted! Focus on warm leads next.')+
       '\n\n📊 Pipeline Status:\n• New: '+stats.new+' | Contacted: '+stats.contacted+' | Interested: '+stats.interested+' | Converted: '+stats.converted,
 
-    "What's my best outreach strategy?": '📨 OUTREACH STRATEGY\n\nChannel: LinkedIn DM (personalized templates ready for all '+SEED_LEADS.length+' leads)\n\n'+
+    "What's my best outreach strategy?": '📨 OUTREACH STRATEGY\n\nChannel: LinkedIn DM (personalized templates ready for all '+(window._allLeads||SEED_LEADS).length+' leads)\n\n'+
       '📅 5-Day Blitz Plan:\n'+
       'Day 1: Send 10 DMs to hot leads (score 80+)\nDay 2: Send 10 DMs to warm leads (score 50-79)\nDay 3: Send remaining warm leads\nDay 4: Follow up Day 1 non-responders\nDay 5: Follow up Day 2 non-responders\n\n'+
       '📍 Geo Targeting — Top markets:\n'+topLocs.map(function(l){return '• '+l[0]+': '+l[1]+' leads';}).join('\n')+
@@ -3764,7 +3768,7 @@ function aiAdvise(q) {
 
     'How can I improve conversion?': '📈 CONVERSION OPTIMIZATION\n\n'+
       'Current Pipeline:\n• '+stats.new+' New → '+stats.contacted+' Contacted → '+stats.interested+' Interested → '+stats.converted+' Converted\n'+
-      '• Conversion rate: '+(stats.converted>0?Math.round(stats.converted/SEED_LEADS.length*100):0)+'%\n'+
+      '• Conversion rate: '+(stats.converted>0?Math.round(stats.converted/(window._allLeads||SEED_LEADS).length*100):0)+'%\n'+
       (totalUsers>0?'• Active users: '+totalUsers+' ('+proUsers+' Pro, '+eliteUsers+' Elite)\n• MRR: $'+mrr:'')+
       '\n\n🎯 Action Items:\n'+
       '1. '+( stats.contacted===0?'START OUTREACH — 0 leads contacted. This is the #1 bottleneck.':'Keep momentum — '+stats.contacted+' leads contacted, aim for 100%.')+'\n'+
@@ -3773,31 +3777,31 @@ function aiAdvise(q) {
       '4. Social proof: Screenshot your dashboard, share to Reddit/Twitter\n'+
       '5. Referral bonus: Give converted users 1 month free for each referral\n'+
       '6. Follow-up cadence: Day 1 → Day 3 → Day 7 → Day 14 (4-touch sequence)\n\n'+
-      '🎯 Target: Convert 5 of '+SEED_LEADS.length+' leads = '+(Math.round(5/SEED_LEADS.length*100))+'% conversion → $'+((3*29)+(2*79))+'/mo MRR',
+      '🎯 Target: Convert 5 of '+(window._allLeads||SEED_LEADS).length+' leads = '+(Math.round(5/(window._allLeads||SEED_LEADS).length*100))+'% conversion → $'+((3*29)+(2*79))+'/mo MRR',
 
     'Analyze my pipeline health': '💪 PIPELINE HEALTH REPORT\n\n'+
-      '📊 Overall: '+SEED_LEADS.length+' leads | Avg score: '+avg+'/100\n\n'+
+      '📊 Overall: '+(window._allLeads||SEED_LEADS).length+' leads | Avg score: '+avg+'/100\n\n'+
       'Stage Breakdown:\n'+
-      '• 🆕 New: '+stats.new+' ('+(Math.round(stats.new/SEED_LEADS.length*100))+'%)\n'+
-      '• 📨 Contacted: '+stats.contacted+' ('+(Math.round(stats.contacted/SEED_LEADS.length*100))+'%)\n'+
-      '• ⭐ Interested: '+stats.interested+' ('+(Math.round(stats.interested/SEED_LEADS.length*100))+'%)\n'+
-      '• ✅ Converted: '+stats.converted+' ('+(Math.round(stats.converted/SEED_LEADS.length*100))+'%)\n\n'+
+      '• 🆕 New: '+stats.new+' ('+(Math.round(stats.new/(window._allLeads||SEED_LEADS).length*100))+'%)\n'+
+      '• 📨 Contacted: '+stats.contacted+' ('+(Math.round(stats.contacted/(window._allLeads||SEED_LEADS).length*100))+'%)\n'+
+      '• ⭐ Interested: '+stats.interested+' ('+(Math.round(stats.interested/(window._allLeads||SEED_LEADS).length*100))+'%)\n'+
+      '• ✅ Converted: '+stats.converted+' ('+(Math.round(stats.converted/(window._allLeads||SEED_LEADS).length*100))+'%)\n\n'+
       'Score Distribution:\n'+
       '• 🔥 Hot (80+): '+hot.length+' leads\n'+
       '• 🌡️ Warm (50-79): '+warm.length+' leads\n'+
       '• ❄️ Cold (<50): '+cold.length+' leads\n\n'+
       'Lead Types:\n'+topTypes.map(function(t){return '• '+t[0]+': '+t[1];}).join('\n')+
       '\n\n'+(totalUsers>0?'💰 Revenue:\n• Users: '+totalUsers+' | Pro: '+proUsers+' | Elite: '+eliteUsers+'\n• MRR: $'+mrr+' | ARR: $'+(mrr*12)+'\n\n':'')+
-      (stats.new>40?'⚠️ ALERT: '+(Math.round(stats.new/SEED_LEADS.length*100))+'% of leads still in "New" — start outreach immediately!':
+      (stats.new>40?'⚠️ ALERT: '+(Math.round(stats.new/(window._allLeads||SEED_LEADS).length*100))+'% of leads still in "New" — start outreach immediately!':
        stats.interested>5?'📈 STRONG: '+stats.interested+' interested leads — focus on closing these this week!':
        '👍 Pipeline is moving. Keep the outreach cadence going.'),
 
     'What markets should I focus on?': '📍 MARKET ANALYSIS\n\n'+
-      'Lead Distribution by Market:\n'+topLocs.map(function(l,i){return (i+1)+'. '+l[0]+': '+l[1]+' leads ('+(Math.round(l[1]/SEED_LEADS.length*100))+'%)';}).join('\n')+
-      '\n\nLead Types:\n'+topTypes.map(function(t){return '• '+t[0]+': '+t[1]+' ('+(Math.round(t[1]/SEED_LEADS.length*100))+'%)';}).join('\n')+
+      'Lead Distribution by Market:\n'+topLocs.map(function(l,i){return (i+1)+'. '+l[0]+': '+l[1]+' leads ('+(Math.round(l[1]/(window._allLeads||SEED_LEADS).length*100))+'%)';}).join('\n')+
+      '\n\nLead Types:\n'+topTypes.map(function(t){return '• '+t[0]+': '+t[1]+' ('+(Math.round(t[1]/(window._allLeads||SEED_LEADS).length*100))+'%)';}).join('\n')+
       '\n\n🎯 Strategy:\n'+
       '• Focus on top 2 markets: '+topLocs[0][0]+' and '+(topLocs[1]?topLocs[1][0]:'N/A')+'\n'+
-      '• These represent '+(Math.round((topLocs[0][1]+(topLocs[1]?topLocs[1][1]:0))/SEED_LEADS.length*100))+'% of all leads\n'+
+      '• These represent '+(Math.round((topLocs[0][1]+(topLocs[1]?topLocs[1][1]:0))/(window._allLeads||SEED_LEADS).length*100))+'% of all leads\n'+
       '• Create market-specific messaging for each geo\n'+
       '• Consider timezone-optimized send times',
 
@@ -3820,14 +3824,14 @@ function aiAdvise(q) {
 
     'Compare lead segments': '🔍 SEGMENT ANALYSIS\n\n'+
       'By Score Tier:\n'+
-      '🔥 Hot (80+): '+hot.length+' leads — '+(Math.round(hot.length/SEED_LEADS.length*100))+'%\n'+
+      '🔥 Hot (80+): '+hot.length+' leads — '+(Math.round(hot.length/(window._allLeads||SEED_LEADS).length*100))+'%\n'+
       '   Avg score: '+(hot.length?Math.round(hot.reduce(function(a,l){return a+l.score;},0)/hot.length):0)+'\n'+
-      '🌡️ Warm (50-79): '+warm.length+' leads — '+(Math.round(warm.length/SEED_LEADS.length*100))+'%\n'+
+      '🌡️ Warm (50-79): '+warm.length+' leads — '+(Math.round(warm.length/(window._allLeads||SEED_LEADS).length*100))+'%\n'+
       '   Avg score: '+(warm.length?Math.round(warm.reduce(function(a,l){return a+l.score;},0)/warm.length):0)+'\n'+
-      '❄️ Cold (<50): '+cold.length+' leads — '+(Math.round(cold.length/SEED_LEADS.length*100))+'%\n'+
+      '❄️ Cold (<50): '+cold.length+' leads — '+(Math.round(cold.length/(window._allLeads||SEED_LEADS).length*100))+'%\n'+
       '   Avg score: '+(cold.length?Math.round(cold.reduce(function(a,l){return a+l.score;},0)/cold.length):0)+'\n\n'+
       'By Type:\n'+topTypes.map(function(t){
-        var tLeads = SEED_LEADS.filter(function(l){return l.type===t[0];});
+        var tLeads = (window._allLeads||SEED_LEADS).filter(function(l){return l.type===t[0];});
         var tAvg = Math.round(tLeads.reduce(function(a,l){return a+l.score;},0)/tLeads.length);
         return '• '+t[0]+': '+t[1]+' leads, avg score '+tAvg;
       }).join('\n')+
@@ -3839,13 +3843,13 @@ function aiAdvise(q) {
   if (!answer) {
     answer = '🤖 Analyzing: "'+q+'"\n\n'+
       'Based on your data:\n\n'+
-      '📊 Leads: '+SEED_LEADS.length+' total | '+hot.length+' hot | '+warm.length+' warm | '+cold.length+' cold\n'+
+      '📊 Leads: '+(window._allLeads||SEED_LEADS).length+' total | '+hot.length+' hot | '+warm.length+' warm | '+cold.length+' cold\n'+
       '📍 Top markets: '+topLocs.slice(0,3).map(function(l){return l[0];}).join(', ')+'\n'+
       '📈 Pipeline: '+stats.new+' new → '+stats.contacted+' contacted → '+stats.interested+' interested → '+stats.converted+' converted\n'+
       (totalUsers>0?'👥 Users: '+totalUsers+' | MRR: $'+mrr+'\n':'')+
       '\n🎯 Recommended Next Steps:\n'+
       (uncontactedHot.length>0?'1. Contact '+uncontactedHot.length+' uncontacted hot leads ASAP\n':'1. Follow up with contacted leads\n')+
-      '2. Review lead DMs — all '+SEED_LEADS.length+' are personalized and ready to send\n'+
+      '2. Review lead DMs — all '+(window._allLeads||SEED_LEADS).length+' are personalized and ready to send\n'+
       '3. Track responses in the CRM kanban board\n'+
       '4. Export leads to CSV for offline follow-up';
   }
@@ -4189,8 +4193,7 @@ function addSched() {
 function renderFollowups(id) {
   var el = document.getElementById('lp-followups');
   var btn = document.getElementById('btn-schedule-all');
-  var idx = parseInt(id.replace('seed_',''));
-  var lead = SEED_LEADS[idx];
+  var lead = getLeadData(id);
   if (!lead || !lead.followups || !lead.followups.length) {
     el.innerHTML = '<div class="empty-msg">No follow-up sequence for this lead</div>';
     if(btn) btn.style.display='none';
@@ -4220,8 +4223,7 @@ function renderFollowups(id) {
 }
 
 function sendFollowup(id, fuIdx) {
-  var idx = parseInt(id.replace('seed_',''));
-  var lead = SEED_LEADS[idx];
+  var lead = getLeadData(id);
   if(!lead||!lead.followups||!lead.followups[fuIdx]) return;
   var saved = JSON.parse(localStorage.getItem('tc_fu_'+id)||'{}');
   var now = new Date();
@@ -4233,8 +4235,7 @@ function sendFollowup(id, fuIdx) {
 }
 
 function copyFollowup(id, fuIdx) {
-  var idx = parseInt(id.replace('seed_',''));
-  var lead = SEED_LEADS[idx];
+  var lead = getLeadData(id);
   if(!lead||!lead.followups||!lead.followups[fuIdx]) return;
   navigator.clipboard.writeText(lead.followups[fuIdx].msg).then(function(){
     toast('Follow-up #'+(fuIdx+1)+' copied to clipboard','grn');
@@ -4243,7 +4244,7 @@ function copyFollowup(id, fuIdx) {
 
 function scheduleFollowup(id, fuIdx) {
   var idx = parseInt(id.replace('seed_',''));
-  var lead = SEED_LEADS[idx];
+  var lead = (window._allLeads||SEED_LEADS)[idx];
   if(!lead||!lead.followups||!lead.followups[fuIdx]) return;
   var fu = lead.followups[fuIdx];
   var d = new Date();
@@ -4259,7 +4260,7 @@ function scheduleFollowup(id, fuIdx) {
 function scheduleAllFollowups() {
   if(!currentLead) return;
   var idx = parseInt(currentLead.replace('seed_',''));
-  var lead = SEED_LEADS[idx];
+  var lead = (window._allLeads||SEED_LEADS)[idx];
   if(!lead||!lead.followups) return;
   var saved = JSON.parse(localStorage.getItem('tc_fu_'+currentLead)||'{}');
   var scheduled = 0;
