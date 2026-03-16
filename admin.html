@@ -761,7 +761,6 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <div class="stat"><div class="stat-label">🌐 Tier 3 · Network</div><div class="stat-val" id="leads-t3">0</div></div>
     <div class="stat"><div class="stat-label">🎯 Prospects</div><div class="stat-val" id="leads-prospects">0</div></div>
   </div>
-  <!-- TIER TABS -->
   <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
     <button class="btn btn-primary tier-tab active" data-tier="all" onclick="setTierFilter('all',this)" style="font-size:12px;padding:6px 14px">All Leads</button>
     <button class="btn btn-ghost tier-tab" data-tier="1" onclick="setTierFilter('1',this)" style="font-size:12px;padding:6px 14px">🔥 Tier 1 — Friends &amp; Family</button>
@@ -1821,7 +1820,6 @@ function doLogout() {
 function showApp() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('app').style.display = 'block';
-  // Pre-load leads from Firestore so data is available on all pages
   loadLeads();
   loadPage('dashboard');
 }
@@ -2475,26 +2473,27 @@ function loadBizDash() {
   }).join('');
 
   // Top leads
-  var allL = window._allLeads||(window._allLeads||SEED_LEADS);
+  var allL = window._allLeads||SEED_LEADS;
   var top5 = allL.filter(function(l){return l.score>=80;}).slice(0,8);
   document.getElementById('bd-top-leads').innerHTML = top5.map(function(l,i){
     var lid = l.id||('seed_'+i);
     return '<tr onclick="openLeadPanel(\''+lid+'\')" style="cursor:pointer" onmouseover="this.style.background=\'rgba(99,102,241,.06)\'" onmouseout="this.style.background=\'\'">'+
       '<td style="font-weight:600;font-size:13px">'+l.name+'</td>'+
       '<td><span style="font-weight:700;color:var(--grn)">'+l.score+'</span></td>'+
-      '<td style="font-size:12px;color:var(--t2)">'+l.type+'</td>'+
-      '<td style="font-size:12px;color:var(--t3)">'+l.location+'</td>'+
-      '<td><button onclick="event.stopPropagation();openLeadPanel(\'seed_'+idx+'\')" class="btn btn-primary" style="font-size:11px;padding:3px 10px">Open</button></td></tr>';
+      '<td style="font-size:12px;color:var(--t2)">'+(l.type||'')+'</td>'+
+      '<td style="font-size:12px;color:var(--t3)">'+(l.location||'')+'</td>'+
+      '<td><button onclick="event.stopPropagation();openLeadPanel(\''+lid+'\')" class="btn btn-primary" style="font-size:11px;padding:3px 10px">Open</button></td></tr>';
   }).join('');
 }
 
 function loadCRM() {
   var cols = {new:[],contacted:[],interested:[],converted:[]};
   (window._allLeads||SEED_LEADS).forEach(function(l,i){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    var id = l.id||('seed_'+i);
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||l.status||'new';
     if(!cols[st]) cols[st] = [];
-    cols[st].push({lead:l, idx:i});
+    cols[st].push({lead:l, id:id});
   });
   var s = function(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; };
   s('crm-new', cols.new.length);
@@ -2707,10 +2706,10 @@ function loadScheduled() {
   }).join('');
 
   // People to contact
-  var topLeads = (window._allLeads||SEED_LEADS).map(function(l,i){return Object.assign({},l,{idx:i});})
+  var topLeads = (window._allLeads||SEED_LEADS).map(function(l,i){return Object.assign({},l,{idx:i,lid:l.id||('seed_'+i)});})
     .sort(function(a,b){return b.score-a.score;}).slice(0,15);
   document.getElementById('sched-contacts').innerHTML = topLeads.map(function(l){
-    var sv = JSON.parse(localStorage.getItem('tc_lead_seed_'+l.idx)||'{}');
+    var sv = JSON.parse(localStorage.getItem('tc_lead_'+l.lid)||'{}');
     var st = sv.status||l.status||'new';
     var stColor = st==='contacted'?'var(--ylw)':st==='interested'?'var(--acc)':st==='converted'?'var(--grn)':'var(--t3)';
     return '<div class="lp-field" style="cursor:pointer;padding:10px 12px" onclick="openLead('+l.idx+')">'+
@@ -3674,7 +3673,8 @@ function aiAdvise(q) {
   // Count statuses from localStorage
   var stats = {new:0,contacted:0,interested:0,converted:0};
   (window._allLeads||SEED_LEADS).forEach(function(l,i){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    var id = l.id||('seed_'+i);
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||l.status||'new';
     if(stats[st]!==undefined) stats[st]++;
     else stats['new']++;
@@ -3699,7 +3699,8 @@ function aiAdvise(q) {
   // Uncontacted hot leads
   var uncontactedHot = [];
   (window._allLeads||SEED_LEADS).forEach(function(l,i){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_seed_'+i)||'{}');
+    var id = l.id||('seed_'+i);
+    var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||l.status||'new';
     if(l.score>=80 && st==='new') uncontactedHot.push({lead:l,idx:i});
   });
@@ -3819,8 +3820,8 @@ window._tierFilter = 'all';
 
 function setTierFilter(tier, btn) {
   window._tierFilter = tier;
-  document.querySelectorAll('.tier-tab').forEach(function(b){b.classList.remove('active');b.classList.remove('btn-primary');b.classList.add('btn-ghost');});
-  if(btn){btn.classList.add('active');btn.classList.remove('btn-ghost');btn.classList.add('btn-primary');}
+  document.querySelectorAll('.tier-tab').forEach(function(b){b.classList.remove('active','btn-primary');b.classList.add('btn-ghost');});
+  if(btn){btn.classList.add('active','btn-primary');btn.classList.remove('btn-ghost');}
   applyLeadFilters();
 }
 
@@ -3830,7 +3831,6 @@ function getTier(lead) {
     if (t === 'Friends & Family') return '1';
     if (t === 'Acquaintance') return '2';
     if (t === 'Network Contact') return '3';
-    // fallback by score
     if ((lead.score||0) >= 80) return '1';
     if ((lead.score||0) >= 50) return '2';
     return '3';
@@ -3840,29 +3840,25 @@ function getTier(lead) {
 
 async function loadLeads() {
   try {
-    // Fetch ALL leads from Firestore (no limit)
     var snap = await db.collection('leads').orderBy('createdAt','desc').get().catch(function(){return {docs:[]};});
     var leads = snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
-    // If Firestore empty, fallback to seed
     if (!leads.length) {
-      leads = (window._allLeads||SEED_LEADS).map(function(l,i){return Object.assign({},l,{id:'seed_'+i, source:'Seed'});});
+      leads = SEED_LEADS.map(function(l,i){return Object.assign({},l,{id:'seed_'+i, source:'Seed'});});
     }
     window._allLeads = leads;
-    // Stats
     var t1 = leads.filter(function(l){return getTier(l)==='1';}).length;
     var t2 = leads.filter(function(l){return getTier(l)==='2';}).length;
     var t3 = leads.filter(function(l){return getTier(l)==='3';}).length;
-    var prospects = leads.filter(function(l){return getTier(l)==='prospect';}).length;
+    var pr = leads.filter(function(l){return getTier(l)==='prospect';}).length;
     document.getElementById('leads-total').textContent = leads.length;
-    document.getElementById('leads-t1').textContent = t1;
-    document.getElementById('leads-t2').textContent = t2;
-    document.getElementById('leads-t3').textContent = t3;
-    document.getElementById('leads-prospects').textContent = prospects;
+    var t1El=document.getElementById('leads-t1'); if(t1El) t1El.textContent=t1;
+    var t2El=document.getElementById('leads-t2'); if(t2El) t2El.textContent=t2;
+    var t3El=document.getElementById('leads-t3'); if(t3El) t3El.textContent=t3;
+    var prEl=document.getElementById('leads-prospects'); if(prEl) prEl.textContent=pr;
     applyLeadFilters();
   } catch(e) {
     console.warn('loadLeads error:', e);
-    var leads = (window._allLeads||SEED_LEADS).map(function(l,i){return Object.assign({},l,{id:'seed_'+i, source:'Seed'});});
-    window._allLeads = leads;
+    window._allLeads = SEED_LEADS.map(function(l,i){return Object.assign({},l,{id:'seed_'+i, source:'Seed'});});
     applyLeadFilters();
   }
 }
@@ -3877,23 +3873,18 @@ function renderLeadsTable(leads) {
     return map[ch]||'📨';
   };
   var tierIcon = function(t){return t==='1'?'🔥':t==='2'?'⚡':t==='3'?'🌐':'🎯';};
-  var tierColor = function(t){return t==='1'?'#10b981':t==='2'?'#f59e0b':t==='3'?'#6366f1':'#94a3b8';};
   tbody.innerHTML = leads.map(function(lead, i) {
     var id = lead.id || 'seed_'+i;
     var saved = JSON.parse(localStorage.getItem('tc_lead_'+id)||'{}');
     var st = saved.status||lead.status||'new';
     var stBadge = st==='converted'?'badge-green':st==='interested'?'badge-yellow':st==='contacted'?'badge-indigo':'badge-indigo';
-    var tier = getTier(lead);
-    var contactBits = [];
-    if(lead.email) contactBits.push('📧');
-    if(lead.phone) contactBits.push('📱');
-    if(lead.instagram) contactBits.push('📸');
-    if(lead.linkedIn) contactBits.push('🔗');
-    var contactStr = contactBits.length ? '<div style="font-size:10px;margin-top:2px">'+contactBits.join(' ')+'</div>' : '';
+    var tier = typeof getTier==='function'?getTier(lead):'?';
+    var cb=[];if(lead.email)cb.push('📧');if(lead.phone)cb.push('📱');if(lead.instagram)cb.push('📸');if(lead.linkedIn)cb.push('🔗');
+    var cs=cb.length?'<div style="font-size:10px;margin-top:2px">'+cb.join(' ')+'</div>':'';
     return '<tr data-id="'+id+'" onclick="openLeadPanel(\''+id+'\')" style="border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'rgba(99,102,241,.08)\'" onmouseout="this.style.background=\'\'">'+
-      '<td style="padding:10px 12px;text-align:center"><span style="font-size:14px" title="Tier '+tier+'">'+tierIcon(tier)+'</span></td>'+
+      '<td style="padding:10px 12px;text-align:center;font-size:14px" title="Tier '+tier+'">'+tierIcon(tier)+'</td>'+
       '<td style="padding:10px 12px"><span style="font-weight:700;color:'+sc(lead.score||0)+';font-size:15px">'+(lead.score||0)+'</span></td>'+
-      '<td style="padding:10px 12px"><div style="font-size:13px;color:#f1f5f9;font-weight:600">'+(lead.name||'\u2014')+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+(lead.location||'')+'</div>'+contactStr+'</td>'+
+      '<td style="padding:10px 12px"><div style="font-size:13px;color:#f1f5f9;font-weight:600">'+(lead.name||'\u2014')+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+(lead.location||'')+'</div>'+cs+'</td>'+
       '<td style="padding:10px 12px;font-size:12px;color:#94a3b8">'+(lead.role||lead.company||'\u2014')+'</td>'+
       '<td style="padding:10px 12px"><span class="badge '+stBadge+'">'+st+'</span></td>'+
       '<td style="padding:10px 12px;font-size:11px;color:#64748b">'+(lead.type||'\u2014')+'</td>'+
@@ -3913,9 +3904,7 @@ function applyLeadFilters() {
   var leads = (window._allLeads||[]).slice();
   var total = leads.length;
   leads = leads.filter(function(l){
-    // Tier filter
     if(tierF!=='all' && getTier(l)!==tierF) return false;
-    // Source filter
     if(sourceF==='Personal Network' && l.source!=='Personal Network') return false;
     if(sourceF==='Seed' && l.source==='Personal Network') return false;
     var saved = JSON.parse(localStorage.getItem('tc_lead_'+l.id)||'{}');
@@ -3953,13 +3942,12 @@ function clearLeadFilters() {
 function filterLeads(q) { applyLeadFilters(); }
 
 function exportLeads() {
-  var rows = [['Tier','Score','Name','Role','Company','Location','Status','Priority','Type','Source','Channel','Email','Phone','Instagram','DM']];
+  var rows = [['Tier','Score','Name','Role','Company','Location','Status','Priority','Type','Source','Email','Phone','Instagram','DM']];
   (window._allLeads||[]).forEach(function(l){
-    var saved = JSON.parse(localStorage.getItem('tc_lead_'+l.id)||'{}');
     rows.push([
       getTier(l), l.score||0, l.name||'', l.role||'', l.company||'', l.location||'',
-      saved.status||l.status||'new', l.priority||'', l.type||'', l.source||'',
-      l.channel||'LinkedIn', l.email||'', l.phone||'', l.instagram||'',
+      l.status||'new', l.priority||'', l.type||'', l.source||'',
+      l.email||'', l.phone||'', l.instagram||'',
       (l.dm||'').replace(/"/g,'""')
     ]);
   });
@@ -3994,13 +3982,11 @@ function copyAllDMs() {
 let currentLead = null;
 
 function getLeadData(id) {
-  // Try Firestore leads first
   var found = (window._allLeads||[]).find(function(l){return l.id===id;});
   if (!found) {
-    // Fallback to seed
     var idx = parseInt(id.replace('seed_',''));
-    if (isNaN(idx) || !(window._allLeads||SEED_LEADS)[idx]) return null;
-    found = Object.assign({}, (window._allLeads||SEED_LEADS)[idx], {id: id});
+    if (isNaN(idx) || !SEED_LEADS[idx]) return null;
+    found = Object.assign({}, SEED_LEADS[idx], {id: id});
   }
   var saved = JSON.parse(localStorage.getItem('tc_lead_'+id) || '{}');
   return Object.assign({}, found, saved);
@@ -4265,7 +4251,7 @@ function toast(msg, color) {
 }
 
 // ═══ SEED LEADS DATA ═══
-const (window._allLeads||SEED_LEADS)_PLACEHOLDER = [
+const SEED_LEADS = [
   {
     "name": "Anthony Wu",
     "firstName": "Anthony",
