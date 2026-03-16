@@ -307,34 +307,103 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 
 <!-- User Edit Modal -->
 <div id="user-modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9997;backdrop-filter:blur(2px)" onclick="closeUserModal()"></div>
-<div id="user-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;width:440px;max-width:90vw;z-index:9998;max-height:80vh;overflow-y:auto">
+<div id="user-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;width:620px;max-width:95vw;z-index:9998;max-height:85vh;overflow-y:auto">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-    <h3 id="um-title" style="font-size:16px;font-weight:700;margin:0">Edit User</h3>
+    <h3 id="um-title" style="font-size:16px;font-weight:700;margin:0">User Profile</h3>
     <button onclick="closeUserModal()" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">✕</button>
   </div>
-  <input type="hidden" id="um-uid">
-  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Email</label>
-  <input type="text" id="um-email" readonly style="opacity:.6;width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
-  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Display Name</label>
-  <input type="text" id="um-name" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
-  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Plan</label>
-  <select id="um-plan" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
-    <option value="free">Free</option>
-    <option value="pro">Pro ($29/mo)</option>
-    <option value="elite">Elite ($79/mo)</option>
-  </select>
-  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Location</label>
-  <input type="text" id="um-location" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
-  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Phone</label>
-  <input type="text" id="um-phone" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
-  <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Admin Notes</label>
-  <input type="text" id="um-notes" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;margin-bottom:12px">
-  <div style="display:flex;gap:8px;margin-top:8px">
-    <button class="btn btn-primary" onclick="saveUserEdits()" style="flex:1">Save Changes</button>
-    <button class="btn btn-ghost" onclick="resetUserPassword()" style="flex:1">Reset Password</button>
+  <!-- Profile Header -->
+  <div id="um-profile-header" style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:12px;margin-bottom:16px">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff" id="um-avatar">?</div>
+    <div style="flex:1">
+      <div id="um-profile-name" style="font-size:15px;font-weight:700"></div>
+      <div id="um-profile-email" style="font-size:12px;color:var(--t2)"></div>
+    </div>
+    <div style="text-align:right">
+      <span id="um-profile-plan" class="badge badge-yellow" style="font-size:11px"></span>
+      <div id="um-profile-joined" style="font-size:10px;color:var(--t3);margin-top:4px"></div>
+    </div>
   </div>
-  <div style="border-top:1px solid var(--brd);margin-top:16px;padding-top:16px">
-    <button class="btn btn-danger" onclick="deleteUserFromModal()" style="width:100%">Delete User Account</button>
+  <!-- Stats Row -->
+  <div id="um-stats-row" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+    <div style="background:var(--bg);border-radius:8px;padding:10px;text-align:center">
+      <div style="font-size:10px;color:var(--t3)">Logins</div>
+      <div id="um-stat-logins" style="font-size:16px;font-weight:700">—</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:10px;text-align:center">
+      <div style="font-size:10px;color:var(--t3)">Trades</div>
+      <div id="um-stat-trades" style="font-size:16px;font-weight:700">—</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:10px;text-align:center">
+      <div style="font-size:10px;color:var(--t3)">Holdings</div>
+      <div id="um-stat-holdings" style="font-size:16px;font-weight:700">—</div>
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:10px;text-align:center">
+      <div style="font-size:10px;color:var(--t3)">Last Active</div>
+      <div id="um-stat-active" style="font-size:12px;font-weight:600">—</div>
+    </div>
+  </div>
+  <!-- Tabs -->
+  <div style="display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--brd);padding-bottom:0">
+    <button class="um-tab active" onclick="switchUserTab('details',this)" style="padding:8px 16px;font-size:12px;font-weight:600;background:none;border:none;color:var(--t1);cursor:pointer;border-bottom:2px solid var(--acc)">Details</button>
+    <button class="um-tab" onclick="switchUserTab('holdings',this)" style="padding:8px 16px;font-size:12px;font-weight:600;background:none;border:none;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent">Holdings</button>
+    <button class="um-tab" onclick="switchUserTab('watchlist',this)" style="padding:8px 16px;font-size:12px;font-weight:600;background:none;border:none;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent">Watchlist</button>
+    <button class="um-tab" onclick="switchUserTab('activity',this)" style="padding:8px 16px;font-size:12px;font-weight:600;background:none;border:none;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent">Activity</button>
+  </div>
+  <!-- Tab: Details -->
+  <div id="um-tab-details">
+    <input type="hidden" id="um-uid">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Email</label>
+        <input type="text" id="um-email" readonly style="opacity:.6;width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px"></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Display Name</label>
+        <input type="text" id="um-name" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px"></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Plan</label>
+        <select id="um-plan" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px">
+          <option value="free">Free</option><option value="trial">Trial</option><option value="pro">Pro ($29/mo)</option><option value="elite">Elite ($79/mo)</option>
+        </select></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Location</label>
+        <input type="text" id="um-location" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px"></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Phone</label>
+        <input type="text" id="um-phone" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px"></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Admin Notes</label>
+        <input type="text" id="um-notes" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-primary" onclick="saveUserEdits()" style="flex:1">Save Changes</button>
+      <button class="btn btn-ghost" onclick="resetUserPassword()" style="flex:1">Reset Password</button>
+    </div>
+    <div style="border-top:1px solid var(--brd);margin-top:16px;padding-top:16px">
+      <button class="btn btn-danger" onclick="deleteUserFromModal()" style="width:100%">Delete User Account</button>
+    </div>
+  </div>
+  <!-- Tab: Holdings -->
+  <div id="um-tab-holdings" style="display:none">
+    <div id="um-holdings-list" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div style="border-top:1px solid var(--brd);margin-top:16px;padding-top:16px">
+      <h4 style="font-size:13px;font-weight:600;margin-bottom:8px">Add Holding</h4>
+      <div style="display:flex;gap:8px;align-items:flex-end">
+        <div style="flex:1"><label style="font-size:10px;color:var(--t3)">Symbol</label><input type="text" id="um-add-sym" placeholder="AAPL" style="width:100%;padding:6px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px;text-transform:uppercase"></div>
+        <div style="flex:1"><label style="font-size:10px;color:var(--t3)">Shares</label><input type="number" id="um-add-shares" placeholder="1" value="1" style="width:100%;padding:6px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px"></div>
+        <div style="flex:1"><label style="font-size:10px;color:var(--t3)">Entry $</label><input type="number" id="um-add-entry" placeholder="0.00" step="0.01" style="width:100%;padding:6px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px"></div>
+        <div style="flex:1"><label style="font-size:10px;color:var(--t3)">Currency</label><select id="um-add-currency" style="width:100%;padding:6px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px"><option>CAD</option><option>USD</option></select></div>
+        <button class="btn btn-primary" onclick="addUserHolding()" style="padding:6px 14px;font-size:12px;white-space:nowrap">+ Add</button>
+      </div>
+    </div>
+  </div>
+  <!-- Tab: Watchlist -->
+  <div id="um-tab-watchlist" style="display:none">
+    <div id="um-watchlist-list" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+    <div style="border-top:1px solid var(--brd);margin-top:16px;padding-top:16px">
+      <div style="display:flex;gap:8px">
+        <input type="text" id="um-add-wl" placeholder="Add symbol (e.g. AAPL)" style="flex:1;padding:6px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px;text-transform:uppercase">
+        <button class="btn btn-primary" onclick="addUserWatchlistItem()" style="padding:6px 14px;font-size:12px">+ Add</button>
+      </div>
+    </div>
+  </div>
+  <!-- Tab: Activity -->
+  <div id="um-tab-activity" style="display:none">
+    <div id="um-activity-list" style="display:flex;flex-direction:column;gap:6px"></div>
   </div>
 </div>
 
@@ -2123,9 +2192,12 @@ function deleteUser(uid, btn) {
     .catch(function(e){ row.style.opacity='1'; row.style.pointerEvents=''; toast('Delete failed: '+e.message,'red'); });
 }
 
+var _modalUser = null;
 function openUserModal(uid) {
   var user = allUsers.find(function(u){return u.id===uid;});
   if (!user) return;
+  _modalUser = user;
+  // Details tab
   document.getElementById('um-uid').value = uid;
   document.getElementById('um-email').value = user.email||'';
   document.getElementById('um-name').value = user.displayName||user.name||'';
@@ -2133,13 +2205,132 @@ function openUserModal(uid) {
   document.getElementById('um-location').value = user.location||user.city||'';
   document.getElementById('um-phone').value = user.phone||'';
   document.getElementById('um-notes').value = user.adminNotes||'';
-  document.getElementById('um-title').textContent = user.email||'Edit User';
+  // Profile header
+  var name = user.displayName||user.name||user.email||'User';
+  document.getElementById('um-avatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('um-profile-name').textContent = name;
+  document.getElementById('um-profile-email').textContent = user.email||'';
+  var planEl = document.getElementById('um-profile-plan');
+  var plan = user.plan||'free';
+  planEl.textContent = plan;
+  planEl.className = 'badge ' + (plan==='elite'?'badge-green':plan==='pro'?'badge-indigo':'badge-yellow');
+  document.getElementById('um-profile-joined').textContent = 'Joined ' + fmtDate(user.createdAt);
+  // Stats
+  document.getElementById('um-stat-logins').textContent = user.loginCount||0;
+  document.getElementById('um-stat-trades').textContent = user.totalTrades||0;
+  document.getElementById('um-stat-holdings').textContent = (user.holdings||[]).length;
+  document.getElementById('um-stat-active').textContent = fmtDate(user.lastActive||user.lastLogin);
+  // Title
+  document.getElementById('um-title').textContent = name;
+  // Render tabs
+  renderUserHoldings();
+  renderUserWatchlist();
+  renderUserActivity();
+  // Reset to details tab
+  switchUserTab('details', document.querySelector('.um-tab.active')||document.querySelector('.um-tab'));
   document.getElementById('user-modal').style.display = 'block';
   document.getElementById('user-modal-overlay').style.display = 'block';
 }
 function closeUserModal() {
   document.getElementById('user-modal').style.display = 'none';
   document.getElementById('user-modal-overlay').style.display = 'none';
+  _modalUser = null;
+}
+function switchUserTab(tab, btn) {
+  document.querySelectorAll('.um-tab').forEach(function(t){ t.style.color='var(--t3)'; t.style.borderBottom='2px solid transparent'; });
+  if(btn){ btn.style.color='var(--t1)'; btn.style.borderBottom='2px solid var(--acc)'; }
+  ['details','holdings','watchlist','activity'].forEach(function(t){
+    var el=document.getElementById('um-tab-'+t);
+    if(el) el.style.display = t===tab?'block':'none';
+  });
+}
+function renderUserHoldings() {
+  var el = document.getElementById('um-holdings-list');
+  var holdings = (_modalUser&&_modalUser.holdings)||[];
+  if(!holdings.length){ el.innerHTML='<p style="font-size:12px;color:var(--t3);text-align:center;padding:20px">No holdings</p>'; return; }
+  el.innerHTML = holdings.map(function(h,i){
+    var val = (h.shares*(h.entry||0)).toFixed(2);
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg);border-radius:8px">'+
+      '<div style="font-size:14px;font-weight:700;min-width:60px">'+h.sym+'</div>'+
+      '<div style="flex:1"><div style="font-size:11px;color:var(--t2)">'+(h.name||'')+'</div></div>'+
+      '<div style="text-align:right"><div style="font-size:13px;font-weight:600">'+h.shares+' shares</div>'+
+      '<div style="font-size:11px;color:var(--t3)">@ $'+((h.entry||0).toFixed(2))+' '+(h.currency||'USD')+' · $'+val+'</div></div>'+
+      '<button onclick="removeUserHolding('+i+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:4px" title="Remove">✕</button></div>';
+  }).join('');
+}
+function addUserHolding() {
+  if(!_modalUser) return;
+  var sym = (document.getElementById('um-add-sym').value||'').toUpperCase().trim();
+  var shares = parseFloat(document.getElementById('um-add-shares').value)||1;
+  var entry = parseFloat(document.getElementById('um-add-entry').value)||0;
+  var currency = document.getElementById('um-add-currency').value||'USD';
+  if(!sym){ toast('Enter a symbol','red'); return; }
+  if(!_modalUser.holdings) _modalUser.holdings = [];
+  _modalUser.holdings.push({sym:sym, shares:shares, entry:entry, currency:currency, addedAt:Date.now()});
+  db.collection('users').doc(_modalUser.id).update({holdings:_modalUser.holdings})
+    .then(function(){ renderUserHoldings(); document.getElementById('um-stat-holdings').textContent=_modalUser.holdings.length; document.getElementById('um-add-sym').value=''; document.getElementById('um-add-entry').value=''; toast(sym+' added','grn'); })
+    .catch(function(e){ toast('Failed: '+e.message,'red'); });
+}
+function removeUserHolding(idx) {
+  if(!_modalUser||!_modalUser.holdings) return;
+  var sym = _modalUser.holdings[idx].sym;
+  if(!confirm('Remove '+sym+' from holdings?')) return;
+  _modalUser.holdings.splice(idx,1);
+  db.collection('users').doc(_modalUser.id).update({holdings:_modalUser.holdings})
+    .then(function(){ renderUserHoldings(); document.getElementById('um-stat-holdings').textContent=_modalUser.holdings.length; toast(sym+' removed','grn'); })
+    .catch(function(e){ toast('Failed: '+e.message,'red'); });
+}
+function renderUserWatchlist() {
+  var el = document.getElementById('um-watchlist-list');
+  var wl = (_modalUser&&_modalUser.watchlist)||[];
+  if(!wl.length){ el.innerHTML='<p style="font-size:12px;color:var(--t3);text-align:center;padding:20px">No watchlist items</p>'; return; }
+  el.innerHTML = wl.map(function(sym,i){
+    return '<div style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px">'+
+      '<span style="font-size:13px;font-weight:600">'+sym+'</span>'+
+      '<button onclick="removeUserWatchlistItem('+i+')" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px" title="Remove">✕</button></div>';
+  }).join('');
+}
+function addUserWatchlistItem() {
+  if(!_modalUser) return;
+  var sym = (document.getElementById('um-add-wl').value||'').toUpperCase().trim();
+  if(!sym){ toast('Enter a symbol','red'); return; }
+  if(!_modalUser.watchlist) _modalUser.watchlist = [];
+  if(_modalUser.watchlist.indexOf(sym)!==-1){ toast(sym+' already in watchlist','red'); return; }
+  _modalUser.watchlist.push(sym);
+  db.collection('users').doc(_modalUser.id).update({watchlist:_modalUser.watchlist})
+    .then(function(){ renderUserWatchlist(); document.getElementById('um-add-wl').value=''; toast(sym+' added to watchlist','grn'); })
+    .catch(function(e){ toast('Failed: '+e.message,'red'); });
+}
+function removeUserWatchlistItem(idx) {
+  if(!_modalUser||!_modalUser.watchlist) return;
+  var sym = _modalUser.watchlist[idx];
+  _modalUser.watchlist.splice(idx,1);
+  db.collection('users').doc(_modalUser.id).update({watchlist:_modalUser.watchlist})
+    .then(function(){ renderUserWatchlist(); toast(sym+' removed','grn'); })
+    .catch(function(e){ toast('Failed: '+e.message,'red'); });
+}
+function renderUserActivity() {
+  var el = document.getElementById('um-activity-list');
+  var user = _modalUser;
+  if(!user){ el.innerHTML=''; return; }
+  var items = [];
+  if(user.createdAt) items.push({time:user.createdAt,text:'Account created',icon:'🆕'});
+  if(user.lastActive) items.push({time:user.lastActive,text:'Last active',icon:'🟢'});
+  if(user.lastLogin) items.push({time:user.lastLogin,text:'Last login',icon:'🔑'});
+  if(user.trialStart) items.push({time:user.trialStart,text:'Trial started',icon:'⏱'});
+  if(user.trialEnds) items.push({time:user.trialEnds,text:'Trial ends',icon:'⏰'});
+  var sectors = user.sectorsUsed||[];
+  if(sectors.length) items.push({time:user.lastActive||Date.now(),text:'Sectors viewed: '+sectors.join(', '),icon:'🏭'});
+  var tickers = user.tickersViewed||[];
+  if(tickers.length) items.push({time:user.lastActive||Date.now(),text:'Tickers viewed: '+tickers.slice(0,15).join(', ')+(tickers.length>15?' +more':''),icon:'📊'});
+  items.sort(function(a,b){ var ta=a.time&&a.time.toDate?a.time.toDate().getTime():a.time; var tb=b.time&&b.time.toDate?b.time.toDate().getTime():b.time; return tb-ta; });
+  if(!items.length){ el.innerHTML='<p style="font-size:12px;color:var(--t3);text-align:center;padding:20px">No activity data</p>'; return; }
+  el.innerHTML = items.map(function(it){
+    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:8px">'+
+      '<span style="font-size:16px">'+it.icon+'</span>'+
+      '<span style="font-size:12px;flex:1">'+it.text+'</span>'+
+      '<span style="font-size:11px;color:var(--t3)">'+fmtDate(it.time)+'</span></div>';
+  }).join('');
 }
 
 function saveUserEdits() {
