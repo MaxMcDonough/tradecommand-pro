@@ -3699,7 +3699,7 @@ function renderHoldings() {
       <div class="hc-top">
         <div style="display:flex;align-items:center;gap:6px">
           <span class="hc-sym">${pos.sym}</span>
-          <span class="hc-shares">${pos.shares} shares</span>
+          <span class="hc-shares">${pos.shares >= 1 ? pos.shares : pos.shares.toFixed(4)} shares</span>
           ${alertBadge}
         </div>
         <div style="text-align:right">
@@ -3931,14 +3931,17 @@ function calcInvestment(amt) {
   const stop = isBuy ? (price - 2 * atr) : (price + 2 * atr);
   const target = isBuy ? (price + 3 * atr) : (price - 3 * atr);
   const stopDist = Math.abs(price - stop);
-  const shares = Math.max(1, Math.floor(amt / price));
+  // Support fractional shares — invest exactly what the user selected
+  const rawShares = amt / price;
+  const shares = rawShares >= 1 ? Math.floor(rawShares) : parseFloat(rawShares.toFixed(4));
   const actualInvested = shares * price;
   const maxLoss = shares * stopDist;
   const potGain = shares * Math.abs(target - price);
   const rr = stopDist > 0 ? (potGain / maxLoss) : 0;
 
   // Update calc display
-  document.getElementById('ic-shares').textContent = shares + ' shares';
+  const sharesLabel = shares >= 1 ? shares + ' shares' : shares.toFixed(4) + ' shares (fractional)';
+  document.getElementById('ic-shares').textContent = sharesLabel;
   document.getElementById('ic-stop').textContent = '$' + stop.toFixed(2);
   document.getElementById('ic-target').textContent = '$' + target.toFixed(2);
   document.getElementById('ic-maxloss').textContent = '-$' + maxLoss.toFixed(2);
@@ -3954,7 +3957,8 @@ function calcInvestment(amt) {
   // Update commit button text
   const commitBtn = document.getElementById('is-commit-btn');
   const verb = isBuy ? 'BUY' : 'SELL';
-  commitBtn.textContent = `📋 Add to Plan: ${verb} ${shares} ${_investSym} @ $${price.toFixed(2)}`;
+  const sharesDisplay = shares >= 1 ? shares : shares.toFixed(4);
+  commitBtn.textContent = `📋 Add to Plan: ${verb} ${sharesDisplay} ${_investSym} @ $${price.toFixed(2)}`;
   commitBtn.className = 'btn-commit' + (isBuy ? '' : ' sell');
   document.getElementById('is-commit-row').style.display = 'flex';
 
@@ -3976,7 +3980,7 @@ function buildActionPlanFromSizer(sym, shares, entry, stop, target, maxLoss, pot
   const steps = isBuy ? [
     `Open <b>Wealthsimple</b> → search <b>${sym}</b>`,
     `Place <b>LIMIT order</b> at <b style="color:${clr}">$${entry.toFixed(2)}</b>`,
-    `Buy <b>${shares} shares</b> — total <b>$${(shares*entry).toFixed(2)}</b>`,
+    `Buy <b>${shares >= 1 ? shares : shares.toFixed(4)} shares</b> — total <b>$${(shares*entry).toFixed(2)}</b>`,
     `Set <b>Stop Loss at $${stop.toFixed(2)}</b> — max loss: <b style="color:var(--red)">$${maxLoss.toFixed(2)}</b>`,
     `Take profit at <b style="color:var(--grn)">$${target.toFixed(2)}</b> — potential gain: <b style="color:var(--grn)">+$${potGain.toFixed(2)}</b>`,
   ] : [
@@ -4039,7 +4043,8 @@ function commitPosition() {
   const isBuy = sig ? sig.tp === 'buy' : true;
   const stop = isBuy ? (price - 2 * atr) : (price + 2 * atr);
   const target = isBuy ? (price + 3 * atr) : (price - 3 * atr);
-  const shares = Math.max(1, Math.floor(_investAmt / price));
+  const rawShares = _investAmt / price;
+  const shares = rawShares >= 1 ? Math.floor(rawShares) : parseFloat(rawShares.toFixed(4));
   const invested = shares * price;
   const maxLoss = shares * Math.abs(price - stop);
 
@@ -4062,7 +4067,8 @@ function commitPosition() {
 
   // Update commit button to confirmed state — keep visible for 2s so user sees it
   const btn = document.getElementById('is-commit-btn');
-  btn.textContent = `✅ ${isBuy?'BUY':'SELL'} ${shares} ${_investSym} added — check bar above`;
+  const sharesDisp = shares >= 1 ? shares : shares.toFixed(4);
+  btn.textContent = `✅ ${isBuy?'BUY':'SELL'} ${sharesDisp} ${_investSym} added — check bar above`;
   btn.style.background = 'var(--grn2)';
   btn.style.color = 'var(--grn)';
   btn.style.border = '1px solid var(--grn)';
