@@ -260,7 +260,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--grn);display:inline-block"></span><span style="font-size:13px">Firebase</span><span style="font-size:11px;color:var(--grn);margin-left:auto">Connected</span></div>
         <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--grn);display:inline-block"></span><span style="font-size:13px">Stripe</span><span style="font-size:11px;color:var(--grn);margin-left:auto">Active</span></div>
         <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--grn);display:inline-block"></span><span style="font-size:13px">GitHub Pages</span><span style="font-size:11px;color:var(--grn);margin-left:auto">Deployed</span></div>
-        <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--acc);display:inline-block"></span><span style="font-size:13px">Leads Pipeline</span><span style="font-size:11px;color:var(--acc);margin-left:auto">50 leads</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--acc);display:inline-block"></span><span style="font-size:13px">Leads Pipeline</span><span id="sys-leads-count" style="font-size:11px;color:var(--acc);margin-left:auto">— leads</span></div>
       </div>
     </div>
   </div>
@@ -3860,7 +3860,7 @@ function aiAdvise(q) {
 }
 
 // ═══ LEADS — THE CRITICAL PAGE ═══
-window._allLeads = [];
+window._allLeads = null;
 window._tierFilter = 'all';
 
 function setTierFilter(tier, btn) {
@@ -3895,6 +3895,7 @@ async function loadLeads() {
     if(el('leads-t2')) el('leads-t2').textContent = leads.filter(function(l){return getTier(l)==='2';}).length;
     if(el('leads-t3')) el('leads-t3').textContent = leads.filter(function(l){return getTier(l)==='3';}).length;
     if(el('leads-prospects')) el('leads-prospects').textContent = leads.filter(function(l){return getTier(l)==='prospect';}).length;
+    if(el('sys-leads-count')) el('sys-leads-count').textContent = leads.length + ' leads';
     applyLeadFilters();
   } catch(e) {
     console.warn('loadLeads error:', e);
