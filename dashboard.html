@@ -2440,6 +2440,22 @@ a{color:var(--acc);text-decoration:none}
   </div>
 </div>
 
+<!-- My Holdings -->
+<div class="settings-section">
+  <h3>📊 My Holdings</h3>
+  <p style="font-size:12px;color:var(--t3);margin-bottom:12px">Track your real positions. These sync to your account and are visible to you on any device.</p>
+  <div id="stg-holdings-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px"></div>
+  <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+    <div><div style="font-size:10px;color:var(--t3);margin-bottom:2px">Symbol</div><input type="text" id="stg-add-sym" placeholder="AAPL" style="width:80px;padding:7px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px;text-transform:uppercase"></div>
+    <div><div style="font-size:10px;color:var(--t3);margin-bottom:2px">Name</div><input type="text" id="stg-add-name" placeholder="Apple Inc." style="width:140px;padding:7px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px"></div>
+    <div><div style="font-size:10px;color:var(--t3);margin-bottom:2px">Shares</div><input type="number" id="stg-add-shares" value="1" min="0.01" step="any" style="width:70px;padding:7px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px"></div>
+    <div><div style="font-size:10px;color:var(--t3);margin-bottom:2px">Entry $</div><input type="number" id="stg-add-entry" placeholder="0.00" step="0.001" style="width:90px;padding:7px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px"></div>
+    <div><div style="font-size:10px;color:var(--t3);margin-bottom:2px">Currency</div><select id="stg-add-cur" style="padding:7px 10px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px"><option>CAD</option><option>USD</option></select></div>
+    <button class="btn-settings-save" onclick="stgAddHolding()" style="padding:7px 14px">+ Add</button>
+  </div>
+  <div id="stg-holdings-msg" style="font-size:12px;margin-top:6px;min-height:16px"></div>
+</div>
+
 <!-- Account -->
 <div class="settings-section">
   <h3>🔐 Account</h3>
@@ -3383,6 +3399,23 @@ async function handleAuthState(user) {
       loginCount: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     hideAuth();
+    // ── Holdings notification on login ──
+    if (userData.holdings && userData.holdings.length > 0) {
+      _myHoldings = userData.holdings;
+      var holdSyms = userData.holdings.map(function(h){ return h.sym; }).join(', ');
+      var holdCount = userData.holdings.length;
+      setTimeout(function(){
+        var nEl = document.createElement('div');
+        nEl.id = 'holdings-notif';
+        nEl.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;background:var(--card);border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:16px 20px;max-width:360px;box-shadow:0 12px 40px rgba(0,0,0,.5);animation:fadeIn .3s ease';
+        nEl.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px"><div style="font-size:14px;font-weight:700">📊 Welcome back, ' + (userData.displayName || 'Trader') + '!</div><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px">✕</button></div>' +
+          '<div style="font-size:12px;color:var(--t2);margin-bottom:10px">You have <b style="color:var(--t1)">' + holdCount + ' holdings</b> in your portfolio: <span style="color:var(--acc)">' + holdSyms + '</span></div>' +
+          '<div style="display:flex;gap:8px"><button onclick="pg(\'settings\',null);this.parentElement.parentElement.remove()" style="padding:6px 14px;background:var(--acc);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">📊 View & Update Holdings</button>' +
+          '<button onclick="this.parentElement.parentElement.remove()" style="padding:6px 14px;background:var(--bg);color:var(--t2);border:1px solid var(--brd);border-radius:6px;font-size:11px;cursor:pointer">Dismiss</button></div>';
+        document.body.appendChild(nEl);
+        setTimeout(function(){ var el = document.getElementById('holdings-notif'); if(el) el.remove(); }, 15000);
+      }, 1500);
+    }
     // ── RTDB Presence: mark this user online ──
     if (rtdb && user) {
       const presenceRef = rtdb.ref('presence/' + user.uid);
@@ -4127,6 +4160,8 @@ function stgOpen() {
       stgPlan.textContent = badge ? badge.textContent : 'Trial';
     }
   }
+  // Load holdings
+  stgLoadHoldings();
 }
 function stgShowMsg(msg, color) {
   const el = document.getElementById('stg-saved-msg');
@@ -4260,6 +4295,95 @@ function showPromoMsg(msg, success) {
   el.style.background = success ? 'rgba(16,185,129,.12)' : 'rgba(239,68,68,.1)';
   el.style.color = success ? '#10b981' : '#f87171';
   el.style.border = success ? '1px solid rgba(16,185,129,.25)' : '1px solid rgba(239,68,68,.2)';
+}
+
+// ===== MY HOLDINGS (Settings) =====
+var _myHoldings = [];
+async function stgLoadHoldings() {
+  const user = auth.currentUser;
+  if (!user) return;
+  try {
+    const doc = await db.collection('users').doc(user.uid).get();
+    if (doc.exists) _myHoldings = doc.data().holdings || [];
+  } catch(e) { _myHoldings = []; }
+  stgRenderHoldings();
+}
+function stgRenderHoldings() {
+  const el = document.getElementById('stg-holdings-list');
+  if (!el) return;
+  if (!_myHoldings.length) {
+    el.innerHTML = '<div style="text-align:center;padding:16px;color:var(--t3);font-size:12px">No holdings yet. Add your first position below.</div>';
+    return;
+  }
+  el.innerHTML = _myHoldings.map(function(h, i) {
+    var val = (h.shares * (h.entry || 0)).toFixed(2);
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px">' +
+      '<div style="font-weight:700;font-size:14px;min-width:55px">' + h.sym + '</div>' +
+      '<div style="flex:1;font-size:11px;color:var(--t2)">' + (h.name || '') + '</div>' +
+      '<div style="text-align:right;font-size:12px"><div style="font-weight:600">' + h.shares + ' shares</div>' +
+      '<div style="color:var(--t3);font-size:10px">@ $' + (h.entry || 0).toFixed(3) + ' ' + (h.currency || 'USD') + ' · $' + val + '</div></div>' +
+      '<div style="display:flex;gap:4px;margin-left:8px">' +
+      '<button onclick="stgEditHolding(' + i + ')" style="background:none;border:1px solid var(--brd);color:var(--acc);cursor:pointer;font-size:11px;padding:3px 8px;border-radius:4px">Edit</button>' +
+      '<button onclick="stgRemoveHolding(' + i + ')" style="background:none;border:1px solid var(--brd);color:var(--red);cursor:pointer;font-size:11px;padding:3px 8px;border-radius:4px">✕</button></div></div>';
+  }).join('');
+}
+async function stgAddHolding() {
+  var sym = (document.getElementById('stg-add-sym').value || '').toUpperCase().trim();
+  var name = document.getElementById('stg-add-name').value.trim();
+  var shares = parseFloat(document.getElementById('stg-add-shares').value) || 1;
+  var entry = parseFloat(document.getElementById('stg-add-entry').value) || 0;
+  var currency = document.getElementById('stg-add-cur').value || 'CAD';
+  if (!sym) { stgHoldingsMsg('Enter a symbol', 'var(--red)'); return; }
+  _myHoldings.push({sym: sym, name: name, shares: shares, entry: entry, currency: currency, addedAt: Date.now()});
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      await db.collection('users').doc(user.uid).update({holdings: _myHoldings});
+    } catch(e) { stgHoldingsMsg('Save failed: ' + e.message, 'var(--red)'); return; }
+  }
+  document.getElementById('stg-add-sym').value = '';
+  document.getElementById('stg-add-name').value = '';
+  document.getElementById('stg-add-entry').value = '';
+  stgRenderHoldings();
+  stgHoldingsMsg('✅ ' + sym + ' added', 'var(--grn)');
+}
+function stgEditHolding(idx) {
+  var h = _myHoldings[idx];
+  if (!h) return;
+  var newShares = prompt('Shares for ' + h.sym + ':', h.shares);
+  if (newShares === null) return;
+  newShares = parseFloat(newShares);
+  if (isNaN(newShares) || newShares <= 0) { stgHoldingsMsg('Invalid share count', 'var(--red)'); return; }
+  var newEntry = prompt('Entry price for ' + h.sym + ':', h.entry);
+  if (newEntry === null) return;
+  newEntry = parseFloat(newEntry);
+  if (isNaN(newEntry) || newEntry < 0) { stgHoldingsMsg('Invalid entry price', 'var(--red)'); return; }
+  _myHoldings[idx].shares = newShares;
+  _myHoldings[idx].entry = newEntry;
+  const user = auth.currentUser;
+  if (user) db.collection('users').doc(user.uid).update({holdings: _myHoldings}).catch(function(){});
+  stgRenderHoldings();
+  stgHoldingsMsg('✅ ' + h.sym + ' updated', 'var(--grn)');
+}
+async function stgRemoveHolding(idx) {
+  var sym = _myHoldings[idx].sym;
+  if (!confirm('Remove ' + sym + ' from holdings?')) return;
+  _myHoldings.splice(idx, 1);
+  const user = auth.currentUser;
+  if (user) {
+    try { await db.collection('users').doc(user.uid).update({holdings: _myHoldings}); }
+    catch(e) {}
+  }
+  stgRenderHoldings();
+  stgHoldingsMsg('✅ ' + sym + ' removed', 'var(--grn)');
+}
+function stgHoldingsMsg(msg, color) {
+  var el = document.getElementById('stg-holdings-msg');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = color || 'var(--t2)';
+  clearTimeout(el._t);
+  el._t = setTimeout(function(){ el.textContent = ''; }, 3000);
 }
 
 function stgClearLocal() {
