@@ -82,7 +82,7 @@
   <text x="647" y="451" font-family="'SF Pro Display', -apple-system, sans-serif" font-size="12" font-weight="700" fill="#8b5cf6" text-anchor="middle">🤖 Reddit Intel</text>
 
   <!-- URL -->
-  <text x="80" y="550" font-family="'SF Mono', 'Fira Code', monospace" font-size="16" fill="#3b82f6" opacity="0.8">maxmcdonough.github.io/tradecommand-pro</text>
+  <text x="80" y="550" font-family="'SF Mono', 'Fira Code', monospace" font-size="16" fill="#3b82f6" opacity="0.8">tradecommandpro.com</text>
 
   <!-- Bottom border -->
   <rect x="0" y="626" width="1200" height="4" fill="url(#accent)"/>
