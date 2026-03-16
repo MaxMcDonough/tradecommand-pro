@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeCommand Pro — Pitch Deck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root{--bg:#08090c;--bg2:#0e1015;--bg3:#151820;--bg4:#1c2030;--accent:#3b82f6;--accent2:#8b5cf6;--accent3:#06b6d4;--green:#10b981;--orange:#f59e0b;--red:#ef4444;--text:#f0f2f5;--text2:#a0aec0;--text3:#5a6578;--border:rgba(255,255,255,0.06);--glass:rgba(14,16,21,0.85)}
+  *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth;scroll-snap-type:y proximity}
+  body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+  .slide{min-height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:80px 60px;scroll-snap-align:start;overflow:hidden}
+  .slide-inner{max-width:1160px;width:100%;position:relative;z-index:2}
+  .slide-bg-grid{position:absolute;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%)}
+  .glow{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+  .nav-dots{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:12px}
+  .nav-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);cursor:pointer;transition:all 0.3s;border:none;outline:none}
+  .nav-dot.active{background:var(--accent);box-shadow:0 0 12px rgba(59,130,246,0.5);transform:scale(1.3)}
+  .nav-dot:hover{background:rgba(255,255,255,0.35)}
+  .slide-num{position:absolute;top:40px;left:60px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text3);letter-spacing:0.1em;z-index:2}
+  .mega{font-size:clamp(3rem,7vw,6rem);font-weight:900;letter-spacing:-0.04em;line-height:1.0}
+  .large{font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1}
+  .body-lg{font-size:1.15rem;color:var(--text2);line-height:1.75;max-width:640px}
+  .label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;color:var(--accent);margin-bottom:16px;display:inline-block}
+  .gradient-text{background:linear-gradient(135deg,#fff 0%,var(--accent) 50%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .gradient-text-2{background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .divider{width:64px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));margin:20px 0 24px}
+  .browser-frame{border-radius:14px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,0.6),0 0 0 1px var(--border);background:var(--bg3)}
+  .browser-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--bg4);border-bottom:1px solid var(--border)}
+  .dot{width:11px;height:11px;border-radius:50%}.dot-r{background:#ff5f57}.dot-y{background:#ffbd2e}.dot-g{background:#28c840}
+  .browser-url{flex:1;text-align:center;font-size:0.72rem;color:var(--text3);font-family:'JetBrains Mono',monospace}
+  .browser-frame iframe{width:100%;border:none;display:block;background:#0a0b10}
+  .feature-row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .feature-row.reverse{direction:rtl}.feature-row.reverse>*{direction:ltr}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:40px 0}
+  .stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px 20px;text-align:center;transition:all 0.3s}
+  .stat-card:hover{border-color:rgba(59,130,246,0.3);transform:translateY(-2px);box-shadow:0 8px 32px rgba(59,130,246,0.1)}
+  .stat-val{font-size:2.4rem;font-weight:900;letter-spacing:-0.03em}
+  .stat-label{font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px}
+  .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .fcard{background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:28px;transition:all 0.35s}
+  .fcard:hover{border-color:rgba(59,130,246,0.2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+  .fcard-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+  .fcard h4{font-size:1rem;font-weight:700;margin-bottom:6px}.fcard p{font-size:0.82rem;color:var(--text2);line-height:1.6}
+  .ic-g{background:rgba(16,185,129,0.12);color:var(--green)}.ic-b{background:rgba(59,130,246,0.12);color:var(--accent)}
+  .ic-p{background:rgba(139,92,246,0.12);color:var(--accent2)}.ic-o{background:rgba(245,158,11,0.12);color:var(--orange)}
+  .ic-c{background:rgba(6,182,212,0.12);color:var(--accent3)}.ic-r{background:rgba(239,68,68,0.12);color:var(--red)}
+  .checks{list-style:none;margin-top:20px}.checks li{display:flex;align-items:flex-start;gap:12px;padding:8px 0;font-size:0.92rem;color:var(--text2)}
+  .checks .ck{flex-shrink:0;width:22px;height:22px;border-radius:6px;background:rgba(16,185,129,0.12);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:2px}
+  .data-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+  .data-table th{background:var(--bg4);padding:14px 20px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);font-weight:600}
+  .data-table td{padding:13px 20px;border-top:1px solid var(--border);font-size:0.88rem}
+  .data-table tr:hover td{background:rgba(255,255,255,0.015)}
+  .data-table .src{font-weight:600;color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:0.82rem}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .pill{padding:8px 18px;border-radius:100px;background:rgba(255,255,255,0.04);border:1px solid var(--border);font-size:0.8rem;font-weight:500;color:var(--text2);font-family:'JetBrains Mono',monospace;transition:all 0.2s}
+  .pill:hover{border-color:var(--accent);color:var(--accent)}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border-radius:12px;font-weight:700;font-size:1rem;text-decoration:none;transition:all 0.3s;cursor:pointer;border:none}
+  .btn-big{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 24px rgba(59,130,246,0.35);font-size:1.1rem;padding:18px 40px}
+  .btn-big:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(59,130,246,0.45)}
+  .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);padding:14px 28px}
+  .btn-outline:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04)}
+  .r{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}.r.v{opacity:1;transform:translateY(0)}
+  .r-d1{transition-delay:0.1s}.r-d2{transition-delay:0.2s}.r-d3{transition-delay:0.3s}.r-d4{transition-delay:0.4s}
+  @media(max-width:900px){.slide{padding:80px 28px}.slide-num{left:28px;top:28px}.feature-row,.feature-row.reverse{grid-template-columns:1fr;direction:ltr}.card-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:repeat(2,1fr)}.nav-dots{right:12px}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+<div class="nav-dots" id="navDots"></div>
+
+<div class="slide" id="s0">
+  <div class="slide-bg-grid"></div>
+  <div class="glow" style="width:700px;height:700px;background:rgba(59,130,246,0.07);top:-200px;right:-100px;"></div>
+  <div class="glow" style="width:500px;height:500px;background:rgba(139,92,246,0.05);bottom:-100px;left:-100px;"></div>
+  <div class="slide-num">01 / 12</div>
+  <div class="slide-inner" style="text-align:center;">
+    <div class="r" style="margin-bottom:28px;">
+      <span style="display:inline-flex;align-items:center;gap:8px;padding:6px 16px 6px 10px;border-radius:100px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);font-size:0.78rem;font-weight:500;color:var(--green);">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;"></span>
+        Live &amp; In Beta
+      </span>
+    </div>
+    <h1 class="mega r r-d1"><span class="gradient-text">TradeCommand</span><br>Pro</h1>
+    <div class="divider r r-d2" style="margin:24px auto;"></div>
+    <p class="body-lg r r-d2" style="margin:0 auto 36px;">A complete day trading intelligence platform that aggregates 10+ live financial data sources into one sleek dashboard. Built entirely by Max McDonough.</p>
+    <div class="r r-d3" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://maxmcdonough.github.io/tradecommand-pro" target="_blank" class="btn btn-big">Launch Live App &rarr;</a>
+      <a href="#s1" class="btn btn-outline">View the Deck &darr;</a>
+    </div>
+    <div class="stat-grid r r-d4" style="max-width:700px;margin:56px auto 0;">
+      <div class="stat-card"><div class="stat-val gradient-text-2">10+</div><div class="stat-label">Data Sources</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">12</div><div class="stat-label">Sectors</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">5x</div><div class="stat-label">Daily Briefings</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">855</div><div class="stat-label">Leads</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s1" style="background:var(--bg2);">
+  <div class="slide-num">02 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">The Problem</span>
+    <h2 class="large r r-d1">Traders are drowning<br>in <span style="color:var(--red)">too many tabs.</span></h2>
+    <div class="divider r r-d2"></div>
+    <p class="body-lg r r-d2">New and aspiring day traders face information overload: they need a broker, a charting tool, a news feed, a screener, Reddit, crypto trackers, and educational resources. That's 7+ apps just to get started — and most of the good ones cost &#36;30-100/month each.</p>
+    <div class="stat-grid r r-d3" style="max-width:800px;margin-top:48px;">
+      <div class="stat-card"><div class="stat-val" style="color:var(--red);">7+</div><div class="stat-label">Apps needed to trade</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--red);">&#36;200+</div><div class="stat-label">/mo for pro tools</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--red);">80%</div><div class="stat-label">Quit within a year</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--green);">1</div><div class="stat-label">TradeCommand Pro</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s2">
+  <div class="slide-bg-grid"></div>
+  <div class="glow" style="width:600px;height:600px;background:rgba(16,185,129,0.05);top:10%;left:-150px;"></div>
+  <div class="slide-num">03 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">The Solution</span>
+    <h2 class="large r r-d1">Everything in <span class="gradient-text">one tab.</span></h2>
+    <p class="body-lg r r-d2" style="margin-bottom:36px;">TradeCommand Pro replaces the entire toolkit. Here it is, running live right now:</p>
+    <div class="browser-frame r r-d3">
+      <div class="browser-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="browser-url">maxmcdonough.github.io/tradecommand-pro</div></div>
+      <iframe src="https://maxmcdonough.github.io/tradecommand-pro" title="TradeCommand Pro" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups" style="height:620px;"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s3" style="background:var(--bg2);">
+  <div class="slide-num">04 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">Core Feature</span>
+    <h2 class="large r r-d1">The Trading Dashboard</h2>
+    <div class="divider r r-d2"></div>
+    <div class="feature-row r r-d2">
+      <div>
+        <p class="body-lg" style="margin-bottom:16px;">The command center. Live market ticker across the top, interactive watchlist on the left, TradingView chart in the center, and real-time technical indicators on the right.</p>
+        <ul class="checks">
+          <li><span class="ck">&#10003;</span> Persistent ticker bar — SPY, QQQ, DIA, IWM with live prices &amp; % changes</li>
+          <li><span class="ck">&#10003;</span> Watchlist with BUY/SELL/HOLD signals, sorted by confidence</li>
+          <li><span class="ck">&#10003;</span> Session P&amp;L tracking — capital deployed, realized gains, trade count</li>
+          <li><span class="ck">&#10003;</span> 8 technical indicators: RSI, MACD, SMA, EMA, VWAP, ATR, Bollinger, Volume</li>
+          <li><span class="ck">&#10003;</span> 12 sector filters (Tech, AI, Healthcare, Defense, Clean Energy...)</li>
+          <li><span class="ck">&#10003;</span> Fear &amp; Greed Index for market sentiment at a glance</li>
+          <li><span class="ck">&#10003;</span> Open positions with stop loss, targets, and live P&amp;L per trade</li>
+        </ul>
+      </div>
+      <div class="browser-frame">
+        <div class="browser-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="browser-url">Trading Dashboard</div></div>
+        <iframe src="https://maxmcdonough.github.io/tradecommand-pro" title="Dashboard" loading="lazy" sandbox="allow-scripts allow-same-origin" style="height:480px;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s4">
+  <div class="glow" style="width:500px;height:500px;background:rgba(139,92,246,0.06);bottom:0;right:-100px;"></div>
+  <div class="slide-num">05 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">Intelligence</span>
+    <h2 class="large r r-d1">AI Signals &amp; <span class="gradient-text-2">Insider Trades</span></h2>
+    <div class="divider r r-d2"></div>
+    <div class="feature-row reverse r r-d2">
+      <div>
+        <p class="body-lg" style="margin-bottom:16px;">The Intel tab surfaces opportunities most retail traders miss — AI-scored emerging picks based on social momentum, plus real SEC Form 4 insider trade filings.</p>
+        <ul class="checks">
+          <li><span class="ck">&#10003;</span> AI-scored picks with confidence bars and sector tags</li>
+          <li><span class="ck">&#10003;</span> Combines Reddit buzz, institutional volume, and price action</li>
+          <li><span class="ck">&#10003;</span> Live SEC EDGAR insider trades — what execs are actually doing</li>
+          <li><span class="ck">&#10003;</span> Per-stock deep dive with bull/bear cases, support/resistance levels</li>
+          <li><span class="ck">&#10003;</span> Position sizing tool with preset risk allocations</li>
+          <li><span class="ck">&#10003;</span> Analyst consensus from 70+ ratings per stock</li>
+        </ul>
+      </div>
+      <div class="browser-frame">
+        <div class="browser-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="browser-url">Intel &amp; AI Analysis</div></div>
+        <iframe src="https://maxmcdonough.github.io/tradecommand-pro" title="Intel" loading="lazy" sandbox="allow-scripts allow-same-origin" style="height:480px;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s5" style="background:var(--bg2);">
+  <div class="slide-num">06 / 12</div>
+  <div class="slide-inner">
+    <div style="text-align:center;margin-bottom:48px;">
+      <span class="label r">Full Feature Set</span>
+      <h2 class="large r r-d1">12 tools. One platform.</h2>
+    </div>
+    <div class="card-grid">
+      <div class="fcard r"><div class="fcard-icon ic-g">&#9650;</div><h4>Live Watchlist</h4><p>10 stocks with real-time prices, signal indicators, custom ticker entry, and multi-sort options.</p></div>
+      <div class="fcard r r-d1"><div class="fcard-icon ic-b">&#128202;</div><h4>TradingView Charts</h4><p>Interactive candlestick charts with RSI, MACD, drawing tools, and multiple timeframes.</p></div>
+      <div class="fcard r r-d2"><div class="fcard-icon ic-p">&#10024;</div><h4>AI Signals</h4><p>Multi-factor analysis generating BUY/SELL signals with confidence %, targets, and stop losses.</p></div>
+      <div class="fcard r"><div class="fcard-icon ic-o">&#128172;</div><h4>Reddit Sentiment</h4><p>Live feeds from WSB, r/stocks, r/options, r/daytrading with 24h ticker mention tracking.</p></div>
+      <div class="fcard r r-d1"><div class="fcard-icon ic-c">&#8383;</div><h4>Crypto Dashboard</h4><p>Top coins by market cap via CoinGecko, trending list, and the Fear &amp; Greed Index.</p></div>
+      <div class="fcard r r-d2"><div class="fcard-icon ic-b">&#128240;</div><h4>Market News</h4><p>Dual-feed: Finnhub (Reuters, CNBC with sentiment) + NewsAPI headlines, filterable by sector.</p></div>
+      <div class="fcard r"><div class="fcard-icon ic-g">&#128203;</div><h4>Briefings (5x/day)</h4><p>Auto-generated intel reports at Pre-Market, Open, Midday, Power Hour, and Post-Close.</p></div>
+      <div class="fcard r r-d1"><div class="fcard-icon ic-p">&#128218;</div><h4>Trading 101</h4><p>"Explain it Like I'm 5" — stocks, indicators, and strategies in plain English with analogies.</p></div>
+      <div class="fcard r r-d2"><div class="fcard-icon ic-o">&#128736;</div><h4>Risk Tools</h4><p>Position calculator, 10 risk rules, and a trade journal for learning from every session.</p></div>
+      <div class="fcard r"><div class="fcard-icon ic-g">&#128188;</div><h4>Portfolio View</h4><p>Session P&amp;L, open positions table, remaining capital, and "Best Next Picks" suggestions.</p></div>
+      <div class="fcard r r-d1"><div class="fcard-icon ic-r">&#128269;</div><h4>Stock Deep Dive</h4><p>Click any ticker: overview, live chart, AI analysis, fundamentals, and analyst consensus in one modal.</p></div>
+      <div class="fcard r r-d2"><div class="fcard-icon ic-b">&#9881;</div><h4>Settings &amp; API Keys</h4><p>Users bring their own free API keys — keeps the platform free to run at scale. Zero server costs.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s6">
+  <div class="glow" style="width:600px;height:600px;background:rgba(139,92,246,0.06);top:-100px;left:-200px;"></div>
+  <div class="slide-num">07 / 12</div>
+  <div class="slide-inner" style="text-align:center;">
+    <span class="label r">Not Just a Trading App</span>
+    <h2 class="mega r r-d1"><span class="gradient-text-2">The Business</span><br>Behind It</h2>
+    <div class="divider r r-d2" style="margin:24px auto;"></div>
+    <p class="body-lg r r-d2" style="margin:0 auto 48px;text-align:center;">Max didn't just build a dashboard — he built a complete business infrastructure. The admin panel at <span style="font-family:'JetBrains Mono',monospace;color:var(--accent);">/admin.html</span> is a full operations hub.</p>
+    <div class="stat-grid r r-d3" style="max-width:800px;margin:0 auto;">
+      <div class="stat-card"><div class="stat-val gradient-text-2">855</div><div class="stat-label">Leads in Pipeline</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">&#36;79</div><div class="stat-label">MRR</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">7</div><div class="stat-label">Active Campaigns</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">6</div><div class="stat-label">Email Templates</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s7" style="background:var(--bg2);">
+  <div class="slide-num">08 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">Business Hub</span>
+    <h2 class="large r r-d1">Full Ops Stack</h2>
+    <div class="divider r r-d2"></div>
+    <div class="card-grid r r-d2">
+      <div class="fcard"><div class="fcard-icon ic-p">&#128101;</div><h4>User Management</h4><p>Full user DB with plan tiers (Free, Pro &#36;29, Elite &#36;79), search, location, activity tracking, CSV export.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-g">&#128176;</div><h4>Leads &amp; CRM</h4><p>855 leads across 4 tiers. Kanban pipeline, lead scoring, filters, and bulk DM export for outreach.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-b">&#128232;</div><h4>Email Sequences</h4><p>6 professional templates with a mapped 5-step automated send sequence from signup to upsell.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-o">&#128640;</div><h4>Campaigns (7 Active)</h4><p>LinkedIn, Reddit, Instagram, Facebook, campus outreach, email drip, and Friends &amp; Family beta.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-c">&#129302;</div><h4>AI Growth Advisor</h4><p>Built-in AI chatbot using real business data for strategy, outreach plans, and revenue forecasting.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-p">&#128200;</div><h4>Analytics &amp; Revenue</h4><p>Signup trends, conversion metrics, lead scores, MRR tracking with &#36;1K/&#36;5K/&#36;10K milestone goals.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-g">&#127919;</div><h4>Prospecting</h4><p>ICP: college students &amp; young traders, 18-28, finance majors. Quick-launch for 6 social channels.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-r">&#128197;</div><h4>Beta Launch Tracker</h4><p>4-day battle plan to 50 users. Channel targets, daily tasks, and a beta incentive stack.</p></div>
+      <div class="fcard"><div class="fcard-icon ic-b">&#128196;</div><h4>Files &amp; Assets</h4><p>21 creative files: 6 ad creatives, 3 print materials, 6 newsletter templates, flyers, business cards.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s8">
+  <div class="slide-bg-grid"></div>
+  <div class="slide-num">09 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">Live Preview</span>
+    <h2 class="large r r-d1">The Admin Panel</h2>
+    <p class="body-lg r r-d2" style="margin-bottom:32px;">Running live — the operational backbone of TradeCommand Pro.</p>
+    <div class="browser-frame r r-d3">
+      <div class="browser-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><div class="browser-url">maxmcdonough.github.io/tradecommand-pro/admin.html</div></div>
+      <iframe src="https://maxmcdonough.github.io/tradecommand-pro/admin.html" title="Admin Panel" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups" style="height:620px;"></iframe>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s9" style="background:var(--bg2);">
+  <div class="slide-num">10 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">Under the Hood</span>
+    <h2 class="large r r-d1">10+ Live Data Sources</h2>
+    <div class="divider r r-d2"></div>
+    <p class="body-lg r r-d2" style="margin-bottom:32px;">Every number on screen is real. Zero mock data.</p>
+    <div class="r r-d3">
+      <table class="data-table">
+        <thead><tr><th>Source</th><th>What It Provides</th></tr></thead>
+        <tbody>
+          <tr><td class="src">Finnhub</td><td>Real-time quotes via WebSocket, market news, earnings</td></tr>
+          <tr><td class="src">Alpha Vantage</td><td>Fundamentals: P/E, EPS, 52W range, beta, revenue, analyst targets</td></tr>
+          <tr><td class="src">NewsAPI</td><td>Top business headlines and breaking news</td></tr>
+          <tr><td class="src">CoinGecko</td><td>Crypto prices, trending coins, market cap data</td></tr>
+          <tr><td class="src">ApeWisdom</td><td>Reddit ticker mentions from WSB, r/stocks, r/options</td></tr>
+          <tr><td class="src">Reddit JSON</td><td>Hot threads from trading subreddits</td></tr>
+          <tr><td class="src">alternative.me</td><td>Crypto Fear &amp; Greed Index</td></tr>
+          <tr><td class="src">US Treasury</td><td>Live yield curve (Bills, Notes, Bonds)</td></tr>
+          <tr><td class="src">TradingView</td><td>Interactive charts with full indicator suite</td></tr>
+          <tr><td class="src">Google News RSS</td><td>Market news aggregation</td></tr>
+          <tr><td class="src">SEC EDGAR</td><td>Insider trading Form 4 filings</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s10">
+  <div class="glow" style="width:500px;height:500px;background:rgba(6,182,212,0.05);top:20%;right:-100px;"></div>
+  <div class="slide-num">11 / 12</div>
+  <div class="slide-inner">
+    <span class="label r">Architecture</span>
+    <h2 class="large r r-d1">Zero server costs.<br><span class="gradient-text">Infinite scalability.</span></h2>
+    <div class="divider r r-d2"></div>
+    <p class="body-lg r r-d2" style="margin-bottom:24px;">Static site on GitHub Pages + Firebase for auth &amp; database + Stripe for payments. All API integrations run client-side. Users bring their own free API keys — so the platform costs nothing to run, regardless of user count.</p>
+    <div class="pills r r-d3">
+      <span class="pill">GitHub Pages</span><span class="pill">Firebase Auth</span><span class="pill">Firestore DB</span><span class="pill">Firebase Storage</span><span class="pill">Stripe Payments</span><span class="pill">HTML / CSS / JS</span><span class="pill">WebSocket</span><span class="pill">TradingView Widgets</span><span class="pill">REST APIs</span><span class="pill">RSS Parsing</span><span class="pill">Client-Side Only</span>
+    </div>
+    <div class="stat-grid r r-d4" style="max-width:600px;margin-top:48px;">
+      <div class="stat-card"><div class="stat-val" style="color:var(--green);">&#36;0</div><div class="stat-label">Hosting Cost</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--green);">&#36;0</div><div class="stat-label">Server Cost</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">&#36;29</div><div class="stat-label">Pro Plan</div></div>
+      <div class="stat-card"><div class="stat-val gradient-text-2">&#36;79</div><div class="stat-label">Elite Plan</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="s11">
+  <div class="slide-bg-grid"></div>
+  <div class="glow" style="width:800px;height:800px;background:rgba(59,130,246,0.06);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <div class="slide-num">12 / 12</div>
+  <div class="slide-inner" style="text-align:center;">
+    <span class="label r">One Person. One Product.</span>
+    <h2 class="mega r r-d1" style="margin-bottom:24px;"><span class="gradient-text">Built from scratch.</span></h2>
+    <p class="body-lg r r-d2" style="margin:0 auto 40px;text-align:center;max-width:580px;">Front-end. Back-end. Data integrations. Business operations. Marketing campaigns. Growth strategy. Paying customers. All by Max McDonough.</p>
+    <div class="r r-d3" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://maxmcdonough.github.io/tradecommand-pro" target="_blank" class="btn btn-big">Experience It Live &rarr;</a>
+    </div>
+    <div class="r r-d4" style="margin-top:64px;font-size:0.82rem;color:var(--text3);">maxmcdonough.github.io/tradecommand-pro &middot; 2026</div>
+  </div>
+</div>
+
+<script>
+  const obs=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')})},{threshold:0.12,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+  const slides=document.querySelectorAll('.slide');const dotsContainer=document.getElementById('navDots');
+  slides.forEach((s,i)=>{const d=document.createElement('button');d.className='nav-dot';d.title='Slide '+(i+1);d.onclick=()=>s.scrollIntoView({behavior:'smooth'});dotsContainer.appendChild(d)});
+  const dots=dotsContainer.querySelectorAll('.nav-dot');
+  const slideObs=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting){const idx=[...slides].indexOf(e.target);dots.forEach((d,i)=>d.classList.toggle('active',i===idx))}})},{threshold:0.4});
+  slides.forEach(s=>slideObs.observe(s));
+  document.addEventListener('keydown',e=>{const active=[...dots].findIndex(d=>d.classList.contains('active'));if(e.key==='ArrowDown'||e.key===' '){e.preventDefault();if(active<slides.length-1)slides[active+1].scrollIntoView({behavior:'smooth'})}if(e.key==='ArrowUp'){e.preventDefault();if(active>0)slides[active-1].scrollIntoView({behavior:'smooth'})}});
+</script>
+</body>
+</html>
