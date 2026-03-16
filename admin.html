@@ -505,6 +505,20 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
       </div>
     </div>
   </div>
+  <div class="card">
+    <h3>Change Admin Password</h3>
+    <p style="font-size:12px;color:var(--t2);margin-bottom:12px">Update your Firebase Auth password. You must enter your current password to confirm.</p>
+    <div style="display:grid;gap:12px;max-width:400px">
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Current Password</label>
+        <input type="password" class="search-box" style="width:100%" id="pw-current" placeholder="Current password"></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">New Password</label>
+        <input type="password" class="search-box" style="width:100%" id="pw-new" placeholder="New password (min 8 chars)"></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Confirm New Password</label>
+        <input type="password" class="search-box" style="width:100%" id="pw-confirm" placeholder="Confirm new password"></div>
+      <div id="pw-status" style="font-size:12px;min-height:18px"></div>
+      <button class="btn btn-primary" onclick="changeAdminPassword()" style="width:fit-content">Update Password</button>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ CHANGELOG — FULL HISTORY ═══ -->
@@ -1880,6 +1894,41 @@ function doLogout() {
   auth.signOut().catch(()=>{});
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
+}
+async function changeAdminPassword() {
+  var statusEl = document.getElementById('pw-status');
+  var curPw = document.getElementById('pw-current').value;
+  var newPw = document.getElementById('pw-new').value;
+  var confPw = document.getElementById('pw-confirm').value;
+  statusEl.style.color = 'var(--red)';
+  statusEl.textContent = '';
+  if (!curPw || !newPw || !confPw) { statusEl.textContent = 'All fields are required.'; return; }
+  if (newPw.length < 8) { statusEl.textContent = 'New password must be at least 8 characters.'; return; }
+  if (newPw !== confPw) { statusEl.textContent = 'New passwords do not match.'; return; }
+  if (newPw === curPw) { statusEl.textContent = 'New password must be different from current.'; return; }
+  try {
+    var user = auth.currentUser;
+    if (!user) {
+      // Bypass mode — try to sign in with Firebase first
+      var result = await auth.signInWithEmailAndPassword(ADMIN_EMAIL, curPw);
+      user = result.user;
+    } else {
+      // Re-authenticate
+      var cred = firebase.auth.EmailAuthProvider.credential(user.email, curPw);
+      await user.reauthenticateWithCredential(cred);
+    }
+    await user.updatePassword(newPw);
+    statusEl.style.color = 'var(--grn)';
+    statusEl.textContent = '✅ Password updated successfully!';
+    document.getElementById('pw-current').value = '';
+    document.getElementById('pw-new').value = '';
+    document.getElementById('pw-confirm').value = '';
+  } catch(e) {
+    var msg = e.message.replace('Firebase: ', '').replace(/\(auth\/.*\)/, '').trim();
+    if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') msg = 'Current password is incorrect.';
+    if (e.code === 'auth/too-many-requests') msg = 'Too many attempts. Try again later.';
+    statusEl.textContent = msg;
+  }
 }
 function showApp() {
   document.getElementById('login-screen').style.display = 'none';
