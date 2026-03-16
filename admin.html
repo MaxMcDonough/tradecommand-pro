@@ -699,6 +699,14 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 
 <!-- ═══ BIZ DASHBOARD ═══ -->
 <div class="page" id="biz-dashboard-page">
+  <!-- Daily Briefing Panel -->
+  <div id="bd-briefing" class="card" style="margin-bottom:16px;border:1px solid rgba(255,171,64,.25);background:linear-gradient(135deg,rgba(255,171,64,.06),rgba(255,82,82,.04))">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 style="margin:0;font-size:15px">📋 Daily Briefing</h3>
+      <span id="bd-brief-date" style="font-size:11px;color:var(--t3)"></span>
+    </div>
+    <div id="bd-brief-content" style="font-size:13px;line-height:1.6;color:var(--t2)">Loading...</div>
+  </div>
   <div class="stats">
     <div class="stat"><div class="stat-label">Total Leads</div><div class="stat-val" id="bd-leads">50</div></div>
     <div class="stat"><div class="stat-label">Contacted</div><div class="stat-val" id="bd-contacted">0</div></div>
@@ -2529,6 +2537,87 @@ function loadBizDash() {
       '<td style="font-size:12px;color:var(--t3)">'+(l.location||'')+'</td>'+
       '<td><button onclick="event.stopPropagation();openLeadPanel(\''+lid+'\')" class="btn btn-primary" style="font-size:11px;padding:3px 10px">Open</button></td></tr>';
   }).join('');
+
+  // ═══ DAILY BRIEFING PANEL ═══
+  renderBriefing(statuses);
+}
+
+function renderBriefing(statuses) {
+  var now = new Date();
+  var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var dateEl = document.getElementById('bd-brief-date');
+  var contentEl = document.getElementById('bd-brief-content');
+  if (!dateEl || !contentEl) return;
+
+  dateEl.textContent = dayNames[now.getDay()] + ', ' + now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+
+  var tasks = typeof getScheduledTasks === 'function' ? getScheduledTasks() : [];
+  var saved = JSON.parse(localStorage.getItem('tc_sched_checks') || '[]');
+  var rollovers = JSON.parse(localStorage.getItem('tc_sched_rollovers') || '[]');
+  var betaState = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0}');
+  var totalLeads = (window._allLeads||SEED_LEADS).length;
+
+  var todayDone = saved.filter(function(v){return v;}).length;
+  var todayTotal = tasks.length;
+  var overdueList = rollovers.filter(function(r){return r.rolledDays >= 2 && r.pri === 'high';});
+  var rolledCount = rollovers.length;
+
+  // Get high priority tasks not yet done
+  var highTasks = tasks.filter(function(t,i){return t.pri === 'high' && !saved[i];});
+
+  var lines = [];
+
+  // Status line
+  if (todayDone === 0 && todayTotal > 0) {
+    lines.push('<div style="font-size:14px;font-weight:600;color:var(--t1);margin-bottom:8px">'+todayTotal+' tasks today' + (rolledCount ? ' + ' + rolledCount + ' rolled over' : '') + '</div>');
+  } else if (todayDone >= todayTotal && todayTotal > 0) {
+    lines.push('<div style="font-size:14px;font-weight:600;color:var(--grn);margin-bottom:8px">All ' + todayTotal + ' tasks done today! 🎉</div>');
+  } else {
+    lines.push('<div style="font-size:14px;font-weight:600;color:var(--t1);margin-bottom:8px">' + todayDone + ' / ' + todayTotal + ' tasks done' + (rolledCount ? ' · ' + rolledCount + ' rolled over' : '') + '</div>');
+  }
+
+  // Overdue warning
+  if (overdueList.length > 0) {
+    lines.push('<div style="background:rgba(255,23,68,.1);border:1px solid rgba(255,23,68,.25);border-radius:6px;padding:8px 10px;margin-bottom:8px">');
+    lines.push('<div style="font-size:12px;font-weight:700;color:#ff1744;margin-bottom:4px">⚠️ ' + overdueList.length + ' OVERDUE task' + (overdueList.length>1?'s':'') + '</div>');
+    overdueList.forEach(function(r){
+      lines.push('<div style="font-size:11px;color:var(--t2);padding:2px 0">• ' + r.text.substring(0,60) + (r.text.length>60?'...':'') + ' <span style="color:#ff1744;font-weight:600">(' + r.rolledDays + ' days)</span></div>');
+    });
+    lines.push('</div>');
+  }
+
+  // Rolled over (non-overdue)
+  var rolledNonOverdue = rollovers.filter(function(r){return !(r.rolledDays >= 2 && r.pri === 'high');});
+  if (rolledNonOverdue.length > 0) {
+    lines.push('<div style="background:rgba(255,171,64,.08);border:1px solid rgba(255,171,64,.2);border-radius:6px;padding:8px 10px;margin-bottom:8px">');
+    lines.push('<div style="font-size:12px;font-weight:600;color:var(--ylw);margin-bottom:4px">🔄 ' + rolledNonOverdue.length + ' rolled from yesterday</div>');
+    rolledNonOverdue.slice(0,3).forEach(function(r){
+      lines.push('<div style="font-size:11px;color:var(--t2);padding:2px 0">• ' + r.text.substring(0,60) + (r.text.length>60?'...':'') + '</div>');
+    });
+    if (rolledNonOverdue.length > 3) lines.push('<div style="font-size:10px;color:var(--t3)">+' + (rolledNonOverdue.length-3) + ' more</div>');
+    lines.push('</div>');
+  }
+
+  // Today's top priorities
+  if (highTasks.length > 0) {
+    lines.push('<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:600;color:var(--t1);margin-bottom:4px">🎯 Top priorities today:</div>');
+    highTasks.slice(0,3).forEach(function(t,i){
+      lines.push('<div style="font-size:12px;color:var(--t2);padding:2px 0">' + (i+1) + '. ' + t.text + '</div>');
+    });
+    lines.push('</div>');
+  }
+
+  // Quick stats row
+  lines.push('<div style="display:flex;gap:16px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);margin-top:4px">');
+  lines.push('<div style="font-size:11px;color:var(--t3)">👥 <span style="color:var(--acc);font-weight:600">' + totalLeads + '</span> leads</div>');
+  lines.push('<div style="font-size:11px;color:var(--t3)">🚀 Beta: <span style="color:var(--grn);font-weight:600">' + (betaState.count||0) + '</span> / 50</div>');
+  var contacted = statuses ? statuses.contacted : 0;
+  var converted = statuses ? statuses.converted : 0;
+  lines.push('<div style="font-size:11px;color:var(--t3)">📨 Contacted: <span style="font-weight:600">' + contacted + '</span></div>');
+  lines.push('<div style="font-size:11px;color:var(--t3)">✅ Converted: <span style="color:var(--grn);font-weight:600">' + converted + '</span></div>');
+  lines.push('</div>');
+
+  contentEl.innerHTML = lines.join('');
 }
 
 function loadCRM() {
