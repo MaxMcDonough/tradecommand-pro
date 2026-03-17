@@ -2017,7 +2017,7 @@ a{color:var(--acc);text-decoration:none}
         <span class="src-badge" style="background:var(--grn2);color:var(--grn)">✓ CoinGecko</span>
         <span class="src-badge" style="background:var(--org2);color:var(--org)">✓ Reddit WSB</span>
         <span class="src-badge" style="background:var(--pur2);color:var(--pur)">✓ ApeWisdom</span>
-        <span class="src-badge" style="background:var(--cyn2);color:var(--cyn)">✓ Fear & Greed</span>
+
         <span class="src-badge" style="background:var(--ylw2);color:var(--ylw)">✓ US Treasury Yields</span>
         <span class="src-badge" style="background:var(--red2);color:var(--red)">✓ SEC EDGAR</span>
         <span class="src-badge" style="background:var(--acc);color:#fff;opacity:.8">✓ TradingView Charts</span>
@@ -2219,14 +2219,7 @@ a{color:var(--acc);text-decoration:none}
   <div class="c">
     <div class="ch"><span class="ct">📊 Technicals — <span id="t-sym">SPY</span></span></div>
     <div class="ig" id="inds"></div>
-    <div style="margin-top:12px">
-      <div class="ct" style="margin-bottom:6px">🧠 Market Sentiment</div>
-      <div class="gv" id="fg-v" style="color:var(--ylw)">--</div>
-      <div class="gl" id="fg-l">Loading...</div>
-      <div class="gs">Fear & Greed (alternative.me)</div>
-      <div class="gbar"><div class="gptr" id="fg-p" style="left:50%"></div></div>
-      <div class="gends"><span>Extreme Fear</span><span>Extreme Greed</span></div>
-    </div>
+    <!-- Fear & Greed moved to crypto tab -->
     <!-- Treasury Yields -->
     <div id="yields-card" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid var(--brd)">
       <div class="ct" style="margin-bottom:8px">🏦 US Treasury Yields <span style="font-size:9px;color:var(--grn);font-weight:400">fiscaldata.treasury.gov</span></div>
@@ -3574,14 +3567,15 @@ async function handleAuthState(user) {
 }
 
 // ═══ WHAT'S NEW CHANGELOG ══════════════════════════════════════════════════
-const CHANGELOG_VERSION = '2.2.0';
+const CHANGELOG_VERSION = '2.3.0';
 const CHANGELOG_ITEMS = [
-  { icon: '💎', title: 'You\'ve Been Upgraded to Elite!', desc: 'Congratulations — your account has been upgraded to Elite membership for free. You now have unlimited access to every feature, all AI signals, and priority data feeds. No limits, no expiry.', eliteOnly: true },
-  { icon: '📂', title: 'Your Holdings, Front & Center', desc: 'Your stocks now appear at the very top of the trading page. Live P&L, entry prices, stop/target levels — everything right where you need it.' },
-  { icon: '💾', title: 'Cloud-Synced Portfolio', desc: 'Your positions are now saved to the cloud. Log in from any device — phone, laptop, tablet — and your holdings are right where you left them.' },
-  { icon: '🎯', title: 'Trade Game Plans', desc: 'When you add a position, you get a full strategy card: entry, stop loss, target, risk/reward ratio, AI confidence, and estimated sell timeline.' },
-  { icon: '🔒', title: 'Security Overhaul', desc: 'All API keys moved server-side with enterprise-grade encryption. Your data is locked down with per-user security rules.' },
-  { icon: '⚡', title: 'Faster & More Stable', desc: 'Server-side data proxying, rate limiting, and input validation make everything snappier and more reliable.' }
+  { icon: '💎', title: 'You\'ve Been Upgraded to Elite!', desc: 'Congratulations — your account has been upgraded to Elite membership for free. Unlimited access to every feature, all AI signals, and priority data feeds.', eliteOnly: true },
+  { icon: '📋', title: 'Game Plans with Target Profit', desc: 'Click any holding to see a full game plan — P&L, target profit in dollars, max risk, a clear progress bar from stop to target, and dynamic AI advice on what to do next.' },
+  { icon: '💰', title: 'Real P&L Tracking', desc: 'P&L is now calculated from your actual entry price vs live market data. Entry prices are saved to the cloud so they stay accurate across devices and sessions.' },
+  { icon: '📊', title: 'Shares or Dollars', desc: 'Size your trades by dollar amount or share count. The buy signal updates live with stop loss, target, potential gain, and risk/reward for whatever amount you enter.' },
+  { icon: '🎨', title: 'Sector-Colored Holdings', desc: 'Each holding card shows its own sector color and badge. Filter by sector to focus on specific categories, or view all positions at once.' },
+  { icon: '☁️', title: 'Cloud-Synced Positions', desc: 'Positions saved to Firestore instantly. Log in from any device and your portfolio is exactly where you left it — real entry prices, stops, and targets all preserved.' },
+  { icon: '🧹', title: 'Cleaner Dashboard', desc: 'Removed placeholder holdings and moved crypto-specific indicators to the crypto section. Only real trades show in your portfolio now.' }
 ];
 
 function showWhatsNew(userName, userPlan) {
@@ -5867,7 +5861,7 @@ function launch(){
   setTimeout(genEmerging,150);
   setTimeout(mkInsider,100);
   setTimeout(renderSymSelector,300);
-  setTimeout(()=>safeFetch(fetchFG),500);
+  // fetchFG removed from main dashboard — crypto-specific, will live in crypto tab
 
   // Session resume: check for saved session after a short delay (data loads first)
   // Skip the modal if user already chose this browser tab session (pull-to-refresh, etc.)
@@ -6119,11 +6113,10 @@ async function fetchFG(){
 function renderFG(v, src){
   const col=v<=25?'var(--red)':v<=45?'#f97316':v<=55?'var(--ylw)':v<=75?'#84cc16':'var(--grn)';
   const lb=v<=25?'Extreme Fear':v<=45?'Fear':v<=55?'Neutral':v<=75?'Greed':'Extreme Greed';
-  document.getElementById('fg-v').textContent=v;
-  document.getElementById('fg-v').style.color=col;
-  document.getElementById('fg-l').textContent=lb;
-  document.getElementById('fg-l').style.color=col;
-  document.getElementById('fg-p').style.left=v+'%';
+  const vEl=document.getElementById('fg-v');if(!vEl)return;
+  vEl.textContent=v;vEl.style.color=col;
+  const lEl=document.getElementById('fg-l');if(lEl){lEl.textContent=lb;lEl.style.color=col;}
+  const pEl=document.getElementById('fg-p');if(pEl)pEl.style.left=v+'%';
   const srcEl=document.querySelector('.gs');
   if(srcEl) srcEl.textContent=`Fear & Greed (${src==='estimated'?'estimated from signals':'alternative.me'})`;
 }
