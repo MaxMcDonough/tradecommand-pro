@@ -685,11 +685,13 @@ a{color:var(--acc);text-decoration:none}
   .hc-v{font-size:10px}
   .hc-n{font-size:7px}
 
-  /* ── HOLDINGS ── */
-  .holdings-grid{grid-template-columns:1fr}
+  /* ── HOLDINGS — horizontal swipe on mobile ── */
+  .holdings-grid{display:flex !important;flex-direction:row;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;gap:10px;padding-bottom:6px}
+  .holdings-grid::-webkit-scrollbar{display:none}
+  .holding-card{min-width:280px;max-width:85vw;flex-shrink:0;scroll-snap-align:start;padding:10px 12px}
+  .holdings-scroll-hint{display:block}
   .hc-summary{flex-wrap:wrap;gap:8px}
   .hc-sum-item{min-width:calc(50% - 8px)}
-  .holding-card{padding:10px 12px}
 
   /* ── SECTOR PORTFOLIOS ── */
   .sec-port-grid{grid-template-columns:repeat(2,1fr);gap:6px}
@@ -855,6 +857,8 @@ a{color:var(--acc);text-decoration:none}
 #holdings-section{display:none;margin-bottom:12px}
 #holdings-section.has-positions{display:block}
 .holdings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr));gap:10px;margin-top:10px;max-width:100%;overflow:hidden}
+.holdings-scroll-hint{display:none;text-align:center;font-size:10px;color:var(--t3);padding:4px 0;animation:fadeInOut 2s ease-in-out infinite}
+@keyframes fadeInOut{0%,100%{opacity:.4}50%{opacity:1}}
 .holding-card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;transition:border-color .15s;max-width:100%;box-sizing:border-box;word-break:break-word}
 .holding-card:hover{border-color:rgba(99,102,241,.4)}
 .holding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
@@ -2137,7 +2141,8 @@ a{color:var(--acc);text-decoration:none}
     <span class="badge" style="background:var(--acc);color:#fff" id="holdings-ct">0</span>
     <span style="font-size:10px;color:var(--t3)">Live P&amp;L · tap to manage</span>
   </div>
-  <div class="holdings-grid" id="holdings-grid" style="overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%"></div>
+  <div class="holdings-grid" id="holdings-grid"></div>
+  <div class="holdings-scroll-hint" id="holdings-scroll-hint">← swipe to see all holdings →</div>
   <div class="hc-summary" id="holdings-summary" style="overflow-x:auto;max-width:100%"></div>
 </div>
 
@@ -3779,6 +3784,8 @@ let _investSym = null; // symbol being sized
 async function initSession() {
   // Always sync session start to current balance (picks up profile-loaded value)
   D.session.start = D.bal;
+  // Re-merge portfolio holdings
+  mergeHoldingsIntoSession();
   // If Firestore has open positions (loaded in handleAuthState), make sure session reflects them
   const open = (D.session.positions || []).filter(p => p.status === 'open');
   if (open.length > 0) {
@@ -3851,6 +3858,9 @@ function renderHoldings() {
   }
   sec.classList.add('has-positions');
   ct.textContent = open.length;
+  // Show swipe hint on mobile when there are 2+ holdings
+  const hint = document.getElementById('holdings-scroll-hint');
+  if (hint) hint.style.display = (open.length > 1 && window.innerWidth <= 480) ? 'block' : 'none';
 
   let totalPnl = 0, totalDeployed = 0, alerts = [];
 
@@ -3931,6 +3941,14 @@ function renderHoldings() {
     <div class="hc-sum-item"><div class="hc-sum-lbl">Remaining Cash</div><div class="hc-sum-val">$${remain.toFixed(2)}</div></div>
     ${alerts.length ? `<div class="hc-sum-item" style="margin-left:auto"><div class="hc-sum-lbl">Alerts</div><div class="hc-sum-val" style="color:var(--red)">${alerts.map(a=>a.sym+': '+a.msg).join(' · ')}</div></div>` : ''}
   `;
+
+  // Hide swipe hint after user scrolls
+  if (hint && open.length > 1) {
+    grid.addEventListener('scroll', function onScroll() {
+      if (hint) hint.style.display = 'none';
+      grid.removeEventListener('scroll', onScroll);
+    }, { once: true });
+  }
 
   // Browser notification for stop/target hits (if permission granted)
   if (alerts.length && Notification.permission === 'granted') {
@@ -4100,6 +4118,34 @@ function showSessionResume(saved) {
   modal.classList.remove('hidden');
 }
 
+// Merge _myHoldings (from Firestore userData.holdings) into session positions
+// This ensures all portfolio holdings always show up regardless of session state
+function mergeHoldingsIntoSession() {
+  if (!_myHoldings || !_myHoldings.length) return;
+  if (!D.session.positions) D.session.positions = [];
+  _myHoldings.forEach(h => {
+    const sym = typeof h === 'string' ? h : h.sym;
+    if (!sym) return;
+    const alreadyIn = D.session.positions.some(p => p.sym === sym && p.status === 'open');
+    if (!alreadyIn) {
+      const price = (D.sd[sym] && D.sd[sym].price) ? D.sd[sym].price : (h.entry || h.price || 0);
+      const shares = h.shares || h.qty || 1;
+      D.session.positions.push({
+        sym, shares, entry: price, invested: shares * price,
+        stop: null, target: null, isBuy: true, status: 'open', pnl: 0,
+        maxLoss: 0, potGain: 0, rr: 0, confidence: 25,
+        sellTimeline: 'Manual', daysToTarget: 0, stopPct: 0, targetPct: 0,
+        reasons: ['Imported from portfolio holdings'], timestamp: Date.now() - Math.random() * 1000,
+        alerts: { stopNotified: false, targetNotified: false }
+      });
+      D.session.deployed += shares * price;
+      D.session.tradeCount++;
+    }
+    // Make sure holding symbols are on the watchlist so they get live data
+    if (!D.wl.includes(sym)) D.wl.push(sym);
+  });
+}
+
 function resumeSession(silent) {
   const modal = document.getElementById('session-resume-modal');
   if (modal) modal.classList.add('hidden');
@@ -4115,14 +4161,15 @@ function resumeSession(silent) {
     D.session.positions.forEach(pos => {
       if (pos.status === 'open') {
         D.session.deployed += pos.invested || 0;
-        // pnl is recalculated live in renderSessionBar — no need to update here
       }
     });
   }
+  // Re-merge portfolio holdings so all 7 always show up
+  mergeHoldingsIntoSession();
   renderSessionBar();
   document.getElementById('session-bar').classList.add('show');
   const open = D.session.positions.filter(p => p.status === 'open').length;
-  showToast(`📈 Session resumed · ${D.session.tradeCount} trade${D.session.tradeCount !== 1 ? 's' : ''} · ${open} open position${open !== 1 ? 's' : ''}`, 'info');
+  if (!silent) showToast(`📈 Session resumed · ${open} open position${open !== 1 ? 's' : ''}`, 'info');
 }
 
 async function startFreshSession() {
@@ -4139,11 +4186,14 @@ async function startFreshSession() {
     positions: firestorePositions.length > 0 ? firestorePositions : [],
     tradeCount: firestorePositions.length
   };
+  // Re-merge portfolio holdings
+  mergeHoldingsIntoSession();
   saveSessionToStorage();
   renderSessionBar();
   document.getElementById('session-bar').classList.add('show');
-  if (firestorePositions.length > 0) {
-    showToast(`🔄 Fresh session started — ${firestorePositions.length} open position${firestorePositions.length !== 1 ? 's' : ''} restored from cloud`, 'info');
+  const totalOpen = D.session.positions.filter(p => p.status === 'open').length;
+  if (totalOpen > 0) {
+    showToast(`🔄 Fresh session started — ${totalOpen} position${totalOpen !== 1 ? 's' : ''} in portfolio`, 'info');
   } else {
     showToast('🔄 Fresh session started — clean slate', 'info');
   }
