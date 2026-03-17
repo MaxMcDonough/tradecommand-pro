@@ -873,11 +873,9 @@ a{color:var(--acc);text-decoration:none}
 .holdings-scroll-hint{display:none;text-align:center;font-size:10px;color:var(--t3);padding:4px 0;animation:fadeInOut 2s ease-in-out infinite}
 @keyframes fadeInOut{0%,100%{opacity:.4}50%{opacity:1}}
 .holding-card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;transition:border-color .15s;max-width:100%;box-sizing:border-box;word-break:break-word}
-.holding-card:hover{border-color:rgba(99,102,241,.4)}
-.holding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.holding-card.hc-up::before{background:var(--grn)}
-.holding-card.hc-dn::before{background:var(--red)}
-.holding-card.hc-neu::before{background:var(--ylw)}
+.holding-card:hover{border-color:var(--hc-sec-color,rgba(99,102,241,.4))}
+.holding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--hc-sec-color,var(--acc))}
+.hc-sector-badge{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;white-space:nowrap}
 .hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap}
 .hc-sym{font-size:16px;font-weight:800;color:var(--t1)}
 .hc-shares{font-size:10px;color:var(--t3);background:var(--bg2);padding:2px 6px;border-radius:4px}
@@ -3859,29 +3857,57 @@ function renderSessionBar() {
   }
 }
 
+// Look up which sector a ticker belongs to (returns {id, name, icon, color} or null)
+function getSectorForSymbol(sym) {
+  if (typeof SECTORS === 'undefined') return null;
+  for (const [id, sec] of Object.entries(SECTORS)) {
+    if (id === 'all') continue; // skip the "All Market" pseudo-sector
+    if (sec.tickers && sec.tickers.includes(sym)) {
+      return { id, name: sec.name, icon: sec.icon, color: sec.color };
+    }
+  }
+  return null; // ticker not in any defined sector
+}
+
 function renderHoldings() {
-  const sec = document.getElementById('holdings-section');
+  const secEl = document.getElementById('holdings-section');
   const grid = document.getElementById('holdings-grid');
   const summary = document.getElementById('holdings-summary');
   const ct = document.getElementById('holdings-ct');
-  if (!sec || !grid) return;
+  if (!secEl || !grid) return;
 
-  const open = (D.session.positions || []).filter(p => p.status === 'open');
-  if (!open.length) {
-    sec.classList.remove('has-positions');
+  const allOpen = (D.session.positions || []).filter(p => p.status === 'open');
+
+  // Filter holdings by active sector (show all on 'all', filter on specific sector)
+  const activeSec = (typeof _activeSector !== 'undefined') ? _activeSector : 'all';
+  const open = activeSec === 'all' ? allOpen : allOpen.filter(pos => {
+    const posSec = getSectorForSymbol(pos.sym);
+    return posSec && posSec.id === activeSec;
+  });
+
+  if (!allOpen.length) {
+    secEl.classList.remove('has-positions');
     return;
   }
-  sec.classList.add('has-positions');
-  ct.textContent = open.length;
-  // Show swipe hint on mobile when there are 2+ holdings
+  // Show the section if there are ANY holdings (even if filtered list is empty, show "no holdings in this sector")
+  secEl.classList.add('has-positions');
+  ct.textContent = allOpen.length;
+  // Show swipe hint on mobile when there are 2+ visible holdings
   const hint = document.getElementById('holdings-scroll-hint');
   if (hint) hint.style.display = (open.length > 1 && window.innerWidth <= 480) ? 'block' : 'none';
+
+  if (!open.length && activeSec !== 'all') {
+    const secInfo = SECTORS[activeSec];
+    grid.innerHTML = `<div style="padding:16px;text-align:center;color:var(--t3);font-size:12px;grid-column:1/-1">No holdings in ${secInfo ? secInfo.icon + ' ' + secInfo.name : 'this sector'} — switch to <a href="#" onclick="event.preventDefault();setSector('all',document.querySelector('[data-sec=all]'))" style="color:var(--acc)">All Market</a> to see all ${allOpen.length} position${allOpen.length!==1?'s':''}</div>`;
+    // Still show full summary
+    renderHoldingsSummary(summary, allOpen, alerts=[]);
+    return;
+  }
 
   let totalPnl = 0, totalDeployed = 0, alerts = [];
 
   grid.innerHTML = open.map(pos => {
     const livePx = D.sd[pos.sym] ? D.sd[pos.sym].price : 0;
-    // Use live price for current; if entry is 0, use live price as entry too
     const entry = pos.entry > 0 ? pos.entry : livePx;
     const cur = livePx > 0 ? livePx : entry;
     const pnl = entry > 0 ? (cur - entry) * pos.shares : 0;
@@ -3890,9 +3916,15 @@ function renderHoldings() {
     totalDeployed += pos.invested > 0 ? pos.invested : (pos.shares * entry);
 
     const col = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
-    const cls = pnl > 0 ? 'hc-up' : pnl < 0 ? 'hc-dn' : 'hc-neu';
     const pnlStr = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
     const pnlPctStr = (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%';
+
+    // Sector info for this holding
+    const posSec = getSectorForSymbol(pos.sym);
+    const secColor = posSec ? posSec.color : '#3b82f6'; // default blue if unknown
+    const secBadge = posSec
+      ? `<span class="hc-sector-badge" style="background:${secColor}22;color:${secColor}">${posSec.icon} ${posSec.name}</span>`
+      : `<span class="hc-sector-badge" style="background:rgba(59,130,246,.1);color:#3b82f6">📊 Other</span>`;
 
     // Status alert
     const hitStop = pos.stop && cur <= pos.stop;
@@ -3913,11 +3945,12 @@ function renderHoldings() {
     else if (pnlPct >= 8) { nextMove = `<div style="font-size:10px;color:var(--grn);margin-bottom:6px">→ Up 8%+ — consider partial take</div>`; }
     else { nextMove = `<div style="font-size:10px;color:var(--t3);margin-bottom:6px">→ Hold — within plan range</div>`; }
 
-    return `<div class="holding-card ${cls}">
+    return `<div class="holding-card" style="--hc-sec-color:${secColor}">
       <div class="hc-top">
-        <div style="display:flex;align-items:center;gap:6px">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
           <span class="hc-sym">${pos.sym}</span>
           <span class="hc-shares">${pos.shares >= 1 ? pos.shares : pos.shares.toFixed(4)} shares</span>
+          ${secBadge}
           ${alertBadge}
         </div>
         <div style="text-align:right">
@@ -3949,16 +3982,7 @@ function renderHoldings() {
   }).join('');
 
   // Summary row
-  const totalPnlCol = totalPnl >= 0 ? 'var(--grn)' : 'var(--red)';
-  const totalPnlStr = (totalPnl >= 0 ? '+$' : '-$') + Math.abs(totalPnl).toFixed(2);
-  const remain = sessionRemaining();
-  summary.innerHTML = `
-    <div class="hc-sum-item"><div class="hc-sum-lbl">Open Positions</div><div class="hc-sum-val">${open.length}</div></div>
-    <div class="hc-sum-item"><div class="hc-sum-lbl">Total Deployed</div><div class="hc-sum-val">$${totalDeployed.toFixed(2)}</div></div>
-    <div class="hc-sum-item"><div class="hc-sum-lbl">Unrealised P&amp;L</div><div class="hc-sum-val" style="color:${totalPnlCol}">${totalPnlStr}</div></div>
-    <div class="hc-sum-item"><div class="hc-sum-lbl">Remaining Cash</div><div class="hc-sum-val">$${remain.toFixed(2)}</div></div>
-    ${alerts.length ? `<div class="hc-sum-item" style="margin-left:auto"><div class="hc-sum-lbl">Alerts</div><div class="hc-sum-val" style="color:var(--red)">${alerts.map(a=>a.sym+': '+a.msg).join(' · ')}</div></div>` : ''}
-  `;
+  renderHoldingsSummary(summary, open, alerts, totalPnl, totalDeployed);
 
   // Hide swipe hint after user scrolls
   if (hint && open.length > 1) {
@@ -3977,6 +4001,31 @@ function renderHoldings() {
       });
     });
   }
+}
+
+function renderHoldingsSummary(summary, positions, alerts, totalPnl, totalDeployed) {
+  if (!summary) return;
+  // Recalculate if not provided
+  if (totalPnl === undefined) {
+    totalPnl = 0; totalDeployed = 0;
+    positions.forEach(pos => {
+      const livePx = D.sd[pos.sym] ? D.sd[pos.sym].price : 0;
+      const entry = pos.entry > 0 ? pos.entry : livePx;
+      const cur = livePx > 0 ? livePx : entry;
+      totalPnl += entry > 0 ? (cur - entry) * pos.shares : 0;
+      totalDeployed += pos.invested > 0 ? pos.invested : (pos.shares * entry);
+    });
+  }
+  const totalPnlCol = totalPnl >= 0 ? 'var(--grn)' : 'var(--red)';
+  const totalPnlStr = (totalPnl >= 0 ? '+$' : '-$') + Math.abs(totalPnl).toFixed(2);
+  const remain = sessionRemaining();
+  summary.innerHTML = `
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Open Positions</div><div class="hc-sum-val">${positions.length}</div></div>
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Total Deployed</div><div class="hc-sum-val">$${totalDeployed.toFixed(2)}</div></div>
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Unrealised P&amp;L</div><div class="hc-sum-val" style="color:${totalPnlCol}">${totalPnlStr}</div></div>
+    <div class="hc-sum-item"><div class="hc-sum-lbl">Remaining Cash</div><div class="hc-sum-val">$${remain.toFixed(2)}</div></div>
+    ${(alerts||[]).length ? `<div class="hc-sum-item" style="margin-left:auto"><div class="hc-sum-lbl">Alerts</div><div class="hc-sum-val" style="color:var(--red)">${alerts.map(a=>a.sym+': '+a.msg).join(' · ')}</div></div>` : ''}
+  `;
 }
 
 // Request notification permission on first position add (called from commitPosition)
@@ -6685,6 +6734,9 @@ function setSector(id, el) {
   D.wl = [...sec.tickers];
   mkWL();
   genSigs();
+
+  // Re-render holdings filtered by the new sector
+  renderHoldings();
 
   // Update CSS accent color for dashboard theme morphing
   document.documentElement.style.setProperty('--acc', sec.color);
