@@ -3376,6 +3376,24 @@ async function handleAuthState(user) {
       lastActive: Date.now(),
       loginCount: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
+    // ── Load holdings from Firestore (persists across sessions/devices) ──
+    try {
+      const firestoreHoldings = await loadHoldingsFromFirestore();
+      if (firestoreHoldings.length > 0) {
+        // Merge Firestore holdings into session
+        if (!D.session.positions) D.session.positions = [];
+        firestoreHoldings.forEach(h => {
+          // Avoid duplicates (check by sym + timestamp)
+          const exists = D.session.positions.some(p => p.sym === h.sym && p.timestamp === h.timestamp);
+          if (!exists) {
+            D.session.positions.push(h);
+            D.session.deployed += h.invested || 0;
+            D.session.tradeCount++;
+          }
+        });
+        console.log('[Holdings] Merged', firestoreHoldings.length, 'positions from Firestore into session');
+      }
+    } catch(e) { console.warn('[Holdings] Error loading from Firestore:', e); }
     hideAuth();
     // ── Holdings notification on login ──
     if (userData.holdings && userData.holdings.length > 0) {
@@ -3587,9 +3605,16 @@ window.addEventListener('DOMContentLoaded', () => {
 let _investAmt = 0; // currently selected investment amount
 let _investSym = null; // symbol being sized
 
-function initSession() {
+async function initSession() {
   // Always sync session start to current balance (picks up profile-loaded value)
   D.session.start = D.bal;
+  // If Firestore has open positions (loaded in handleAuthState), make sure session reflects them
+  const open = (D.session.positions || []).filter(p => p.status === 'open');
+  if (open.length > 0) {
+    D.session.deployed = open.reduce((sum, p) => sum + (p.invested || 0), 0);
+    D.session.tradeCount = open.length;
+    showToast(`📊 ${open.length} open position${open.length !== 1 ? 's' : ''} restored from your portfolio`, 'info');
+  }
   renderSessionBar();
   document.getElementById('session-bar').classList.add('show');
 }
@@ -3760,6 +3785,8 @@ function closePosition(sym) {
   pos.status = 'closed';
   pos.pnl = pnl;
   pos.exitPrice = cur;
+  // Sync close to Firestore
+  removePositionFromFirestore(pos);
   D.session.deployed -= pos.invested;
   D.session.realized += pnl;
   renderSessionBar();
@@ -3769,7 +3796,7 @@ function closePosition(sym) {
 }
 
 function endSession() {
-  // Close all open positions at current price
+  // Close all open positions at current price (closePosition already syncs to Firestore)
   D.session.positions.filter(p => p.status === 'open').forEach(p => closePosition(p.sym));
   const net = D.session.realized;
   alert(`Session ended!\n\nStarted with: $${D.session.start.toFixed(2)}\nNet P&L: ${net>=0?'+':''}$${net.toFixed(2)}\nTrades: ${D.session.tradeCount}\n\nFinal balance: $${(D.session.start + net).toFixed(2)}`);
@@ -3797,6 +3824,56 @@ function checkSavedSession() {
     if (!p.session || !p.session.tradeCount || p.session.tradeCount === 0) return null;
     return p.session;
   } catch(e) { return null; }
+}
+
+// ═══ FIRESTORE HOLDINGS SYNC ═══════════════════════════════════════════════
+// Persist positions to /users/{uid}/holdings so they survive across sessions/devices
+
+async function savePositionToFirestore(pos) {
+  const user = auth.currentUser;
+  if (!user) return;
+  try {
+    const docId = pos.sym + '_' + pos.timestamp;
+    await db.collection('users').doc(user.uid).collection('holdings').doc(docId).set(pos);
+    console.log('[Holdings] Saved to Firestore:', pos.sym);
+  } catch(e) { console.warn('[Holdings] Firestore save error:', e); }
+}
+
+async function removePositionFromFirestore(pos) {
+  const user = auth.currentUser;
+  if (!user) return;
+  try {
+    const docId = pos.sym + '_' + pos.timestamp;
+    await db.collection('users').doc(user.uid).collection('holdings').doc(docId).update({
+      status: 'closed',
+      pnl: pos.pnl || 0,
+      exitPrice: pos.exitPrice || pos.entry,
+      closedAt: Date.now()
+    });
+    console.log('[Holdings] Closed in Firestore:', pos.sym);
+  } catch(e) { console.warn('[Holdings] Firestore close error:', e); }
+}
+
+async function loadHoldingsFromFirestore() {
+  const user = auth.currentUser;
+  if (!user) return [];
+  try {
+    const snap = await db.collection('users').doc(user.uid).collection('holdings')
+      .where('status', '==', 'open').get();
+    const holdings = [];
+    snap.forEach(doc => holdings.push(doc.data()));
+    console.log('[Holdings] Loaded from Firestore:', holdings.length, 'open positions');
+    return holdings;
+  } catch(e) { console.warn('[Holdings] Firestore load error:', e); return []; }
+}
+
+async function syncAllPositionsToFirestore() {
+  const user = auth.currentUser;
+  if (!user || !D.session.positions) return;
+  const open = D.session.positions.filter(p => p.status === 'open');
+  for (const pos of open) {
+    await savePositionToFirestore(pos);
+  }
 }
 
 function showSessionResume(saved) {
@@ -3847,14 +3924,27 @@ function resumeSession() {
   showToast(`📈 Session resumed · ${D.session.tradeCount} trade${D.session.tradeCount !== 1 ? 's' : ''} · ${open} open position${open !== 1 ? 's' : ''}`, 'info');
 }
 
-function startFreshSession() {
+async function startFreshSession() {
   const modal = document.getElementById('session-resume-modal');
   if (modal) modal.classList.add('hidden');
-  D.session = { start: D.bal, deployed: 0, realized: 0, positions: [], tradeCount: 0 };
+  // Preserve Firestore-synced open positions even on fresh session
+  const firestorePositions = await loadHoldingsFromFirestore();
+  const deployed = firestorePositions.reduce((sum, p) => sum + (p.invested || 0), 0);
+  D.session = {
+    start: D.bal,
+    deployed: deployed,
+    realized: 0,
+    positions: firestorePositions.length > 0 ? firestorePositions : [],
+    tradeCount: firestorePositions.length
+  };
   saveSessionToStorage();
   renderSessionBar();
   document.getElementById('session-bar').classList.add('show');
-  showToast('🔄 Fresh session started — clean slate', 'info');
+  if (firestorePositions.length > 0) {
+    showToast(`🔄 Fresh session started — ${firestorePositions.length} open position${firestorePositions.length !== 1 ? 's' : ''} restored from cloud`, 'info');
+  } else {
+    showToast('🔄 Fresh session started — clean slate', 'info');
+  }
 }
 
 // ===== INVESTMENT SIZER =====
@@ -3950,7 +4040,7 @@ function calcInvestment(amt) {
   const commitBtn = document.getElementById('is-commit-btn');
   const verb = isBuy ? 'BUY' : 'SELL';
   const sharesDisplay = shares >= 1 ? shares : shares.toFixed(4);
-  commitBtn.textContent = `📋 Add to Plan: ${verb} ${sharesDisplay} ${_investSym} — $${actualInvested.toFixed(2)}`;
+  commitBtn.textContent = `📋 Add to Plan: ${verb} ${sharesDisplay} ${_investSym} @ $${price.toFixed(2)} — Total: $${actualInvested.toFixed(2)}`;
   commitBtn.className = 'btn-commit' + (isBuy ? '' : ' sell');
   document.getElementById('is-commit-row').style.display = 'flex';
 
@@ -4043,13 +4133,48 @@ function commitPosition() {
   // Track activity
   trackActivity('trade', {sym: _investSym, action: isBuy ? 'BUY' : 'SELL', shares, price, invested});
 
-  // Add to session (guard against missing positions array)
+  // Build game plan data
+  const potGain = shares * Math.abs(target - price);
+  const rr = maxLoss > 0 ? (potGain / maxLoss) : 0;
+  const stopPct = Math.abs((stop - price) / price * 100);
+  const targetPct = Math.abs((target - price) / price * 100);
+  const confidence = sig ? sig.conf || 25 : 25;
+
+  // Estimate sell timeline based on ATR volatility
+  const dailyMove = atr / price * 100; // avg daily % move
+  const daysToTarget = dailyMove > 0 ? Math.ceil(targetPct / dailyMove) : 14;
+  const sellTimeline = daysToTarget <= 3 ? '1-3 days (swing)' : daysToTarget <= 7 ? '3-7 days (short-term)' : daysToTarget <= 14 ? '1-2 weeks' : '2-4 weeks';
+
+  // Generate strategy reasoning
+  const reasons = [];
+  if (sig && sig.reasons) { reasons.push(...sig.reasons); }
+  else {
+    if (isBuy) {
+      reasons.push('Price showing upward momentum');
+      if (rr >= 2) reasons.push(`Strong risk/reward ratio (${rr.toFixed(1)}:1)`);
+      if (stopPct < 3) reasons.push('Tight stop loss limits downside');
+      if (s.pct > 0) reasons.push(`Currently up ${s.pct.toFixed(2)}% today`);
+    } else {
+      reasons.push('Bearish signal detected');
+      if (s.pct < 0) reasons.push(`Down ${Math.abs(s.pct).toFixed(2)}% today — weakness confirmed`);
+    }
+  }
+
+  const gamePlan = {
+    sym: _investSym, shares, entry: price, stop, target, invested, isBuy,
+    maxLoss, potGain, rr, confidence, sellTimeline, daysToTarget,
+    stopPct, targetPct, reasons, timestamp: Date.now(),
+    status: 'open', pnl: 0, alerts: { stopNotified: false, targetNotified: false }
+  };
+
+  // Add to session
   if (!D.session.positions) D.session.positions = [];
-  D.session.positions.push({sym:_investSym, shares, entry:price, stop, target, invested, status:'open', pnl:0});
+  D.session.positions.push(gamePlan);
+  // Persist to Firestore so holdings survive across sessions/devices
+  savePositionToFirestore(gamePlan);
   requestNotifPermission();
   D.session.deployed += invested;
   D.session.tradeCount++;
-  // Render session bar without resetting D.session.start (initSession() would incorrectly overwrite it)
   renderSessionBar();
   document.getElementById('session-bar').classList.add('show');
 
@@ -4057,25 +4182,215 @@ function commitPosition() {
   D.log.unshift({sy:_investSym, si:isBuy?'BUY':'SELL', en:price, ex:null, sh:shares, no:`Session trade. Invested $${invested.toFixed(2)}. Stop: $${stop.toFixed(2)}`, tm:new Date().toLocaleString()});
   mkJournal();
 
-  // Update commit button to confirmed state — keep visible for 2s so user sees it
+  // Show game plan modal instead of just a button change
+  showGamePlanModal(gamePlan);
+
+  // Update commit button
   const btn = document.getElementById('is-commit-btn');
   const sharesDisp = shares >= 1 ? shares : shares.toFixed(4);
-  btn.textContent = `✅ ${isBuy?'BUY':'SELL'} ${sharesDisp} ${_investSym} ($${invested.toFixed(2)}) added — check bar above`;
+  btn.textContent = `✅ ${isBuy?'BUY':'SELL'} ${sharesDisp} ${_investSym} ($${invested.toFixed(2)}) added`;
   btn.style.background = 'var(--grn2)';
   btn.style.color = 'var(--grn)';
   btn.style.border = '1px solid var(--grn)';
-  btn.onclick = null; // prevent double-commit; restored by buildInvestSizer()
+  btn.onclick = null;
 
-  // Refresh sizer after 2s so user has time to see the confirmation
-  setTimeout(() => buildInvestSizer(_investSym), 2000);
-
-  // Show "next pick" toast suggestion
+  setTimeout(() => buildInvestSizer(_investSym), 3000);
   setTimeout(() => showNextPickToast(_investSym), 800);
-
-  // Refresh sector portfolios with updated session data
   setTimeout(renderSectorPortfolios, 1000);
-
+  updateFloatingWidget();
   saveSessionToStorage();
+}
+
+// ═══ GAME PLAN MODAL ════════════════════════════════════════════════════════
+function showGamePlanModal(gp) {
+  let overlay = document.getElementById('gameplan-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'gameplan-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;';
+    overlay.onclick = e => { if(e.target===overlay) closeGamePlan(); };
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = 'flex';
+
+  const verb = gp.isBuy ? 'BUY' : 'SELL';
+  const verbCol = gp.isBuy ? 'var(--grn)' : 'var(--red)';
+  const sharesDisp = gp.shares >= 1 ? gp.shares : gp.shares.toFixed(4);
+  const confCol = gp.confidence >= 60 ? 'var(--grn)' : gp.confidence >= 35 ? 'var(--ylw)' : 'var(--red)';
+  const rrCol = gp.rr >= 2 ? 'var(--grn)' : gp.rr >= 1 ? 'var(--ylw)' : 'var(--red)';
+
+  overlay.innerHTML = `
+  <div style="background:var(--card);border:1px solid var(--brd);border-radius:16px;max-width:520px;width:100%;padding:0;overflow:hidden;animation:gpSlide .3s ease">
+    <div style="background:linear-gradient(135deg,${gp.isBuy?'rgba(16,185,129,.15)':'rgba(239,68,68,.15)'},transparent);padding:20px 24px;border-bottom:1px solid var(--brd)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:${verbCol};font-weight:700;margin-bottom:4px">📋 Trade Game Plan</div>
+          <div style="font-size:22px;font-weight:800;color:var(--t1)">${verb} ${sharesDisp} ${gp.sym}</div>
+        </div>
+        <button onclick="closeGamePlan()" style="background:none;border:none;color:var(--t3);font-size:20px;cursor:pointer">✕</button>
+      </div>
+    </div>
+
+    <div style="padding:20px 24px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:10px;color:var(--t3);margin-bottom:4px">Entry Price</div>
+          <div style="font-size:18px;font-weight:700;color:var(--t1)">$${gp.entry.toFixed(2)}</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:10px;color:var(--t3);margin-bottom:4px">🛑 Stop Loss</div>
+          <div style="font-size:18px;font-weight:700;color:var(--red)">$${gp.stop.toFixed(2)}</div>
+          <div style="font-size:10px;color:var(--red)">-${gp.stopPct.toFixed(1)}%</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:10px;color:var(--t3);margin-bottom:4px">🎯 Target</div>
+          <div style="font-size:18px;font-weight:700;color:var(--grn)">$${gp.target.toFixed(2)}</div>
+          <div style="font-size:10px;color:var(--grn)">+${gp.targetPct.toFixed(1)}%</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+        <div style="text-align:center;padding:8px;background:var(--bg2);border-radius:8px">
+          <div style="font-size:9px;color:var(--t3)">Invested</div>
+          <div style="font-size:13px;font-weight:700;color:var(--acc)">$${gp.invested.toFixed(2)}</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:var(--bg2);border-radius:8px">
+          <div style="font-size:9px;color:var(--t3)">Max Loss</div>
+          <div style="font-size:13px;font-weight:700;color:var(--red)">-$${gp.maxLoss.toFixed(2)}</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:var(--bg2);border-radius:8px">
+          <div style="font-size:9px;color:var(--t3)">Pot. Gain</div>
+          <div style="font-size:13px;font-weight:700;color:var(--grn)">+$${gp.potGain.toFixed(2)}</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:var(--bg2);border-radius:8px">
+          <div style="font-size:9px;color:var(--t3)">R/R Ratio</div>
+          <div style="font-size:13px;font-weight:700;color:${rrCol}">${gp.rr.toFixed(1)}:1</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg2);border-radius:10px;padding:14px;margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--t1);margin-bottom:8px">🧠 Strategy Reasoning</div>
+        ${gp.reasons.map(r => `<div style="font-size:12px;color:var(--t2);padding:3px 0;display:flex;gap:6px"><span style="color:var(--acc)">▸</span> ${r}</div>`).join('')}
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div style="background:var(--bg2);border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--t1);margin-bottom:6px">⏱ Sell Timeline</div>
+          <div style="font-size:16px;font-weight:700;color:var(--acc)">${gp.sellTimeline}</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:2px">~${gp.daysToTarget} trading days to target</div>
+        </div>
+        <div style="background:var(--bg2);border-radius:10px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--t1);margin-bottom:6px">📊 Confidence</div>
+          <div style="font-size:16px;font-weight:700;color:${confCol}">${gp.confidence}%</div>
+          <div style="background:var(--brd);border-radius:4px;height:6px;margin-top:6px;overflow:hidden"><div style="background:${confCol};height:100%;width:${gp.confidence}%;border-radius:4px"></div></div>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(139,92,246,.08));border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:14px;margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--acc);margin-bottom:8px">🔔 Alert Preferences</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);cursor:pointer">
+            <input type="checkbox" id="gp-alert-push" checked style="accent-color:var(--acc)"> Browser push notification when stop or target is hit
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);cursor:pointer">
+            <input type="checkbox" id="gp-alert-email" style="accent-color:var(--acc)"> Email alert (${ADMIN_EMAIL})
+          </label>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px">
+        <button onclick="closeGamePlan()" style="flex:1;padding:12px;background:var(--acc);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer">👍 Got it — Let's trade</button>
+        <button onclick="closeGamePlan();openStock('${gp.sym}')" style="padding:12px 16px;background:var(--card2);color:var(--t1);border:1px solid var(--brd);border-radius:10px;font-weight:600;font-size:13px;cursor:pointer">📈 View Chart</button>
+      </div>
+    </div>
+  </div>`;
+
+  // Save alert preferences when modal closes
+  const pushChk = document.getElementById('gp-alert-push');
+  const emailChk = document.getElementById('gp-alert-email');
+  if (pushChk) pushChk.onchange = () => { gp.alerts.push = pushChk.checked; saveSessionToStorage(); };
+  if (emailChk) emailChk.onchange = () => { gp.alerts.email = emailChk.checked; saveSessionToStorage(); };
+}
+
+function closeGamePlan() {
+  const ov = document.getElementById('gameplan-overlay');
+  if (ov) ov.style.display = 'none';
+}
+
+// ═══ VIEW GAME PLAN FROM HOLDINGS ═════════════════════════════════════════
+function viewGamePlan(sym) {
+  const pos = (D.session.positions || []).find(p => p.sym === sym && p.status === 'open');
+  if (!pos) return;
+  // Update with live data
+  const cur = D.sd[sym] ? D.sd[sym].price : pos.entry;
+  const livePnl = (cur - pos.entry) * pos.shares;
+  const livePnlPct = ((cur - pos.entry) / pos.entry * 100);
+
+  // Build an enhanced view with live data
+  const gp = { ...pos };
+  showGamePlanModal(gp);
+
+  // Inject live status at top of modal after it renders
+  setTimeout(() => {
+    const modalContent = document.querySelector('#gameplan-overlay > div > div:nth-child(2)');
+    if (!modalContent) return;
+    const liveBar = document.createElement('div');
+    const col = livePnl >= 0 ? 'var(--grn)' : 'var(--red)';
+    liveBar.style.cssText = 'background:var(--bg2);border-radius:10px;padding:12px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;';
+    liveBar.innerHTML = `
+      <div><div style="font-size:10px;color:var(--t3)">Current Price</div><div style="font-size:18px;font-weight:700;color:var(--t1)">$${cur.toFixed(2)}</div></div>
+      <div style="text-align:center"><div style="font-size:10px;color:var(--t3)">P&L</div><div style="font-size:18px;font-weight:700;color:${col}">${livePnl>=0?'+':''}$${livePnl.toFixed(2)}</div></div>
+      <div style="text-align:right"><div style="font-size:10px;color:var(--t3)">Return</div><div style="font-size:18px;font-weight:700;color:${col}">${livePnlPct>=0?'+':''}${livePnlPct.toFixed(2)}%</div></div>
+    `;
+    modalContent.insertBefore(liveBar, modalContent.firstChild);
+  }, 50);
+}
+
+// ═══ FLOATING ACTIVE POSITIONS WIDGET ═════════════════════════════════════
+function updateFloatingWidget() {
+  let widget = document.getElementById('float-positions');
+  const open = (D.session.positions || []).filter(p => p.status === 'open');
+
+  if (!open.length) {
+    if (widget) widget.style.display = 'none';
+    return;
+  }
+
+  if (!widget) {
+    widget = document.createElement('div');
+    widget.id = 'float-positions';
+    widget.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:9000;background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:10px;min-width:200px;max-width:280px;box-shadow:0 8px 32px rgba(0,0,0,.4);transition:all .3s ease;';
+    document.body.appendChild(widget);
+  }
+  widget.style.display = 'block';
+
+  let totalPnl = 0;
+  const chips = open.map(p => {
+    const cur = D.sd[p.sym] ? D.sd[p.sym].price : p.entry;
+    const pnl = (cur - p.entry) * p.shares;
+    totalPnl += pnl;
+    const col = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
+    const pnlStr = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
+    const hitStop = p.stop && cur <= p.stop;
+    const hitTarget = p.target && cur >= p.target;
+    const alert = hitStop ? ' ⚠️' : hitTarget ? ' 🎯' : '';
+    return `<div onclick="viewGamePlan('${p.sym}')" style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;cursor:pointer;border-radius:6px;margin-bottom:2px;background:${hitStop||hitTarget?'rgba(255,255,255,.05)':'transparent'}" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background='${hitStop||hitTarget?'rgba(255,255,255,.05)':'transparent'}'">
+      <span style="font-size:12px;font-weight:700;color:var(--t1)">${p.sym}${alert}</span>
+      <span style="font-size:12px;font-weight:600;color:${col}">${pnlStr}</span>
+    </div>`;
+  }).join('');
+
+  const totalCol = totalPnl >= 0 ? 'var(--grn)' : 'var(--red)';
+  widget.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--brd)">
+      <span style="font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px">Active Positions</span>
+      <span style="font-size:12px;font-weight:700;color:${totalCol}">${totalPnl>=0?'+':''}$${totalPnl.toFixed(2)}</span>
+    </div>
+    ${chips}
+    <div style="text-align:center;margin-top:6px;padding-top:6px;border-top:1px solid var(--brd)">
+      <span onclick="pg('trading',document.querySelector('.nav button[onclick*=trading]'))" style="font-size:10px;color:var(--acc);cursor:pointer;font-weight:600">View All Holdings →</span>
+    </div>
+  `;
 }
 
 // ===== SETTINGS PAGE =====
