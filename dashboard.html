@@ -168,6 +168,15 @@ a{color:var(--acc);text-decoration:none}
 .invest-custom input{flex:1;padding:9px 12px;background:var(--bg);border:1px solid var(--brd2);border-radius:8px;color:var(--t1);font-size:14px;font-weight:700;outline:none}
 .invest-custom input:focus{border-color:var(--acc)}
 .invest-custom label{font-size:11px;color:var(--t3);white-space:nowrap}
+.input-toggle{display:flex;border:1px solid var(--brd2);border-radius:8px;overflow:hidden;flex-shrink:0}
+.it-btn{padding:8px 12px;background:transparent;border:none;color:var(--t3);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.it-btn.active{background:var(--acc);color:#fff}
+.ai-rec-section{background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(6,182,212,.06));border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.ai-rec-title{font-size:12px;font-weight:700;color:var(--grn);margin-bottom:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.btn-use-ai{width:100%;padding:10px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);border-radius:8px;color:var(--grn);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-use-ai:hover{background:rgba(16,185,129,.2);border-color:var(--grn)}
+.your-trade-section{background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(139,92,246,.06));border:1px solid rgba(59,130,246,.25);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.your-trade-title{font-size:12px;font-weight:700;color:var(--acc);margin-bottom:10px}
 .invest-calc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .ic-box{background:var(--bg);border-radius:8px;padding:8px 10px;text-align:center}
 .ic-label{font-size:9px;color:var(--t3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
@@ -812,9 +821,13 @@ a{color:var(--acc);text-decoration:none}
   /* ── INVEST SIZER ── */
   .invest-row{flex-wrap:wrap;gap:6px}
   .invest-btn{min-width:calc(33% - 5px);padding:6px 8px;font-size:11px}
+  .invest-custom{flex-wrap:wrap;gap:6px}
+  .input-toggle{order:-1}
   .invest-commit-row{gap:6px}
   .btn-commit{font-size:12px;padding:10px 12px}
   .btn-skip{padding:10px 8px;font-size:10px}
+  .ai-rec-section{padding:10px 12px}
+  .your-trade-section{padding:10px 12px}
 
   /* ── SETTINGS ── */
   #p-settings{padding:0 0 30px}
@@ -2660,36 +2673,38 @@ a{color:var(--acc);text-decoration:none}
         </div>
         <!-- Dynamic % buttons — amounts auto-scale to session remaining -->
         <div class="invest-btn-row" id="is-btns"></div>
-        <!-- Custom input -->
+        <!-- Custom input — toggle between $ and shares -->
         <div class="invest-custom">
-          <label>Custom $</label>
-          <input type="number" id="is-custom" placeholder="Enter amount..." oninput="calcInvestment(this.value)">
+          <div class="input-toggle" id="is-input-toggle">
+            <button class="it-btn active" id="it-dollar" onclick="setInputMode('dollar')">$</button>
+            <button class="it-btn" id="it-shares" onclick="setInputMode('shares')">Shares</button>
+          </div>
+          <input type="number" id="is-custom" placeholder="Enter dollar amount..." oninput="handleInvestInput(this.value)">
         </div>
-        <!-- Live calculation results -->
-        <div class="invest-calc" id="is-calc" style="display:none">
-          <div class="ic-box">
-            <div class="ic-label">Shares to Buy</div>
-            <div class="ic-val" id="ic-shares">--</div>
+        <!-- AI Recommendation (always based on session balance + risk profile) -->
+        <div class="ai-rec-section" id="ai-rec-section" style="display:none">
+          <div class="ai-rec-title">🤖 AI Recommendation <span style="font-size:10px;color:var(--t3);font-weight:400">Based on your session balance &amp; risk profile</span></div>
+          <div class="invest-calc" id="ai-rec-calc">
+            <div class="ic-box"><div class="ic-label">Suggested Amount</div><div class="ic-val" id="ai-rec-amt">--</div></div>
+            <div class="ic-box"><div class="ic-label">Shares</div><div class="ic-val" id="ai-rec-shares">--</div></div>
+            <div class="ic-box"><div class="ic-label">Stop Loss</div><div class="ic-val" style="color:var(--red)" id="ai-rec-stop">--</div></div>
+            <div class="ic-box"><div class="ic-label">Target Price</div><div class="ic-val" style="color:var(--grn)" id="ai-rec-target">--</div></div>
+            <div class="ic-box"><div class="ic-label">Max Loss</div><div class="ic-val" style="color:var(--red)" id="ai-rec-maxloss">--</div></div>
+            <div class="ic-box"><div class="ic-label">Potential Gain</div><div class="ic-val" style="color:var(--grn)" id="ai-rec-gain">--</div></div>
           </div>
-          <div class="ic-box">
-            <div class="ic-label">Stop Loss</div>
-            <div class="ic-val" style="color:var(--red)" id="ic-stop">--</div>
-          </div>
-          <div class="ic-box">
-            <div class="ic-label">Target Price</div>
-            <div class="ic-val" style="color:var(--grn)" id="ic-target">--</div>
-          </div>
-          <div class="ic-box">
-            <div class="ic-label">Max Loss</div>
-            <div class="ic-val" style="color:var(--red)" id="ic-maxloss">--</div>
-          </div>
-          <div class="ic-box">
-            <div class="ic-label">Potential Gain</div>
-            <div class="ic-val" style="color:var(--grn)" id="ic-gain">--</div>
-          </div>
-          <div class="ic-box">
-            <div class="ic-label">R/R Ratio</div>
-            <div class="ic-val" id="ic-rr">--</div>
+          <button class="btn-use-ai" onclick="useAiRecommendation()">✨ Use AI Recommendation</button>
+        </div>
+
+        <!-- Your Trade (based on user's input — updates live) -->
+        <div class="your-trade-section" id="is-calc" style="display:none">
+          <div class="your-trade-title">📊 Your Trade</div>
+          <div class="invest-calc">
+            <div class="ic-box"><div class="ic-label">Shares to Buy</div><div class="ic-val" id="ic-shares">--</div></div>
+            <div class="ic-box"><div class="ic-label">Stop Loss</div><div class="ic-val" style="color:var(--red)" id="ic-stop">--</div></div>
+            <div class="ic-box"><div class="ic-label">Target Price</div><div class="ic-val" style="color:var(--grn)" id="ic-target">--</div></div>
+            <div class="ic-box"><div class="ic-label">Max Loss</div><div class="ic-val" style="color:var(--red)" id="ic-maxloss">--</div></div>
+            <div class="ic-box"><div class="ic-label">Potential Gain</div><div class="ic-val" style="color:var(--grn)" id="ic-gain">--</div></div>
+            <div class="ic-box"><div class="ic-label">R/R Ratio</div><div class="ic-val" id="ic-rr">--</div></div>
           </div>
         </div>
         <div class="invest-commit-row" id="is-commit-row" style="display:none">
@@ -4207,9 +4222,80 @@ async function startFreshSession() {
 }
 
 // ===== INVESTMENT SIZER =====
+let _inputMode = 'dollar'; // 'dollar' or 'shares'
+
+function setInputMode(mode) {
+  _inputMode = mode;
+  const dolBtn = document.getElementById('it-dollar');
+  const shrBtn = document.getElementById('it-shares');
+  const input = document.getElementById('is-custom');
+  if (mode === 'dollar') {
+    dolBtn.classList.add('active'); shrBtn.classList.remove('active');
+    input.placeholder = 'Enter dollar amount...';
+  } else {
+    shrBtn.classList.add('active'); dolBtn.classList.remove('active');
+    input.placeholder = 'Enter number of shares...';
+  }
+  // Re-calc if there's a value
+  if (input.value) handleInvestInput(input.value);
+}
+
+function handleInvestInput(val) {
+  val = parseFloat(val);
+  if (!val || val <= 0 || !_investSym) return;
+  const s = D.sd[_investSym] || {};
+  let price = s.price || 0;
+  if (!price) {
+    const mPriceEl = document.getElementById('m-price');
+    if (mPriceEl) price = parseFloat(mPriceEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+  }
+  if (!price) return;
+
+  if (_inputMode === 'shares') {
+    // User entered shares — convert to dollar amount
+    const amt = val * price;
+    calcInvestment(amt, val);
+  } else {
+    // User entered dollars
+    calcInvestment(val);
+  }
+}
+
+function getTradePrice() {
+  const s = D.sd[_investSym] || {};
+  let price = s.price || 0;
+  if (!price) {
+    const mPriceEl = document.getElementById('m-price');
+    if (mPriceEl) price = parseFloat(mPriceEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+  }
+  return price;
+}
+
+function getTradeParams(price) {
+  const s = D.sd[_investSym] || {};
+  const atr = s._atr || price * 0.018;
+  const sig = D.sigs.find(x => x.sym === _investSym);
+  const isBuy = sig ? sig.tp === 'buy' : true;
+  const stop = isBuy ? (price - 2 * atr) : (price + 2 * atr);
+  const target = isBuy ? (price + 3 * atr) : (price - 3 * atr);
+  return { atr, sig, isBuy, stop, target };
+}
+
+function calcTradeForAmount(amt, price, params) {
+  const stopDist = Math.abs(price - params.stop);
+  const rawShares = amt / price;
+  const shares = rawShares >= 1 ? Math.floor(rawShares) : parseFloat(rawShares.toFixed(4));
+  const invested = shares * price;
+  const maxLoss = shares * stopDist;
+  const potGain = shares * Math.abs(params.target - price);
+  const rr = maxLoss > 0 ? (potGain / maxLoss) : 0;
+  return { shares, invested, maxLoss, potGain, rr };
+}
+
 function buildInvestSizer(sym) {
   _investSym = sym;
   _investAmt = 0;
+  _inputMode = 'dollar';
   const remain = sessionRemaining();
   const maxRisk = (remain * D.risk / 100);
 
@@ -4230,13 +4316,18 @@ function buildInvestSizer(sym) {
   }).join('');
 
   // Reset custom input + calc display
-  document.getElementById('is-custom').value = '';
+  const input = document.getElementById('is-custom');
+  input.value = '';
+  input.placeholder = 'Enter dollar amount...';
+  document.getElementById('it-dollar').classList.add('active');
+  document.getElementById('it-shares').classList.remove('active');
   document.getElementById('is-calc').style.display = 'none';
   document.getElementById('is-commit-row').style.display = 'none';
   document.getElementById('m-whats-next').style.display = 'none';
-  // Clear active states
+  document.getElementById('ai-rec-section').style.display = 'none';
   document.querySelectorAll('.invest-btn').forEach(b => b.classList.remove('active'));
-  // CRITICAL: restore commit button onclick (it gets set to null after a commit — persists across modal opens)
+
+  // CRITICAL: restore commit button onclick
   const resetBtn = document.getElementById('is-commit-btn');
   if (resetBtn) {
     resetBtn.onclick = commitPosition;
@@ -4246,50 +4337,89 @@ function buildInvestSizer(sym) {
     resetBtn.style.border = '';
     resetBtn.className = 'btn-commit';
   }
+
+  // Build AI Recommendation based on session balance + risk
+  buildAiRecommendation(sym, remain, maxRisk);
+}
+
+function buildAiRecommendation(sym, remain, maxRisk) {
+  const price = getTradePrice();
+  if (!price) return;
+  const params = getTradeParams(price);
+
+  // AI suggests: risk-appropriate amount (max risk per trade, capped at 20% of capital)
+  const suggestedAmt = Math.min(maxRisk, remain * 0.2);
+  if (suggestedAmt <= 0) return;
+
+  const trade = calcTradeForAmount(suggestedAmt, price, params);
+  const sharesLabel = trade.shares >= 1 ? trade.shares + ' shares' : trade.shares.toFixed(4) + ' (fractional)';
+
+  document.getElementById('ai-rec-amt').textContent = '$' + suggestedAmt.toFixed(2);
+  document.getElementById('ai-rec-shares').textContent = sharesLabel;
+  document.getElementById('ai-rec-stop').textContent = '$' + params.stop.toFixed(2);
+  document.getElementById('ai-rec-target').textContent = '$' + params.target.toFixed(2);
+  document.getElementById('ai-rec-maxloss').textContent = '-$' + trade.maxLoss.toFixed(2);
+  document.getElementById('ai-rec-gain').textContent = '+$' + trade.potGain.toFixed(2);
+
+  // Store AI recommended amount for "Use AI Recommendation" button
+  window._aiRecAmt = suggestedAmt;
+  window._aiRecShares = trade.shares;
+
+  document.getElementById('ai-rec-section').style.display = 'block';
+}
+
+function useAiRecommendation() {
+  if (!window._aiRecAmt) return;
+  _inputMode = 'dollar';
+  document.getElementById('it-dollar').classList.add('active');
+  document.getElementById('it-shares').classList.remove('active');
+  document.getElementById('is-custom').value = window._aiRecAmt.toFixed(2);
+  document.getElementById('is-custom').placeholder = 'Enter dollar amount...';
+  // Highlight AI button row as well
+  document.querySelectorAll('.invest-btn').forEach(b => b.classList.remove('active'));
+  calcInvestment(window._aiRecAmt);
 }
 
 function selectInvestBtn(btn, amt) {
   document.querySelectorAll('.invest-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _inputMode = 'dollar';
+  document.getElementById('it-dollar').classList.add('active');
+  document.getElementById('it-shares').classList.remove('active');
   document.getElementById('is-custom').value = amt.toFixed(2);
+  document.getElementById('is-custom').placeholder = 'Enter dollar amount...';
   calcInvestment(amt);
 }
 
-function calcInvestment(amt) {
+function calcInvestment(amt, forcedShares) {
   amt = parseFloat(amt);
   if (!amt || amt <= 0 || !_investSym) return;
   _investAmt = amt;
 
-  const s = D.sd[_investSym] || {};
-  // Try D.sd price first, then fall back to the price displayed in the modal header
-  let price = s.price || 0;
-  if (!price) {
-    const mPriceEl = document.getElementById('m-price');
-    if (mPriceEl) price = parseFloat(mPriceEl.textContent.replace(/[^0-9.]/g, '')) || 0;
-  }
+  const price = getTradePrice();
   if (!price) return;
-  const atr = s._atr || price * 0.018;
+  const params = getTradeParams(price);
 
-  // Find signal for this symbol
-  const sig = D.sigs.find(x => x.sym === _investSym);
-  const isBuy = sig ? sig.tp === 'buy' : true;
-
-  const stop = isBuy ? (price - 2 * atr) : (price + 2 * atr);
-  const target = isBuy ? (price + 3 * atr) : (price - 3 * atr);
-  const stopDist = Math.abs(price - stop);
-  // Support fractional shares — invest exactly what the user selected
-  const rawShares = amt / price;
-  const shares = rawShares >= 1 ? Math.floor(rawShares) : parseFloat(rawShares.toFixed(4));
+  const stopDist = Math.abs(price - params.stop);
+  // Support fractional shares
+  let shares;
+  if (forcedShares !== undefined) {
+    shares = parseFloat(forcedShares);
+  } else {
+    const rawShares = amt / price;
+    shares = rawShares >= 1 ? Math.floor(rawShares) : parseFloat(rawShares.toFixed(4));
+  }
   const actualInvested = shares * price;
+  _investAmt = actualInvested; // update to actual invested amount
   const maxLoss = shares * stopDist;
-  const potGain = shares * Math.abs(target - price);
-  const rr = stopDist > 0 ? (potGain / maxLoss) : 0;
+  const potGain = shares * Math.abs(params.target - price);
+  const rr = maxLoss > 0 ? (potGain / maxLoss) : 0;
 
-  // Update calc display
+  // Update "Your Trade" calc display
   const sharesLabel = shares >= 1 ? shares + ' shares' : shares.toFixed(4) + ' shares (fractional)';
   document.getElementById('ic-shares').textContent = sharesLabel;
-  document.getElementById('ic-stop').textContent = '$' + stop.toFixed(2);
-  document.getElementById('ic-target').textContent = '$' + target.toFixed(2);
+  document.getElementById('ic-stop').textContent = '$' + params.stop.toFixed(2);
+  document.getElementById('ic-target').textContent = '$' + params.target.toFixed(2);
   document.getElementById('ic-maxloss').textContent = '-$' + maxLoss.toFixed(2);
   document.getElementById('ic-gain').textContent = '+$' + potGain.toFixed(2);
   document.getElementById('ic-rr').textContent = rr.toFixed(1) + ':1';
@@ -4298,21 +4428,21 @@ function calcInvestment(amt) {
   const rrEl = document.getElementById('ic-rr');
   rrEl.style.color = rr >= 2 ? 'var(--grn)' : rr >= 1 ? 'var(--ylw)' : 'var(--red)';
 
-  document.getElementById('is-calc').style.display = 'grid';
+  document.getElementById('is-calc').style.display = 'block';
 
   // Update commit button text
   const commitBtn = document.getElementById('is-commit-btn');
-  const verb = isBuy ? 'BUY' : 'SELL';
+  const verb = params.isBuy ? 'BUY' : 'SELL';
   const sharesDisplay = shares >= 1 ? shares : shares.toFixed(4);
   commitBtn.textContent = `📋 Add to Plan: ${verb} ${sharesDisplay} ${_investSym} @ $${price.toFixed(2)} — Total: $${actualInvested.toFixed(2)}`;
-  commitBtn.className = 'btn-commit' + (isBuy ? '' : ' sell');
+  commitBtn.className = 'btn-commit' + (params.isBuy ? '' : ' sell');
   document.getElementById('is-commit-row').style.display = 'flex';
 
   // Re-render full action plan with the updated share count
-  buildActionPlanFromSizer(_investSym, shares, price, stop, target, maxLoss, potGain, rr, isBuy, sig);
+  buildActionPlanFromSizer(_investSym, shares, price, params.stop, params.target, maxLoss, potGain, rr, params.isBuy, params.sig);
 
   // Show "what's next" with remaining capital after this trade
-  buildWhatsNext(amt);
+  buildWhatsNext(actualInvested);
 }
 
 function buildActionPlanFromSizer(sym, shares, entry, stop, target, maxLoss, potGain, rr, isBuy, sig) {
