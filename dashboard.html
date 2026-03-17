@@ -102,6 +102,22 @@ a{color:var(--acc);text-decoration:none}
 .ap-box .ap-lbl{font-size:9px;color:var(--t3);margin-bottom:3px}
 .ap-box .ap-val{font-size:13px;font-weight:700}
 
+/* STOCK SEARCH BAR */
+#stock-search-wrap{position:relative;display:flex;align-items:center;flex-shrink:0}
+#stock-search-input{width:180px;padding:5px 10px 5px 28px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px;outline:none;transition:border-color .2s,width .2s}
+#stock-search-input::placeholder{color:var(--t3)}
+#stock-search-input:focus{border-color:var(--acc);width:220px}
+#stock-search-icon{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--t3);pointer-events:none}
+#stock-search-results{display:none;position:absolute;top:100%;left:0;right:0;margin-top:4px;background:var(--card);border:1px solid var(--brd);border-radius:8px;max-height:280px;overflow-y:auto;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5);min-width:260px}
+.ssr-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--brd);transition:background .15s}
+.ssr-item:last-child{border-bottom:none}
+.ssr-item:hover,.ssr-item.ssr-active{background:rgba(99,102,241,.1)}
+.ssr-sym{font-weight:700;font-size:13px;color:var(--t1)}
+.ssr-name{font-size:11px;color:var(--t2);margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
+.ssr-type{font-size:9px;color:var(--t3);padding:2px 5px;background:var(--bg2);border-radius:3px;flex-shrink:0}
+.ssr-empty{padding:14px;text-align:center;color:var(--t3);font-size:12px}
+.ssr-loading{padding:14px;text-align:center;color:var(--t3);font-size:12px}
+
 /* SESSION TRACKER BAR */
 #session-bar{display:none;align-items:center;gap:0;padding:6px 16px;background:var(--bg2);border-bottom:1px solid var(--brd);font-size:11px;overflow-x:auto;gap:4px}
 #session-bar.show{display:flex}
@@ -474,6 +490,13 @@ a{color:var(--acc);text-decoration:none}
   .mkt-tooltip{right:-8px;width:240px;top:calc(100% + 8px)}
   .trial-badge{font-size:9px;padding:2px 5px}
   .btn-signout{font-size:9px !important;padding:3px 6px !important}
+
+  /* ── MOBILE SEARCH ── */
+  #stock-search-input{width:0;padding:5px 0;border:none;opacity:0;transition:width .25s,opacity .25s,padding .25s}
+  #stock-search-wrap.mob-open #stock-search-input{width:140px;padding:5px 10px 5px 28px;border:1px solid var(--brd);opacity:1}
+  #stock-search-icon{pointer-events:auto;cursor:pointer;font-size:14px;left:0;z-index:1}
+  #stock-search-wrap.mob-open #stock-search-icon{pointer-events:none;left:8px;font-size:12px}
+  #stock-search-results{min-width:200px;right:auto;left:0}
 
   /* ── MOBILE P&L PILL (inserted into top bar) ── */
   #mobile-pnl-pill{
@@ -1975,6 +1998,13 @@ a{color:var(--acc);text-decoration:none}
 <div class="top">
   <div class="logo" onclick="pg('trading', document.querySelector('.nav button'))" style="cursor:pointer" title="Go to Trading">⚡ TradeCommand</div>
   <div class="tickers" id="tickers"></div>
+  <!-- Stock Search -->
+  <div id="stock-search-wrap">
+    <span id="stock-search-icon" onclick="toggleMobileSearch()">🔍</span>
+    <input type="text" id="stock-search-input" placeholder="Search stocks..." autocomplete="off" spellcheck="false"
+      oninput="handleStockSearch(this.value)" onkeydown="handleSearchKey(event)" onfocus="this.parentElement.classList.add('mob-open')" />
+    <div id="stock-search-results"></div>
+  </div>
   <!-- Mobile P&L pill (hidden on desktop) -->
   <div id="mobile-pnl-pill" style="display:none" onclick="toggleMobileSession()">
     <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1">
@@ -4557,6 +4587,182 @@ function openSettings(){
   const btn = document.querySelector('.nav button[onclick*="settings"]');
   if (btn) pg('settings', btn);
 }
+
+/* ── Stock Search ── */
+let _searchTimeout = null;
+let _searchResults = [];
+let _searchIdx = -1;
+
+function toggleMobileSearch() {
+  const wrap = document.getElementById('stock-search-wrap');
+  const input = document.getElementById('stock-search-input');
+  if (wrap.classList.contains('mob-open')) {
+    wrap.classList.remove('mob-open');
+    input.blur();
+    hideSearchResults();
+  } else {
+    wrap.classList.add('mob-open');
+    setTimeout(() => input.focus(), 260);
+  }
+}
+
+function handleStockSearch(q) {
+  q = q.trim().toUpperCase();
+  if (_searchTimeout) clearTimeout(_searchTimeout);
+  if (!q || q.length < 1) { hideSearchResults(); return; }
+
+  // Show immediate local matches from D.sd + D.wl
+  const localMatches = [];
+  const allSyms = new Set([...Object.keys(D.sd), ...D.wl]);
+  allSyms.forEach(sym => {
+    if (sym.includes(q)) {
+      const d = D.sd[sym] || {};
+      localMatches.push({ symbol: sym, description: d.name || '', type: d.exchange || 'Stock' });
+    }
+  });
+  if (localMatches.length > 0) renderSearchResults(localMatches, q);
+
+  // Debounce remote search (Finnhub symbol lookup)
+  _searchTimeout = setTimeout(async () => {
+    if (!D.fh) {
+      // No API key — only show local results
+      if (localMatches.length === 0) {
+        showSearchEmpty(q);
+      }
+      return;
+    }
+    try {
+      const el = document.getElementById('stock-search-results');
+      if (localMatches.length === 0) {
+        el.innerHTML = '<div class="ssr-loading">Searching...</div>';
+        el.style.display = 'block';
+      }
+      const data = await fhGet('/search?q=' + encodeURIComponent(q));
+      if (data && data.result && data.result.length > 0) {
+        // Filter to common stocks only, limit results
+        const filtered = data.result
+          .filter(r => r.type === 'Common Stock' || r.type === 'ETP' || r.type === 'ADR' || !r.type)
+          .slice(0, 8);
+        if (filtered.length > 0) {
+          renderSearchResults(filtered, q);
+        } else {
+          showSearchEmpty(q);
+        }
+      } else if (localMatches.length === 0) {
+        showSearchEmpty(q);
+      }
+    } catch(e) {
+      console.warn('[Search] Finnhub search error:', e);
+    }
+  }, 300);
+}
+
+function renderSearchResults(results, query) {
+  _searchResults = results;
+  _searchIdx = -1;
+  const el = document.getElementById('stock-search-results');
+  el.innerHTML = results.map((r, i) => {
+    const sym = r.symbol || r.displaySymbol || '';
+    const name = r.description || r.name || '';
+    const type = r.type || 'Stock';
+    // Highlight matching text
+    const symHtml = sym.replace(new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<b style="color:var(--acc)">$1</b>');
+    return `<div class="ssr-item" data-idx="${i}" onclick="selectSearchResult(${i})" onmouseenter="_searchIdx=${i};highlightSearchResult()">
+      <div><span class="ssr-sym">${symHtml}</span><span class="ssr-name">${name}</span></div>
+      <span class="ssr-type">${type}</span>
+    </div>`;
+  }).join('');
+  el.style.display = 'block';
+}
+
+function showSearchEmpty(q) {
+  const el = document.getElementById('stock-search-results');
+  el.innerHTML = `<div class="ssr-empty">No results for "${q}"</div>`;
+  el.style.display = 'block';
+}
+
+function hideSearchResults() {
+  const el = document.getElementById('stock-search-results');
+  if (el) { el.style.display = 'none'; el.innerHTML = ''; }
+  _searchResults = [];
+  _searchIdx = -1;
+}
+
+function highlightSearchResult() {
+  document.querySelectorAll('.ssr-item').forEach((el, i) => {
+    el.classList.toggle('ssr-active', i === _searchIdx);
+  });
+}
+
+function handleSearchKey(e) {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (_searchResults.length > 0) {
+      _searchIdx = Math.min(_searchIdx + 1, _searchResults.length - 1);
+      highlightSearchResult();
+    }
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (_searchResults.length > 0) {
+      _searchIdx = Math.max(_searchIdx - 1, 0);
+      highlightSearchResult();
+    }
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (_searchIdx >= 0 && _searchIdx < _searchResults.length) {
+      selectSearchResult(_searchIdx);
+    } else if (_searchResults.length > 0) {
+      selectSearchResult(0);
+    } else {
+      // Direct symbol entry — try whatever they typed
+      const q = document.getElementById('stock-search-input').value.trim().toUpperCase();
+      if (q) selectSearchDirect(q);
+    }
+  } else if (e.key === 'Escape') {
+    hideSearchResults();
+    document.getElementById('stock-search-input').blur();
+    document.getElementById('stock-search-wrap').classList.remove('mob-open');
+  }
+}
+
+function selectSearchResult(idx) {
+  const r = _searchResults[idx];
+  if (!r) return;
+  const sym = (r.symbol || r.displaySymbol || '').replace(/\..+$/, ''); // Strip exchange suffix like .TO
+  if (!sym) return;
+  selectSearchDirect(sym);
+}
+
+function selectSearchDirect(sym) {
+  // Add to watchlist if not already there
+  if (!D.wl.includes(sym)) {
+    D.wl.push(sym);
+    // Fetch quote data for the new symbol
+    if (D.fh) {
+      fetchQ(sym).then(() => { mkWL(); genSigs(); renderSymSelector(); });
+    } else {
+      D.sd[sym] = { price: 100 + Math.random() * 200, pct: Math.random() * 6 - 3, pc: 100 };
+      mkWL(); genSigs(); renderSymSelector();
+    }
+    showToast(`✅ ${sym} added to watchlist`, 'info');
+  }
+  // Open stock detail modal
+  openStock(sym);
+  // Clean up search
+  document.getElementById('stock-search-input').value = '';
+  hideSearchResults();
+  document.getElementById('stock-search-wrap').classList.remove('mob-open');
+}
+
+// Close search results when clicking outside
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('stock-search-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    hideSearchResults();
+    // On mobile, collapse the search bar too
+    if (window.innerWidth <= 480) wrap.classList.remove('mob-open');
+  }
+});
 
 /* ── Mobile session bar toggle ── */
 function toggleMobileSession(){
