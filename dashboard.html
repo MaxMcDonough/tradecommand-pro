@@ -3344,16 +3344,8 @@ async function handleAuthState(user) {
           console.log('[VIP] Auto-upgraded', user.email, 'to elite');
         } catch(e) { console.warn('[VIP] Upgrade error:', e); }
       }
-      // ── One-time holdings sync: ensure VIP accounts have demo portfolio ──
-      const SEED_HOLDINGS = ['DM','GPU','PLUR','QNC','VERS','VG','XBOT'];
-      if (userData && (!userData.holdings || userData.holdings.length === 0)) {
-        try {
-          const holdingsArr = SEED_HOLDINGS.map(s => ({sym:s}));
-          await db.collection('users').doc(user.uid).update({ holdings: holdingsArr });
-          userData.holdings = holdingsArr;
-          console.log('[VIP] Seeded holdings for', user.email);
-        } catch(e) { console.warn('[VIP] Holdings seed error:', e); }
-      }
+      // Holdings are now only created when the user actually buys a stock.
+      // No auto-seeding — positions come from real trades only.
     }
 
     if(user.email === ADMIN_EMAIL) {
@@ -3484,12 +3476,14 @@ async function handleAuthState(user) {
       loginCount: firebase.firestore.FieldValue.increment(1)
     }, { merge: true });
     // ── Load holdings from Firestore (persists across sessions/devices) ──
+    const LEGACY_SEEDS = ['DM','GPU','PLUR','QNC','VERS','VG','XBOT'];
     try {
       const firestoreHoldings = await loadHoldingsFromFirestore();
       if (firestoreHoldings.length > 0) {
-        // Merge Firestore holdings into session
         if (!D.session.positions) D.session.positions = [];
         firestoreHoldings.forEach(h => {
+          // Skip legacy auto-seeded positions (will be cleaned up)
+          if (h.reasons && h.reasons[0] && (h.reasons[0].includes('auto-tracked') || h.reasons[0].includes('Imported')) && LEGACY_SEEDS.includes(h.sym)) return;
           // Avoid duplicates (check by sym + timestamp)
           const exists = D.session.positions.some(p => p.sym === h.sym && p.timestamp === h.timestamp);
           if (!exists) {
@@ -3498,14 +3492,17 @@ async function handleAuthState(user) {
             D.session.tradeCount++;
           }
         });
-        console.log('[Holdings] Merged', firestoreHoldings.length, 'positions from Firestore into session');
+        console.log('[Holdings] Loaded real positions from Firestore');
       }
     } catch(e) { console.warn('[Holdings] Error loading from Firestore:', e); }
     hideAuth();
-    // ── Store holdings info for session resume modal ──
+    // ── Clean up old seeded holdings (no longer used — positions come from real trades only) ──
+    _myHoldings = [];
     if (userData.holdings && userData.holdings.length > 0) {
-      _myHoldings = userData.holdings;
+      db.collection('users').doc(user.uid).update({ holdings: [] }).catch(e => console.warn('Holdings cleanup error:', e));
     }
+    // Clean up legacy seeded positions from Firestore subcollection too
+    cleanupSeededPositions();
     // ── RTDB Presence: mark this user online ──
     if (rtdb && user) {
       const presenceRef = rtdb.ref('presence/' + user.uid);
@@ -3951,7 +3948,7 @@ function renderHoldings() {
     totalDeployed += pos.invested > 0 ? pos.invested : (pos.shares * entry);
 
     const col = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
-    const pnlStr = hasLive ? ((pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2)) : 'Waiting...';
+    const pnlStr = hasLive ? ((pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2)) : 'No data';
     const pnlPctStr = hasLive ? ((pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%') : '';
 
     // Sector info for this holding
@@ -4185,6 +4182,32 @@ async function syncAllPositionsToFirestore() {
   }
 }
 
+// Remove old auto-seeded positions that have no real trade data
+async function cleanupSeededPositions() {
+  const user = auth.currentUser;
+  if (!user) return;
+  try {
+    const snap = await db.collection('users').doc(user.uid).collection('holdings').get();
+    const LEGACY_SEEDS = ['DM','GPU','PLUR','QNC','VERS','VG','XBOT'];
+    const batch = db.batch();
+    let count = 0;
+    snap.forEach(doc => {
+      const data = doc.data();
+      // Remove if it's an auto-tracked legacy seed with no real trade context
+      if (data.reasons && data.reasons[0] && (data.reasons[0].includes('auto-tracked') || data.reasons[0].includes('Imported'))) {
+        if (LEGACY_SEEDS.includes(data.sym)) {
+          batch.delete(doc.ref);
+          count++;
+        }
+      }
+    });
+    if (count > 0) {
+      await batch.commit();
+      console.log('[Cleanup] Removed', count, 'legacy seeded positions from Firestore');
+    }
+  } catch(e) { console.warn('[Cleanup] Error:', e); }
+}
+
 function showSessionResume(saved) {
   const modal = document.getElementById('session-resume-modal');
   if (!modal) return;
@@ -4282,14 +4305,22 @@ async function resumeSession(silent) {
   if (!D.session.start || D.session.start <= 0) {
     D.session.start = D.bal || 25000;
   }
+  // Remove legacy seeded positions from localStorage session data
+  const LEGACY_SEEDS = ['DM','GPU','PLUR','QNC','VERS','VG','XBOT'];
+  if (D.session.positions) {
+    D.session.positions = D.session.positions.filter(p => {
+      if (LEGACY_SEEDS.includes(p.sym) && p.reasons && p.reasons[0] && (p.reasons[0].includes('auto-tracked') || p.reasons[0].includes('Imported'))) return false;
+      return true;
+    });
+  }
   // Load positions from Firestore (source of truth — works across devices)
   try {
     const firestorePositions = await loadHoldingsFromFirestore();
     if (firestorePositions.length > 0) {
-      // Firestore positions have the real saved entry prices
-      // Merge them in, preferring Firestore data over localStorage
       if (!D.session.positions) D.session.positions = [];
       firestorePositions.forEach(fp => {
+        // Skip legacy auto-seeded positions
+        if (fp.reasons && fp.reasons[0] && (fp.reasons[0].includes('auto-tracked') || fp.reasons[0].includes('Imported')) && LEGACY_SEEDS.includes(fp.sym)) return;
         const idx = D.session.positions.findIndex(p => p.sym === fp.sym && p.status === 'open');
         if (idx >= 0) {
           // Firestore has the canonical entry price — use it
@@ -4299,7 +4330,6 @@ async function resumeSession(silent) {
           D.session.positions[idx].target = fp.target || D.session.positions[idx].target;
           D.session.positions[idx].timestamp = fp.timestamp || D.session.positions[idx].timestamp;
         } else {
-          // Position only in Firestore (new device), add it
           D.session.positions.push(fp);
         }
       });
@@ -4327,15 +4357,20 @@ async function startFreshSession() {
   sessionStorage.setItem('tcp_session_chosen', '1');
   const modal = document.getElementById('session-resume-modal');
   if (modal) modal.classList.add('hidden');
-  // Preserve Firestore-synced open positions even on fresh session
-  const firestorePositions = await loadHoldingsFromFirestore();
-  const deployed = firestorePositions.reduce((sum, p) => sum + (p.invested || 0), 0);
+  // Load real positions from Firestore (skip legacy seeds)
+  const LEGACY_SEEDS = ['DM','GPU','PLUR','QNC','VERS','VG','XBOT'];
+  const allPositions = await loadHoldingsFromFirestore();
+  const realPositions = allPositions.filter(fp => {
+    if (fp.reasons && fp.reasons[0] && (fp.reasons[0].includes('auto-tracked') || fp.reasons[0].includes('Imported')) && LEGACY_SEEDS.includes(fp.sym)) return false;
+    return true;
+  });
+  const deployed = realPositions.reduce((sum, p) => sum + (p.invested || 0), 0);
   D.session = {
     start: D.bal,
     deployed: deployed,
     realized: 0,
-    positions: firestorePositions.length > 0 ? firestorePositions : [],
-    tradeCount: firestorePositions.length
+    positions: realPositions,
+    tradeCount: realPositions.length
   };
   // Re-merge portfolio holdings
   mergeHoldingsIntoSession();
@@ -4663,7 +4698,7 @@ function buildGamePlan(sym) {
 
   // Note when there's no live price data
   if (!hasLiveData) {
-    adviceItems.push({ icon: '📡', text: '<b>No live price data</b> — this ticker may not be covered by the data feed, or markets may be closed. P&L will update once live quotes come in.' });
+    adviceItems.push({ icon: '📡', text: '<b>No live price data</b> — this ticker isn\'t covered by the data feed. P&L can\'t be calculated without live quotes.' });
   }
 
   // Today's price action context
@@ -4693,8 +4728,8 @@ function buildGamePlan(sym) {
     <div class="gp-stats">
       <div class="gp-stat">
         <div class="lbl">P&L</div>
-        <div class="val" style="color:${pnlCol}">${hasLiveData ? pnlStr : 'Waiting...'}</div>
-        <div style="font-size:10px;color:${hasLiveData ? pnlCol : 'var(--t3)'}">${hasLiveData ? pnlPctStr : 'No live data yet'}</div>
+        <div class="val" style="color:${pnlCol}">${hasLiveData ? pnlStr : 'No data'}</div>
+        <div style="font-size:10px;color:${hasLiveData ? pnlCol : 'var(--t3)'}">${hasLiveData ? pnlPctStr : 'No live data'}</div>
       </div>
       <div class="gp-stat">
         <div class="lbl">Current</div>
