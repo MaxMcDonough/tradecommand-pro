@@ -3996,6 +3996,8 @@ function closePosition(sym) {
   pos.exitPrice = cur;
   // Sync close to Firestore
   removePositionFromFirestore(pos);
+  // Also remove from _myHoldings so it doesn't get re-merged on refresh
+  removeFromMyHoldings(sym);
   D.session.deployed -= pos.invested;
   D.session.realized += pnl;
   saveSessionToStorage(); // Persist closed state so refresh doesn't resurrect it
@@ -4004,6 +4006,18 @@ function closePosition(sym) {
   // Log to journal
   D.log.unshift({sy:sym,si:'CLOSE',en:pos.entry,ex:cur,sh:pos.shares,no:`Session close. P&L: ${pnl>=0?'+':''}$${pnl.toFixed(2)}`,tm:new Date().toLocaleString()});
   mkJournal();
+}
+
+// Remove a ticker from the _myHoldings array and update Firestore
+function removeFromMyHoldings(sym) {
+  if (!_myHoldings || !_myHoldings.length) return;
+  const idx = _myHoldings.findIndex(h => (typeof h === 'string' ? h : h.sym) === sym);
+  if (idx === -1) return;
+  _myHoldings.splice(idx, 1);
+  const user = auth.currentUser;
+  if (user) {
+    db.collection('users').doc(user.uid).update({holdings: _myHoldings}).catch(e => console.warn('Failed to remove holding from Firestore:', e));
+  }
 }
 
 function endSession() {
@@ -4145,6 +4159,8 @@ function mergeHoldingsIntoSession() {
     const sym = typeof h === 'string' ? h : h.sym;
     if (!sym) return;
     const alreadyIn = D.session.positions.some(p => p.sym === sym && p.status === 'open');
+    const wasClosed = D.session.positions.some(p => p.sym === sym && p.status === 'closed');
+    if (wasClosed) return; // Don't resurrect closed positions
     if (!alreadyIn) {
       const price = (D.sd[sym] && D.sd[sym].price) ? D.sd[sym].price : (h.entry || h.price || 0);
       const shares = h.shares || h.qty || 1;
