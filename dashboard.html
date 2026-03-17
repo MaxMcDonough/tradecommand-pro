@@ -3812,6 +3812,8 @@ function renderSessionBar() {
     mobPnl.textContent = (pnl >= 0 ? '+' : '') + '$' + pnl.toFixed(2);
     mobPnl.style.color = pnl > 0 ? 'var(--grn)' : pnl < 0 ? 'var(--red)' : 'var(--t1)';
   }
+  // Persist session state to localStorage on every render (keeps savedAt fresh)
+  saveSessionToStorage();
   // Render holdings section on trading page
   renderHoldings();
   // Render open position chips
@@ -3960,7 +3962,9 @@ function closePosition(sym) {
   removePositionFromFirestore(pos);
   D.session.deployed -= pos.invested;
   D.session.realized += pnl;
+  saveSessionToStorage(); // Persist closed state so refresh doesn't resurrect it
   renderSessionBar();
+  renderHoldings(); // Update holdings section on home page
   // Log to journal
   D.log.unshift({sy:sym,si:'CLOSE',en:pos.entry,ex:cur,sh:pos.shares,no:`Session close. P&L: ${pnl>=0?'+':''}$${pnl.toFixed(2)}`,tm:new Date().toLocaleString()});
   mkJournal();
@@ -4058,7 +4062,9 @@ function showSessionResume(saved) {
   const realized = saved.realized || 0;
   const pnlColor = realized > 0 ? 'var(--grn)' : realized < 0 ? 'var(--red)' : 'var(--t1)';
   const pnlStr = (realized >= 0 ? '+$' : '-$') + Math.abs(realized).toFixed(2);
-  const savedDate = saved.savedAt ? new Date(saved.savedAt).toLocaleString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'Last session';
+  // Use savedAt from localStorage, but also check Firestore lastActive from handleAuthState
+  const ts = saved.savedAt || Date.now();
+  const savedDate = new Date(ts).toLocaleString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
 
   // Build holdings section if user has holdings
   let holdingsHtml = '';
@@ -4094,12 +4100,15 @@ function showSessionResume(saved) {
   modal.classList.remove('hidden');
 }
 
-function resumeSession() {
+function resumeSession(silent) {
   const modal = document.getElementById('session-resume-modal');
   if (modal) modal.classList.add('hidden');
-  if (!window._savedSessionData) return;
+  sessionStorage.setItem('tcp_session_chosen', '1');
+  if (!silent && !window._savedSessionData) return;
+  const savedData = window._savedSessionData || checkSavedSession();
+  if (!savedData) { initSession(); return; }
 
-  D.session = { ...window._savedSessionData };
+  D.session = { ...savedData };
   // Update unrealized P&L on open positions using current market prices
   if (D.session.positions) {
     D.session.deployed = 0;
@@ -4117,6 +4126,7 @@ function resumeSession() {
 }
 
 async function startFreshSession() {
+  sessionStorage.setItem('tcp_session_chosen', '1');
   const modal = document.getElementById('session-resume-modal');
   if (modal) modal.classList.add('hidden');
   // Preserve Firestore-synced open positions even on fresh session
@@ -5310,10 +5320,15 @@ function launch(){
   setTimeout(()=>safeFetch(fetchFG),500);
 
   // Session resume: check for saved session after a short delay (data loads first)
+  // Skip the modal if user already chose this browser tab session (pull-to-refresh, etc.)
   setTimeout(() => {
+    const alreadyChose = sessionStorage.getItem('tcp_session_chosen');
     const saved = checkSavedSession();
-    if (saved) {
+    if (saved && !alreadyChose) {
       showSessionResume(saved);
+    } else if (saved && alreadyChose) {
+      // Auto-resume silently on refresh — don't re-ask
+      resumeSession(true);
     } else {
       // No previous session — start fresh immediately
       initSession();
