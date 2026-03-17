@@ -190,6 +190,31 @@ a{color:var(--acc);text-decoration:none}
 @keyframes commitPulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.5)}50%{box-shadow:0 0 0 10px rgba(16,185,129,0)}}
 @keyframes commitPulseSell{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}50%{box-shadow:0 0 0 10px rgba(239,68,68,0)}}
 
+/* GAME PLAN PANEL (active position) */
+.gp-panel{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.06));border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:16px;margin-bottom:14px}
+.gp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.gp-title{font-size:14px;font-weight:800;color:var(--t1);display:flex;align-items:center;gap:8px}
+.gp-status-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px}
+.gp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.gp-stat{background:var(--bg);border-radius:8px;padding:8px 10px;text-align:center}
+.gp-stat .lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.gp-stat .val{font-size:15px;font-weight:800}
+.gp-progress{margin-bottom:14px}
+.gp-prog-title{font-size:10px;color:var(--t3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.gp-prog-bar{position:relative;height:28px;background:var(--bg);border-radius:8px;overflow:hidden;display:flex;align-items:center}
+.gp-prog-fill{height:100%;border-radius:8px;transition:width .5s ease}
+.gp-prog-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--t3);margin-top:4px}
+.gp-prog-marker{position:absolute;top:0;bottom:0;width:2px;background:var(--t1);z-index:2}
+.gp-prog-marker::after{content:attr(data-label);position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:8px;color:var(--t2);white-space:nowrap}
+.gp-advice{background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.gp-advice-title{font-size:11px;font-weight:700;color:var(--acc);margin-bottom:6px}
+.gp-advice-text{font-size:12px;color:var(--t1);line-height:1.6}
+.gp-advice-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:4px}
+.gp-advice-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+.gp-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--t3)}
+.gp-meta-item{display:flex;align-items:center;gap:4px}
+@media(max-width:600px){.gp-stats{grid-template-columns:repeat(2,1fr)}}
+
 /* WHAT'S NEXT PANEL */
 .whats-next{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:14px;margin-top:14px}
 .wn-title{font-size:12px;font-weight:700;color:var(--grn);margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -2658,6 +2683,8 @@ a{color:var(--acc);text-decoration:none}
   <div class="modal-body">
     <!-- OVERVIEW -->
     <div id="mt-overview">
+      <!-- ACTIVE POSITION GAME PLAN (shown when user holds this stock) -->
+      <div id="m-gameplan" style="display:none"></div>
       <!-- INVESTMENT SIZER -->
       <div class="invest-sizer" id="m-invest-sizer">
         <h3>💰 How much do you want to put in?</h3>
@@ -4510,6 +4537,170 @@ function calcInvestment(amt, forcedShares) {
   buildWhatsNext(actualInvested);
 }
 
+// ===== GAME PLAN PANEL (for active holdings) =====
+function buildGamePlan(sym) {
+  const el = document.getElementById('m-gameplan');
+  if (!el) return;
+
+  // Check if user has an open position in this stock
+  const pos = (D.session.positions || []).find(p => p.sym === sym && p.status === 'open');
+  if (!pos) { el.style.display = 'none'; return; }
+
+  const s = D.sd[sym] || {};
+  const curPrice = s.price || pos.entry || 0;
+  const entry = pos.entry || 0;
+  const shares = pos.shares || 0;
+  const stop = pos.stop;
+  const target = pos.target;
+  const invested = pos.invested || (shares * entry);
+
+  // Calculate P&L
+  const pnl = entry > 0 ? (curPrice - entry) * shares : 0;
+  const pnlPct = entry > 0 ? ((curPrice - entry) / entry * 100) : 0;
+  const pnlCol = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
+  const pnlStr = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
+  const pnlPctStr = (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%';
+
+  // Time held
+  const elapsed = pos.timestamp ? Date.now() - pos.timestamp : 0;
+  const daysHeld = Math.floor(elapsed / 86400000);
+  const hoursHeld = Math.floor((elapsed % 86400000) / 3600000);
+  const timeStr = daysHeld > 0 ? `${daysHeld}d ${hoursHeld}h` : `${hoursHeld}h`;
+
+  // Status determination
+  let statusText, statusColor, statusBg;
+  const hitStop = stop && curPrice <= stop;
+  const hitTarget = target && curPrice >= target;
+  const nearStop = stop && !hitStop && curPrice <= stop * 1.02;
+  const nearTarget = target && !hitTarget && curPrice >= target * 0.98;
+
+  if (hitStop) { statusText = '⚠️ STOP HIT'; statusColor = 'var(--red)'; statusBg = 'var(--red2)'; }
+  else if (hitTarget) { statusText = '🎯 TARGET HIT'; statusColor = 'var(--grn)'; statusBg = 'var(--grn2)'; }
+  else if (nearStop) { statusText = '⚡ Near Stop'; statusColor = '#f97316'; statusBg = 'rgba(249,115,22,.12)'; }
+  else if (nearTarget) { statusText = '🔥 Near Target'; statusColor = 'var(--grn)'; statusBg = 'rgba(16,185,129,.12)'; }
+  else if (pnlPct >= 5) { statusText = '📈 Winning'; statusColor = 'var(--grn)'; statusBg = 'var(--grn2)'; }
+  else if (pnlPct <= -3) { statusText = '📉 Under Pressure'; statusColor = 'var(--red)'; statusBg = 'var(--red2)'; }
+  else { statusText = '⏳ On Track'; statusColor = 'var(--acc)'; statusBg = 'rgba(59,130,246,.12)'; }
+
+  // Progress bar: where is current price between stop and target?
+  let progressPct = 50; // default if no stop/target
+  let progColor = 'var(--acc)';
+  if (stop && target && entry > 0) {
+    const range = target - stop;
+    if (range > 0) {
+      progressPct = Math.max(0, Math.min(100, ((curPrice - stop) / range) * 100));
+      const entryPct = ((entry - stop) / range) * 100;
+      progColor = curPrice >= entry ? 'var(--grn)' : 'var(--red)';
+    }
+  }
+
+  // Dynamic AI advice based on current state
+  let adviceItems = [];
+  if (hitStop) {
+    adviceItems.push({ icon: '🚨', text: '<b>Stop loss hit.</b> Consider closing this position to limit further downside.' });
+    adviceItems.push({ icon: '🔍', text: 'Review if the thesis has changed — if fundamentals still hold, consider lowering stop slightly.' });
+  } else if (hitTarget) {
+    adviceItems.push({ icon: '🎉', text: '<b>Target price reached!</b> Consider taking profit on all or part of your position.' });
+    adviceItems.push({ icon: '📊', text: 'You could sell half to lock in gains and let the rest ride with a trailing stop.' });
+  } else if (pnlPct >= 8) {
+    adviceItems.push({ icon: '💰', text: `<b>Up ${pnlPct.toFixed(1)}%</b> — strong move. Consider taking partial profit (sell 25-50%).` });
+    adviceItems.push({ icon: '🛡️', text: `Move your stop up to <b>$${(entry * 1.02).toFixed(2)}</b> to lock in gains (break-even + 2%).` });
+  } else if (pnlPct >= 3) {
+    adviceItems.push({ icon: '✅', text: `<b>Up ${pnlPct.toFixed(1)}%</b> — trade progressing well. Hold and monitor.` });
+    if (stop) adviceItems.push({ icon: '🛡️', text: `Consider tightening stop to <b>$${(entry * 0.99).toFixed(2)}</b> to reduce risk.` });
+  } else if (pnlPct >= -2) {
+    adviceItems.push({ icon: '⏳', text: '<b>Within plan range.</b> No action needed — let the trade develop.' });
+    if (pos.sellTimeline) adviceItems.push({ icon: '📅', text: `Expected timeline: <b>${pos.sellTimeline}</b>. Patience is key.` });
+  } else if (pnlPct >= -5) {
+    adviceItems.push({ icon: '⚡', text: `<b>Down ${Math.abs(pnlPct).toFixed(1)}%</b> — getting extended. Watch closely.` });
+    if (stop) adviceItems.push({ icon: '🛡️', text: `Stop is at <b>$${stop.toFixed(2)}</b> — do NOT move it lower. Discipline wins.` });
+  } else {
+    adviceItems.push({ icon: '🚨', text: `<b>Down ${Math.abs(pnlPct).toFixed(1)}%</b> — significant drawdown. Review your thesis.` });
+    adviceItems.push({ icon: '💡', text: 'If the original reason for entering no longer holds, consider cutting the loss.' });
+  }
+
+  // Today's price action context
+  const todayPct = s.pct || 0;
+  if (Math.abs(todayPct) >= 2) {
+    const dir = todayPct > 0 ? 'up' : 'down';
+    const dirCol = todayPct > 0 ? 'var(--grn)' : 'var(--red)';
+    adviceItems.push({ icon: '📰', text: `Today: <b style="color:${dirCol}">${todayPct > 0 ? '+' : ''}${todayPct.toFixed(2)}%</b> ${dir} — ${todayPct > 2 ? 'momentum in your favor' : 'watch for reversal'}.` });
+  }
+
+  // Build the entry marker position for the progress bar
+  let entryMarkerPct = 50;
+  if (stop && target) {
+    const range = target - stop;
+    if (range > 0) entryMarkerPct = Math.max(5, Math.min(95, ((entry - stop) / range) * 100));
+  }
+
+  el.style.display = 'block';
+  el.innerHTML = `<div class="gp-panel">
+    <div class="gp-header">
+      <div class="gp-title">📋 Your Game Plan — ${sym}
+        <span class="gp-status-badge" style="background:${statusBg};color:${statusColor}">${statusText}</span>
+      </div>
+      <div style="font-size:10px;color:var(--t3)">Held ${timeStr} · Updated ${new Date().toLocaleTimeString()}</div>
+    </div>
+
+    <div class="gp-stats">
+      <div class="gp-stat">
+        <div class="lbl">P&L</div>
+        <div class="val" style="color:${pnlCol}">${pnlStr}</div>
+        <div style="font-size:10px;color:${pnlCol}">${pnlPctStr}</div>
+      </div>
+      <div class="gp-stat">
+        <div class="lbl">Current</div>
+        <div class="val">${curPrice > 0 ? '$'+curPrice.toFixed(2) : 'N/A'}</div>
+        <div style="font-size:10px;color:var(--t3)">Entry: $${entry > 0 ? entry.toFixed(2) : '--'}</div>
+      </div>
+      <div class="gp-stat">
+        <div class="lbl">Position</div>
+        <div class="val">${shares >= 1 ? shares : shares.toFixed(4)}</div>
+        <div style="font-size:10px;color:var(--t3)">$${invested.toFixed(2)} invested</div>
+      </div>
+      <div class="gp-stat">
+        <div class="lbl">R/R Ratio</div>
+        <div class="val" style="color:${(pos.rr||0)>=2?'var(--grn)':(pos.rr||0)>=1?'var(--ylw)':'var(--red)'}">${pos.rr ? pos.rr.toFixed(1)+':1' : '--'}</div>
+        <div style="font-size:10px;color:var(--t3)">Conf: ${pos.confidence||25}%</div>
+      </div>
+    </div>
+
+    ${stop && target ? `
+    <div class="gp-progress">
+      <div class="gp-prog-title">Price Progress — Stop to Target</div>
+      <div class="gp-prog-bar">
+        <div class="gp-prog-fill" style="width:${progressPct.toFixed(1)}%;background:linear-gradient(90deg,var(--red) 0%,var(--ylw) 40%,var(--grn) 100%)"></div>
+        <div class="gp-prog-marker" style="left:${entryMarkerPct.toFixed(1)}%" data-label="Entry $${entry.toFixed(2)}"></div>
+        <div class="gp-prog-marker" style="left:${progressPct.toFixed(1)}%;background:${progColor};width:3px" data-label="Now $${curPrice.toFixed(2)}"></div>
+      </div>
+      <div class="gp-prog-labels">
+        <span style="color:var(--red)">🛑 Stop $${stop.toFixed(2)}</span>
+        <span style="color:var(--grn)">🎯 Target $${target.toFixed(2)}</span>
+      </div>
+    </div>` : `
+    <div style="padding:10px;background:var(--bg);border-radius:8px;margin-bottom:14px;font-size:11px;color:var(--t3);text-align:center">
+      No stop/target set — consider adding levels to manage risk
+    </div>`}
+
+    <div class="gp-advice">
+      <div class="gp-advice-title">🤖 What to Do Now</div>
+      ${adviceItems.map(a => `
+        <div class="gp-advice-item">
+          <span class="gp-advice-icon">${a.icon}</span>
+          <div class="gp-advice-text">${a.text}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="gp-meta">
+      ${pos.sellTimeline ? `<div class="gp-meta-item">📅 Timeline: ${pos.sellTimeline}</div>` : ''}
+      ${pos.reasons && pos.reasons.length ? `<div class="gp-meta-item">💡 ${pos.reasons[0]}</div>` : ''}
+      <div class="gp-meta-item">🔄 <a href="#" onclick="event.preventDefault();buildGamePlan('${sym}')" style="color:var(--acc)">Refresh</a></div>
+    </div>
+  </div>`;
+}
+
 function buildActionPlanFromSizer(sym, shares, entry, stop, target, maxLoss, potGain, rr, isBuy, sig) {
   const el = document.getElementById('m-action-plan');
   if (!el) return;
@@ -5101,7 +5292,20 @@ async function stgSaveProfile() {
       });
     } catch(e) {}
   }
-  stgShowMsg('✅ Profile saved');
+  // Recalculate everything affected by risk/balance change
+  // Update session start if balance changed
+  if (D.session.start <= 0 || D.session.start !== bal) {
+    D.session.start = bal;
+  }
+  renderSessionBar();
+  renderHoldings();
+  // If stock modal is open, refresh its sizer and game plan
+  if (M_SYM && document.getElementById('modal-bg').style.display === 'block') {
+    buildInvestSizer(M_SYM);
+    buildGamePlan(M_SYM);
+    buildActionPlan(M_SYM);
+  }
+  stgShowMsg('✅ Profile saved — calculations updated');
 }
 async function stgSaveKeys() {
   const fh = document.getElementById('stg-fh').value.trim();
@@ -6225,6 +6429,7 @@ async function openStock(sym) {
   buildTechPanel(sym);
   buildActionPlan(sym);
   buildInvestSizer(sym);
+  buildGamePlan(sym);
   // Load TV chart (lazy — only when tab opened)
 }
 
