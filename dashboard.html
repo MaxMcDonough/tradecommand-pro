@@ -856,7 +856,7 @@ a{color:var(--acc);text-decoration:none}
 /* ===== HOLDINGS SECTION ===== */
 #holdings-section{display:none;margin-bottom:12px}
 #holdings-section.has-positions{display:block}
-.holdings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr));gap:10px;margin-top:10px;max-width:100%;overflow:hidden}
+.holdings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr));gap:10px;margin-top:10px;max-width:100%;overflow:visible}
 .holdings-scroll-hint{display:none;text-align:center;font-size:10px;color:var(--t3);padding:4px 0;animation:fadeInOut 2s ease-in-out infinite}
 @keyframes fadeInOut{0%,100%{opacity:.4}50%{opacity:1}}
 .holding-card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;transition:border-color .15s;max-width:100%;box-sizing:border-box;word-break:break-word}
@@ -2135,7 +2135,7 @@ a{color:var(--acc);text-decoration:none}
 <div class="page on" id="p-trading">
 
 <!-- MY HOLDINGS — shown first, above everything -->
-<div id="holdings-section" style="margin-bottom:16px;overflow:hidden">
+<div id="holdings-section" style="margin-bottom:16px">
   <div class="ch" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
     <span class="ct">📂 My Holdings</span>
     <span class="badge" style="background:var(--acc);color:#fff" id="holdings-ct">0</span>
@@ -3650,7 +3650,7 @@ const D = {
   av:'WGIEYOIJEINA74F8',
   na:'fb90a7d7e29d42f3b952ef5490a60f81',
   name:'Max',
-  bal:200, risk:1.4,
+  bal:25000, risk:1.4,
   wl:['AAPL','MSFT','NVDA','TSLA','META','AMZN','GOOGL','AMD','SPY','QQQ'],
   sd:{}, sigs:[], sel:'SPY', ws:null,
   pc:null, vc:null,
@@ -3783,7 +3783,7 @@ let _investSym = null; // symbol being sized
 
 async function initSession() {
   // Always sync session start to current balance (picks up profile-loaded value)
-  D.session.start = D.bal;
+  D.session.start = D.bal || 25000;
   // Re-merge portfolio holdings
   mergeHoldingsIntoSession();
   // If Firestore has open positions (loaded in handleAuthState), make sure session reflects them
@@ -3914,11 +3914,11 @@ function renderHoldings() {
       <div class="hc-levels">
         <div class="hc-level">
           <div class="lbl">Entry</div>
-          <div class="val" style="color:var(--t2)">${entry > 0 ? '$'+entry.toFixed(2) : 'Loading...'}</div>
+          <div class="val" style="color:var(--t2)">${entry > 0 ? '$'+entry.toFixed(2) : (window._quotesLoaded ? 'N/A' : 'Loading...')}</div>
         </div>
         <div class="hc-level">
           <div class="lbl">Current</div>
-          <div class="val" style="color:${col}">${cur > 0 ? '$'+cur.toFixed(2) : 'Loading...'}</div>
+          <div class="val" style="color:${col}">${cur > 0 ? '$'+cur.toFixed(2) : (window._quotesLoaded ? 'N/A' : 'Loading...')}</div>
         </div>
         <div class="hc-level">
           <div class="lbl">Stop / Target</div>
@@ -4158,6 +4158,10 @@ function resumeSession(silent) {
   if (!savedData) { initSession(); return; }
 
   D.session = { ...savedData };
+  // Fix $0 session start — use D.bal (loaded from profile) as fallback
+  if (!D.session.start || D.session.start <= 0) {
+    D.session.start = D.bal || 25000;
+  }
   // Update unrealized P&L on open positions using current market prices
   if (D.session.positions) {
     D.session.deployed = 0;
@@ -5568,7 +5572,7 @@ async function fetchQ(sym){
   if(!auth.currentUser)return;
   try{const r=await cfFinnhubQuote({symbol:sym});const d=r.data;if(d&&d.c)D.sd[sym]={...(D.sd[sym]||{}),price:d.c,change:d.d,pct:d.dp,pc:d.pc};}catch(e){}
 }
-async function fetchAllQ(){const syms=[...new Set([...D.wl,'SPY','QQQ','DIA','IWM'])];for(let i=0;i<syms.length;i++){fetchQ(syms[i]);if(i%5===4)await slp(1100);}setTimeout(()=>{updTicker();mkWL();fetchCandles(D.sel);updateHoldingPrices();},2000);}
+async function fetchAllQ(){const holdingSyms=(D.session.positions||[]).filter(p=>p.status==='open').map(p=>p.sym);const syms=[...new Set([...D.wl,...holdingSyms,'SPY','QQQ','DIA','IWM'])];for(let i=0;i<syms.length;i++){fetchQ(syms[i]);if(i%5===4)await slp(1100);}setTimeout(()=>{window._quotesLoaded=true;updTicker();mkWL();fetchCandles(D.sel);updateHoldingPrices();renderHoldings();},2000);}
 // After live quotes load, fix any holdings that were imported with $0 entry
 function updateHoldingPrices(){
   if(!D.session.positions)return;
@@ -6607,8 +6611,13 @@ function renderSectorPortfolios() {
 
 // ===== PORTFOLIO MODAL =====
 function openPortfolioModal() {
-  renderPortfolioModal();
-  document.getElementById('portfolio-modal').classList.add('show');
+  try {
+    renderPortfolioModal();
+    document.getElementById('portfolio-modal').classList.add('show');
+  } catch(e) {
+    console.error('Portfolio modal error:', e);
+    showToast('⚠️ Could not open portfolio — ' + e.message, 'error');
+  }
 }
 function closePortfolioModal() {
   document.getElementById('portfolio-modal').classList.remove('show');
@@ -6618,8 +6627,9 @@ function renderPortfolioModal() {
   const closed = D.session.positions.filter(p => p.status === 'closed');
   const remain = sessionRemaining();
   const unrealized = open.reduce((sum, p) => {
-    const cur = D.sd[p.sym] ? D.sd[p.sym].price : p.entry;
-    return sum + (cur - p.entry) * p.shares;
+    const entry = p.entry || 0;
+    const cur = D.sd[p.sym] ? D.sd[p.sym].price : entry;
+    return sum + (entry > 0 ? (cur - entry) * p.shares : 0);
   }, 0);
   const totalPnl = D.session.realized + unrealized;
 
@@ -6656,20 +6666,24 @@ function renderPortfolioModal() {
         <th>Symbol</th><th>Shares</th><th>Entry</th><th>Current</th><th>Stop</th><th>Target</th><th>Invested</th><th>P&L</th><th>Actions</th>
       </tr></thead><tbody>`;
     open.forEach(p => {
-      const cur = D.sd[p.sym] ? D.sd[p.sym].price : p.entry;
-      const pnl = (cur - p.entry) * p.shares;
-      const pnlPct = ((cur - p.entry) / p.entry * 100);
+      const entry = p.entry || 0;
+      const cur = D.sd[p.sym] ? D.sd[p.sym].price : entry;
+      const pnl = entry > 0 ? (cur - entry) * p.shares : 0;
+      const pnlPct = entry > 0 ? ((cur - entry) / entry * 100) : 0;
       const pnlCol = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
-      const stopPct = ((p.stop - p.entry) / p.entry * 100).toFixed(1);
-      const tgtPct = ((p.target - p.entry) / p.entry * 100).toFixed(1);
+      const stopStr = p.stop ? '$'+p.stop.toFixed(2) : '--';
+      const stopPct = (p.stop && entry > 0) ? ((p.stop - entry) / entry * 100).toFixed(1)+'%' : '';
+      const tgtStr = p.target ? '$'+p.target.toFixed(2) : '--';
+      const tgtPct = (p.target && entry > 0) ? '+'+((p.target - entry) / entry * 100).toFixed(1)+'%' : '';
+      const invested = p.invested || (p.shares * entry);
       bodyHtml += `<tr>
         <td><b>${p.sym}</b></td>
         <td>${p.shares}</td>
-        <td>$${p.entry.toFixed(2)}</td>
-        <td style="color:${cur > p.entry ? 'var(--grn)' : 'var(--red)'}">$${cur.toFixed(2)}</td>
-        <td style="color:var(--red)">$${p.stop.toFixed(2)} <span style="font-size:9px;color:var(--t3)">(${stopPct}%)</span></td>
-        <td style="color:var(--grn)">$${p.target.toFixed(2)} <span style="font-size:9px;color:var(--t3)">(+${tgtPct}%)</span></td>
-        <td>$${p.invested.toFixed(2)}</td>
+        <td>${entry > 0 ? '$'+entry.toFixed(2) : 'N/A'}</td>
+        <td style="color:${cur > entry ? 'var(--grn)' : 'var(--red)'}">${cur > 0 ? '$'+cur.toFixed(2) : 'N/A'}</td>
+        <td style="color:var(--red)">${stopStr} ${stopPct ? '<span style="font-size:9px;color:var(--t3)">('+stopPct+')</span>' : ''}</td>
+        <td style="color:var(--grn)">${tgtStr} ${tgtPct ? '<span style="font-size:9px;color:var(--t3)">('+tgtPct+')</span>' : ''}</td>
+        <td>$${invested.toFixed(2)}</td>
         <td style="color:${pnlCol};font-weight:700">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)} <span style="font-size:9px">(${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(1)}%)</span></td>
         <td style="display:flex;gap:4px;flex-wrap:wrap">
           <button class="pf-btn-trade" onclick="closePortfolioModal();openStock('${p.sym}')">📊 View</button>
@@ -6694,8 +6708,8 @@ function renderPortfolioModal() {
       bodyHtml += `<tr>
         <td><b>${p.sym}</b></td>
         <td>${p.shares}</td>
-        <td>$${p.entry.toFixed(2)}</td>
-        <td>$${p.exitPrice ? p.exitPrice.toFixed(2) : '--'}</td>
+        <td>${p.entry ? '$'+p.entry.toFixed(2) : 'N/A'}</td>
+        <td>${p.exitPrice ? '$'+p.exitPrice.toFixed(2) : '--'}</td>
         <td style="color:${pnlCol};font-weight:700">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
         <td><span class="pf-badge" style="background:${pnl>=0?'var(--grn2)':'var(--red2)'};color:${pnlCol}">${result}</span></td>
       </tr>`;
