@@ -3942,16 +3942,17 @@ function renderHoldings() {
 
   grid.innerHTML = open.map(pos => {
     const livePx = D.sd[pos.sym] ? D.sd[pos.sym].price : 0;
+    const hasLive = livePx > 0;
     const entry = pos.entry > 0 ? pos.entry : livePx;
     const cur = livePx > 0 ? livePx : entry;
-    const pnl = entry > 0 ? (cur - entry) * pos.shares : 0;
-    const pnlPct = entry > 0 ? ((cur - entry) / entry * 100) : 0;
+    const pnl = (entry > 0 && hasLive) ? (cur - entry) * pos.shares : 0;
+    const pnlPct = (entry > 0 && hasLive) ? ((cur - entry) / entry * 100) : 0;
     totalPnl += pnl;
     totalDeployed += pos.invested > 0 ? pos.invested : (pos.shares * entry);
 
     const col = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
-    const pnlStr = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
-    const pnlPctStr = (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%';
+    const pnlStr = hasLive ? ((pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2)) : 'Waiting...';
+    const pnlPctStr = hasLive ? ((pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%') : '';
 
     // Sector info for this holding
     const posSec = getSectorForSymbol(pos.sym);
@@ -4245,31 +4246,21 @@ function mergeHoldingsIntoSession() {
     const wasClosed = D.session.positions.some(p => p.sym === sym && p.status === 'closed');
     if (wasClosed) return; // Don't resurrect closed positions
     if (!alreadyIn) {
-      const livePrice = (D.sd[sym] && D.sd[sym].price) ? D.sd[sym].price : 0;
-      // Use stored entry if available, otherwise simulate a slightly different entry
-      // so P&L isn't always $0 when price = entry
-      let entryPrice = h.entry || h.price || 0;
-      if ((!entryPrice || entryPrice === livePrice) && livePrice > 0) {
-        // Simulate a buy-in at 1-5% below current price
-        const offset = 0.01 + Math.random() * 0.04;
-        entryPrice = +(livePrice * (1 - offset)).toFixed(4);
-      }
-      if (!entryPrice && livePrice > 0) entryPrice = livePrice;
+      // Entry = the live price at the moment of first import (the actual buy-in price)
+      const price = (D.sd[sym] && D.sd[sym].price) ? D.sd[sym].price : (h.entry || h.price || 0);
       const shares = h.shares || h.qty || 1;
-      // Auto-generate stop/target based on entry price if not provided
-      const autoStop = h.stop || (entryPrice > 0 ? +(entryPrice * 0.92).toFixed(4) : null);
-      const autoTarget = h.target || (entryPrice > 0 ? +(entryPrice * 1.15).toFixed(4) : null);
-      const autoRR = (autoStop && autoTarget && entryPrice > 0) ? +((autoTarget - entryPrice) / (entryPrice - autoStop)).toFixed(1) : 0;
-      D.session.positions.push({
-        sym, shares, entry: entryPrice, invested: shares * entryPrice,
-        stop: autoStop, target: autoTarget, isBuy: true, status: 'open', pnl: 0,
-        maxLoss: autoStop ? (entryPrice - autoStop) * shares : 0,
-        potGain: autoTarget ? (autoTarget - entryPrice) * shares : 0,
-        rr: autoRR, confidence: 40,
-        sellTimeline: 'Swing (1-4 weeks)', daysToTarget: 14, stopPct: 8, targetPct: 15,
-        reasons: ['Portfolio holding — auto-tracked'], timestamp: Date.now() - (86400000 * (1 + Math.floor(Math.random() * 5))),
+      const pos = {
+        sym, shares, entry: price, invested: shares * price,
+        stop: h.stop || null, target: h.target || null,
+        isBuy: true, status: 'open', pnl: 0,
+        maxLoss: 0, potGain: 0, rr: 0, confidence: 25,
+        sellTimeline: 'Manual', daysToTarget: 0, stopPct: 0, targetPct: 0,
+        reasons: ['Portfolio holding — auto-tracked'], timestamp: Date.now(),
         alerts: { stopNotified: false, targetNotified: false }
-      });
+      };
+      D.session.positions.push(pos);
+      // Persist to Firestore immediately so entry price is saved across devices/sessions
+      savePositionToFirestore(pos);
       D.session.deployed += shares * price;
       D.session.tradeCount++;
     }
@@ -4278,7 +4269,7 @@ function mergeHoldingsIntoSession() {
   });
 }
 
-function resumeSession(silent) {
+async function resumeSession(silent) {
   const modal = document.getElementById('session-resume-modal');
   if (modal) modal.classList.add('hidden');
   sessionStorage.setItem('tcp_session_chosen', '1');
@@ -4291,41 +4282,41 @@ function resumeSession(silent) {
   if (!D.session.start || D.session.start <= 0) {
     D.session.start = D.bal || 25000;
   }
-  // Update unrealized P&L on open positions using current market prices
+  // Load positions from Firestore (source of truth — works across devices)
+  try {
+    const firestorePositions = await loadHoldingsFromFirestore();
+    if (firestorePositions.length > 0) {
+      // Firestore positions have the real saved entry prices
+      // Merge them in, preferring Firestore data over localStorage
+      if (!D.session.positions) D.session.positions = [];
+      firestorePositions.forEach(fp => {
+        const idx = D.session.positions.findIndex(p => p.sym === fp.sym && p.status === 'open');
+        if (idx >= 0) {
+          // Firestore has the canonical entry price — use it
+          D.session.positions[idx].entry = fp.entry;
+          D.session.positions[idx].invested = fp.invested;
+          D.session.positions[idx].stop = fp.stop || D.session.positions[idx].stop;
+          D.session.positions[idx].target = fp.target || D.session.positions[idx].target;
+          D.session.positions[idx].timestamp = fp.timestamp || D.session.positions[idx].timestamp;
+        } else {
+          // Position only in Firestore (new device), add it
+          D.session.positions.push(fp);
+        }
+      });
+    }
+  } catch(e) { console.warn('[Resume] Firestore load error:', e); }
+  // Recalculate deployed capital from open positions
   if (D.session.positions) {
     D.session.deployed = 0;
     D.session.positions.forEach(pos => {
       if (pos.status === 'open') {
         D.session.deployed += pos.invested || 0;
-        // Patch: auto-generate stop/target for imported holdings that are missing them
-        if (!pos.stop && pos.entry > 0) {
-          pos.stop = +(pos.entry * 0.92).toFixed(4);
-        }
-        if (!pos.target && pos.entry > 0) {
-          pos.target = +(pos.entry * 1.15).toFixed(4);
-        }
-        if (!pos.rr && pos.stop && pos.target && pos.entry > 0) {
-          pos.rr = +((pos.target - pos.entry) / (pos.entry - pos.stop)).toFixed(1);
-        }
-        // Patch: if entry exactly equals live price (stale import), offset entry slightly
-        // so P&L shows realistic movement. Use a deterministic offset based on symbol.
-        const liveP = (D.sd[pos.sym] && D.sd[pos.sym].price) ? D.sd[pos.sym].price : 0;
-        if (liveP > 0 && pos.entry === liveP && pos.reasons && pos.reasons[0] && (pos.reasons[0].includes('Imported') || pos.reasons[0].includes('Portfolio') || pos.reasons[0].includes('auto-tracked'))) {
-          // Use symbol hash for deterministic offset (1-4% below current)
-          let hash = 0; for (let i = 0; i < pos.sym.length; i++) hash = ((hash << 5) - hash) + pos.sym.charCodeAt(i);
-          const offset = 0.01 + (Math.abs(hash) % 40) / 1000;
-          pos.entry = +(liveP * (1 - offset)).toFixed(4);
-          pos.invested = pos.shares * pos.entry;
-          // Also recalc stop/target based on new entry
-          pos.stop = +(pos.entry * 0.92).toFixed(4);
-          pos.target = +(pos.entry * 1.15).toFixed(4);
-          pos.rr = +((pos.target - pos.entry) / (pos.entry - pos.stop)).toFixed(1);
-        }
       }
     });
   }
   // Re-merge portfolio holdings so all 7 always show up
   mergeHoldingsIntoSession();
+  saveSessionToStorage();
   renderSessionBar();
   document.getElementById('session-bar').classList.add('show');
   const open = D.session.positions.filter(p => p.status === 'open').length;
@@ -4593,6 +4584,7 @@ function buildGamePlan(sym) {
   if (!pos) { el.style.display = 'none'; return; }
 
   const s = D.sd[sym] || {};
+  const hasLiveData = !!(s.price && s.price > 0);
   const curPrice = s.price || pos.entry || 0;
   const entry = pos.entry || 0;
   const shares = pos.shares || 0;
@@ -4669,6 +4661,11 @@ function buildGamePlan(sym) {
     adviceItems.push({ icon: '💡', text: 'If the original reason for entering no longer holds, consider cutting the loss.' });
   }
 
+  // Note when there's no live price data
+  if (!hasLiveData) {
+    adviceItems.push({ icon: '📡', text: '<b>No live price data</b> — this ticker may not be covered by the data feed, or markets may be closed. P&L will update once live quotes come in.' });
+  }
+
   // Today's price action context
   const todayPct = s.pct || 0;
   if (Math.abs(todayPct) >= 2) {
@@ -4696,12 +4693,12 @@ function buildGamePlan(sym) {
     <div class="gp-stats">
       <div class="gp-stat">
         <div class="lbl">P&L</div>
-        <div class="val" style="color:${pnlCol}">${pnlStr}</div>
-        <div style="font-size:10px;color:${pnlCol}">${pnlPctStr}</div>
+        <div class="val" style="color:${pnlCol}">${hasLiveData ? pnlStr : 'Waiting...'}</div>
+        <div style="font-size:10px;color:${hasLiveData ? pnlCol : 'var(--t3)'}">${hasLiveData ? pnlPctStr : 'No live data yet'}</div>
       </div>
       <div class="gp-stat">
         <div class="lbl">Current</div>
-        <div class="val">${curPrice > 0 ? '$'+curPrice.toFixed(2) : 'N/A'}</div>
+        <div class="val">${hasLiveData ? '$'+curPrice.toFixed(2) : 'N/A'}</div>
         <div style="font-size:10px;color:var(--t3)">Entry: $${entry > 0 ? entry.toFixed(2) : '--'}</div>
       </div>
       <div class="gp-stat">
