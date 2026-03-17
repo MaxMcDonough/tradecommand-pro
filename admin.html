@@ -598,7 +598,29 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <div id="changelog-updated" style="font-size:11px;color:var(--t3);margin-top:4px;margin-bottom:12px"></div>
     <div style="display:flex;flex-direction:column;gap:24px;margin-top:8px">
 
-      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-green">v2.6</span><span class="badge badge-yellow">LATEST</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 6:45 PM EST</span></div>
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-green">v2.7</span><span class="badge badge-yellow">LATEST</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 17, 2026 &mdash; Dashboard Overhaul</span></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">GAME PLANS + REAL P&L + CLEANUP</div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7">
+        + Game Plan panel &mdash; click any holding to see P&L, target profit ($), max risk ($), progress bar (stop→target), dynamic AI advice<br>
+        + Progress bar redesigned &mdash; clear red/green zones (loss vs profit) with entry line and "NOW" marker<br>
+        + Real P&L tracking &mdash; entry price saved to Firestore on buy, P&L = live price minus entry, updates in real-time<br>
+        + Positions fully cloud-synced via Firestore subcollection &mdash; works across devices and sessions<br>
+        + Shares/dollars toggle &mdash; size trades by share count or dollar amount, signal updates dynamically<br>
+        + AI recommendation section + custom trade section in invest sizer<br>
+        + Sector-colored holdings cards &mdash; each card shows its own sector color/badge, not the global filter color<br>
+        + Holdings filter by active sector category (or show all)<br>
+        + Removed auto-seeded fake holdings (DM, GPU, PLUR, QNC, VERS, VG, XBOT) &mdash; portfolio is real trades only<br>
+        + Cleanup on login: legacy seeds removed from Firestore + localStorage automatically<br>
+        + Removed crypto Fear &amp; Greed Index from main dashboard (moved to crypto tab for future)<br>
+        + Closed positions no longer resurrect after refresh (removeFromMyHoldings + merge guard)<br>
+        + Portfolio modal null-safe fixes (stop/target/entry guards + try-catch wrapper)<br>
+        + Holdings swipe fixed (removed overflow:hidden blocking touch scroll)<br>
+        + Session start $0 bug fixed (D.bal default 25000, fallback in resume)<br>
+        ~ "No data" shown instead of misleading +$0.00 for tickers without live quotes<br>
+        ~ Updated user-facing changelog to v2.3.0
+      </div></div>
+
+      <div><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span class="badge badge-indigo">v2.6</span><span style="font-size:11px;color:var(--t3)" class="cl-ts">Mar 15, 2026 &mdash; 6:45 PM EST</span></div>
       <div style="font-size:13px;font-weight:700;margin-bottom:6px">BETA LAUNCH + EMAIL TEMPLATES</div>
       <div style="font-size:12px;color:var(--t2);line-height:1.7">
         + NEW: Beta Launch page &mdash; 4-day battle plan with daily goals, channel tracking, progress bar<br>
