@@ -4980,41 +4980,17 @@ LOW:
             appId: "1:1068820115443:web:a132300a23f41c519d6c86"
         };
 
-        // SHA-256 helper for local bypass mode
-        async function sha256(message) {
-          const msgBuffer = new TextEncoder().encode(message);
-          const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-          const hashArray = Array.from(new Uint8Array(hashBuffer));
-          return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-        const ADMIN_BYPASS_HASH = '69cf361374eb98f109a7272cd195138769b2658bff2d789240322781c4112240';
         const FIREBASE_CONFIGURED = () => firebaseConfig.apiKey !== 'YOUR_FIREBASE_API_KEY';
         const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
         
-        // Check local admin bypass session
-        function checkLocalAdminBypass() {
-          const session = localStorage.getItem('tcp_admin_session');
-          if (!session) return false;
-          try {
-            const s = JSON.parse(session);
-            // Session valid for 8 hours
-            return s.admin === true && (Date.now() - s.ts) < 8 * 60 * 60 * 1000;
-          } catch(e) { return false; }
-        }
 
         // Initialize Firebase (if credentials provided)
         let app, auth, db;
         let currentUser = null;
 
         if (!FIREBASE_CONFIGURED()) {
-          // Show auth gate for local bypass
           document.getElementById('auth-gate') && (document.getElementById('auth-gate').style.display = 'flex');
           document.getElementById('container') && (document.getElementById('container').style.display = 'none');
-          
-          // Check if already have valid local session
-          if (checkLocalAdminBypass()) {
-            grantAdminAccess({ email: ADMIN_EMAIL, displayName: 'Max', uid: 'local-admin' });
-          }
         } else {
           try {
             if (!firebase.apps.length) {
@@ -5064,15 +5040,8 @@ LOW:
           if (!email || !pass) { errEl.textContent = 'Enter email and password'; errEl.style.display='block'; return; }
           
           if (!FIREBASE_CONFIGURED()) {
-            // Local bypass check
-            const hash = await sha256(pass);
-            if (email === ADMIN_EMAIL && hash === ADMIN_BYPASS_HASH) {
-              localStorage.setItem('tcp_admin_session', JSON.stringify({ admin: true, ts: Date.now() }));
-              grantAdminAccess({ email: ADMIN_EMAIL, displayName: 'Max', uid: 'local-admin' });
-            } else {
-              errEl.textContent = 'Invalid credentials.';
-              errEl.style.display = 'block';
-            }
+            errEl.textContent = 'Firebase not configured. Please set up Firebase credentials.';
+            errEl.style.display = 'block';
             return;
           }
           

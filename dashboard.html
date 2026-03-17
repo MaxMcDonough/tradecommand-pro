@@ -2729,14 +2729,6 @@ try { rtdb = firebase.database(); } catch(e) { console.warn('RTDB not available:
 
 const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
 
-// SHA-256 helper for local bypass mode
-async function sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-const ADMIN_BYPASS_HASH = '69cf361374eb98f109a7272cd195138769b2658bff2d789240322781c4112240';
 const FIREBASE_CONFIGURED = () => firebaseConfig.apiKey !== 'YOUR_FIREBASE_API_KEY';
 
 // ===== AUTH UI FUNCTIONS =====
@@ -2791,34 +2783,8 @@ async function authSignIn() {
   if (!email || !pass) { showAuthError('signin', 'Email and password required'); return; }
 
   if (!FIREBASE_CONFIGURED()) {
-    // LOCAL BYPASS MODE
-    if (email === ADMIN_EMAIL) {
-      const h = await sha256(pass);
-      if (h === ADMIN_BYPASS_HASH) {
-        localStorage.setItem('tcp_local_admin', '1');
-        hideAuth();
-        D.isAdmin = true;
-        D.name = 'Max';
-        document.getElementById('user-name') && (document.getElementById('user-name').textContent = '👤 Max');
-        const adminLink = document.getElementById('admin-link');
-        if (adminLink) adminLink.style.display = 'inline';
-        // Pre-fill form fields then launch
-        document.getElementById('k-fh').value = D.fh;
-        document.getElementById('k-av').value = D.av;
-        document.getElementById('k-na').value = D.na;
-        document.getElementById('p-name').value = 'Max';
-        document.getElementById('s-bal').value = D.bal;
-        document.getElementById('s-risk').value = D.risk;
-        setTimeout(launch, 50);
-        return;
-      } else {
-        showAuthError('signin', 'Invalid credentials.');
-        return;
-      }
-    } else {
-      showAuthError('signin', 'Firebase not configured yet — only the admin can log in. Set up Firebase to enable user accounts.');
-      return;
-    }
+    showAuthError('signin', 'Firebase not configured. Please set up Firebase credentials.');
+    return;
   }
 
   try {
@@ -2878,7 +2844,7 @@ async function authSignUp() {
 }
 async function authGoogle() {
   if (!FIREBASE_CONFIGURED()) {
-    showAuthError('signin', 'Google sign-in requires Firebase to be configured. Use email login with bypass key for now.');
+    showAuthError('signin', 'Google sign-in requires Firebase to be configured.');
     return;
   }
   try {
@@ -2933,7 +2899,6 @@ async function authForgot() {
 }
 
 function authSignOut() {
-  localStorage.removeItem('tcp_local_admin');
   (() => { if(rtdb && auth.currentUser){ rtdb.ref('presence/'+auth.currentUser.uid).set({online:false,email:auth.currentUser.email,lastSeen:Date.now()}).finally(()=>auth.signOut()); } else { auth.signOut(); } })().then(() => {
     D.isAdmin = false;
     showAuth();
@@ -3594,24 +3559,6 @@ function applyURLParams() {
 
 // Auto-launch on page open — pre-fill form fields from D defaults then launch
 window.addEventListener('DOMContentLoaded', () => {
-  // Check local admin bypass first (for when Firebase isn't configured)
-  if (!FIREBASE_CONFIGURED() && localStorage.getItem('tcp_local_admin') === '1') {
-    hideAuth();
-    D.isAdmin = true;
-    D.name = 'Max';
-    document.getElementById('k-fh').value = D.fh;
-    document.getElementById('k-av').value = D.av;
-    document.getElementById('k-na').value = D.na;
-    document.getElementById('p-name').value = 'Max';
-    document.getElementById('s-bal').value = D.bal;
-    document.getElementById('s-risk').value = D.risk;
-    const nameEl = document.getElementById('user-name');
-    if (nameEl) nameEl.textContent = '👤 Max';
-    const adminLink = document.getElementById('admin-link');
-    if (adminLink) adminLink.style.display = 'inline';
-    setTimeout(launch, 50);
-    return;
-  }
   // Handle payment return params
   handlePaymentReturn();
   // Apply URL params from index.html access modal (tab=signup, email=, checkout=)

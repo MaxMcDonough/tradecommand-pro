@@ -1935,12 +1935,6 @@ function doLogin() {
   const pass = document.getElementById('login-pass').value;
   const errEl = document.getElementById('login-error');
   errEl.textContent = '';
-  // Local bypass
-  if (pass === 'tcpro2024') {
-    localStorage.setItem('tc_bypass', '1');
-    showApp();
-    return;
-  }
   auth.signInWithEmailAndPassword(email, pass)
     .then(() => showApp())
     .catch(e => errEl.textContent = e.message);
@@ -1960,7 +1954,6 @@ function doResetPassword() {
     });
 }
 function doLogout() {
-  localStorage.removeItem('tc_bypass');
   auth.signOut().catch(()=>{});
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
@@ -2013,7 +2006,6 @@ auth.getRedirectResult().then(function(result){
 }).catch(function(){});
 auth.onAuthStateChanged(u => {
   if (u && u.email === ADMIN_EMAIL) showApp();
-  else if (localStorage.getItem('tc_bypass') === '1') showApp();
 });
 
 // ═══ NAVIGATION ═══

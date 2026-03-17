@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── HELPER: Check if the requester is the admin ───
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == 'max.mcdonough123@gmail.com';
+    }
+
+    // ─── HELPER: Check if user is authenticated ───
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // ─── HELPER: Check if user owns the document ───
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // ═══ USER PROFILES ═══
+    // Users can read/write their own profile. Admin can read all.
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ═══ USER HOLDINGS ═══
+    // Users can manage their own holdings subcollection. Admin can read all.
+    match /users/{userId}/holdings/{holdingId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    // ═══ USER WATCHLIST ═══
+    match /users/{userId}/watchlist/{itemId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    // ═══ USER ACTIVITY / TRADES ═══
+    match /users/{userId}/activity/{activityId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update, delete: if isAdmin();
+    }
+
+    // ═══ LEADS / CRM (admin only) ═══
+    match /leads/{leadId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ═══ ANALYTICS / METRICS (admin only) ═══
+    match /analytics/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ═══ SITE SETTINGS (admin only) ═══
+    match /settings/{docId} {
+      allow read: if isAuth();
+      allow write: if isAdmin();
+    }
+
+    // ═══ FEEDBACK / SUPPORT TICKETS ═══
+    match /feedback/{feedbackId} {
+      allow create: if isAuth();
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ═══ DEFAULT: Deny everything else ═══
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
