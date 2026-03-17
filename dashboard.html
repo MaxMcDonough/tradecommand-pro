@@ -3865,11 +3865,14 @@ function renderHoldings() {
   let totalPnl = 0, totalDeployed = 0, alerts = [];
 
   grid.innerHTML = open.map(pos => {
-    const cur = D.sd[pos.sym] ? D.sd[pos.sym].price : pos.entry;
-    const pnl = (cur - pos.entry) * pos.shares;
-    const pnlPct = ((cur - pos.entry) / pos.entry * 100);
+    const livePx = D.sd[pos.sym] ? D.sd[pos.sym].price : 0;
+    // Use live price for current; if entry is 0, use live price as entry too
+    const entry = pos.entry > 0 ? pos.entry : livePx;
+    const cur = livePx > 0 ? livePx : entry;
+    const pnl = entry > 0 ? (cur - entry) * pos.shares : 0;
+    const pnlPct = entry > 0 ? ((cur - entry) / entry * 100) : 0;
     totalPnl += pnl;
-    totalDeployed += pos.invested || (pos.shares * pos.entry);
+    totalDeployed += pos.invested > 0 ? pos.invested : (pos.shares * entry);
 
     const col = pnl >= 0 ? 'var(--grn)' : 'var(--red)';
     const cls = pnl > 0 ? 'hc-up' : pnl < 0 ? 'hc-dn' : 'hc-neu';
@@ -3911,11 +3914,11 @@ function renderHoldings() {
       <div class="hc-levels">
         <div class="hc-level">
           <div class="lbl">Entry</div>
-          <div class="val" style="color:var(--t2)">$${pos.entry.toFixed(2)}</div>
+          <div class="val" style="color:var(--t2)">${entry > 0 ? '$'+entry.toFixed(2) : 'Loading...'}</div>
         </div>
         <div class="hc-level">
           <div class="lbl">Current</div>
-          <div class="val" style="color:${col}">$${cur.toFixed(2)}</div>
+          <div class="val" style="color:${col}">${cur > 0 ? '$'+cur.toFixed(2) : 'Loading...'}</div>
         </div>
         <div class="hc-level">
           <div class="lbl">Stop / Target</div>
@@ -5563,9 +5566,29 @@ async function fhGet(ep){
 }
 async function fetchQ(sym){
   if(!auth.currentUser)return;
-  try{const r=await cfFinnhubQuote({symbol:sym});const d=r.data;if(d&&d.c)D.sd[sym]={price:d.c,change:d.d,pct:d.dp,pc:d.pc,...(D.sd[sym]||{})};}catch(e){}
+  try{const r=await cfFinnhubQuote({symbol:sym});const d=r.data;if(d&&d.c)D.sd[sym]={...(D.sd[sym]||{}),price:d.c,change:d.d,pct:d.dp,pc:d.pc};}catch(e){}
 }
-async function fetchAllQ(){const syms=[...new Set([...D.wl,'SPY','QQQ','DIA','IWM'])];for(let i=0;i<syms.length;i++){fetchQ(syms[i]);if(i%5===4)await slp(1100);}setTimeout(()=>{updTicker();mkWL();fetchCandles(D.sel);},2000);}
+async function fetchAllQ(){const syms=[...new Set([...D.wl,'SPY','QQQ','DIA','IWM'])];for(let i=0;i<syms.length;i++){fetchQ(syms[i]);if(i%5===4)await slp(1100);}setTimeout(()=>{updTicker();mkWL();fetchCandles(D.sel);updateHoldingPrices();},2000);}
+// After live quotes load, fix any holdings that were imported with $0 entry
+function updateHoldingPrices(){
+  if(!D.session.positions)return;
+  let changed=false;
+  D.session.positions.forEach(pos=>{
+    if(pos.status!=='open')return;
+    const livePrice=D.sd[pos.sym]?D.sd[pos.sym].price:0;
+    if(livePrice>0&&(!pos.entry||pos.entry===0)){
+      pos.entry=livePrice;
+      pos.invested=pos.shares*livePrice;
+      changed=true;
+    }
+  });
+  if(changed){
+    // Recalc deployed
+    D.session.deployed=D.session.positions.filter(p=>p.status==='open').reduce((s,p)=>s+(p.invested||0),0);
+    saveSessionToStorage();
+    renderSessionBar();
+  }
+}
 async function fetchCandles(sym,res='D',from,to){if(!auth.currentUser)return;if(!to)to=Math.floor(Date.now()/1000);if(!from)from=to-90*86400;try{const r=await cfFinnhubCandles({symbol:sym,resolution:res,from:from,to:to});const d=r.data;if(d&&d.s==='ok'){updChart(d,sym);compTech(d.c,d.v,sym);}}catch(e){}}
 async function fetchFhNews(){if(!auth.currentUser)return;try{const r=await cfFinnhubProxy({endpoint:'/news',params:{category:'general',minId:'0'}});const d=r.data;if(d&&Array.isArray(d)){D.news=d.slice(0,30);mkFhNews();}}catch(e){}}
 async function fetchEarn(){if(!auth.currentUser)return;const n=new Date(),f=n.toISOString().split('T')[0],t=new Date(n.getTime()+7*864e5).toISOString().split('T')[0];try{const r=await cfFinnhubProxy({endpoint:'/calendar/earnings',params:{from:f,to:t}});const d=r.data;if(d&&d.earningsCalendar)mkEarn(d.earningsCalendar.slice(0,20));}catch(e){}}
