@@ -102,19 +102,20 @@ a{color:var(--acc);text-decoration:none}
 .ap-box .ap-lbl{font-size:9px;color:var(--t3);margin-bottom:3px}
 .ap-box .ap-val{font-size:13px;font-weight:700}
 
-/* STOCK SEARCH BAR */
-#stock-search-wrap{position:relative;display:flex;align-items:center;flex-shrink:0}
-#stock-search-input{width:180px;padding:5px 10px 5px 28px;background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);font-size:12px;outline:none;transition:border-color .2s,width .2s}
+/* STOCK SEARCH BAR — own row below top bar */
+#stock-search-wrap{position:relative;display:none;align-items:center;padding:6px 16px;background:var(--bg2);border-bottom:1px solid var(--brd)}
+#stock-search-wrap.show{display:flex}
+#stock-search-input{flex:1;padding:8px 12px 8px 32px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;outline:none;transition:border-color .2s}
 #stock-search-input::placeholder{color:var(--t3)}
-#stock-search-input:focus{border-color:var(--acc);width:220px}
-#stock-search-icon{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--t3);pointer-events:none}
-#stock-search-results{display:none;position:absolute;top:100%;left:0;right:0;margin-top:4px;background:var(--card);border:1px solid var(--brd);border-radius:8px;max-height:280px;overflow-y:auto;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5);min-width:260px}
-.ssr-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--brd);transition:background .15s}
+#stock-search-input:focus{border-color:var(--acc)}
+#stock-search-icon{position:absolute;left:28px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--t3);pointer-events:none}
+#stock-search-results{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:2px;background:var(--card);border:1px solid var(--brd);border-radius:8px;max-height:300px;overflow-y:auto;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.ssr-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--brd);transition:background .15s}
 .ssr-item:last-child{border-bottom:none}
 .ssr-item:hover,.ssr-item.ssr-active{background:rgba(99,102,241,.1)}
 .ssr-sym{font-weight:700;font-size:13px;color:var(--t1)}
-.ssr-name{font-size:11px;color:var(--t2);margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px}
-.ssr-type{font-size:9px;color:var(--t3);padding:2px 5px;background:var(--bg2);border-radius:3px;flex-shrink:0}
+.ssr-name{font-size:11px;color:var(--t2);margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+.ssr-type{font-size:9px;color:var(--t3);padding:2px 6px;background:var(--bg2);border-radius:3px;flex-shrink:0}
 .ssr-empty{padding:14px;text-align:center;color:var(--t3);font-size:12px}
 .ssr-loading{padding:14px;text-align:center;color:var(--t3);font-size:12px}
 
@@ -492,11 +493,10 @@ a{color:var(--acc);text-decoration:none}
   .btn-signout{font-size:9px !important;padding:3px 6px !important}
 
   /* ── MOBILE SEARCH ── */
-  #stock-search-input{width:0;padding:5px 0;border:none;opacity:0;transition:width .25s,opacity .25s,padding .25s}
-  #stock-search-wrap.mob-open #stock-search-input{width:140px;padding:5px 10px 5px 28px;border:1px solid var(--brd);opacity:1}
-  #stock-search-icon{pointer-events:auto;cursor:pointer;font-size:14px;left:0;z-index:1}
-  #stock-search-wrap.mob-open #stock-search-icon{pointer-events:none;left:8px;font-size:12px}
-  #stock-search-results{min-width:200px;right:auto;left:0}
+  #stock-search-wrap{padding:4px 10px}
+  #stock-search-input{padding:7px 10px 7px 30px;font-size:14px;border-radius:8px}
+  #stock-search-icon{left:20px}
+  #stock-search-results{left:10px;right:10px}
 
   /* ── MOBILE P&L PILL (inserted into top bar) ── */
   #mobile-pnl-pill{
@@ -1998,13 +1998,6 @@ a{color:var(--acc);text-decoration:none}
 <div class="top">
   <div class="logo" onclick="pg('trading', document.querySelector('.nav button'))" style="cursor:pointer" title="Go to Trading">⚡ TradeCommand</div>
   <div class="tickers" id="tickers"></div>
-  <!-- Stock Search -->
-  <div id="stock-search-wrap">
-    <span id="stock-search-icon" onclick="toggleMobileSearch()">🔍</span>
-    <input type="text" id="stock-search-input" placeholder="Search stocks..." autocomplete="off" spellcheck="false"
-      oninput="handleStockSearch(this.value)" onkeydown="handleSearchKey(event)" onfocus="this.parentElement.classList.add('mob-open')" />
-    <div id="stock-search-results"></div>
-  </div>
   <!-- Mobile P&L pill (hidden on desktop) -->
   <div id="mobile-pnl-pill" style="display:none" onclick="toggleMobileSession()">
     <div style="display:flex;flex-direction:column;align-items:center;line-height:1.1">
@@ -2062,6 +2055,14 @@ a{color:var(--acc);text-decoration:none}
     <button onclick="openSettings()" style="padding:3px 9px;background:var(--card2);border:1px solid var(--brd);border-radius:5px;color:var(--t2);font-size:11px;cursor:pointer" title="Settings">⚙️</button>
     <button id="btn-signout" onclick="authSignOut()" class="btn-signout" style="display:none">Sign Out</button>
   </div>
+</div>
+
+<!-- Stock Search Bar -->
+<div id="stock-search-wrap">
+  <span id="stock-search-icon">🔍</span>
+  <input type="text" id="stock-search-input" placeholder="Search any stock ticker or company..." autocomplete="off" spellcheck="false"
+    oninput="handleStockSearch(this.value)" onkeydown="handleSearchKey(event)" />
+  <div id="stock-search-results"></div>
 </div>
 
 <!-- Session Tracker Bar -->
@@ -4593,29 +4594,16 @@ let _searchTimeout = null;
 let _searchResults = [];
 let _searchIdx = -1;
 
-function toggleMobileSearch() {
-  const wrap = document.getElementById('stock-search-wrap');
-  const input = document.getElementById('stock-search-input');
-  if (wrap.classList.contains('mob-open')) {
-    wrap.classList.remove('mob-open');
-    input.blur();
-    hideSearchResults();
-  } else {
-    wrap.classList.add('mob-open');
-    setTimeout(() => input.focus(), 260);
-  }
-}
-
 function handleStockSearch(q) {
   q = q.trim().toUpperCase();
   if (_searchTimeout) clearTimeout(_searchTimeout);
   if (!q || q.length < 1) { hideSearchResults(); return; }
 
-  // Show immediate local matches from D.sd + D.wl
+  // Show immediate local matches — only tickers that START with the query
   const localMatches = [];
   const allSyms = new Set([...Object.keys(D.sd), ...D.wl]);
   allSyms.forEach(sym => {
-    if (sym.includes(q)) {
+    if (sym.startsWith(q)) {
       const d = D.sd[sym] || {};
       localMatches.push({ symbol: sym, description: d.name || '', type: d.exchange || 'Stock' });
     }
@@ -4639,9 +4627,14 @@ function handleStockSearch(q) {
       }
       const data = await fhGet('/search?q=' + encodeURIComponent(q));
       if (data && data.result && data.result.length > 0) {
-        // Filter to common stocks only, limit results
+        // Filter to common stocks only, prioritize symbols starting with query
         const filtered = data.result
           .filter(r => r.type === 'Common Stock' || r.type === 'ETP' || r.type === 'ADR' || !r.type)
+          .sort((a, b) => {
+            const aStarts = (a.symbol || '').toUpperCase().startsWith(q) ? 0 : 1;
+            const bStarts = (b.symbol || '').toUpperCase().startsWith(q) ? 0 : 1;
+            return aStarts - bStarts;
+          })
           .slice(0, 8);
         if (filtered.length > 0) {
           renderSearchResults(filtered, q);
@@ -4751,7 +4744,6 @@ function selectSearchDirect(sym) {
   // Clean up search
   document.getElementById('stock-search-input').value = '';
   hideSearchResults();
-  document.getElementById('stock-search-wrap').classList.remove('mob-open');
 }
 
 // Close search results when clicking outside
@@ -4759,8 +4751,6 @@ document.addEventListener('click', function(e) {
   const wrap = document.getElementById('stock-search-wrap');
   if (wrap && !wrap.contains(e.target)) {
     hideSearchResults();
-    // On mobile, collapse the search bar too
-    if (window.innerWidth <= 480) wrap.classList.remove('mob-open');
   }
 });
 
@@ -5264,6 +5254,9 @@ function launch(){
 
   document.getElementById('setup').style.display='none';
   document.getElementById('dash').style.display='block';
+  // Show the stock search bar
+  const searchWrap = document.getElementById('stock-search-wrap');
+  if (searchWrap) searchWrap.classList.add('show');
   document.getElementById('pc-r').value=D.risk;
   document.getElementById('rr-pct').textContent=D.risk+'%';
 
