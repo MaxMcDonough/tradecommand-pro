@@ -46,6 +46,12 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // ═══ ACTIVITY LOG (flat collection used by trackActivity) ═══
+    match /activity/{activityId} {
+      allow create: if isAuth();
+      allow read, update, delete: if isAdmin();
+    }
+
     // ═══ LEADS / CRM (admin only) ═══
     match /leads/{leadId} {
       allow read, write: if isAdmin();

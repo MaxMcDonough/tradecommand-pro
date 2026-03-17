@@ -3250,6 +3250,25 @@ async function handleAuthState(user) {
       D.isAdmin = true;
       const adminLink = document.getElementById('admin-link');
       if(adminLink) adminLink.style.display = 'inline';
+      // ── One-time admin migration: upgrade VIP users to elite ──
+      (async function() {
+        try {
+          const VIP_UPGRADES = ['cowtown100@gmail.com']; // Steve + any other VIPs
+          const usersSnap = await db.collection('users').where('email', 'in', VIP_UPGRADES).get();
+          usersSnap.forEach(async (doc) => {
+            const d = doc.data();
+            if (d.plan !== 'elite') {
+              await db.collection('users').doc(doc.id).update({
+                plan: 'elite',
+                upgradedAt: Date.now(),
+                upgradedBy: 'admin',
+                subscriptionEnd: null // no expiry — lifetime elite
+              });
+              console.log('[Admin] Upgraded', d.email, 'to elite');
+            }
+          });
+        } catch(e) { console.warn('[Admin] VIP upgrade check:', e); }
+      })();
     } else {
       D.isAdmin = false;
     }
@@ -3447,6 +3466,8 @@ async function handleAuthState(user) {
     } else if (_autoKeys) {
       // Paid/trial user with auto-provided keys: skip setup panel entirely, launch direct
       launch();
+      // Show "What's New" popup for returning users after dashboard is ready
+      setTimeout(function(){ showWhatsNew(D.name, userData.plan); }, 2000);
     } else {
       // Free/custom key user: show setup panel so they can enter their own keys
       document.getElementById('setup').style.display = 'flex';
@@ -3455,6 +3476,99 @@ async function handleAuthState(user) {
     console.error('Auth state error:', e);
   }
 }
+
+// ═══ WHAT'S NEW CHANGELOG ══════════════════════════════════════════════════
+const CHANGELOG_VERSION = '2.1.0';
+const CHANGELOG_ITEMS = [
+  { icon: '🔒', title: 'Enhanced Security', desc: 'All API keys moved server-side. Your data is now protected with enterprise-grade Firebase Cloud Functions and per-user Firestore security rules.' },
+  { icon: '💾', title: 'Holdings Now Persist', desc: 'Your portfolio positions are saved to the cloud. Log in from any device and your holdings are right where you left them — no more lost trades.' },
+  { icon: '🎯', title: 'Trade Game Plans', desc: 'When you add a position, you get a full strategy card: entry, stop loss, target, risk/reward ratio, AI confidence, and estimated sell timeline.' },
+  { icon: '📊', title: 'Live Floating Widget', desc: 'A new widget in the corner shows all your active positions with real-time P&L. Tap any position to view its full game plan.' },
+  { icon: '⚡', title: 'Faster & More Reliable', desc: 'Rate limiting, input validation, and server-side proxying make every data request faster and more stable.' }
+];
+
+function showWhatsNew(userName, userPlan) {
+  // Check if user already saw this version
+  const seenKey = 'tcp_changelog_seen';
+  try {
+    const seen = localStorage.getItem(seenKey);
+    if (seen === CHANGELOG_VERSION) return;
+  } catch(e) {}
+
+  // Build plan badge
+  let planBadge = '';
+  if (userPlan === 'elite') {
+    planBadge = '<div style="margin:0 auto 16px;padding:8px 20px;background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(168,85,247,.15));border:1px solid rgba(99,102,241,.3);border-radius:20px;display:inline-block"><span style="font-size:13px;font-weight:700;background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent">💎 Elite Member</span></div><br>';
+  } else if (userPlan === 'pro' || userPlan === 'pro_monthly' || userPlan === 'pro_annual') {
+    planBadge = '<div style="margin:0 auto 16px;padding:8px 20px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:20px;display:inline-block"><span style="font-size:13px;font-weight:700;color:#10b981">⚡ Pro Member</span></div><br>';
+  }
+
+  var itemsHtml = CHANGELOG_ITEMS.map(function(item) {
+    return '<div style="display:flex;gap:12px;align-items:flex-start;text-align:left;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)">' +
+      '<div style="font-size:22px;flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border-radius:10px">' + item.icon + '</div>' +
+      '<div><div style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:3px">' + item.title + '</div>' +
+      '<div style="font-size:12px;color:#94a3b8;line-height:1.5">' + item.desc + '</div></div></div>';
+  }).join('');
+
+  var overlay = document.createElement('div');
+  overlay.id = 'whats-new-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;transition:opacity .3s ease;';
+
+  overlay.innerHTML =
+    '<div id="whats-new-modal" style="background:#0f1219;border:1px solid rgba(255,255,255,.08);border-radius:20px;max-width:420px;width:100%;max-height:85vh;overflow-y:auto;padding:32px 24px 24px;box-shadow:0 24px 80px rgba(0,0,0,.6);position:relative;transform:translateY(20px);transition:transform .3s ease;-webkit-overflow-scrolling:touch">' +
+      '<div style="text-align:center;margin-bottom:20px">' +
+        '<div style="font-size:40px;margin-bottom:12px">🚀</div>' +
+        planBadge +
+        '<h2 style="color:#f1f5f9;font-size:20px;font-weight:800;margin:0 0 4px">What\'s New' + (userName && userName !== 'User' ? ', ' + userName : '') + '</h2>' +
+        '<p style="color:#64748b;font-size:12px;margin:0">Version ' + CHANGELOG_VERSION + ' — March 2026</p>' +
+      '</div>' +
+      '<div style="margin-bottom:20px">' + itemsHtml + '</div>' +
+      '<button id="whats-new-dismiss" style="width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;touch-action:manipulation;-webkit-appearance:none">Got it, let\'s trade →</button>' +
+    '</div>';
+
+  document.body.appendChild(overlay);
+
+  // Animate in
+  requestAnimationFrame(function() {
+    overlay.style.opacity = '1';
+    var modal = document.getElementById('whats-new-modal');
+    if (modal) modal.style.transform = 'translateY(0)';
+  });
+
+  document.getElementById('whats-new-dismiss').addEventListener('click', function() {
+    localStorage.setItem(seenKey, CHANGELOG_VERSION);
+    overlay.style.opacity = '0';
+    var modal = document.getElementById('whats-new-modal');
+    if (modal) modal.style.transform = 'translateY(20px)';
+    setTimeout(function(){ overlay.remove(); }, 300);
+  });
+
+  // Also close on overlay click (outside modal)
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      document.getElementById('whats-new-dismiss').click();
+    }
+  });
+}
+
+// ═══ ADMIN: UPGRADE USER ════════════════════════════════════════════════════
+// Usage from browser console: upgradeUser('email@example.com', 'elite')
+window.upgradeUser = async function(email, plan) {
+  if (!D.isAdmin) { console.error('Admin only'); return; }
+  try {
+    const snap = await db.collection('users').where('email', '==', email).get();
+    if (snap.empty) { console.error('User not found:', email); return; }
+    snap.forEach(async (doc) => {
+      await db.collection('users').doc(doc.id).update({
+        plan: plan || 'elite',
+        upgradedAt: Date.now(),
+        upgradedBy: 'admin',
+        subscriptionEnd: null
+      });
+      console.log('✅ Upgraded', email, 'to', plan || 'elite');
+    });
+  } catch(e) { console.error('Upgrade error:', e); }
+};
 
 function trackActivity(type, data) {
   const user = auth.currentUser;
