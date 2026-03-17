@@ -3950,7 +3950,7 @@ function calcInvestment(amt) {
   const commitBtn = document.getElementById('is-commit-btn');
   const verb = isBuy ? 'BUY' : 'SELL';
   const sharesDisplay = shares >= 1 ? shares : shares.toFixed(4);
-  commitBtn.textContent = `📋 Add to Plan: ${verb} ${sharesDisplay} ${_investSym} @ $${price.toFixed(2)}`;
+  commitBtn.textContent = `📋 Add to Plan: ${verb} ${sharesDisplay} ${_investSym} — $${actualInvested.toFixed(2)}`;
   commitBtn.className = 'btn-commit' + (isBuy ? '' : ' sell');
   document.getElementById('is-commit-row').style.display = 'flex';
 
@@ -4060,7 +4060,7 @@ function commitPosition() {
   // Update commit button to confirmed state — keep visible for 2s so user sees it
   const btn = document.getElementById('is-commit-btn');
   const sharesDisp = shares >= 1 ? shares : shares.toFixed(4);
-  btn.textContent = `✅ ${isBuy?'BUY':'SELL'} ${sharesDisp} ${_investSym} added — check bar above`;
+  btn.textContent = `✅ ${isBuy?'BUY':'SELL'} ${sharesDisp} ${_investSym} ($${invested.toFixed(2)}) added — check bar above`;
   btn.style.background = 'var(--grn2)';
   btn.style.color = 'var(--grn)';
   btn.style.border = '1px solid var(--grn)';
