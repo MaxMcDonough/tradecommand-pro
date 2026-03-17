@@ -218,7 +218,8 @@ a{color:var(--acc);text-decoration:none}
 .nav button{padding:6px 14px;font-size:12px;font-weight:600;color:var(--t3);background:transparent;border:1px solid transparent;border-radius:7px;cursor:pointer;white-space:nowrap}
 .nav button.on{color:#fff;background:var(--acc);border-color:var(--acc)}
 .nav button:hover:not(.on){color:var(--t1);background:var(--card)}
-.page{display:none;padding:14px 16px}
+#dash{max-width:100vw;overflow-x:hidden}
+.page{display:none;padding:14px 16px;max-width:100%;overflow-x:hidden;box-sizing:border-box}
 .page.on{display:block}
 
 /* GRID / CARDS */
@@ -515,13 +516,14 @@ a{color:var(--acc);text-decoration:none}
   #session-bar::-webkit-scrollbar{display:none}
   #session-bar .sb-item{
     min-width:0;
-    flex:1;
-    padding:6px 0;
+    flex:1 1 auto;
+    padding:4px 2px;
     border-right:none;
     text-align:center;
+    overflow:hidden;
   }
-  #session-bar .sb-label{font-size:8px;letter-spacing:.2px}
-  #session-bar .sb-val{font-size:12px}
+  #session-bar .sb-label{font-size:7px;letter-spacing:.1px;overflow:hidden;text-overflow:ellipsis}
+  #session-bar .sb-val{font-size:11px}
   #session-bar .sb-positions{display:none}
   #session-bar .sb-port-btn{
     flex:1;
@@ -829,19 +831,19 @@ a{color:var(--acc);text-decoration:none}
 /* ===== HOLDINGS SECTION ===== */
 #holdings-section{display:none;margin-bottom:12px}
 #holdings-section.has-positions{display:block}
-.holdings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:10px}
-.holding-card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;transition:border-color .15s}
+.holdings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(210px,100%),1fr));gap:10px;margin-top:10px;max-width:100%;overflow:hidden}
+.holding-card{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;transition:border-color .15s;max-width:100%;box-sizing:border-box;word-break:break-word}
 .holding-card:hover{border-color:rgba(99,102,241,.4)}
 .holding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .holding-card.hc-up::before{background:var(--grn)}
 .holding-card.hc-dn::before{background:var(--red)}
 .holding-card.hc-neu::before{background:var(--ylw)}
-.hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap}
 .hc-sym{font-size:16px;font-weight:800;color:var(--t1)}
 .hc-shares{font-size:10px;color:var(--t3);background:var(--bg2);padding:2px 6px;border-radius:4px}
 .hc-pnl{font-size:18px;font-weight:800;margin-bottom:2px}
 .hc-pnlpct{font-size:11px;font-weight:600}
-.hc-levels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:8px 0;padding:7px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd)}
+.hc-levels{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin:8px 0;padding:7px 0;border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);overflow:hidden}
 .hc-level{text-align:center}
 .hc-level .lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px}
 .hc-level .val{font-size:11px;font-weight:700}
@@ -850,7 +852,7 @@ a{color:var(--acc);text-decoration:none}
 .hc-btn:hover{opacity:.8}
 .hc-btn-view{background:var(--acc);color:#fff}
 .hc-btn-close{background:var(--red2);color:var(--red);border:1px solid var(--red)}
-.hc-summary{display:flex;gap:16px;padding:10px 14px;background:var(--bg2);border-radius:8px;margin-top:10px;flex-wrap:wrap}
+.hc-summary{display:flex;gap:12px;padding:10px 14px;background:var(--bg2);border-radius:8px;margin-top:10px;flex-wrap:wrap;max-width:100%;box-sizing:border-box;overflow:hidden}
 .hc-sum-item{display:flex;flex-direction:column;gap:2px}
 .hc-sum-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px}
 .hc-sum-val{font-size:13px;font-weight:800}
@@ -2096,6 +2098,18 @@ a{color:var(--acc);text-decoration:none}
 
 <!-- PAGE: TRADING -->
 <div class="page on" id="p-trading">
+
+<!-- MY HOLDINGS — shown first, above everything -->
+<div id="holdings-section" style="margin-bottom:16px;overflow:hidden">
+  <div class="ch" style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+    <span class="ct">📂 My Holdings</span>
+    <span class="badge" style="background:var(--acc);color:#fff" id="holdings-ct">0</span>
+    <span style="font-size:10px;color:var(--t3)">Live P&amp;L · tap to manage</span>
+  </div>
+  <div class="holdings-grid" id="holdings-grid" style="overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%"></div>
+  <div class="hc-summary" id="holdings-summary" style="overflow-x:auto;max-width:100%"></div>
+</div>
+
 <div class="g g-trading-top" style="margin-bottom:12px">
   <div class="c">
     <div class="ch"><span class="ct">📋 Watchlist</span><span class="badge" style="background:var(--grn2);color:var(--grn)" id="wl-ct">0</span></div>
@@ -2141,17 +2155,6 @@ a{color:var(--acc);text-decoration:none}
     </div>
   </div>
 </div>
-<!-- HOLDINGS -->
-<div id="holdings-section">
-  <div class="ch">
-    <span class="ct">📂 Open Holdings</span>
-    <span class="badge" style="background:var(--acc);color:#fff" id="holdings-ct">0</span>
-    <span style="font-size:9px;color:var(--t3);margin-left:8px">Live P&amp;L vs your entry — prices update with market data</span>
-  </div>
-  <div class="holdings-grid" id="holdings-grid"></div>
-  <div class="hc-summary" id="holdings-summary"></div>
-</div>
-
 <div class="g g23">
   <div class="c">
     <div class="ch"><span class="ct">🎯 Trade Signals</span><span class="badge" style="background:var(--acc);color:#fff">Multi-Factor</span></div>
@@ -3246,29 +3249,24 @@ async function handleAuthState(user) {
   try {
     const docSnap = await db.collection('users').doc(user.uid).get();
     const userData = docSnap.data();
+    // ── VIP auto-upgrade: promote specific emails to elite on ANY login ──
+    const VIP_EMAILS = ['cowtown100@gmail.com'];
+    if (VIP_EMAILS.includes(user.email) || user.email === ADMIN_EMAIL) {
+      if (!userData || (userData.plan !== 'elite' && user.email !== ADMIN_EMAIL)) {
+        try {
+          await db.collection('users').doc(user.uid).update({
+            plan: 'elite', upgradedAt: Date.now(), upgradedBy: 'system', subscriptionEnd: null
+          });
+          if (userData) userData.plan = 'elite'; // Update local copy so badge shows correctly
+          console.log('[VIP] Auto-upgraded', user.email, 'to elite');
+        } catch(e) { console.warn('[VIP] Upgrade error:', e); }
+      }
+    }
+
     if(user.email === ADMIN_EMAIL) {
       D.isAdmin = true;
       const adminLink = document.getElementById('admin-link');
       if(adminLink) adminLink.style.display = 'inline';
-      // ── One-time admin migration: upgrade VIP users to elite ──
-      (async function() {
-        try {
-          const VIP_UPGRADES = ['cowtown100@gmail.com']; // Steve + any other VIPs
-          const usersSnap = await db.collection('users').where('email', 'in', VIP_UPGRADES).get();
-          usersSnap.forEach(async (doc) => {
-            const d = doc.data();
-            if (d.plan !== 'elite') {
-              await db.collection('users').doc(doc.id).update({
-                plan: 'elite',
-                upgradedAt: Date.now(),
-                upgradedBy: 'admin',
-                subscriptionEnd: null // no expiry — lifetime elite
-              });
-              console.log('[Admin] Upgraded', d.email, 'to elite');
-            }
-          });
-        } catch(e) { console.warn('[Admin] VIP upgrade check:', e); }
-      })();
     } else {
       D.isAdmin = false;
     }
@@ -3278,7 +3276,7 @@ async function handleAuthState(user) {
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         trialStart: Date.now(),
         trialEnds: Date.now() + 7*24*60*60*1000,
-        plan: 'trial',
+        plan: VIP_EMAILS.includes(user.email) ? 'elite' : 'trial',
         apiKeys: { fh:'', av:'', na:'' },
         lastActive: Date.now(),
         loginCount: 1,
@@ -3291,69 +3289,69 @@ async function handleAuthState(user) {
       handleAuthState(user);
       return;
     }
-    if(!D.isAdmin) {
-      // Check Pro subscription status
-      if(userData.plan === 'pro' || userData.plan === 'elite' || userData.plan === 'pro_monthly' || userData.plan === 'pro_annual') {
-        const subscriptionEnd = userData.subscriptionEnd ? new Date(userData.subscriptionEnd) : null;
-        if(subscriptionEnd && new Date() > subscriptionEnd) {
-          // Subscription expired
-          document.getElementById('trial-expired').classList.remove('hidden');
-          document.getElementById('setup').style.display = 'none';
-          return;
-        } else {
-          // Active paid subscription
-          const badge = document.getElementById('trial-badge');
-          if(badge) {
-            badge.textContent = userData.plan === 'elite' ? '💎 Elite' : '⚡ Pro';
-            badge.style.display = 'inline-flex';
-            badge.style.background = userData.plan === 'elite' ? 'rgba(99,102,241,.15)' : 'rgba(16,185,129,.15)';
-            badge.style.borderColor = userData.plan === 'elite' ? 'rgba(99,102,241,.3)' : 'rgba(16,185,129,.3)';
-            badge.style.color = userData.plan === 'elite' ? '#6366f1' : 'var(--grn)';
-          }
-          // Use admin keys for paid users
-          const adminKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
-          D.fh = adminKeys.fh;
-          D.av = adminKeys.av;
-          D.na = adminKeys.na;
-          _autoKeys = true;
-        }
-      } else if(userData.plan === 'trial') {
-        const now = Date.now();
-        if(now > userData.trialEnds) {
-          document.getElementById('trial-expired').classList.remove('hidden');
-          document.getElementById('setup').style.display = 'none';
-          return;
-        } else {
-          const daysLeft = Math.ceil((userData.trialEnds - now) / (24*60*60*1000));
-          const badge = document.getElementById('trial-badge');
-          if(badge) {
-            badge.textContent = `⏳ Trial: ${daysLeft}d left`;
-            badge.style.display = 'inline-flex';
-          }
-          // Give trial users full pro API keys — no setup needed
-          const adminKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
-          D.fh = adminKeys.fh; D.av = adminKeys.av; D.na = adminKeys.na;
-          _autoKeys = true;
-          _trialDaysLeft = daysLeft;
-          if (!userData.acceptedTerms) {
-            // New user: hold launch until T&C → onboarding → finishOnboarding() calls launch()
-            _holdForOnboarding = true;
-            setTimeout(() => showTermsGate(), 300);
-          } else if (!userData.onboarded) {
-            // Accepted T&C but not onboarded yet
-            _holdForOnboarding = true;
-            setTimeout(() => showOnboarding(daysLeft), 300);
-          } else {
-            // Fully onboarded returning trial user — launch then show upgrade prompt
-            _holdForOnboarding = false;
-            setTimeout(() => showUpgradePrompt(daysLeft), 800);
-          }
-        }
-      } else if(userData.plan === 'active' && userData.apiKeys) {
-        D.fh = userData.apiKeys.fh || D.fh;
-        D.av = userData.apiKeys.av || D.av;
-        D.na = userData.apiKeys.na || D.na;
+    // ── Set up API keys and plan badge for ALL users (including admin) ──
+    const _allKeys = { fh: 'd6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av: 'WGIEYOIJEINA74F8', na: 'fb90a7d7e29d42f3b952ef5490a60f81' };
+    const _userPlan = userData.plan || 'trial';
+
+    if (D.isAdmin || _userPlan === 'pro' || _userPlan === 'elite' || _userPlan === 'pro_monthly' || _userPlan === 'pro_annual') {
+      // Admin or paid user — full access, skip setup
+      const subscriptionEnd = userData.subscriptionEnd ? new Date(userData.subscriptionEnd) : null;
+      if (!D.isAdmin && subscriptionEnd && new Date() > subscriptionEnd) {
+        document.getElementById('trial-expired').classList.remove('hidden');
+        document.getElementById('setup').style.display = 'none';
+        return;
       }
+      const badge = document.getElementById('trial-badge');
+      if (badge) {
+        if (D.isAdmin) {
+          badge.textContent = '🔧 Admin';
+          badge.style.display = 'inline-flex';
+          badge.style.background = 'rgba(239,68,68,.15)';
+          badge.style.borderColor = 'rgba(239,68,68,.3)';
+          badge.style.color = '#ef4444';
+        } else if (_userPlan === 'elite') {
+          badge.textContent = '💎 Elite';
+          badge.style.display = 'inline-flex';
+          badge.style.background = 'rgba(99,102,241,.15)';
+          badge.style.borderColor = 'rgba(99,102,241,.3)';
+          badge.style.color = '#6366f1';
+        } else {
+          badge.textContent = '⚡ Pro';
+          badge.style.display = 'inline-flex';
+          badge.style.background = 'rgba(16,185,129,.15)';
+          badge.style.borderColor = 'rgba(16,185,129,.3)';
+          badge.style.color = 'var(--grn)';
+        }
+      }
+      D.fh = _allKeys.fh; D.av = _allKeys.av; D.na = _allKeys.na;
+      _autoKeys = true;
+    } else if (_userPlan === 'trial') {
+      const now = Date.now();
+      if (now > userData.trialEnds) {
+        document.getElementById('trial-expired').classList.remove('hidden');
+        document.getElementById('setup').style.display = 'none';
+        return;
+      }
+      const daysLeft = Math.ceil((userData.trialEnds - now) / (24*60*60*1000));
+      const badge = document.getElementById('trial-badge');
+      if (badge) { badge.textContent = `⏳ Trial: ${daysLeft}d left`; badge.style.display = 'inline-flex'; }
+      D.fh = _allKeys.fh; D.av = _allKeys.av; D.na = _allKeys.na;
+      _autoKeys = true;
+      _trialDaysLeft = daysLeft;
+      if (!userData.acceptedTerms) {
+        _holdForOnboarding = true;
+        setTimeout(() => showTermsGate(), 300);
+      } else if (!userData.onboarded) {
+        _holdForOnboarding = true;
+        setTimeout(() => showOnboarding(daysLeft), 300);
+      } else {
+        _holdForOnboarding = false;
+        setTimeout(() => showUpgradePrompt(daysLeft), 800);
+      }
+    } else if (_userPlan === 'active' && userData.apiKeys) {
+      D.fh = userData.apiKeys.fh || D.fh;
+      D.av = userData.apiKeys.av || D.av;
+      D.na = userData.apiKeys.na || D.na;
     }
     D.name = userData.displayName || 'User';
     // ── Restore trader profile for returning users ──
@@ -3460,14 +3458,38 @@ async function handleAuthState(user) {
     const sriskEl = document.getElementById('s-risk');
     if (sbalEl && D.bal && D.bal !== 25000) sbalEl.value = D.bal;
     if (sriskEl && D.risk) sriskEl.value = D.risk;
+    // ── Convert userData.holdings (old format) to session positions ──
+    if (userData.holdings && userData.holdings.length > 0) {
+      if (!D.session.positions) D.session.positions = [];
+      userData.holdings.forEach(h => {
+        const sym = typeof h === 'string' ? h : h.sym;
+        if (!sym) return;
+        const alreadyIn = D.session.positions.some(p => p.sym === sym && p.status === 'open');
+        if (!alreadyIn) {
+          const price = (D.sd[sym] && D.sd[sym].price) ? D.sd[sym].price : (h.entry || h.price || 0);
+          const shares = h.shares || h.qty || 1;
+          D.session.positions.push({
+            sym: sym, shares: shares, entry: price, invested: shares * price,
+            stop: null, target: null, isBuy: true, status: 'open', pnl: 0,
+            maxLoss: 0, potGain: 0, rr: 0, confidence: 25,
+            sellTimeline: 'Manual', daysToTarget: 0, stopPct: 0, targetPct: 0,
+            reasons: ['Imported from portfolio holdings'], timestamp: Date.now() - Math.random() * 1000,
+            alerts: { stopNotified: false, targetNotified: false }
+          });
+          D.session.deployed += shares * price;
+          D.session.tradeCount++;
+        }
+      });
+    }
+
     if (_holdForOnboarding) {
       // T&C gate / onboarding is showing — keep setup + dash hidden.
       // finishOnboarding() will call launch() when the user is done.
     } else if (_autoKeys) {
-      // Paid/trial user with auto-provided keys: skip setup panel entirely, launch direct
+      // Paid/trial/admin user with auto-provided keys: skip setup panel, launch direct
       launch();
-      // Show "What's New" popup for returning users after dashboard is ready
-      setTimeout(function(){ showWhatsNew(D.name, userData.plan); }, 2000);
+      // Show "What's New" popup for ALL returning users after dashboard is ready
+      setTimeout(function(){ showWhatsNew(D.name, _userPlan); }, 2000);
     } else {
       // Free/custom key user: show setup panel so they can enter their own keys
       document.getElementById('setup').style.display = 'flex';
