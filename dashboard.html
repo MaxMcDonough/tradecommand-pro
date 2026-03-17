@@ -3250,16 +3250,26 @@ async function handleAuthState(user) {
     const docSnap = await db.collection('users').doc(user.uid).get();
     const userData = docSnap.data();
     // ── VIP auto-upgrade: promote specific emails to elite on ANY login ──
-    const VIP_EMAILS = ['cowtown100@gmail.com'];
-    if (VIP_EMAILS.includes(user.email) || user.email === ADMIN_EMAIL) {
-      if (!userData || (userData.plan !== 'elite' && user.email !== ADMIN_EMAIL)) {
+    const VIP_EMAILS = ['cowtown100@gmail.com', 'max.mcdonough123@gmail.com'];
+    if (VIP_EMAILS.includes(user.email)) {
+      if (!userData || userData.plan !== 'elite') {
         try {
           await db.collection('users').doc(user.uid).update({
             plan: 'elite', upgradedAt: Date.now(), upgradedBy: 'system', subscriptionEnd: null
           });
-          if (userData) userData.plan = 'elite'; // Update local copy so badge shows correctly
+          if (userData) userData.plan = 'elite';
           console.log('[VIP] Auto-upgraded', user.email, 'to elite');
         } catch(e) { console.warn('[VIP] Upgrade error:', e); }
+      }
+      // ── One-time holdings sync: ensure VIP accounts have demo portfolio ──
+      const SEED_HOLDINGS = ['DM','GPU','PLUR','QNC','VERS','VG','XBOT'];
+      if (userData && (!userData.holdings || userData.holdings.length === 0)) {
+        try {
+          const holdingsArr = SEED_HOLDINGS.map(s => ({sym:s}));
+          await db.collection('users').doc(user.uid).update({ holdings: holdingsArr });
+          userData.holdings = holdingsArr;
+          console.log('[VIP] Seeded holdings for', user.email);
+        } catch(e) { console.warn('[VIP] Holdings seed error:', e); }
       }
     }
 
