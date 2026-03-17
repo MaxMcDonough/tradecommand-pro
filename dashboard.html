@@ -3314,11 +3314,8 @@ async function handleAuthState(user) {
       const badge = document.getElementById('trial-badge');
       if (badge) {
         if (D.isAdmin) {
-          badge.textContent = '🔧 Admin';
-          badge.style.display = 'inline-flex';
-          badge.style.background = 'rgba(239,68,68,.15)';
-          badge.style.borderColor = 'rgba(239,68,68,.3)';
-          badge.style.color = '#ef4444';
+          // Admin badge is handled by #admin-link — don't duplicate it here
+          badge.style.display = 'none';
         } else if (_userPlan === 'elite') {
           badge.textContent = '💎 Elite';
           badge.style.display = 'inline-flex';
@@ -4157,9 +4154,14 @@ function calcInvestment(amt) {
   if (!amt || amt <= 0 || !_investSym) return;
   _investAmt = amt;
 
-  const s = D.sd[_investSym];
-  if (!s || !s.price) return;
-  const price = s.price;
+  const s = D.sd[_investSym] || {};
+  // Try D.sd price first, then fall back to the price displayed in the modal header
+  let price = s.price || 0;
+  if (!price) {
+    const mPriceEl = document.getElementById('m-price');
+    if (mPriceEl) price = parseFloat(mPriceEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+  }
+  if (!price) return;
   const atr = s._atr || price * 0.018;
 
   // Find signal for this symbol
@@ -4561,8 +4563,13 @@ function toggleMobileSession(){
   const bar = document.getElementById('session-bar');
   const arrow = document.getElementById('mob-pnl-arrow');
   if(!bar) return;
+  // Ensure session bar has .show class (needed for the expand/collapse CSS)
+  if (!bar.classList.contains('show')) bar.classList.add('show');
   bar.classList.toggle('mob-open');
   if(arrow) arrow.classList.toggle('open');
+  // Brief highlight on the pill so user sees the tap registered
+  const pill = document.getElementById('mobile-pnl-pill');
+  if(pill){ pill.style.borderColor='var(--acc)'; setTimeout(()=>{ pill.style.borderColor=''; },300); }
 }
 function stgOpen() {
   // Pre-fill settings fields from live state
@@ -6630,14 +6637,6 @@ function handlePaymentReturn() {
   }
 }
 
-/* ── Mobile session bar toggle ── */
-function toggleMobileSession(){
-  const bar = document.getElementById('session-bar');
-  const arrow = document.getElementById('mob-pnl-arrow');
-  if(!bar) return;
-  bar.classList.toggle('mob-open');
-  if(arrow) arrow.classList.toggle('open');
-}
 
 </script>
 
