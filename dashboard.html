@@ -33,6 +33,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-functions-compat.js"></script>
 <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
 <style>
 :root{--bg:#0a0e17;--bg2:#111827;--card:#1a2236;--card2:#1f2a42;--brd:#2a3550;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--acc:#3b82f6;--grn:#10b981;--grn2:rgba(16,185,129,.12);--red:#ef4444;--red2:rgba(239,68,68,.12);--ylw:#f59e0b;--ylw2:rgba(245,158,11,.12);--pur:#8b5cf6;--pur2:rgba(139,92,246,.12);--cyn:#06b6d4;--cyn2:rgba(6,182,212,.12);--org:#f97316;--org2:rgba(249,115,22,.12)}
@@ -2724,12 +2725,23 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+const fns = firebase.functions();
 let rtdb = null;
 try { rtdb = firebase.database(); } catch(e) { console.warn('RTDB not available:', e); }
 
 const ADMIN_EMAIL = 'max.mcdonough123@gmail.com';
 
 const FIREBASE_CONFIGURED = () => firebaseConfig.apiKey !== 'YOUR_FIREBASE_API_KEY';
+
+// ── Cloud Function callables ──
+const cfFinnhubQuote   = fns.httpsCallable('finnhubQuote');
+const cfFinnhubCandles = fns.httpsCallable('finnhubCandles');
+const cfFinnhubProxy   = fns.httpsCallable('finnhubProxy');
+const cfAlphaVantage   = fns.httpsCallable('alphaVantage');
+const cfNewsHeadlines  = fns.httpsCallable('newsHeadlines');
+const cfNewsSearch     = fns.httpsCallable('newsSearch');
+const cfCreateCheckout = fns.httpsCallable('createCheckout');
+const cfGetUserPlan    = fns.httpsCallable('getUserPlan');
 
 // ===== AUTH UI FUNCTIONS =====
 function showAuth() {
@@ -3504,18 +3516,17 @@ window.addEventListener('beforeunload', () => {
   if (D.session && D.session.tradeCount > 0) saveSessionToStorage();
 });
 
-// ===== STRIPE REDIRECT HELPER =====
-const STRIPE_LINKS = {
-  pro:   'https://buy.stripe.com/14A3cveQ9gyk9zhaHmcV200',
-  elite: 'https://buy.stripe.com/dRm6oH6jD5TG7r9aHmcV201'
-};
-function goToStripe(plan) {
-  const base = STRIPE_LINKS[plan];
-  if (!base) return;
+// ===== STRIPE REDIRECT HELPER (via Cloud Function) =====
+async function goToStripe(plan) {
   const user = firebase.auth().currentUser;
-  let url = base;
-  if (user) url += '?prefilled_email=' + encodeURIComponent(user.email) + '&client_reference_id=' + user.uid;
-  window.location.href = url;
+  if (!user) { showAuth(); return; }
+  try {
+    const r = await cfCreateCheckout({ plan: plan });
+    if (r.data && r.data.url) window.location.href = r.data.url;
+  } catch(e) {
+    console.error('Checkout error:', e);
+    alert('Could not start checkout. Please try again.');
+  }
 }
 
 // ===== CHECKOUT PLAN BANNER =====
@@ -4787,13 +4798,28 @@ function mkDemoChart(sym){
   compTech(pr,vl,sym);
 }
 
-// ===== FINNHUB =====
-async function fhGet(ep){if(!D.fh)return null;try{const r=await fetch(`https://finnhub.io/api/v1${ep}&token=${D.fh}`);return r.ok?await r.json():null;}catch(e){return null;}}
-async function fetchQ(sym){const d=await fhGet(`/quote?symbol=${sym}`);if(d&&d.c)D.sd[sym]={price:d.c,change:d.d,pct:d.dp,pc:d.pc,...(D.sd[sym]||{})};}
+// ===== FINNHUB (via Cloud Functions) =====
+async function fhGet(ep){
+  // Legacy wrapper — routes through Cloud Functions proxy
+  if(!auth.currentUser)return null;
+  try{
+    // Parse endpoint to extract params
+    const [path, qs] = ep.split('?');
+    const params = {};
+    if(qs) qs.split('&').forEach(p => { const [k,v] = p.split('='); if(k!=='token') params[k]=v; });
+    const r = await cfFinnhubProxy({ endpoint: path, params });
+    return r.data;
+  }catch(e){console.warn('fhGet error:',e.message);return null;}
+}
+async function fetchQ(sym){
+  if(!auth.currentUser)return;
+  try{const r=await cfFinnhubQuote({symbol:sym});const d=r.data;if(d&&d.c)D.sd[sym]={price:d.c,change:d.d,pct:d.dp,pc:d.pc,...(D.sd[sym]||{})};}catch(e){}
+}
 async function fetchAllQ(){const syms=[...new Set([...D.wl,'SPY','QQQ','DIA','IWM'])];for(let i=0;i<syms.length;i++){fetchQ(syms[i]);if(i%5===4)await slp(1100);}setTimeout(()=>{updTicker();mkWL();fetchCandles(D.sel);},2000);}
-async function fetchCandles(sym,res='D',from,to){if(!D.fh)return;if(!to)to=Math.floor(Date.now()/1000);if(!from)from=to-90*86400;const d=await fhGet(`/stock/candle?symbol=${sym}&resolution=${res}&from=${from}&to=${to}`);if(d&&d.s==='ok'){updChart(d,sym);compTech(d.c,d.v,sym);}}
-async function fetchFhNews(){if(!D.fh)return;const d=await fhGet('/news?category=general&minId=0');if(d&&Array.isArray(d)){D.news=d.slice(0,30);mkFhNews();}}
-async function fetchEarn(){if(!D.fh)return;const n=new Date(),f=n.toISOString().split('T')[0],t=new Date(n.getTime()+7*864e5).toISOString().split('T')[0];const d=await fhGet(`/calendar/earnings?from=${f}&to=${t}`);if(d&&d.earningsCalendar)mkEarn(d.earningsCalendar.slice(0,20));}
+async function fetchCandles(sym,res='D',from,to){if(!auth.currentUser)return;if(!to)to=Math.floor(Date.now()/1000);if(!from)from=to-90*86400;try{const r=await cfFinnhubCandles({symbol:sym,resolution:res,from:from,to:to});const d=r.data;if(d&&d.s==='ok'){updChart(d,sym);compTech(d.c,d.v,sym);}}catch(e){}}
+async function fetchFhNews(){if(!auth.currentUser)return;try{const r=await cfFinnhubProxy({endpoint:'/news',params:{category:'general',minId:'0'}});const d=r.data;if(d&&Array.isArray(d)){D.news=d.slice(0,30);mkFhNews();}}catch(e){}}
+async function fetchEarn(){if(!auth.currentUser)return;const n=new Date(),f=n.toISOString().split('T')[0],t=new Date(n.getTime()+7*864e5).toISOString().split('T')[0];try{const r=await cfFinnhubProxy({endpoint:'/calendar/earnings',params:{from:f,to:t}});const d=r.data;if(d&&d.earningsCalendar)mkEarn(d.earningsCalendar.slice(0,20));}catch(e){}}
+// WebSocket still needs client-side key for real-time — kept as optional enhancement
 function connectWS(){if(!D.fh)return;try{D.ws=new WebSocket(`wss://ws.finnhub.io?token=${D.fh}`);D.ws.onopen=()=>['SPY','QQQ','AAPL','NVDA','TSLA','AMD'].forEach(s=>D.ws.send(JSON.stringify({type:'subscribe',symbol:s})));D.ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type==='trade'&&m.data)m.data.forEach(t=>{if(D.sd[t.s]){D.sd[t.s].price=t.p;D.sd[t.s].pct=((t.p-(D.sd[t.s].pc||t.p))/(D.sd[t.s].pc||t.p)*100);}});updTicker();};D.ws.onclose=()=>setTimeout(connectWS,5000);}catch(e){}}
 
 // ===== COINGECKO (FREE) =====
@@ -5580,17 +5606,15 @@ function fmtNum(n) {
   return n.toFixed(0);
 }
 
-// ===== ALPHA VANTAGE =====
+// ===== ALPHA VANTAGE (via Cloud Functions) =====
 async function avGet(fn,params){
-  if(!D.av)return null;
+  if(!auth.currentUser)return null;
   try{
-    const qs=Object.entries({...params,function:fn,apikey:D.av}).map(([k,v])=>`${k}=${v}`).join('&');
-    const r=await fetch(`https://www.alphavantage.co/query?${qs}`);
-    if(!r.ok)return null;
-    const j=await r.json();
+    const r=await cfAlphaVantage({function:fn,params:params||{}});
+    const j=r.data;
     if(j['Note']||j['Information'])return null; // rate limit
     return j;
-  }catch(e){return null;}
+  }catch(e){console.warn('avGet error:',e.message);return null;}
 }
 async function fetchAVOverview(sym){
   const d=await avGet('OVERVIEW',{symbol:sym});
@@ -5619,24 +5643,22 @@ async function enrichModalAV(sym){
   }
 }
 
-// ===== NEWS API =====
+// ===== NEWS API (via Cloud Functions) =====
 async function fetchNewsAPI(){
-  if(!D.na)return;
+  if(!auth.currentUser)return;
   try{
-    const r=await fetch(`https://newsapi.org/v2/top-headlines?category=business&language=en&pageSize=20&apiKey=${D.na}`);
-    if(!r.ok)return;
-    const j=await r.json();
+    const r=await cfNewsHeadlines({category:'business',pageSize:20});
+    const j=r.data;
     if(j.status!=='ok'||!j.articles)return;
     D.naNews=j.articles;
     mergeNewsAPI();
   }catch(e){}
 }
 async function fetchNewsAPIStock(sym){
-  if(!D.na)return[];
+  if(!auth.currentUser)return[];
   try{
-    const r=await fetch(`https://newsapi.org/v2/everything?q=${sym}&language=en&sortBy=publishedAt&pageSize=5&apiKey=${D.na}`);
-    if(!r.ok)return[];
-    const j=await r.json();
+    const r=await cfNewsSearch({query:sym,pageSize:5});
+    const j=r.data;
     return j.status==='ok'?j.articles:[];
   }catch(e){return[];}
 }
@@ -5997,35 +6019,27 @@ function mkSources(){
   document.getElementById('src-list').innerHTML=srcs.map(s=>`<span class="src-badge" style="background:${s.live?'var(--grn2)':'rgba(100,116,139,.12)'};color:${s.live?'var(--grn)':'var(--t3)'}${s.live?'':';opacity:.6'}">${s.live?'✓':''} ${s.n}: ${s.d}</span>`).join('');
 }
 
-// ===== STRIPE CONFIG =====
+// ===== STRIPE CONFIG (links handled server-side via Cloud Functions) =====
 const STRIPE_CONFIG = {
-  monthlyLink: 'https://buy.stripe.com/YOUR_MONTHLY_LINK',
-  annualLink: 'https://buy.stripe.com/YOUR_ANNUAL_LINK',
-  customerPortal: 'https://billing.stripe.com/p/login/YOUR_PORTAL_LINK',
   monthlyPrice: 12.99,
   annualPrice: 109.99,
   currency: 'CAD'
 };
 
 // ===== PAYMENT & SUBSCRIPTION =====
-function openCheckout(plan) {
+async function openCheckout(plan) {
   const user = firebase.auth().currentUser;
   if (!user) return;
-  
-  const link = plan === 'annual' ? STRIPE_CONFIG.annualLink : STRIPE_CONFIG.monthlyLink;
-  const url = new URL(link);
-  url.searchParams.set('client_reference_id', user.uid);
-  url.searchParams.set('prefilled_email', user.email);
-  window.open(url.toString(), '_blank');
+  // Route through Cloud Function for secure checkout
+  await goToStripe(plan === 'annual' ? 'elite' : 'pro');
 }
 
 function openCustomerPortal() {
+  // Customer portal URL should be fetched from server in production
+  // For now, redirect to Stripe's portal login
   const user = firebase.auth().currentUser;
   if (!user) return;
-  
-  const url = new URL(STRIPE_CONFIG.customerPortal);
-  url.searchParams.set('prefilled_email', user.email);
-  window.open(url.toString(), '_blank');
+  window.open('https://billing.stripe.com/p/login/test', '_blank');
 }
 
 function showUpgradeModal() {
