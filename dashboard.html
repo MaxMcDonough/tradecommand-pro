@@ -2057,15 +2057,7 @@ a{color:var(--acc);text-decoration:none}
   </div>
 </div>
 
-<!-- Stock Search Bar -->
-<div id="stock-search-wrap">
-  <span id="stock-search-icon">🔍</span>
-  <input type="text" id="stock-search-input" placeholder="Search any stock ticker or company..." autocomplete="off" spellcheck="false"
-    oninput="handleStockSearch(this.value)" onkeydown="handleSearchKey(event)" />
-  <div id="stock-search-results"></div>
-</div>
-
-<!-- Session Tracker Bar -->
+<!-- Session Tracker Bar (above search so P&L pill expands it in the right spot) -->
 <div id="session-bar">
   <div class="sb-item">
     <div class="sb-label">Session Start</div>
@@ -2090,6 +2082,14 @@ a{color:var(--acc);text-decoration:none}
   <div class="sb-positions" id="sb-positions"></div>
   <button class="sb-port-btn" onclick="openPortfolioModal()">📁 Portfolio</button>
   <button class="sb-end-btn" onclick="endSession()">End Session</button>
+</div>
+
+<!-- Stock Search Bar -->
+<div id="stock-search-wrap">
+  <span id="stock-search-icon">🔍</span>
+  <input type="text" id="stock-search-input" placeholder="Search any stock ticker or company..." autocomplete="off" spellcheck="false"
+    oninput="handleStockSearch(this.value)" onkeydown="handleSearchKey(event)" />
+  <div id="stock-search-results"></div>
 </div>
 
 <!-- Demo Mode Banner -->
@@ -3450,22 +3450,9 @@ async function handleAuthState(user) {
       }
     } catch(e) { console.warn('[Holdings] Error loading from Firestore:', e); }
     hideAuth();
-    // ── Holdings notification on login ──
+    // ── Store holdings info for session resume modal ──
     if (userData.holdings && userData.holdings.length > 0) {
       _myHoldings = userData.holdings;
-      var holdSyms = userData.holdings.map(function(h){ return h.sym; }).join(', ');
-      var holdCount = userData.holdings.length;
-      setTimeout(function(){
-        var nEl = document.createElement('div');
-        nEl.id = 'holdings-notif';
-        nEl.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9999;background:var(--card);border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:16px 20px;max-width:360px;box-shadow:0 12px 40px rgba(0,0,0,.5);animation:fadeIn .3s ease';
-        nEl.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px"><div style="font-size:14px;font-weight:700">📊 Welcome back, ' + (userData.displayName || 'Trader') + '!</div><button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px">✕</button></div>' +
-          '<div style="font-size:12px;color:var(--t2);margin-bottom:10px">You have <b style="color:var(--t1)">' + holdCount + ' holdings</b> in your portfolio: <span style="color:var(--acc)">' + holdSyms + '</span></div>' +
-          '<div style="display:flex;gap:8px"><button onclick="pg(\'settings\',null);this.parentElement.parentElement.remove()" style="padding:6px 14px;background:var(--acc);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer">📊 View & Update Holdings</button>' +
-          '<button onclick="this.parentElement.parentElement.remove()" style="padding:6px 14px;background:var(--bg);color:var(--t2);border:1px solid var(--brd);border-radius:6px;font-size:11px;cursor:pointer">Dismiss</button></div>';
-        document.body.appendChild(nEl);
-        setTimeout(function(){ var el = document.getElementById('holdings-notif'); if(el) el.remove(); }, 15000);
-      }, 1500);
     }
     // ── RTDB Presence: mark this user online ──
     if (rtdb && user) {
@@ -4073,8 +4060,29 @@ function showSessionResume(saved) {
   const pnlStr = (realized >= 0 ? '+$' : '-$') + Math.abs(realized).toFixed(2);
   const savedDate = saved.savedAt ? new Date(saved.savedAt).toLocaleString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : 'Last session';
 
+  // Build holdings section if user has holdings
+  let holdingsHtml = '';
+  if (_myHoldings && _myHoldings.length > 0) {
+    const holdSyms = _myHoldings.map(h => h.sym || h).join(', ');
+    holdingsHtml = `
+      <div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;text-align:left">
+        <div style="font-size:11px;color:var(--t3);font-weight:600;margin-bottom:4px">📂 YOUR HOLDINGS</div>
+        <div style="font-size:13px;font-weight:700;color:var(--acc)">${holdSyms}</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">${_myHoldings.length} position${_myHoldings.length !== 1 ? 's' : ''} in your portfolio</div>
+      </div>`;
+  } else if (open.length > 0) {
+    const openSyms = open.map(p => p.sym).join(', ');
+    holdingsHtml = `
+      <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 14px;margin-bottom:14px;text-align:left">
+        <div style="font-size:11px;color:var(--t3);font-weight:600;margin-bottom:4px">📂 OPEN POSITIONS</div>
+        <div style="font-size:13px;font-weight:700;color:var(--grn)">${openSyms}</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:2px">${open.length} active trade${open.length !== 1 ? 's' : ''}</div>
+      </div>`;
+  }
+
   const summary = document.getElementById('sr-summary');
   if (summary) summary.innerHTML = `
+    ${holdingsHtml}
     <div class="sr-row"><span class="sr-row-lbl">Last active</span><span class="sr-row-val">${savedDate}</span></div>
     <div class="sr-row"><span class="sr-row-lbl">Session start balance</span><span class="sr-row-val">$${(saved.start || 0).toLocaleString()}</span></div>
     <div class="sr-row"><span class="sr-row-lbl">Realized P&L</span><span class="sr-row-val" style="color:${pnlColor}">${pnlStr}</span></div>
