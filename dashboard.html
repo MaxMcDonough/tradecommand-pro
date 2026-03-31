@@ -4184,43 +4184,58 @@ function modalTab(tab, btn) {
     const avgVol = ((s.vol||5000000)/1000).toFixed(0)+'K';
     const divYield = s.price > 100 ? ((Math.abs(sym.charCodeAt(1)%4)*0.5)+0.5).toFixed(1)+'%' : 'None';
     
-    // Industry lookup
+    // Company profile — show placeholder first, load real data async
     const discStock = (typeof DISCOVER_UNIVERSE!=='undefined') ? DISCOVER_UNIVERSE.stocks.find(st=>st.sym===sym) : null;
-    const industry = discStock ? discStock.industry : 'N/A';
-    const companyName = discStock ? discStock.name : sym;
-    
+    const cachedProfile = _profileCache[sym];
+    const companyName = cachedProfile?.name || (discStock ? discStock.name : sym);
+    const exchange = cachedProfile?.exchange || '';
+    const industry = cachedProfile?.industry || (discStock ? discStock.industry : '');
+    const description = cachedProfile?.description || '';
+    const currency = cachedProfile?.currency || 'USD';
+    const logoUrl = cachedProfile?.logo || '';
+    const mktCap = cachedProfile?.marketCap ? (cachedProfile.marketCap >= 1000 ? (cachedProfile.marketCap/1000).toFixed(1)+'T' : cachedProfile.marketCap >= 1 ? cachedProfile.marketCap.toFixed(1)+'B' : (cachedProfile.marketCap*1000).toFixed(0)+'M') : '--';
+    const pe = cachedProfile?.peRatio ? cachedProfile.peRatio.toFixed(1) : '--';
+    const eps = cachedProfile?.eps ? '$'+cachedProfile.eps.toFixed(2) : '--';
+    const w52h = cachedProfile?.w52h ? '$'+cachedProfile.w52h.toFixed(2) : '--';
+    const w52l = cachedProfile?.w52l ? '$'+cachedProfile.w52l.toFixed(2) : '--';
+    const beta = cachedProfile?.beta ? cachedProfile.beta.toFixed(2) : '--';
+    const divYield = cachedProfile?.divYield || '--';
+    const avgVol = ((s.vol||0)/1000).toFixed(0)+'K';
+
     panel.innerHTML = `
       ${roadmapHTML}
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
-        <div style="width:56px;height:56px;border-radius:50%;border:3px solid ${aiCol};display:flex;align-items:center;justify-content:center;flex-shrink:0">
-          <span style="font-size:22px;font-weight:900;color:${aiCol}">${sc.ai}</span>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+        <div style="width:56px;height:56px;border-radius:50%;border:3px solid ${aiCol};display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;background:var(--bg2)">
+          ${logoUrl ? `<img src="${logoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none;font-size:22px;font-weight:900;color:${aiCol}">${sc.ai}</span>` : `<span style="font-size:22px;font-weight:900;color:${aiCol}">${sc.ai}</span>`}
         </div>
         <div style="flex:1">
-          <div style="font-size:16px;font-weight:800">${companyName}</div>
-          <div style="font-size:12px;color:var(--t2)">${industry} · AI Score ${sc.ai}/10</div>
+          <div style="font-size:16px;font-weight:800" id="profile-company-name">${companyName}</div>
+          <div style="font-size:12px;color:var(--t2)" id="profile-meta">${exchange ? exchange+' · ' : ''}${industry || ''} ${industry || exchange ? '· ' : ''}${currency} · AI Score ${sc.ai}/10</div>
         </div>
         <div style="text-align:right">
           <div style="font-size:20px;font-weight:800">$${(s.price||0).toFixed(2)}</div>
           <div style="font-size:13px;font-weight:600;color:${(s.pct||0)>=0?'var(--green)':'var(--red)'}">${(s.pct||0)>=0?'+':''}${(s.pct||0).toFixed(2)}%</div>
         </div>
       </div>
+      ${description ? `<div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:14px;padding:10px;background:var(--bg2);border-radius:8px;border-left:3px solid var(--accent)" id="profile-desc">${description.length > 300 ? description.substring(0,300)+'...' : description}</div>` : `<div id="profile-desc" style="display:none"></div>`}
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:16px">
         <div style="text-align:center;padding:6px"><div style="font-size:12px;font-weight:700;color:${sc.tech>=6?'var(--green)':'var(--yellow)'}">${sc.tech}/10</div><div style="font-size:9px;color:var(--t3)">Technical</div></div>
         <div style="text-align:center;padding:6px"><div style="font-size:12px;font-weight:700;color:${sc.sent>=6?'var(--green)':'var(--yellow)'}">${sc.sent}/10</div><div style="font-size:9px;color:var(--t3)">Sentiment</div></div>
         <div style="text-align:center;padding:6px"><div style="font-size:12px;font-weight:700;color:${sc.risk>=6?'var(--green)':'var(--yellow)'}">${sc.risk}/10</div><div style="font-size:9px;color:var(--t3)">Low Risk</div></div>
         <div style="text-align:center;padding:6px"><div style="font-size:12px;font-weight:700;color:${sc.fundamental>=6?'var(--green)':'var(--yellow)'}">${sc.fundamental}/10</div><div style="font-size:9px;color:var(--t3)">Fundamental</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px">
-        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">Market Cap</div><div style="font-size:14px;font-weight:700">${mktCap}</div></div>
-        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">P/E Ratio</div><div style="font-size:14px;font-weight:700">${pe}</div></div>
-        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">EPS</div><div style="font-size:14px;font-weight:700">$${eps}</div></div>
-        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">52W High</div><div style="font-size:14px;font-weight:700">$${w52h}</div></div>
-        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">52W Low</div><div style="font-size:14px;font-weight:700">$${w52l}</div></div>
-        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">Beta</div><div style="font-size:14px;font-weight:700">${beta}</div></div>
-        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">Div Yield</div><div style="font-size:14px;font-weight:700">${divYield}</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px" id="profile-fundamentals">
+        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">Market Cap</div><div style="font-size:14px;font-weight:700" id="pf-mktcap">${mktCap}</div></div>
+        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">P/E Ratio</div><div style="font-size:14px;font-weight:700" id="pf-pe">${pe}</div></div>
+        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">EPS</div><div style="font-size:14px;font-weight:700" id="pf-eps">${eps}</div></div>
+        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">52W High</div><div style="font-size:14px;font-weight:700" id="pf-w52h">${w52h}</div></div>
+        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">52W Low</div><div style="font-size:14px;font-weight:700" id="pf-w52l">${w52l}</div></div>
+        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">Beta</div><div style="font-size:14px;font-weight:700" id="pf-beta">${beta}</div></div>
+        <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">Div Yield</div><div style="font-size:14px;font-weight:700" id="pf-div">${divYield}</div></div>
         <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">Avg Volume</div><div style="font-size:14px;font-weight:700">${avgVol}</div></div>
         <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">ATR (14)</div><div style="font-size:14px;font-weight:700">$${(s._atr||0).toFixed(2)}</div></div>
       </div>
+      ${!cachedProfile ? '<div id="profile-loading" style="text-align:center;font-size:11px;color:var(--t3);margin-bottom:10px">Loading company profile...</div>' : ''}
       <div style="margin-bottom:16px">
         <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:8px;text-transform:uppercase">Quick Links</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
@@ -4261,6 +4276,24 @@ function modalTab(tab, btn) {
     `;
     // Build amount buttons after DOM is set
     setTimeout(()=>buildModalAmtBtns(), 0);
+    // Async-load company profile if not cached
+    if(!cachedProfile) {
+      fetchCompanyProfile(sym).then(p => {
+        if(!p || document.getElementById('modal-sym').textContent !== sym) return;
+        const el = (id) => document.getElementById(id);
+        if(el('profile-company-name')) el('profile-company-name').textContent = p.name;
+        if(el('profile-meta')) el('profile-meta').innerHTML = `${p.exchange} · ${p.industry||''} · ${p.currency} · AI Score ${sc.ai}/10`;
+        if(p.description && el('profile-desc')) { el('profile-desc').style.display='block'; el('profile-desc').textContent = p.description.length > 300 ? p.description.substring(0,300)+'...' : p.description; }
+        if(p.marketCap && el('pf-mktcap')) el('pf-mktcap').textContent = p.marketCap >= 1000 ? (p.marketCap/1000).toFixed(1)+'T' : p.marketCap >= 1 ? p.marketCap.toFixed(1)+'B' : (p.marketCap*1000).toFixed(0)+'M';
+        if(p.peRatio && el('pf-pe')) el('pf-pe').textContent = p.peRatio.toFixed(1);
+        if(p.eps && el('pf-eps')) el('pf-eps').textContent = '$'+p.eps.toFixed(2);
+        if(p.w52h && el('pf-w52h')) el('pf-w52h').textContent = '$'+p.w52h.toFixed(2);
+        if(p.w52l && el('pf-w52l')) el('pf-w52l').textContent = '$'+p.w52l.toFixed(2);
+        if(p.beta && el('pf-beta')) el('pf-beta').textContent = p.beta.toFixed(2);
+        if(p.divYield && el('pf-div')) el('pf-div').textContent = p.divYield;
+        if(el('profile-loading')) el('profile-loading').remove();
+      }).catch(()=>{ const el = document.getElementById('profile-loading'); if(el) el.remove(); });
+    }
     } catch(err) {
       console.error('Overview render error:', err);
       panel.innerHTML = `<div style="padding:20px;text-align:center;color:var(--t2)">
@@ -6825,6 +6858,62 @@ async function fetchQuote(sym) {
     }
   } catch(e) {}
   return D.sd[sym] || null;
+}
+
+// ═══ COMPANY PROFILE (Finnhub + AV fallback) ═══
+const _profileCache = {};
+async function fetchCompanyProfile(sym) {
+  if(_profileCache[sym]) return _profileCache[sym];
+  if(D.fh) {
+    const variants = [sym];
+    if(!sym.includes('.')) variants.push(sym+'.TO', sym+'.V');
+    for(const s of variants) {
+      try {
+        const r = await fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${s}&token=${D.fh}`);
+        const d = await r.json();
+        if(d && d.name) {
+          const profile = {
+            name: d.name, exchange: d.exchange || 'Unknown', industry: d.finnhubIndustry || 'N/A',
+            country: d.country || '', currency: d.currency || 'USD',
+            marketCap: d.marketCapitalization ? d.marketCapitalization : null,
+            ipo: d.ipo || '', logo: d.logo || '', weburl: d.weburl || '',
+            ticker: d.ticker || sym, shareOutstanding: d.shareOutstanding || null
+          };
+          _profileCache[sym] = profile;
+          return profile;
+        }
+      } catch(e) {}
+    }
+  }
+  if(D.av) {
+    const variants = [sym];
+    if(!sym.includes('.')) variants.push(sym+'.TO', sym+'.V');
+    for(const s of variants) {
+      try {
+        const r = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${s}&apikey=${D.av}`);
+        const d = await r.json();
+        if(d && d.Name && d.Name !== 'None') {
+          const profile = {
+            name: d.Name, exchange: d.Exchange || 'Unknown', industry: d.Industry || d.Sector || 'N/A',
+            country: d.Country || '', currency: d.Currency || 'USD',
+            marketCap: d.MarketCapitalization ? parseFloat(d.MarketCapitalization)/1e6 : null,
+            logo: '', weburl: '', ticker: d.Symbol || sym,
+            shareOutstanding: d.SharesOutstanding ? parseFloat(d.SharesOutstanding)/1e6 : null,
+            description: d.Description || '', sector: d.Sector || '',
+            peRatio: d.PERatio && d.PERatio !== 'None' ? parseFloat(d.PERatio) : null,
+            eps: d.EPS && d.EPS !== 'None' ? parseFloat(d.EPS) : null,
+            divYield: d.DividendYield && d.DividendYield !== 'None' && d.DividendYield !== '0' ? (parseFloat(d.DividendYield)*100).toFixed(2)+'%' : 'None',
+            w52h: d['52WeekHigh'] && d['52WeekHigh'] !== 'None' ? parseFloat(d['52WeekHigh']) : null,
+            w52l: d['52WeekLow'] && d['52WeekLow'] !== 'None' ? parseFloat(d['52WeekLow']) : null,
+            beta: d.Beta && d.Beta !== 'None' ? parseFloat(d.Beta) : null
+          };
+          _profileCache[sym] = profile;
+          return profile;
+        }
+      } catch(e) {}
+    }
+  }
+  return null;
 }
 
 // ═══ NOTIFICATION CENTER ═══
