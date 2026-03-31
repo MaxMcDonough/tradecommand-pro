@@ -4174,16 +4174,6 @@ function modalTab(tab, btn) {
     // AI Score Circle
     const aiCol = sc.ai>=8?'var(--green)':sc.ai>=6?'#4ade80':sc.ai>=4?'var(--yellow)':'var(--red)';
     
-    // Company fundamentals (generated from price data for demo)
-    const mktCap = s.price > 500 ? ((s.price * 1.5)/1).toFixed(0)+'B' : s.price > 100 ? ((s.price * 800)/1000).toFixed(1)+'B' : ((s.price * 400)/1000).toFixed(1)+'B';
-    const pe = (12 + Math.abs(sym.charCodeAt(0) % 20)).toFixed(1);
-    const eps = (s.price / parseFloat(pe)).toFixed(2);
-    const w52h = (s.price * (1.15 + Math.abs(sym.charCodeAt(1)%10)/100)).toFixed(2);
-    const w52l = (s.price * (0.65 + Math.abs(sym.charCodeAt(0)%15)/100)).toFixed(2);
-    const beta = (0.7 + Math.abs(sym.charCodeAt(0)%15)/10).toFixed(2);
-    const avgVol = ((s.vol||5000000)/1000).toFixed(0)+'K';
-    const divYield = s.price > 100 ? ((Math.abs(sym.charCodeAt(1)%4)*0.5)+0.5).toFixed(1)+'%' : 'None';
-    
     // Company profile — show placeholder first, load real data async
     const discStock = (typeof DISCOVER_UNIVERSE!=='undefined') ? DISCOVER_UNIVERSE.stocks.find(st=>st.sym===sym) : null;
     const cachedProfile = _profileCache[sym];
