@@ -3060,7 +3060,29 @@ async function authGoogle() {
         plan:'trial', apiKeys:{fh:'',av:'',na:''}, lastActive:Date.now(), loginCount:1, disabled:false
       });
     }
-  } catch(e) { showAuthError('signin', e.message); }
+  } catch(e) {
+    if(e.code === 'auth/account-exists-with-different-credential') {
+      const pendingCred = e.credential || (e.customData && e.customData._tokenResponse
+        ? firebase.auth.GoogleAuthProvider.credential(e.customData._tokenResponse.oauthIdToken)
+        : null);
+      const email = e.customData?.email || e.email;
+      if(email && pendingCred) {
+        const pass = prompt('Your email ' + email + ' already has a password account. Enter your password to link Google sign-in:');
+        if(pass) {
+          try {
+            const userCred = await auth.signInWithEmailAndPassword(email, pass);
+            await userCred.user.linkWithCredential(pendingCred);
+          } catch(linkErr) {
+            showAuthError('signin', 'Could not link accounts. Check your password and try again.');
+          }
+        }
+      } else {
+        showAuthError('signin', 'This email already has a password account. Please sign in with your password, or contact support.');
+      }
+    } else {
+      showAuthError('signin', e.message);
+    }
+  }
 }
 async function authForgot() {
   const email = document.getElementById('forgot-email').value.trim();
@@ -6716,7 +6738,27 @@ function getStockData(sym) {
   return (D.sd[sym] && D.sd[sym].price > 0) ? D.sd[sym] : null;
 }
 
-// Fetch a single quote from Finnhub (rate-limited, cached)
+// Fetch a quote from Alpha Vantage as fallback/verification
+async function fetchQuoteAV(sym) {
+  if(!D.av) return null;
+  try {
+    const r = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sym}&apikey=${D.av}`);
+    const d = await r.json();
+    const gq = d['Global Quote'];
+    if(gq && gq['05. price']) {
+      const price = parseFloat(gq['05. price']);
+      const pc = parseFloat(gq['08. previous close']) || price;
+      const open = parseFloat(gq['02. open']) || price;
+      const high = parseFloat(gq['03. high']) || price;
+      const low = parseFloat(gq['04. low']) || price;
+      const pct = parseFloat(gq['10. change percent']) || ((price - pc)/pc*100);
+      if(price > 0) return { price, pc, open, high, low, pct: +pct.toFixed(2) };
+    }
+  } catch(e) {}
+  return null;
+}
+
+// Fetch a single quote from Finnhub (rate-limited, cached), verified against Alpha Vantage
 async function fetchQuote(sym) {
   const cached = getCachedQuote(sym);
   if(cached) {
@@ -6729,18 +6771,46 @@ async function fetchQuote(sym) {
     const r = await rateLimitedFetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${D.fh}`);
     const d = await r.json();
     if(d && d.c && d.c > 0) {
+      let price = d.c, pc = d.pc, open = d.o||d.c, high = d.h||d.c, low = d.l||d.c;
+      let pct = d.dp || ((d.c - d.pc)/d.pc*100);
+
+      // Cross-check with Alpha Vantage: if Finnhub price diverges >50% from AV, trust AV
+      const av = await fetchQuoteAV(sym);
+      if(av && av.price > 0) {
+        const ratio = price / av.price;
+        if(ratio > 1.5 || ratio < 0.5) {
+          console.warn(`[${sym}] Finnhub price $${price} diverges from AlphaVantage $${av.price} — using AV`);
+          price = av.price; pc = av.pc; open = av.open; high = av.high; low = av.low; pct = av.pct;
+        }
+      }
+
       const prev = D.sd[sym] || {};
-      const pct = d.dp || ((d.c - d.pc)/d.pc*100);
-      const atr = (d.h && d.l) ? (d.h - d.l) : d.c * 0.02;
+      const atr = (high && low) ? (high - low) : price * 0.02;
       D.sd[sym] = {
-        ...prev, sym, price:d.c, pct:+pct.toFixed(2), open:d.o||d.c, high:d.h||d.c,
-        low:d.l||d.c, pc:d.pc||d.c, vol:prev.vol||0,
-        _atr:+atr.toFixed(2), _vwap:prev._vwap||d.c, _sma20:prev._sma20||d.c,
-        _ema9:prev._ema9||d.c, _rsi:prev._rsi||50, _macd:prev._macd||0,
-        _bb:prev._bb||{upper:d.c*1.02,lower:d.c*0.98}, _volRatio:prev._volRatio||1
+        ...prev, sym, price, pct:+pct.toFixed(2), open, high,
+        low, pc, vol:prev.vol||0,
+        _atr:+atr.toFixed(2), _vwap:prev._vwap||price, _sma20:prev._sma20||price,
+        _ema9:prev._ema9||price, _rsi:prev._rsi||50, _macd:prev._macd||0,
+        _bb:prev._bb||{upper:price*1.02,lower:price*0.98}, _volRatio:prev._volRatio||1
       };
-      setCachedQuote(sym, { price:d.c, pct:+pct.toFixed(2), open:d.o||d.c, high:d.h||d.c, low:d.l||d.c, pc:d.pc||d.c, _atr:+atr.toFixed(2) });
+      setCachedQuote(sym, { price, pct:+pct.toFixed(2), open, high, low, pc, _atr:+atr.toFixed(2) });
       return D.sd[sym];
+    } else {
+      // Finnhub returned no data — try Alpha Vantage directly
+      const av = await fetchQuoteAV(sym);
+      if(av && av.price > 0) {
+        const prev = D.sd[sym] || {};
+        const atr = (av.high && av.low) ? (av.high - av.low) : av.price * 0.02;
+        D.sd[sym] = {
+          ...prev, sym, price:av.price, pct:av.pct, open:av.open, high:av.high,
+          low:av.low, pc:av.pc, vol:prev.vol||0,
+          _atr:+atr.toFixed(2), _vwap:prev._vwap||av.price, _sma20:prev._sma20||av.price,
+          _ema9:prev._ema9||av.price, _rsi:prev._rsi||50, _macd:prev._macd||0,
+          _bb:prev._bb||{upper:av.price*1.02,lower:av.price*0.98}, _volRatio:prev._volRatio||1
+        };
+        setCachedQuote(sym, { price:av.price, pct:av.pct, open:av.open, high:av.high, low:av.low, pc:av.pc, _atr:+atr.toFixed(2) });
+        return D.sd[sym];
+      }
     }
   } catch(e) {}
   return D.sd[sym] || null;

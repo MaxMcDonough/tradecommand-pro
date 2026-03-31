@@ -3060,7 +3060,29 @@ async function authGoogle() {
         plan:'trial', apiKeys:{fh:'',av:'',na:''}, lastActive:Date.now(), loginCount:1, disabled:false
       });
     }
-  } catch(e) { showAuthError('signin', e.message); }
+  } catch(e) {
+    if(e.code === 'auth/account-exists-with-different-credential') {
+      const pendingCred = e.credential || (e.customData && e.customData._tokenResponse
+        ? firebase.auth.GoogleAuthProvider.credential(e.customData._tokenResponse.oauthIdToken)
+        : null);
+      const email = e.customData?.email || e.email;
+      if(email && pendingCred) {
+        const pass = prompt('Your email ' + email + ' already has a password account. Enter your password to link Google sign-in:');
+        if(pass) {
+          try {
+            const userCred = await auth.signInWithEmailAndPassword(email, pass);
+            await userCred.user.linkWithCredential(pendingCred);
+          } catch(linkErr) {
+            showAuthError('signin', 'Could not link accounts. Check your password and try again.');
+          }
+        }
+      } else {
+        showAuthError('signin', 'This email already has a password account. Please sign in with your password, or contact support.');
+      }
+    } else {
+      showAuthError('signin', e.message);
+    }
+  }
 }
 async function authForgot() {
   const email = document.getElementById('forgot-email').value.trim();
