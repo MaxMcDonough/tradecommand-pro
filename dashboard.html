@@ -6738,27 +6738,49 @@ function getStockData(sym) {
   return (D.sd[sym] && D.sd[sym].price > 0) ? D.sd[sym] : null;
 }
 
-// Fetch a quote from Alpha Vantage as fallback/verification
+// Fetch a quote from Alpha Vantage (used as fallback for Canadian/OTC stocks)
 async function fetchQuoteAV(sym) {
   if(!D.av) return null;
-  try {
-    const r = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${sym}&apikey=${D.av}`);
-    const d = await r.json();
-    const gq = d['Global Quote'];
-    if(gq && gq['05. price']) {
-      const price = parseFloat(gq['05. price']);
-      const pc = parseFloat(gq['08. previous close']) || price;
-      const open = parseFloat(gq['02. open']) || price;
-      const high = parseFloat(gq['03. high']) || price;
-      const low = parseFloat(gq['04. low']) || price;
-      const pct = parseFloat(gq['10. change percent']) || ((price - pc)/pc*100);
-      if(price > 0) return { price, pc, open, high, low, pct: +pct.toFixed(2) };
-    }
-  } catch(e) {}
+  // Alpha Vantage uses .TO for TSX, .V for TSXV — try Canadian suffixes if bare symbol fails
+  const variants = [sym];
+  if(!sym.includes('.')) { variants.push(sym + '.TO', sym + '.V'); }
+  for(const s of variants) {
+    try {
+      const r = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${s}&apikey=${D.av}`);
+      const d = await r.json();
+      const gq = d['Global Quote'];
+      if(gq && gq['05. price']) {
+        const price = parseFloat(gq['05. price']);
+        if(price > 0) {
+          const pc = parseFloat(gq['08. previous close']) || price;
+          const open = parseFloat(gq['02. open']) || price;
+          const high = parseFloat(gq['03. high']) || price;
+          const low = parseFloat(gq['04. low']) || price;
+          const pct = parseFloat(gq['10. change percent']) || ((price - pc)/pc*100);
+          return { price, pc, open, high, low, pct: +pct.toFixed(2), resolvedSym: s };
+        }
+      }
+    } catch(e) {}
+  }
   return null;
 }
 
-// Fetch a single quote from Finnhub (rate-limited, cached), verified against Alpha Vantage
+// Apply a verified quote to the data store
+function applyQuote(sym, price, pct, open, high, low, pc) {
+  const prev = D.sd[sym] || {};
+  const atr = (high && low && high !== low) ? (high - low) : price * 0.02;
+  D.sd[sym] = {
+    ...prev, sym, price, pct:+pct.toFixed(2), open, high,
+    low, pc, vol:prev.vol||0,
+    _atr:+atr.toFixed(2), _vwap:prev._vwap||price, _sma20:prev._sma20||price,
+    _ema9:prev._ema9||price, _rsi:prev._rsi||50, _macd:prev._macd||0,
+    _bb:prev._bb||{upper:price*1.02,lower:price*0.98}, _volRatio:prev._volRatio||1
+  };
+  setCachedQuote(sym, { price, pct:+pct.toFixed(2), open, high, low, pc, _atr:+atr.toFixed(2) });
+  return D.sd[sym];
+}
+
+// Fetch a single quote — Finnhub first, then AV background verify for suspicious data
 async function fetchQuote(sym) {
   const cached = getCachedQuote(sym);
   if(cached) {
@@ -6774,42 +6796,31 @@ async function fetchQuote(sym) {
       let price = d.c, pc = d.pc, open = d.o||d.c, high = d.h||d.c, low = d.l||d.c;
       let pct = d.dp || ((d.c - d.pc)/d.pc*100);
 
-      // Cross-check with Alpha Vantage: if Finnhub price diverges >50% from AV, trust AV
-      const av = await fetchQuoteAV(sym);
-      if(av && av.price > 0) {
-        const ratio = price / av.price;
-        if(ratio > 1.5 || ratio < 0.5) {
-          console.warn(`[${sym}] Finnhub price $${price} diverges from AlphaVantage $${av.price} — using AV`);
-          price = av.price; pc = av.pc; open = av.open; high = av.high; low = av.low; pct = av.pct;
-        }
+      // Detect suspicious Finnhub data: stale (OHLC all identical) or penny stock territory
+      const looksStale = (d.o === d.c && d.h === d.c && d.l === d.c);
+      const isPenny = price < 5;
+
+      if(looksStale || isPenny) {
+        // Background AV cross-check — don't block the UI
+        fetchQuoteAV(sym).then(av => {
+          if(av && av.price > 0) {
+            const ratio = price / av.price;
+            if(ratio > 1.5 || ratio < 0.5) {
+              console.warn(`[${sym}] Finnhub $${price} vs AV $${av.price} — correcting to AV`);
+              applyQuote(sym, av.price, av.pct, av.open, av.high, av.low, av.pc);
+              if(typeof renderAll === 'function') renderAll();
+            }
+          }
+        }).catch(()=>{});
       }
 
-      const prev = D.sd[sym] || {};
-      const atr = (high && low) ? (high - low) : price * 0.02;
-      D.sd[sym] = {
-        ...prev, sym, price, pct:+pct.toFixed(2), open, high,
-        low, pc, vol:prev.vol||0,
-        _atr:+atr.toFixed(2), _vwap:prev._vwap||price, _sma20:prev._sma20||price,
-        _ema9:prev._ema9||price, _rsi:prev._rsi||50, _macd:prev._macd||0,
-        _bb:prev._bb||{upper:price*1.02,lower:price*0.98}, _volRatio:prev._volRatio||1
-      };
-      setCachedQuote(sym, { price, pct:+pct.toFixed(2), open, high, low, pc, _atr:+atr.toFixed(2) });
-      return D.sd[sym];
+      // Show Finnhub data immediately (AV correction comes async if needed)
+      return applyQuote(sym, price, pct, open, high, low, pc);
     } else {
       // Finnhub returned no data — try Alpha Vantage directly
       const av = await fetchQuoteAV(sym);
       if(av && av.price > 0) {
-        const prev = D.sd[sym] || {};
-        const atr = (av.high && av.low) ? (av.high - av.low) : av.price * 0.02;
-        D.sd[sym] = {
-          ...prev, sym, price:av.price, pct:av.pct, open:av.open, high:av.high,
-          low:av.low, pc:av.pc, vol:prev.vol||0,
-          _atr:+atr.toFixed(2), _vwap:prev._vwap||av.price, _sma20:prev._sma20||av.price,
-          _ema9:prev._ema9||av.price, _rsi:prev._rsi||50, _macd:prev._macd||0,
-          _bb:prev._bb||{upper:av.price*1.02,lower:av.price*0.98}, _volRatio:prev._volRatio||1
-        };
-        setCachedQuote(sym, { price:av.price, pct:av.pct, open:av.open, high:av.high, low:av.low, pc:av.pc, _atr:+atr.toFixed(2) });
-        return D.sd[sym];
+        return applyQuote(sym, av.price, av.pct, av.open, av.high, av.low, av.pc);
       }
     }
   } catch(e) {}
