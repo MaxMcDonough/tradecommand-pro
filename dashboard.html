@@ -1670,29 +1670,41 @@ input, select, button { font-family: inherit; }
 #tour-overlay.active{display:block}
 #tour-backdrop{position:fixed;inset:0;z-index:10001;pointer-events:auto}
 #tour-spotlight{position:absolute;z-index:10002;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.75);pointer-events:none;transition:all .4s cubic-bezier(.4,0,.2,1)}
-#tour-tooltip{position:absolute;z-index:10003;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:380px;width:90vw;pointer-events:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:tourFadeIn .3s ease}
+#tour-tooltip{position:absolute;z-index:10003;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px 22px;max-width:380px;width:calc(100vw - 40px);pointer-events:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:tourFadeIn .3s ease;overflow:visible}
 @keyframes tourFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-#tour-tooltip::before{content:'';position:absolute;width:12px;height:12px;background:var(--bg2);border:1px solid var(--border);transform:rotate(45deg)}
-#tour-tooltip.arrow-top::before{top:-7px;left:30px;border-right:none;border-bottom:none}
-#tour-tooltip.arrow-bottom::before{bottom:-7px;left:30px;border-left:none;border-top:none}
-#tour-tooltip.arrow-left::before{left:-7px;top:24px;border-top:none;border-right:none}
+#tour-tooltip::before{content:'';position:absolute;width:12px;height:12px;background:var(--bg2);border:1px solid var(--border);transform:rotate(45deg);display:none}
+#tour-tooltip.arrow-top::before{display:block;top:-7px;left:30px;border-right:none;border-bottom:none}
+#tour-tooltip.arrow-bottom::before{display:block;bottom:-7px;left:30px;border-left:none;border-top:none}
+#tour-tooltip.arrow-left::before{display:block;left:-7px;top:24px;border-top:none;border-right:none}
 .tour-step-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:800;margin-right:8px;flex-shrink:0}
 .tour-title{font-size:16px;font-weight:800;color:var(--t1);display:flex;align-items:center;margin-bottom:8px}
 .tour-body{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:18px}
-.tour-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.tour-progress{display:flex;gap:5px;align-items:center}
-.tour-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .2s}
-.tour-dot.active{background:var(--accent);width:18px;border-radius:4px}
+.tour-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.tour-progress{display:flex;gap:4px;align-items:center;flex-wrap:wrap;max-width:160px}
+.tour-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:all .2s;flex-shrink:0}
+.tour-dot.active{background:var(--accent);width:14px;border-radius:3px}
 .tour-dot.done{background:var(--green)}
-.tour-btns{display:flex;gap:8px}
-.tour-btn{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none}
+.tour-btns{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.tour-btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none;white-space:nowrap}
 .tour-btn-primary{background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff}
 .tour-btn-primary:hover{opacity:.9;box-shadow:0 4px 16px rgba(59,130,246,.3)}
 .tour-btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--border)}
 .tour-btn-ghost:hover{border-color:var(--accent);color:var(--t1)}
-.tour-btn-skip{background:transparent;color:var(--t3);border:none;font-size:12px;padding:8px 12px}
+.tour-btn-skip{background:transparent;color:var(--t3);border:none;font-size:12px;padding:6px 10px}
 .tour-btn-skip:hover{color:var(--t2)}
 .tour-key{display:inline-block;padding:2px 7px;background:var(--card);border:1px solid var(--border);border-radius:4px;font-size:11px;font-weight:600;color:var(--t2);font-family:monospace}
+@media(max-width:480px){
+  #tour-tooltip{padding:16px 18px;max-width:calc(100vw - 24px);border-radius:12px}
+  .tour-title{font-size:14px}
+  .tour-body{font-size:12px;margin-bottom:14px}
+  .tour-footer{flex-direction:column;align-items:stretch;gap:10px}
+  .tour-progress{max-width:100%;justify-content:center}
+  .tour-btns{justify-content:flex-end}
+  .tour-btn{padding:8px 14px;font-size:12px}
+  .tour-prompt-box{padding:24px 20px}
+  .tour-prompt-title{font-size:18px}
+  .tour-prompt-btns{flex-direction:column}
+}
 
 /* Tour prompt dialog */
 #tour-prompt{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
@@ -2029,7 +2041,7 @@ input, select, button { font-family: inherit; }
         </div>
         <!-- Reddit Mentions -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Reddit Mentions (24h)</div><span class="card-badge" style="background:var(--purple2);color:var(--purple)">ApeWisdom</span></div>
+          <div class="card-header"><div class="card-title">Social Mentions (24h)</div><span class="card-badge" style="background:var(--purple2);color:var(--purple)">Live</span></div>
           <div id="mentions-feed" style="max-height:500px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading...</p></div>
         </div>
         <!-- Sector Heatmap -->
@@ -2056,15 +2068,15 @@ input, select, button { font-family: inherit; }
         <!-- Reddit Threads -->
         <div class="card insights-full">
           <div class="card-header">
-            <div class="card-title">Reddit Hot Threads</div>
+            <div class="card-title">Trending Discussions</div>
             <div style="display:flex;gap:4px" id="reddit-tabs">
-              <button class="wl-filter active" onclick="fetchReddit('wallstreetbets',this)">WSB</button>
-              <button class="wl-filter" onclick="fetchReddit('stocks',this)">stocks</button>
-              <button class="wl-filter" onclick="fetchReddit('daytrading',this)">daytrading</button>
-              <button class="wl-filter" onclick="fetchReddit('options',this)">options</button>
+              <button class="wl-filter active" onclick="fetchReddit('wallstreetbets',this)">Hot Takes</button>
+              <button class="wl-filter" onclick="fetchReddit('stocks',this)">General</button>
+              <button class="wl-filter" onclick="fetchReddit('daytrading',this)">Day Trading</button>
+              <button class="wl-filter" onclick="fetchReddit('options',this)">Options</button>
             </div>
           </div>
-          <div id="reddit-feed" style="max-height:400px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading Reddit...</p></div>
+          <div id="reddit-feed" style="max-height:400px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading social feeds...</p></div>
         </div>
       </div>
     </div>
@@ -2093,7 +2105,7 @@ input, select, button { font-family: inherit; }
           <div class="card-title" style="font-size:16px">AI Stock Scanner <span class="card-badge" style="background:var(--accent2);color:var(--accent)">Live</span></div>
           <button class="btn btn-sm btn-primary" onclick="runAIScanner()" id="btn-scan">Scan Now</button>
         </div>
-        <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Scans Reddit buzz, unusual volume, RSI extremes, and momentum breakouts across 100+ tickers to find opportunities most traders miss.</p>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Scans social sentiment, unusual volume, RSI extremes, and momentum breakouts across 100+ tickers to find opportunities most traders miss.</p>
         <div id="scanner-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>
       </div>
       <!-- SIGNALS -->
@@ -3279,7 +3291,7 @@ function launch() {
   setTimeout(()=>{
     const loadingFallbacks = [
       { id:'news-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:20px;margin-bottom:6px">📰</div><div style="font-size:12px">News unavailable — <a href="#" onclick="safeFetch(fetchNews);return false" style="color:var(--accent)">retry</a></div></div>' },
-      { id:'mentions-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:12px">Reddit data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div></div>' },
+      { id:'mentions-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:12px">Social sentiment data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div></div>' },
       { id:'reddit-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:12px">Reddit threads unavailable — <a href="#" onclick="safeFetch(()=>fetchRedditPosts(\'wallstreetbets\'));return false" style="color:var(--accent)">retry</a></div></div>' }
     ];
     loadingFallbacks.forEach(fb => {
@@ -3952,7 +3964,7 @@ async function openStock(sym) {
     // No data yet — show loading
     document.getElementById('modal-price').textContent = 'Loading...';
     document.getElementById('modal-change').textContent = '';
-    document.getElementById('mp-overview').innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2)"><div style="font-size:24px;margin-bottom:12px">⏳</div><div style="font-size:14px;font-weight:600">Fetching live data for '+sym+'...</div><div style="font-size:11px;color:var(--t3);margin-top:6px">Getting real-time quote from Finnhub</div></div>';
+    document.getElementById('mp-overview').innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2)"><div style="font-size:24px;margin-bottom:12px">⏳</div><div style="font-size:14px;font-weight:600">Fetching live data for '+sym+'...</div><div style="font-size:11px;color:var(--t3);margin-top:6px">Connecting to real-time data feed</div></div>';
   }
 
   // Fetch fresh data from API
@@ -4649,16 +4661,16 @@ async function fetchApeWisdom() {
       // Also populate reddit feed if it failed to load from direct Reddit API
       const redditEl = document.getElementById('reddit-feed');
       if(redditEl && (redditEl.textContent.includes('Loading') || redditEl.textContent.includes('unavailable'))) {
-        redditEl.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from Reddit (via ApeWisdom)</div>` +
+        redditEl.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from social sentiment analysis</div>` +
           D.ment.slice(0,12).map(m => `<div class="news-item" onclick="openStock('${m.ticker}')" style="cursor:pointer">
-            <div><div class="news-source">r/wallstreetbets · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
+            <div><div class="news-source">Social Buzz · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
           </div>`).join('');
       }
     }
   } catch(e) {
     clearTimeout(timeout);
     const el = document.getElementById('mentions-feed');
-    if(el && el.textContent.includes('Loading')) el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Reddit data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div>';
+    if(el && el.textContent.includes('Loading')) el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Social sentiment data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div>';
   }
 }
 
@@ -4691,12 +4703,12 @@ async function fetchRedditPosts(sub) {
   // All attempts failed — show ApeWisdom ticker mentions as fallback (real data, not fake)
   clearTimeout(timeout);
   if(D.ment && D.ment.length) {
-    el.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from Reddit (via ApeWisdom)</div>` +
+    el.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from social sentiment analysis</div>` +
       D.ment.slice(0,12).map(m => `<div class="news-item" onclick="openStock('${m.ticker}')" style="cursor:pointer">
-        <div><div class="news-source">r/wallstreetbets · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
+        <div><div class="news-source">Social Buzz · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
       </div>`).join('');
   } else {
-    el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Reddit data unavailable — <a href="#" onclick="fetchReddit(\'wallstreetbets\');return false" style="color:var(--accent)">retry</a></div>';
+    el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Social sentiment data unavailable — <a href="#" onclick="fetchReddit(\'wallstreetbets\');return false" style="color:var(--accent)">retry</a></div>';
   }
 }
 function fetchReddit(sub, btn) {
@@ -5076,7 +5088,7 @@ async function runAIScanner() {
 
         // ── Reddit buzz ──
         if(redditBuzz[sym]) {
-          if(redditBuzz[sym] > 200) { score += 3; reasons.push('Heavy Reddit buzz: '+redditBuzz[sym]+' mentions (24h)'); }
+          if(redditBuzz[sym] > 200) { score += 3; reasons.push('Heavy social buzz: '+redditBuzz[sym]+' mentions (24h)'); }
           else if(redditBuzz[sym] > 50) { score += 2; reasons.push('Reddit trending: '+redditBuzz[sym]+' mentions'); }
           else { score += 1; reasons.push('Reddit mentions: '+redditBuzz[sym]); }
         }
@@ -7302,28 +7314,28 @@ const TOUR_STEPS = [
     target: '.card:has(#bot-top-picks), [style*="bot-top-picks"]',
     fallback: '#page-trading > .card:first-child',
     title: 'AI Bot Scanner',
-    body: 'The <strong>TradeCommand AI Bot</strong> scans your watchlist using 8 factors: momentum, RSI, volume, trend, MACD, news sentiment, social buzz, and institutional flow. Hit <strong>"Run AI Scan Now"</strong> to generate fresh signals instantly.',
+    body: 'The <strong>TradeCommand AI engine</strong> analyzes your watchlist across 8 proprietary factors — momentum, RSI, volume, trend, MACD, news sentiment, social sentiment, and institutional flow. Hit <strong>"Run AI Scan Now"</strong> to generate fresh signals instantly.',
     icon: '🤖',
     position: 'bottom'
   },
   {
     target: '#watchlist-container',
     title: 'Your Watchlist',
-    body: 'These are the stocks you\'re tracking. Each card shows <strong>live price, change %, and an AI signal</strong> (Buy/Sell/Hold). Click any stock for deep analysis with charts, technicals, and AI summary. Use the <strong>filters</strong> above to show only Buy signals, Hot movers, etc.',
+    body: 'These are the stocks you\'re tracking. Each card shows <strong>live price, change %, and an AI signal</strong> (Buy/Sell/Hold). Click any stock for deep analysis with charts, technicals, and AI-generated insights.<br><br>You can <strong>add new tickers</strong> anytime and <strong>remove ones that don\'t fit</strong> by clicking the X. After this tour, try adding your preferred stocks and trimming what doesn\'t suit your strategy.',
     icon: '👁️',
     position: 'bottom'
   },
   {
     target: '#add-ticker-input',
-    title: 'Add Tickers',
-    body: 'Type any stock symbol here and press Enter or click <strong>+</strong> to add it to your watchlist. Try adding your favorite stocks — the AI will start scanning them immediately.',
+    title: 'Add & Manage Tickers',
+    body: 'Type any <strong>US stock or ETF symbol</strong> and press Enter to add it. We cover the full <strong>NYSE, NASDAQ, and AMEX</strong> — thousands of stocks and ETFs. You can also remove tickers you\'re not interested in to keep your watchlist focused.',
     icon: '➕',
     position: 'bottom'
   },
   {
     target: '[data-page="holdings"]',
     title: 'Portfolio & Holdings',
-    body: 'Track all your <strong>open positions, P&L, cost basis,</strong> and <strong>sector allocation</strong> here. You can add positions manually, and the dashboard will track real-time profit/loss with charts and performance metrics.',
+    body: 'Track all your <strong>open positions, P&L, cost basis,</strong> and <strong>sector allocation</strong> here. Add positions manually, and the dashboard tracks real-time profit/loss with charts and performance metrics.',
     icon: '💼',
     position: 'right',
     action: () => navigate('holdings')
@@ -7331,7 +7343,7 @@ const TOUR_STEPS = [
   {
     target: '[data-page="insights"]',
     title: 'News & Insights',
-    body: 'Get a live feed of <strong>market news from Finnhub and NewsAPI</strong>, a real-time <strong>Reddit sentiment scanner</strong> pulling from r/wallstreetbets, r/stocks, and more, plus an <strong>economic calendar</strong> with upcoming events that move markets.',
+    body: 'Our proprietary intelligence engine aggregates data from <strong>15+ real-time sources</strong> — delivering breaking market headlines, <strong>social sentiment analysis</strong> across major trading communities, and an <strong>economic calendar</strong> with upcoming events that move markets. All processed and ranked by relevance.',
     icon: '🧠',
     position: 'right',
     action: () => navigate('insights')
@@ -7339,7 +7351,7 @@ const TOUR_STEPS = [
   {
     target: '[data-page="predictions"]',
     title: 'AI Predictions & Signals',
-    body: 'The heart of the platform. Each signal card shows: <strong>entry price, stop loss, target price, risk/reward ratio,</strong> and an <strong>AI confidence score</strong>. These are generated from the 8-factor analysis when you run the AI scanner.',
+    body: 'The heart of the platform. Each signal card shows: <strong>entry price, stop loss, target price, risk/reward ratio,</strong> and a <strong>confidence score</strong>. Generated from our proprietary 8-factor analysis engine every time you run a scan.',
     icon: '🎯',
     position: 'right',
     action: () => navigate('predictions')
@@ -7347,7 +7359,7 @@ const TOUR_STEPS = [
   {
     target: '[data-page="autopilot"]',
     title: 'Autopilot & Game Plan',
-    body: 'Queue up trades from your signals and let <strong>Autopilot</strong> manage them. It tracks your entries, stops, and targets — alerting you when conditions are met. Think of it as your automated trading assistant.',
+    body: 'Queue up trades from your signals and let <strong>Autopilot</strong> manage them. It tracks your entries, stops, and targets — alerting you when conditions are met. Your automated trading co-pilot.',
     icon: '🤖',
     position: 'right',
     action: () => navigate('autopilot')
@@ -7355,7 +7367,7 @@ const TOUR_STEPS = [
   {
     target: '[data-page="discover"]',
     title: 'Discover',
-    body: 'Find new trading opportunities with <strong>AI-ranked stocks, trending tickers, ETF screeners,</strong> and <strong>trade ideas</strong>. Everything is scored and sortable — click any row to analyze, or hit + to add to your watchlist.',
+    body: 'Find new opportunities with <strong>AI-ranked stocks, trending tickers, ETF screeners,</strong> and <strong>curated trade ideas</strong>. Everything scored and sortable. Click any row to analyze, or hit + to add it straight to your watchlist.',
     icon: '🔍',
     position: 'right',
     action: () => navigate('discover')
@@ -7363,7 +7375,7 @@ const TOUR_STEPS = [
   {
     target: '[data-page="alerts"]',
     title: 'Price Alerts',
-    body: 'Set custom alerts for <strong>price crossings, percentage moves, volume spikes,</strong> and more. Alerts can be <strong>recurring</strong> and trigger <strong>browser notifications, sounds, Telegram messages,</strong> and <strong>email</strong>. Up to 20 active alerts.',
+    body: 'Set custom alerts for <strong>price crossings, percentage moves, volume spikes,</strong> and more. Alerts can be <strong>recurring</strong> and trigger <strong>push notifications, sounds, Telegram,</strong> and <strong>email</strong>. Up to 20 active alerts.',
     icon: '🔔',
     position: 'right',
     action: () => navigate('alerts')
@@ -7371,7 +7383,7 @@ const TOUR_STEPS = [
   {
     target: '#notif-bell',
     title: 'Notification Center',
-    body: 'All your alerts, trade executions, and system notifications appear here. The red badge shows unread count. Click the bell to review and manage your notifications.',
+    body: 'All your alerts, trade executions, and system notifications land here. The red badge shows your unread count. Click the bell to review everything.',
     icon: '🔔',
     position: 'bottom',
     action: () => navigate('trading')
@@ -7379,7 +7391,7 @@ const TOUR_STEPS = [
   {
     target: null,
     title: 'You\'re Ready to Trade!',
-    body: 'That\'s everything! Start by <strong>running the AI Scan</strong> on the Trading page to generate your first signals. Add stocks to your watchlist, explore Discover for ideas, and set up alerts for the ones you\'re watching.<br><br>You can <strong>retake this tour anytime</strong> from Settings → Retake Platform Tour.',
+    body: 'That covers it! Here\'s how to get started:<br><br><strong>1.</strong> Add your preferred stocks to the watchlist (and remove what doesn\'t fit)<br><strong>2.</strong> Hit <strong>Run AI Scan</strong> to generate your first signals<br><strong>3.</strong> Explore <strong>Discover</strong> for new ideas and set <strong>Alerts</strong> on tickers you\'re watching<br><br>You can <strong>retake this tour anytime</strong> from Settings.',
     icon: '🚀',
     position: 'center',
     final: true

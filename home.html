@@ -1985,7 +1985,7 @@ input, select, button { font-family: inherit; }
         </div>
         <!-- Reddit Mentions -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Reddit Mentions (24h)</div><span class="card-badge" style="background:var(--purple2);color:var(--purple)">ApeWisdom</span></div>
+          <div class="card-header"><div class="card-title">Social Mentions (24h)</div><span class="card-badge" style="background:var(--purple2);color:var(--purple)">Social Intelligence</span></div>
           <div id="mentions-feed" style="max-height:500px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading...</p></div>
         </div>
         <!-- Sector Heatmap -->
@@ -2012,15 +2012,15 @@ input, select, button { font-family: inherit; }
         <!-- Reddit Threads -->
         <div class="card insights-full">
           <div class="card-header">
-            <div class="card-title">Reddit Hot Threads</div>
+            <div class="card-title">Trending Discussions</div>
             <div style="display:flex;gap:4px" id="reddit-tabs">
-              <button class="wl-filter active" onclick="fetchReddit('wallstreetbets',this)">WSB</button>
-              <button class="wl-filter" onclick="fetchReddit('stocks',this)">stocks</button>
-              <button class="wl-filter" onclick="fetchReddit('daytrading',this)">daytrading</button>
-              <button class="wl-filter" onclick="fetchReddit('options',this)">options</button>
+              <button class="wl-filter active" onclick="fetchReddit('wallstreetbets',this)">Hot Takes</button>
+              <button class="wl-filter" onclick="fetchReddit('stocks',this)">General</button>
+              <button class="wl-filter" onclick="fetchReddit('daytrading',this)">Day Trading</button>
+              <button class="wl-filter" onclick="fetchReddit('options',this)">Options</button>
             </div>
           </div>
-          <div id="reddit-feed" style="max-height:400px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading Reddit...</p></div>
+          <div id="reddit-feed" style="max-height:400px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading social feeds...</p></div>
         </div>
       </div>
     </div>
@@ -2049,7 +2049,7 @@ input, select, button { font-family: inherit; }
           <div class="card-title" style="font-size:16px">AI Stock Scanner <span class="card-badge" style="background:var(--accent2);color:var(--accent)">Live</span></div>
           <button class="btn btn-sm btn-primary" onclick="runAIScanner()" id="btn-scan">Scan Now</button>
         </div>
-        <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Scans Reddit buzz, unusual volume, RSI extremes, and momentum breakouts across 100+ tickers to find opportunities most traders miss.</p>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Scans social sentiment, unusual volume, RSI extremes, and momentum breakouts across 100+ tickers to find opportunities most traders miss.</p>
         <div id="scanner-results" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>
       </div>
       <!-- SIGNALS -->
@@ -3230,8 +3230,8 @@ function launch() {
   setTimeout(()=>{
     const loadingFallbacks = [
       { id:'news-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:20px;margin-bottom:6px">📰</div><div style="font-size:12px">News unavailable — <a href="#" onclick="safeFetch(fetchNews);return false" style="color:var(--accent)">retry</a></div></div>' },
-      { id:'mentions-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:12px">Reddit data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div></div>' },
-      { id:'reddit-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:12px">Reddit threads unavailable — <a href="#" onclick="safeFetch(()=>fetchRedditPosts(\'wallstreetbets\'));return false" style="color:var(--accent)">retry</a></div></div>' }
+      { id:'mentions-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:12px">Social sentiment data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div></div>' },
+      { id:'reddit-feed', html:'<div style="text-align:center;padding:20px;color:var(--t3)"><div style="font-size:12px">Trending discussions unavailable — <a href="#" onclick="safeFetch(()=>fetchRedditPosts(\'wallstreetbets\'));return false" style="color:var(--accent)">retry</a></div></div>' }
     ];
     loadingFallbacks.forEach(fb => {
       const el = document.getElementById(fb.id);
@@ -3903,7 +3903,7 @@ async function openStock(sym) {
     // No data yet — show loading
     document.getElementById('modal-price').textContent = 'Loading...';
     document.getElementById('modal-change').textContent = '';
-    document.getElementById('mp-overview').innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2)"><div style="font-size:24px;margin-bottom:12px">⏳</div><div style="font-size:14px;font-weight:600">Fetching live data for '+sym+'...</div><div style="font-size:11px;color:var(--t3);margin-top:6px">Getting real-time quote from Finnhub</div></div>';
+    document.getElementById('mp-overview').innerHTML = '<div style="text-align:center;padding:40px;color:var(--t2)"><div style="font-size:24px;margin-bottom:12px">⏳</div><div style="font-size:14px;font-weight:600">Fetching live data for '+sym+'...</div><div style="font-size:11px;color:var(--t3);margin-top:6px">Getting real-time quote</div></div>';
   }
 
   // Fetch fresh data from API
@@ -4577,16 +4577,16 @@ async function fetchApeWisdom() {
       // Also populate reddit feed if it failed to load from direct Reddit API
       const redditEl = document.getElementById('reddit-feed');
       if(redditEl && (redditEl.textContent.includes('Loading') || redditEl.textContent.includes('unavailable'))) {
-        redditEl.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from Reddit (via ApeWisdom)</div>` +
+        redditEl.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from social trading communities</div>` +
           D.ment.slice(0,12).map(m => `<div class="news-item" onclick="openStock('${m.ticker}')" style="cursor:pointer">
-            <div><div class="news-source">r/wallstreetbets · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
+            <div><div class="news-source">Active trading communities · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
           </div>`).join('');
       }
     }
   } catch(e) {
     clearTimeout(timeout);
     const el = document.getElementById('mentions-feed');
-    if(el && el.textContent.includes('Loading')) el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Reddit data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div>';
+    if(el && el.textContent.includes('Loading')) el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Social sentiment data unavailable — <a href="#" onclick="safeFetch(fetchApeWisdom);return false" style="color:var(--accent)">retry</a></div>';
   }
 }
 
@@ -4619,12 +4619,12 @@ async function fetchRedditPosts(sub) {
   // All attempts failed — show ApeWisdom ticker mentions as fallback (real data, not fake)
   clearTimeout(timeout);
   if(D.ment && D.ment.length) {
-    el.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from Reddit (via ApeWisdom)</div>` +
+    el.innerHTML = `<div style="padding:10px 16px;font-size:11px;color:var(--t3);border-bottom:1px solid var(--border)">Trending tickers from social trading communities</div>` +
       D.ment.slice(0,12).map(m => `<div class="news-item" onclick="openStock('${m.ticker}')" style="cursor:pointer">
-        <div><div class="news-source">r/wallstreetbets · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
+        <div><div class="news-source">Active trading communities · ${m.mentions} mentions (24h)</div><div class="news-headline" style="font-size:14px;font-weight:700">${m.ticker} ${m.name?'— '+m.name:''}</div><div class="news-time">Rank #${m.rank||''} · ${m.mentions_24h_ago||0} mentions yesterday</div></div>
       </div>`).join('');
   } else {
-    el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Reddit data unavailable — <a href="#" onclick="fetchReddit(\'wallstreetbets\');return false" style="color:var(--accent)">retry</a></div>';
+    el.innerHTML = '<div style="text-align:center;padding:15px;color:var(--t3);font-size:11px">Social sentiment data unavailable — <a href="#" onclick="fetchReddit(\'wallstreetbets\');return false" style="color:var(--accent)">retry</a></div>';
   }
 }
 function fetchReddit(sub, btn) {
@@ -5002,11 +5002,11 @@ async function runAIScanner() {
           else if(s._volRatio < 0.4) { score -= 1; reasons.push('Very low volume — lack of conviction'); }
         }
 
-        // ── Reddit buzz ──
+        // ── Social sentiment ──
         if(redditBuzz[sym]) {
-          if(redditBuzz[sym] > 200) { score += 3; reasons.push('Heavy Reddit buzz: '+redditBuzz[sym]+' mentions (24h)'); }
-          else if(redditBuzz[sym] > 50) { score += 2; reasons.push('Reddit trending: '+redditBuzz[sym]+' mentions'); }
-          else { score += 1; reasons.push('Reddit mentions: '+redditBuzz[sym]); }
+          if(redditBuzz[sym] > 200) { score += 3; reasons.push('Heavy social sentiment: '+redditBuzz[sym]+' mentions (24h)'); }
+          else if(redditBuzz[sym] > 50) { score += 2; reasons.push('Social trending: '+redditBuzz[sym]+' mentions'); }
+          else { score += 1; reasons.push('Social mentions: '+redditBuzz[sym]); }
         }
 
         // ── SMA/VWAP ──
@@ -5047,7 +5047,7 @@ async function runAIScanner() {
     if(s.pct > 4) { score += 2; reasons.push('Breaking out +'+s.pct.toFixed(1)+'%'); }
     if(s._macd && s._macd > 0.5) { score += 1; reasons.push('MACD bullish ('+s._macd.toFixed(2)+')'); }
     if(s._bb && s.price < s._bb.lower) { score += 2; reasons.push('Below Bollinger lower band'); }
-    if(redditBuzz[sym] && redditBuzz[sym] > 50) { score += 1; reasons.push('Reddit trending'); }
+    if(redditBuzz[sym] && redditBuzz[sym] > 50) { score += 1; reasons.push('Social sentiment trending'); }
     const dayRangePct = s.high && s.low && s.price > 0 ? (s.high-s.low)/s.price*100 : 0;
     const posInRange = s.high && s.low && s.high !== s.low ? (s.price-s.low)/(s.high-s.low) : 0.5;
     if(score >= 2) {
