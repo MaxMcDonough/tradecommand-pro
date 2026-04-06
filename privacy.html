@@ -88,7 +88,7 @@
     <h3>Payment Information</h3>
     <p>If you subscribe to a paid plan, payment is processed by Stripe. We do not store your full credit card number, CVV, or banking details. We receive from Stripe: your Stripe Customer ID, subscription status, and subscription dates. Stripe's privacy policy governs how your payment data is handled.</p>
     <h3>API Keys</h3>
-    <p>If you configure custom data integrations, these are stored encrypted in our database. You may delete them at any time from your account settings.</p>
+    <p>If you configure custom data integrations (e.g. Telegram, email alerts), these tokens are encrypted on your device using AES-256-GCM before being stored locally. They are also synced to our database with Firebase's built-in encryption at rest. You may delete them at any time from your account settings.</p>
     <h3>Communications</h3>
     <p>If you contact us by email, we retain those communications to respond to your inquiry and improve support quality.</p>
   </div>
@@ -119,7 +119,8 @@
       <li>Firebase Authentication for secure login (email/password and Google OAuth)</li>
       <li>Firestore security rules restricting data access to authenticated users</li>
       <li>HTTPS encryption for all data in transit</li>
-      <li>Firebase's built-in encryption at rest</li>
+      <li>Firebase's built-in encryption at rest for cloud-stored data</li>
+      <li>AES-256-GCM on-device encryption for sensitive locally cached data (API tokens, notification settings, alert configurations) using keys derived from your account via PBKDF2</li>
       <li>Role-based access control — users can only access their own data</li>
     </ul>
     <p>Despite these measures, no internet transmission is 100% secure. We cannot guarantee the absolute security of your data.</p>
