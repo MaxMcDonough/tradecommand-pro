@@ -3055,6 +3055,55 @@ const cfCreateCheckout = fns.httpsCallable('createCheckout');
 const cfGetUserPlan = fns.httpsCallable('getUserPlan');
 const cfFinnhubCandles = fns.httpsCallable('finnhubCandles');
 
+// ═══ ON-DEVICE ENCRYPTION (AES-256-GCM via Web Crypto API) ═══
+const _enc = {
+  SENSITIVE_KEYS: ['tc_notif_settings', 'tc_price_alerts', 'tc_alert_history'],
+  _key: null, _uid: null,
+  async deriveKey(uid) {
+    if (this._key && this._uid === uid) return this._key;
+    const enc = new TextEncoder();
+    const km = await crypto.subtle.importKey('raw', enc.encode(uid), 'PBKDF2', false, ['deriveKey']);
+    this._key = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: enc.encode('tradecommand-v1'), iterations: 100000, hash: 'SHA-256' },
+      km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+    );
+    this._uid = uid; return this._key;
+  },
+  async encrypt(plaintext, uid) {
+    try {
+      const key = await this.deriveKey(uid); const enc = new TextEncoder();
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
+      const buf = new Uint8Array(iv.length + ct.byteLength);
+      buf.set(iv); buf.set(new Uint8Array(ct), iv.length);
+      return 'enc:' + btoa(String.fromCharCode(...buf));
+    } catch(e) { console.warn('Encrypt failed:', e); return plaintext; }
+  },
+  async decrypt(ciphertext, uid) {
+    if (!ciphertext || !ciphertext.startsWith('enc:')) return ciphertext;
+    try {
+      const key = await this.deriveKey(uid);
+      const raw = Uint8Array.from(atob(ciphertext.slice(4)), c => c.charCodeAt(0));
+      const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: raw.slice(0, 12) }, key, raw.slice(12));
+      return new TextDecoder().decode(pt);
+    } catch(e) { console.warn('Decrypt failed:', e); return null; }
+  },
+  isSensitive(key) { return this.SENSITIVE_KEYS.includes(key); }
+};
+async function secureGet(key) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !_enc.isSensitive(key)) return localStorage.getItem(key);
+  const raw = localStorage.getItem(key); if (!raw) return null;
+  const decrypted = await _enc.decrypt(raw, uid);
+  if (raw === decrypted || (decrypted && !raw.startsWith('enc:'))) secureSet(key, decrypted);
+  return decrypted;
+}
+async function secureSet(key, value) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !_enc.isSensitive(key)) { localStorage.setItem(key, value); return; }
+  localStorage.setItem(key, await _enc.encrypt(value, uid));
+}
+
 // <!-- -- -->- STATE <!-- -- -->-
 const D = {
   fh:'', av:'', na:'',
@@ -6053,13 +6102,12 @@ let _notifSettings = {
 };
 
 // Load saved notification settings from localStorage
-function loadNotifSettings() {
+async function loadNotifSettings() {
   try {
-    const saved = localStorage.getItem('tc_notif_settings');
+    const saved = await secureGet('tc_notif_settings');
     if(saved) {
       const parsed = JSON.parse(saved);
       Object.assign(_notifSettings, parsed);
-      // Restore UI
       setTimeout(() => {
         if(_notifSettings.telegramToken) { const el = document.getElementById('stg-tg-token'); if(el) el.value = _notifSettings.telegramToken; }
         if(_notifSettings.telegramChatId) { const el = document.getElementById('stg-tg-chatid'); if(el) el.value = _notifSettings.telegramChatId; }
@@ -6067,7 +6115,6 @@ function loadNotifSettings() {
         if(_notifSettings.emailjsService) { const el = document.getElementById('stg-emailjs-service'); if(el) el.value = _notifSettings.emailjsService; }
         if(_notifSettings.emailjsTemplate) { const el = document.getElementById('stg-emailjs-template'); if(el) el.value = _notifSettings.emailjsTemplate; }
         if(_notifSettings.emailjsPubKey) { const el = document.getElementById('stg-emailjs-pubkey'); if(el) el.value = _notifSettings.emailjsPubKey; }
-        // Checkboxes
         Object.keys(_notifSettings.prefs).forEach(k => {
           const cb = document.getElementById('notif-' + k);
           if(cb) cb.checked = _notifSettings.prefs[k];
@@ -6078,8 +6125,8 @@ function loadNotifSettings() {
   } catch(e) { console.warn('loadNotifSettings error:', e); }
 }
 
-function saveNotifSettings() {
-  try { localStorage.setItem('tc_notif_settings', JSON.stringify(_notifSettings)); } catch(e) {}
+async function saveNotifSettings() {
+  try { await secureSet('tc_notif_settings', JSON.stringify(_notifSettings)); } catch(e) {}
 }
 
 function updateNotifStatusUI() {
@@ -7939,19 +7986,19 @@ let _alertHistory = [];
 let _alertCheckInterval = null;
 const ALERT_MAX = 20;
 
-function loadPriceAlerts() {
+async function loadPriceAlerts() {
   try {
-    const saved = localStorage.getItem('tc_price_alerts');
+    const saved = await secureGet('tc_price_alerts');
     if(saved) _priceAlerts = JSON.parse(saved);
-    const hist = localStorage.getItem('tc_alert_history');
+    const hist = await secureGet('tc_alert_history');
     if(hist) _alertHistory = JSON.parse(hist);
   } catch(e) { console.warn('loadPriceAlerts error:', e); }
 }
 
-function savePriceAlerts() {
+async function savePriceAlerts() {
   try {
-    localStorage.setItem('tc_price_alerts', JSON.stringify(_priceAlerts));
-    localStorage.setItem('tc_alert_history', JSON.stringify(_alertHistory));
+    await secureSet('tc_price_alerts', JSON.stringify(_priceAlerts));
+    await secureSet('tc_alert_history', JSON.stringify(_alertHistory));
   } catch(e) {}
 }
 
