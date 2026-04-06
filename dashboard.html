@@ -1871,12 +1871,14 @@ body {
 }
 body::before {
   background:
-    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(10,132,255,.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(191,90,242,.04) 0%, transparent 50%),
-    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(10,132,255,.03) 0%, transparent 70%) !important;
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(10,132,255,.14) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(191,90,242,.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 60% 100%, rgba(10,132,255,.06) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(100,210,255,.04) 0%, transparent 70%) !important;
   animation: none !important;
   opacity: 1 !important;
   transform: none !important;
+  pointer-events: none !important;
 }
 
 /* ── SIDEBAR - FROSTED GLASS ── */
@@ -1908,22 +1910,24 @@ body::before {
   height: 20px !important;
 }
 .nav-item .icon svg {
-  color: var(--t3) !important;
-  transition: color .2s ease !important;
+  transition: opacity .2s ease, filter .2s ease !important;
+  opacity: .55 !important;
+  filter: saturate(.7) !important;
 }
-.nav-item:hover .icon svg { color: var(--t2) !important; }
+.nav-item:hover .icon svg { opacity: .85 !important; filter: saturate(1) !important; }
 .nav-item:hover {
   background: rgba(255,255,255,.04) !important;
   color: var(--t1) !important;
 }
 .nav-item.active {
-  background: rgba(10,132,255,.1) !important;
+  background: rgba(10,132,255,.08) !important;
   color: #f5f5f7 !important;
   border-left: none !important;
   box-shadow: inset 0 0 0 1px rgba(10,132,255,.12), 0 0 12px rgba(10,132,255,.06) !important;
 }
 .nav-item.active .icon svg {
-  color: #0a84ff !important;
+  opacity: 1 !important;
+  filter: saturate(1.2) drop-shadow(0 0 6px rgba(10,132,255,.3)) !important;
 }
 .nav-item.active .label {
   color: #f5f5f7 !important;
@@ -3013,22 +3017,22 @@ body { line-height: 1.5 !important; }
       <div class="insights-layout">
         <!-- News -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Market News</div><span class="card-badge" style="background:var(--green2);color:var(--green)">Live</span></div>
+          <div class="card-header"><div class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64d2ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/></svg> Market News</div><span class="card-badge" style="background:var(--green2);color:var(--green)">Live</span></div>
           <div id="news-feed" style="max-height:500px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading news...</p></div>
         </div>
         <!-- Reddit Mentions -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Social Mentions (24h)</div><span class="card-badge" style="background:var(--purple2);color:var(--purple)">Live</span></div>
+          <div class="card-header"><div class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bf5af2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Social Mentions (24h)</div><span class="card-badge" style="background:var(--purple2);color:var(--purple)">Live</span></div>
           <div id="mentions-feed" style="max-height:500px;overflow-y:auto"><p style="text-align:center;color:var(--t3);font-size:12px;padding:20px">Loading...</p></div>
         </div>
         <!-- Sector Heatmap -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Sector Heatmap</div></div>
+          <div class="card-header"><div class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffd60a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> Sector Heatmap</div></div>
           <div class="heatmap-grid" id="heatmap-grid"></div>
         </div>
         <!-- Fear & Greed + Yields -->
         <div class="card">
-          <div class="card-header"><div class="card-title">Fear & Greed Index</div></div>
+          <div class="card-header"><div class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff453a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0110 10H2A10 10 0 0112 2z"/><path d="M12 12l3.5-3.5"/><circle cx="12" cy="12" r="1.5" fill="#ff453a"/></svg> Fear & Greed Index</div></div>
           <div class="fg-display">
             <div class="fg-value" id="fg-value-lg" style="color:var(--yellow)">--</div>
             <div class="fg-label" id="fg-label-lg">Loading...</div>
@@ -3045,7 +3049,7 @@ body { line-height: 1.5 !important; }
         <!-- Reddit Threads -->
         <div class="card insights-full">
           <div class="card-header">
-            <div class="card-title">Trending Discussions</div>
+            <div class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 23c-3.866 0-7-3.134-7-7 0-2.8 1.6-5.2 3-7l1.5 1.5c.3.3.8.1.8-.3V4c0-.3.2-.5.5-.6.3-.1.5.1.7.3l4.8 5.6c1.4 1.7 2.2 3.8 2.2 6 0 3.866-3.134 7-7 7z"/></svg> Trending Discussions</div>
             <div style="display:flex;gap:4px" id="reddit-tabs">
               <button class="wl-filter active" onclick="fetchReddit('wallstreetbets',this)">Hot Takes</button>
               <button class="wl-filter" onclick="fetchReddit('stocks',this)">General</button>
@@ -3384,7 +3388,7 @@ body { line-height: 1.5 !important; }
 
       <!-- AUTOPILOT ACTIVITY LOG -->
       <div class="card" style="margin-top:16px">
-        <div class="card-header"><div class="card-title">Activity Log</div><button class="btn btn-sm btn-ghost" onclick="clearActivityLog()">Clear</button></div>
+        <div class="card-header"><div class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Activity Log</div><button class="btn btn-sm btn-ghost" onclick="clearActivityLog()">Clear</button></div>
         <div id="autopilot-log" style="max-height:300px;overflow-y:auto;font-family:monospace;font-size:11px">
           <div style="padding:8px 0;color:var(--t3);border-bottom:1px solid rgba(255,255,255,.03)">Autopilot initialized. Enable strategies and run a scan to begin.</div>
         </div>
