@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>Welcome — TradeCommand Pro</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   TRADECOMMAND PRO — ONBOARDING FLOW
+   Matches existing dark + premium design system
+   ═══════════════════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080b12;--bg2:#0d1117;
+  --card:#111a2e;--card2:#162036;--card-hover:#1a2640;
+  --border:#1e2d4a;--border2:#283a5c;
+  --t1:#e8ecf4;--t2:#8892a4;--t3:#505a6e;
+  --accent:#3b82f6;--accent2:rgba(59,130,246,.12);--accent-glow:rgba(59,130,246,.25);
+  --green:#10b981;--green2:rgba(16,185,129,.1);
+  --red:#ef4444;--red2:rgba(239,68,68,.1);
+  --yellow:#f59e0b;--yellow2:rgba(245,158,11,.1);
+  --cyan:#06b6d4;--purple:#8b5cf6;
+  --grad:linear-gradient(135deg,#3b82f6,#06b6d4);
+  --radius:12px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter','Segoe UI',sans-serif;
+  background:var(--bg);color:var(--t1);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── LOADING STATE ── */
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
+.loader{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── BACKGROUND EFFECTS ── */
+.bg-glow{position:fixed;top:15%;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(59,130,246,.08) 0%,rgba(6,182,212,.04) 40%,transparent 70%);pointer-events:none;z-index:0}
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(59,130,246,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse 70% 50% at 50% 40%,black,transparent)}
+
+/* ── CONTAINER ── */
+#onboarding{
+  position:relative;z-index:1;
+  width:100%;max-width:640px;
+  padding:40px 24px 60px;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar{
+  width:100%;max-width:480px;
+  display:flex;align-items:center;gap:0;
+  margin-bottom:48px;
+}
+.progress-step{
+  flex:1;display:flex;flex-direction:column;align-items:center;position:relative;
+}
+.progress-dot{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--card);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:var(--t3);
+  transition:all .4s ease;position:relative;z-index:2;
+}
+.progress-step.active .progress-dot{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 0 20px var(--accent-glow);
+}
+.progress-step.done .progress-dot{
+  background:var(--green);border-color:var(--green);color:#fff;
+}
+.progress-label{
+  font-size:10px;font-weight:600;color:var(--t3);
+  margin-top:8px;text-transform:uppercase;letter-spacing:.6px;
+  transition:color .3s;white-space:nowrap;
+}
+.progress-step.active .progress-label{color:var(--accent)}
+.progress-step.done .progress-label{color:var(--green)}
+.progress-line{
+  flex:1;height:2px;background:var(--border);
+  position:relative;margin:0 -4px;align-self:flex-start;margin-top:15px;
+}
+.progress-line.filled{background:var(--green)}
+
+/* ── STEP CARDS ── */
+.step{
+  display:none;width:100%;
+  animation:fadeUp .4s ease;
+}
+.step.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.step-header{text-align:center;margin-bottom:36px}
+.step-icon{font-size:40px;margin-bottom:16px;display:block}
+.step-title{font-size:26px;font-weight:800;color:var(--t1);margin-bottom:8px;line-height:1.2}
+.step-subtitle{font-size:14px;color:var(--t2);line-height:1.6;max-width:440px;margin:0 auto}
+
+/* ── LEGAL CARDS ── */
+.legal-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:14px;
+  transition:border-color .2s;
+}
+.legal-card:hover{border-color:var(--border2)}
+.legal-card-header{display:flex;align-items:flex-start;gap:14px}
+.legal-checkbox{
+  width:22px;height:22px;min-width:22px;border-radius:6px;
+  border:2px solid var(--border);background:var(--bg2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;margin-top:1px;
+}
+.legal-checkbox.checked{
+  background:var(--accent);border-color:var(--accent);
+}
+.legal-checkbox.checked::after{
+  content:'✓';color:#fff;font-size:13px;font-weight:800;
+}
+.legal-card-content h3{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.legal-card-content p{font-size:13px;color:var(--t2);line-height:1.5}
+.legal-card-content a{color:var(--accent);text-decoration:underline;font-weight:500}
+
+/* ── RISK ACKNOWLEDGMENT BOX ── */
+.risk-box{
+  background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:14px;
+}
+.risk-box h4{font-size:14px;font-weight:700;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.risk-box p{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:12px}
+.risk-box ul{padding-left:18px;margin-bottom:12px}
+.risk-box li{font-size:13px;color:var(--t2);margin-bottom:4px;line-height:1.5}
+
+/* ── FORM ELEMENTS ── */
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--t2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.form-input{
+  width:100%;padding:12px 16px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  color:var(--t1);font-size:14px;
+  transition:border-color .2s,box-shadow .2s;outline:none;
+}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent2)}
+.form-input::placeholder{color:var(--t3)}
+select.form-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238892a4' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+select.form-input option{background:var(--bg2);color:var(--t1)}
+
+/* ── CHOICE CARDS (experience, interests, etc.) ── */
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.choice-card{
+  background:var(--card);border:2px solid var(--border);border-radius:var(--radius);
+  padding:18px 16px;cursor:pointer;transition:all .25s;text-align:center;
+}
+.choice-card:hover{border-color:var(--border2);background:var(--card-hover)}
+.choice-card.selected{border-color:var(--accent);background:var(--accent2)}
+.choice-card .choice-icon{font-size:28px;display:block;margin-bottom:8px}
+.choice-card .choice-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.choice-card .choice-desc{font-size:11px;color:var(--t2);line-height:1.4}
+
+.choice-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.choice-grid-3 .choice-card{padding:14px 10px}
+.choice-grid-3 .choice-icon{font-size:22px;margin-bottom:6px}
+.choice-grid-3 .choice-title{font-size:12px}
+.choice-grid-3 .choice-desc{font-size:10px}
+
+/* ── TOGGLE SWITCH ── */
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;margin-bottom:10px;
+}
+.toggle-info{display:flex;flex-direction:column}
+.toggle-info span:first-child{font-size:14px;font-weight:600;color:var(--t1)}
+.toggle-info span:last-child{font-size:12px;color:var(--t2);margin-top:2px}
+.toggle-switch{
+  width:44px;height:24px;background:var(--border);border-radius:12px;
+  position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;
+}
+.toggle-switch.on{background:var(--accent)}
+.toggle-switch::after{
+  content:'';position:absolute;top:3px;left:3px;
+  width:18px;height:18px;background:#fff;border-radius:50%;
+  transition:transform .2s;
+}
+.toggle-switch.on::after{transform:translateX(20px)}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:12px;margin-top:32px}
+.btn-primary{
+  flex:1;padding:14px 24px;
+  background:var(--grad);color:#fff;border:none;border-radius:10px;
+  font-size:15px;font-weight:700;cursor:pointer;
+  transition:opacity .2s,box-shadow .2s,transform .1s;
+}
+.btn-primary:hover{opacity:.92;box-shadow:0 4px 24px var(--accent-glow)}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn-secondary{
+  padding:14px 24px;
+  background:var(--card);color:var(--t2);border:1px solid var(--border);border-radius:10px;
+  font-size:15px;font-weight:600;cursor:pointer;
+  transition:all .2s;
+}
+.btn-secondary:hover{border-color:var(--border2);color:var(--t1)}
+
+/* ── WELCOME / FINAL STEP ── */
+.welcome-features{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:28px 0}
+.welcome-feature{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;text-align:center;
+}
+.welcome-feature .wf-icon{font-size:28px;display:block;margin-bottom:10px}
+.welcome-feature .wf-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.welcome-feature .wf-desc{font-size:11px;color:var(--t2);line-height:1.4}
+
+.launch-btn{
+  width:100%;padding:18px;margin-top:24px;
+  background:var(--grad);color:#fff;border:none;border-radius:12px;
+  font-size:17px;font-weight:800;cursor:pointer;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.launch-btn:hover{box-shadow:0 6px 32px var(--accent-glow);transform:translateY(-1px)}
+.launch-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
+  transform:translateX(-100%);transition:transform .6s;
+}
+.launch-btn:hover::before{transform:translateX(100%)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  #onboarding{padding:24px 16px 40px}
+  .step-title{font-size:22px}
+  .choice-grid,.welcome-features{grid-template-columns:1fr}
+  .choice-grid-3{grid-template-columns:1fr 1fr}
+  .progress-label{font-size:9px}
+  .btn-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading"><div class="loader"></div></div>
+
+<!-- Background -->
+<div class="bg-glow"></div>
+<div class="bg-grid"></div>
+
+<div id="onboarding">
+
+  <!-- ═══ PROGRESS BAR ═══ -->
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-step active" data-step="1">
+      <div class="progress-dot">1</div>
+      <div class="progress-label">Legal</div>
+    </div>
+    <div class="progress-line" id="line1"></div>
+    <div class="progress-step" data-step="2">
+      <div class="progress-dot">2</div>
+      <div class="progress-label">Profile</div>
+    </div>
+    <div class="progress-line" id="line2"></div>
+    <div class="progress-step" data-step="3">
+      <div class="progress-dot">3</div>
+      <div class="progress-label">Preferences</div>
+    </div>
+    <div class="progress-line" id="line3"></div>
+    <div class="progress-step" data-step="4">
+      <div class="progress-dot">4</div>
+      <div class="progress-label">Launch</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       STEP 1 — LEGAL AGREEMENTS
+       ═══════════════════════════════════════════════════════ -->
+  <div class="step active" id="step1">
+    <div class="step-header">
+      <span class="step-icon">📋</span>
+      <h1 class="step-title">Before We Begin</h1>
+      <p class="step-subtitle">Please review and accept the following agreements. These protect both you and us.</p>
+    </div>
+
+    <!-- Age Verification -->
+    <div class="legal-card">
+      <div class="legal-card-header">
+        <div class="legal-checkbox" id="chk-age" onclick="toggleCheck('age')"></div>
+        <div class="legal-card-content">
+          <h3>Age Verification</h3>
+          <p>I confirm that I am at least <strong>18 years of age</strong> (or the age of majority in my jurisdiction) and am legally permitted to use financial information services.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terms of Service -->
+    <div class="legal-card">
+      <div class="legal-card-header">
+        <div class="legal-checkbox" id="chk-tos" onclick="toggleCheck('tos')"></div>
+        <div class="legal-card-content">
+          <h3>Terms of Service</h3>
+          <p>I have read and agree to the <a href="terms.html" target="_blank">Terms of Service</a>, including the limitations of liability and dispute resolution provisions.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Policy -->
+    <div class="legal-card">
+      <div class="legal-card-header">
+        <div class="legal-checkbox" id="chk-privacy" onclick="toggleCheck('privacy')"></div>
+        <div class="legal-card-content">
+          <h3>Privacy Policy</h3>
+          <p>I have read and agree to the <a href="privacy.html" target="_blank">Privacy Policy</a>, including data collection practices and how my information is used.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial Risk Acknowledgment -->
+    <div class="risk-box">
+      <h4>⚠️ Financial Risk Acknowledgment</h4>
+      <p>Trading financial instruments carries a <strong style="color:var(--t1)">high degree of risk</strong> and may not be suitable for all investors. Before using TradeCommand Pro, you should understand that:</p>
+      <ul>
+        <li>You may lose some or all of your invested capital</li>
+        <li>Past performance does not guarantee future results</li>
+        <li>AI-generated signals and insights are <strong style="color:var(--t1)">not financial advice</strong></li>
+        <li>You are solely responsible for your own trading decisions</li>
+        <li>TradeCommand Pro is an information platform only — we do not execute trades on your behalf</li>
+      </ul>
+      <div class="legal-card-header" style="margin-top:4px">
+        <div class="legal-checkbox" id="chk-risk" onclick="toggleCheck('risk')"></div>
+        <div class="legal-card-content">
+          <h3>I Understand and Accept the Risks</h3>
+          <p>I acknowledge that I have read and understood the financial risks associated with trading. I accept full responsibility for my investment decisions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" id="btnStep1" onclick="goStep(2)" disabled>Accept &amp; Continue</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       STEP 2 — PROFILE SETUP
+       ═══════════════════════════════════════════════════════ -->
+  <div class="step" id="step2">
+    <div class="step-header">
+      <span class="step-icon">👤</span>
+      <h1 class="step-title">Set Up Your Profile</h1>
+      <p class="step-subtitle">Let's personalize your experience. You can always change these later in Settings.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Display Name</label>
+      <input type="text" class="form-input" id="inp-name" placeholder="How should we address you?" maxlength="50"/>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Timezone / Market Hours</label>
+      <select class="form-input" id="inp-timezone">
+        <option value="">Select your timezone...</option>
+        <option value="America/New_York">Eastern Time (ET) — NYSE / NASDAQ</option>
+        <option value="America/Chicago">Central Time (CT)</option>
+        <option value="America/Denver">Mountain Time (MT)</option>
+        <option value="America/Los_Angeles">Pacific Time (PT)</option>
+        <option value="America/Anchorage">Alaska Time (AKT)</option>
+        <option value="Pacific/Honolulu">Hawaii Time (HST)</option>
+        <option value="America/Vancouver">Pacific Time — Canada</option>
+        <option value="America/Toronto">Eastern Time — Canada</option>
+        <option value="Europe/London">London (GMT/BST)</option>
+        <option value="Europe/Paris">Central European (CET)</option>
+        <option value="Asia/Tokyo">Tokyo (JST)</option>
+        <option value="Asia/Hong_Kong">Hong Kong (HKT)</option>
+        <option value="Asia/Singapore">Singapore (SGT)</option>
+        <option value="Australia/Sydney">Sydney (AEST)</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Trading Experience</label>
+      <div class="choice-grid" id="experience-grid">
+        <div class="choice-card" onclick="selectChoice('experience',this,'beginner')">
+          <span class="choice-icon">🌱</span>
+          <div class="choice-title">Beginner</div>
+          <div class="choice-desc">New to trading or learning the basics</div>
+        </div>
+        <div class="choice-card" onclick="selectChoice('experience',this,'intermediate')">
+          <span class="choice-icon">📊</span>
+          <div class="choice-title">Intermediate</div>
+          <div class="choice-desc">Comfortable reading charts and placing trades</div>
+        </div>
+        <div class="choice-card" onclick="selectChoice('experience',this,'advanced')">
+          <span class="choice-icon">🎯</span>
+          <div class="choice-title">Advanced</div>
+          <div class="choice-desc">Experienced with technical analysis and strategies</div>
+        </div>
+        <div class="choice-card" onclick="selectChoice('experience',this,'professional')">
+          <span class="choice-icon">🏛️</span>
+          <div class="choice-title">Professional</div>
+          <div class="choice-desc">Full-time or institutional trader</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goStep(1)">Back</button>
+      <button class="btn-primary" id="btnStep2" onclick="goStep(3)">Continue</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       STEP 3 — TRADING PREFERENCES
+       ═══════════════════════════════════════════════════════ -->
+  <div class="step" id="step3">
+    <div class="step-header">
+      <span class="step-icon">⚙️</span>
+      <h1 class="step-title">Your Trading Preferences</h1>
+      <p class="step-subtitle">Help us tailor your dashboard. Select all that apply — we'll customize your feed accordingly.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Trading Style (select all that apply)</label>
+      <div class="choice-grid" id="style-grid">
+        <div class="choice-card" onclick="toggleMulti('style',this,'day-trading')">
+          <span class="choice-icon">⚡</span>
+          <div class="choice-title">Day Trading</div>
+          <div class="choice-desc">Intraday positions, closed by market close</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('style',this,'swing')">
+          <span class="choice-icon">🌊</span>
+          <div class="choice-title">Swing Trading</div>
+          <div class="choice-desc">Hold positions days to weeks</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('style',this,'scalping')">
+          <span class="choice-icon">🔥</span>
+          <div class="choice-title">Scalping</div>
+          <div class="choice-desc">Quick in-and-out trades for small gains</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('style',this,'long-term')">
+          <span class="choice-icon">🏔️</span>
+          <div class="choice-title">Long-Term</div>
+          <div class="choice-desc">Position trades held weeks to months</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Interested Sectors</label>
+      <div class="choice-grid-3" id="sector-grid">
+        <div class="choice-card" onclick="toggleMulti('sector',this,'tech')">
+          <span class="choice-icon">💻</span>
+          <div class="choice-title">Tech</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('sector',this,'finance')">
+          <span class="choice-icon">🏦</span>
+          <div class="choice-title">Finance</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('sector',this,'healthcare')">
+          <span class="choice-icon">🏥</span>
+          <div class="choice-title">Healthcare</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('sector',this,'energy')">
+          <span class="choice-icon">⛽</span>
+          <div class="choice-title">Energy</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('sector',this,'consumer')">
+          <span class="choice-icon">🛒</span>
+          <div class="choice-title">Consumer</div>
+        </div>
+        <div class="choice-card" onclick="toggleMulti('sector',this,'crypto')">
+          <span class="choice-icon">₿</span>
+          <div class="choice-title">Crypto</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Notifications</label>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span>Trade Signals</span>
+          <span>Get notified when new AI signals are generated</span>
+        </div>
+        <div class="toggle-switch on" id="tog-signals" onclick="toggleSwitch(this)"></div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span>Market Alerts</span>
+          <span>Significant moves in your watched sectors</span>
+        </div>
+        <div class="toggle-switch on" id="tog-market" onclick="toggleSwitch(this)"></div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span>Weekly Digest</span>
+          <span>Email summary of your portfolio and signals</span>
+        </div>
+        <div class="toggle-switch" id="tog-digest" onclick="toggleSwitch(this)"></div>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span>Product Updates</span>
+          <span>New features and platform improvements</span>
+        </div>
+        <div class="toggle-switch" id="tog-updates" onclick="toggleSwitch(this)"></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goStep(2)">Back</button>
+      <button class="btn-primary" onclick="goStep(4)">Continue</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       STEP 4 — WELCOME / LAUNCH
+       ═══════════════════════════════════════════════════════ -->
+  <div class="step" id="step4">
+    <div class="step-header">
+      <span class="step-icon">🚀</span>
+      <h1 class="step-title">You're All Set!</h1>
+      <p class="step-subtitle">Welcome to TradeCommand Pro. Your 7-day free trial is active — here's what's waiting for you.</p>
+    </div>
+
+    <div class="welcome-features">
+      <div class="welcome-feature">
+        <span class="wf-icon">📡</span>
+        <div class="wf-title">15+ Live Data Sources</div>
+        <div class="wf-desc">Real-time market data, news, and social sentiment</div>
+      </div>
+      <div class="welcome-feature">
+        <span class="wf-icon">🤖</span>
+        <div class="wf-title">AI Trade Signals</div>
+        <div class="wf-desc">Machine-learning signals with entry, exit, and stop-loss targets</div>
+      </div>
+      <div class="welcome-feature">
+        <span class="wf-icon">📋</span>
+        <div class="wf-title">Action Plans</div>
+        <div class="wf-desc">Step-by-step daily trading plans tailored to your style</div>
+      </div>
+      <div class="welcome-feature">
+        <span class="wf-icon">📈</span>
+        <div class="wf-title">Portfolio Tracker</div>
+        <div class="wf-desc">Track holdings, P&L, and sector allocation in real time</div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;margin-top:8px;text-align:center">
+      <p style="font-size:13px;color:var(--t2);line-height:1.6">
+        <strong style="color:var(--yellow)">Pro Tip:</strong> Start by adding a few stocks to your watchlist. The AI signals get smarter the more you interact with the platform.
+      </p>
+    </div>
+
+    <button class="launch-btn" id="btnLaunch" onclick="completOnboarding()">
+      Launch Dashboard →
+    </button>
+  </div>
+
+</div><!-- /onboarding -->
+
+<script>
+// ═══ FIREBASE INIT ═══
+const firebaseConfig = {
+  apiKey: "AIzaSyAwFPWCs-gryIaIZa7Jznunhvxx0uiJ36A",
+  authDomain: "tradecommand-pro.firebaseapp.com",
+  projectId: "tradecommand-pro",
+  storageBucket: "tradecommand-pro.firebasestorage.app",
+  messagingSenderId: "1068820115443",
+  appId: "1:1068820115443:web:a132300a23f41c519d6c86"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// ═══ STATE ═══
+let currentStep = 1;
+const checks = { age:false, tos:false, privacy:false, risk:false };
+const onboardData = {
+  displayName: '',
+  timezone: '',
+  experience: '',
+  styles: [],
+  sectors: [],
+  notifications: { signals:true, market:true, digest:false, updates:false }
+};
+
+// ═══ AUTH CHECK ═══
+auth.onAuthStateChanged(user => {
+  document.getElementById('loading').style.display = 'none';
+  if (!user) {
+    // Not signed in — redirect to dashboard (which has the auth screen)
+    window.location.href = 'dashboard.html';
+    return;
+  }
+  // Check if user already completed onboarding
+  db.collection('users').doc(user.uid).get().then(snap => {
+    const data = snap.data();
+    if (data && data.onboardingComplete) {
+      window.location.href = 'dashboard.html';
+      return;
+    }
+    // Pre-fill display name if available
+    if (data && data.displayName) {
+      document.getElementById('inp-name').value = data.displayName;
+      onboardData.displayName = data.displayName;
+    } else if (user.displayName) {
+      document.getElementById('inp-name').value = user.displayName;
+      onboardData.displayName = user.displayName;
+    }
+    // Auto-detect timezone
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const sel = document.getElementById('inp-timezone');
+      for (let i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === tz) { sel.selectedIndex = i; onboardData.timezone = tz; break; }
+      }
+    } catch(e) {}
+  });
+});
+
+// ═══ LEGAL CHECKBOXES ═══
+function toggleCheck(id) {
+  checks[id] = !checks[id];
+  const el = document.getElementById('chk-' + id);
+  el.classList.toggle('checked', checks[id]);
+  // Enable continue only when ALL checked
+  const allChecked = checks.age && checks.tos && checks.privacy && checks.risk;
+  document.getElementById('btnStep1').disabled = !allChecked;
+}
+
+// ═══ SINGLE-SELECT CHOICE ═══
+function selectChoice(group, el, value) {
+  const parent = el.parentElement;
+  parent.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  onboardData[group === 'experience' ? 'experience' : group] = value;
+}
+
+// ═══ MULTI-SELECT CHOICE ═══
+function toggleMulti(group, el, value) {
+  el.classList.toggle('selected');
+  const arr = group === 'style' ? onboardData.styles : onboardData.sectors;
+  const idx = arr.indexOf(value);
+  if (idx > -1) arr.splice(idx, 1); else arr.push(value);
+}
+
+// ═══ TOGGLE SWITCHES ═══
+function toggleSwitch(el) {
+  el.classList.toggle('on');
+  const id = el.id.replace('tog-', '');
+  onboardData.notifications[id] = el.classList.contains('on');
+}
+
+// ═══ STEP NAVIGATION ═══
+function goStep(n) {
+  // Validation
+  if (n === 2 && currentStep === 1) {
+    if (!checks.age || !checks.tos || !checks.privacy || !checks.risk) return;
+  }
+
+  // Collect data from step 2 before leaving
+  if (currentStep === 2) {
+    onboardData.displayName = document.getElementById('inp-name').value.trim() || 'Trader';
+    onboardData.timezone = document.getElementById('inp-timezone').value;
+  }
+
+  // Hide current, show next
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('step' + n).classList.add('active');
+
+  // Update progress bar
+  const steps = document.querySelectorAll('.progress-step');
+  const lines = [document.getElementById('line1'), document.getElementById('line2'), document.getElementById('line3')];
+
+  steps.forEach((s, i) => {
+    const stepNum = i + 1;
+    s.classList.remove('active', 'done');
+    if (stepNum < n) { s.classList.add('done'); s.querySelector('.progress-dot').innerHTML = '✓'; }
+    else if (stepNum === n) s.classList.add('active');
+  });
+  lines.forEach((l, i) => {
+    if (l) l.classList.toggle('filled', i + 1 < n);
+  });
+
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══ COMPLETE ONBOARDING ═══
+async function completOnboarding() {
+  const btn = document.getElementById('btnLaunch');
+  btn.textContent = 'Setting up your dashboard...';
+  btn.style.pointerEvents = 'none';
+  btn.style.opacity = '.6';
+
+  const user = auth.currentUser;
+  if (!user) { window.location.href = 'dashboard.html'; return; }
+
+  try {
+    // Save onboarding data to Firestore user profile
+    await db.collection('users').doc(user.uid).set({
+      // Legal timestamps
+      onboardingComplete: true,
+      onboardingCompletedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      legalAcceptances: {
+        termsOfService: { accepted: true, version: '1.0', acceptedAt: new Date().toISOString() },
+        privacyPolicy:  { accepted: true, version: '1.0', acceptedAt: new Date().toISOString() },
+        ageVerification: { confirmed: true, acceptedAt: new Date().toISOString() },
+        riskAcknowledgment: { accepted: true, acceptedAt: new Date().toISOString() }
+      },
+      // Profile
+      displayName: onboardData.displayName || 'Trader',
+      timezone: onboardData.timezone,
+      experience: onboardData.experience,
+      // Preferences
+      tradingStyles: onboardData.styles,
+      interestedSectors: onboardData.sectors,
+      notifications: onboardData.notifications,
+    }, { merge: true });
+
+    // Log the onboarding event
+    await db.collection('activity').add({
+      uid: user.uid,
+      email: user.email,
+      action: 'onboarding_complete',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      data: {
+        experience: onboardData.experience,
+        styles: onboardData.styles,
+        sectors: onboardData.sectors
+      }
+    });
+
+    // Redirect to dashboard
+    window.location.href = 'dashboard.html';
+  } catch (e) {
+    console.error('Onboarding save error:', e);
+    btn.textContent = 'Launch Dashboard →';
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = '1';
+    alert('Something went wrong saving your preferences. Please try again.');
+  }
+}
+</script>
+
+</body>
+</html>

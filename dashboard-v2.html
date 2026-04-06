@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<script src="gate.js"></script>
+
 <title>TradeCommand Pro</title>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://tradecommandpro.com/dashboard-v2.html">
@@ -2524,14 +2524,6 @@ input, select, button { font-family: inherit; }
           <div class="stg-msg" id="stg-saved-msg"></div>
         </div>
         <div class="settings-section">
-          <h3>API Keys</h3>
-          <p style="font-size:12px;color:var(--t3);margin-bottom:14px">Pro & Elite plans include all keys. Custom keys override the defaults.</p>
-          <div class="stg-row"><span class="stg-label">Finnhub</span><input class="stg-input" id="stg-fh" type="password" placeholder="Finnhub API key"><button class="btn btn-sm btn-ghost" onclick="stgToggleKey('stg-fh',this)">Show</button></div>
-          <div class="stg-row"><span class="stg-label">Alpha Vantage</span><input class="stg-input" id="stg-av" type="password" placeholder="Alpha Vantage key"><button class="btn btn-sm btn-ghost" onclick="stgToggleKey('stg-av',this)">Show</button></div>
-          <div class="stg-row"><span class="stg-label">NewsAPI</span><input class="stg-input" id="stg-na" type="password" placeholder="NewsAPI key"><button class="btn btn-sm btn-ghost" onclick="stgToggleKey('stg-na',this)">Show</button></div>
-          <button class="btn btn-primary" onclick="stgSaveKeys()">Save Keys</button>
-        </div>
-        <div class="settings-section">
           <h3>Account</h3>
           <div class="stg-row"><span class="stg-label">Email</span><span class="stg-val" id="stg-email">--</span></div>
           <div class="stg-row"><span class="stg-label">Plan</span><span class="stg-val" id="stg-plan">--</span></div>
@@ -2976,9 +2968,7 @@ const cfFinnhubCandles = fns.httpsCallable('finnhubCandles');
 
 // ═══ STATE ═══
 const D = {
-  fh:'d6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0',
-  av:'WGIEYOIJEINA74F8',
-  na:'fb90a7d7e29d42f3b952ef5490a60f81',
+  fh:'', av:'', na:'',
   name:'User', bal:200, risk:1.4,
   wl:['AAPL','MSFT','NVDA','TSLA','META','AMZN','GOOGL','AMD','SPY','QQQ'],
   sd:{}, sigs:[], sel:'SPY', ws:null,
@@ -3100,7 +3090,8 @@ function authSignOut() {
 
 // ═══ AUTH STATE HANDLER ═══
 const VIP_EMAILS = ['cowtown100@gmail.com','max.mcdonough123@gmail.com'];
-const ALL_KEYS = { fh:'d6qkh2hr01qhcrmkihrgd6qkh2hr01qhcrmkihs0', av:'WGIEYOIJEINA74F8', na:'fb90a7d7e29d42f3b952ef5490a60f81' };
+// API keys are managed server-side via Cloud Functions
+const ALL_KEYS = { fh:'', av:'', na:'' };
 
 async function handleAuthState(user) {
   if(!user) { showAuth(); return; }
@@ -7036,9 +7027,6 @@ function openSettings() {
   document.getElementById('stg-name').value = D.name !== 'User' ? D.name : '';
   document.getElementById('stg-bal').value = D.bal || 25000;
   document.getElementById('stg-risk').value = D.risk || 1.4;
-  document.getElementById('stg-fh').value = D.fh || '';
-  document.getElementById('stg-av').value = D.av || '';
-  document.getElementById('stg-na').value = D.na || '';
   if(user) document.getElementById('stg-email').textContent = user.email || '--';
   const badge = document.getElementById('trial-badge');
   document.getElementById('stg-plan').textContent = D.isAdmin ? 'Admin' : (badge ? badge.textContent : 'Free');
@@ -7074,20 +7062,6 @@ async function stgSaveProfile() {
   }
   stgShowMsg('stg-saved-msg','Profile saved','var(--green)');
   buildOrderAmounts(); updateOrderPanel();
-}
-async function stgSaveKeys() {
-  const fh = document.getElementById('stg-fh').value.trim();
-  const av = document.getElementById('stg-av').value.trim();
-  const na = document.getElementById('stg-na').value.trim();
-  if(fh) D.fh = fh;
-  if(av) D.av = av;
-  if(na) D.na = na;
-  stgShowMsg('stg-saved-msg','API keys saved — reload to apply','var(--green)');
-}
-function stgToggleKey(id, btn) {
-  const inp = document.getElementById(id);
-  inp.type = inp.type==='password' ? 'text' : 'password';
-  btn.textContent = inp.type==='password' ? 'Show' : 'Hide';
 }
 function stgShowMsg(id, msg, color) {
   const el = document.getElementById(id);
@@ -8500,5 +8474,18 @@ window.addEventListener('DOMContentLoaded', () => {
     .finally(() => auth.onAuthStateChanged(handleAuthState));
 });
 </script>
+
+<!-- Financial Disclaimer Footer -->
+<div id="financial-disclaimer" style="position:fixed;bottom:0;left:0;right:0;z-index:9998;background:rgba(15,17,25,.95);backdrop-filter:blur(8px);border-top:1px solid rgba(239,68,68,.2);padding:8px 16px;text-align:center;font-size:10px;color:rgba(255,255,255,.4);line-height:1.4">
+  TradeCommand Pro is for informational and educational purposes only. Nothing on this platform constitutes financial, investment, or trading advice. Trading involves substantial risk of loss. You are solely responsible for your own trading decisions. <a href="terms.html" style="color:#f59e0b;text-decoration:underline">Full Disclaimer</a>
+</div>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:36px;left:50%;transform:translateX(-50%);z-index:9999;background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 20px;max-width:520px;width:90%;text-align:center;font-size:12px;color:rgba(255,255,255,.6);box-shadow:0 8px 32px rgba(0,0,0,.4)">
+  We use essential cookies for authentication only. No advertising or tracking cookies. See our <a href="privacy.html" style="color:#f59e0b;text-decoration:underline">Privacy Policy</a>.
+  <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('tcp_cookie_ok','1')" style="margin-left:12px;padding:6px 16px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">Got it</button>
+</div>
+<script>if(!localStorage.getItem('tcp_cookie_ok'))document.getElementById('cookie-banner').style.display='block';</script>
+
 </body>
 </html>

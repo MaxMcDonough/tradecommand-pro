@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<script src="gate.js"></script>
+
 <title>TC Pro Admin</title>
 <meta name="description" content="TradeCommand Pro admin dashboard — manage leads, CRM, marketing, analytics, and growth planning.">
 <meta property="og:type" content="website">
@@ -205,6 +205,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="nav-item" data-page="biz-plan">📋 Growth Plan</div>
   <div class="nav-item" data-page="biz-newsletters">✉️ Email Templates</div>
   <div class="nav-item" data-page="biz-files">📁 Files</div>
+  <div class="nav-item" data-page="biz-social">📱 Social Media</div>
   <div class="nav-item" data-page="biz-settings">⚙️ Biz Settings</div>
 </div>
 
@@ -1786,6 +1787,182 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 </div>
 
 <!-- ═══ BIZ SETTINGS ═══ -->
+<!-- ═══ SOCIAL MEDIA PAGE ═══ -->
+<div class="page" id="biz-social-page">
+
+<!-- Campaign Overview -->
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px">
+  <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--acc)" id="sm-followers">0</div><div style="font-size:11px;color:var(--t3)">Instagram Followers</div></div>
+  <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:#22c55e" id="sm-engagement">0%</div><div style="font-size:11px;color:var(--t3)">Engagement Rate</div></div>
+  <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:#3b82f6" id="sm-posts-count">0</div><div style="font-size:11px;color:var(--t3)">Posts Published</div></div>
+  <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:#f59e0b" id="sm-clicks">0</div><div style="font-size:11px;color:var(--t3)">Link Clicks</div></div>
+</div>
+
+<!-- Campaign Progress -->
+<div class="card" style="margin-bottom:20px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="margin:0">Campaign: Trade Smarter Signals (8 Weeks)</h3>
+    <span class="badge" style="background:rgba(34,197,94,.15);color:#22c55e" id="sm-week-badge">Week 1</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+    <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Follower Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#6366f1,#3b82f6);width:0%;transition:width .5s" id="sm-follow-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-follow-pct">0</span>% of 5,000</div></div>
+    <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Trial Signups Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#22c55e,#06b6d4);width:0%;transition:width .5s" id="sm-trial-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-trial-pct">0</span>% of 800</div></div>
+    <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Website Traffic Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#f59e0b,#ef4444);width:0%;transition:width .5s" id="sm-traffic-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-traffic-pct">0</span>% of 3,000</div></div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+  <button class="btn btn-primary sm-tab active" data-tab="calendar" onclick="smTab('calendar',this)">Content Calendar</button>
+  <button class="btn btn-ghost sm-tab" data-tab="posts" onclick="smTab('posts',this)">Post Queue (12)</button>
+  <button class="btn btn-ghost sm-tab" data-tab="reels" onclick="smTab('reels',this)">Reel Ideas (8)</button>
+  <button class="btn btn-ghost sm-tab" data-tab="stories" onclick="smTab('stories',this)">Story Templates</button>
+  <button class="btn btn-ghost sm-tab" data-tab="hashtags" onclick="smTab('hashtags',this)">Hashtags</button>
+  <button class="btn btn-ghost sm-tab" data-tab="strategy" onclick="smTab('strategy',this)">Growth Strategy</button>
+</div>
+
+<!-- TAB: Content Calendar -->
+<div class="card sm-panel" id="sm-calendar" style="overflow-x:auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h3 style="margin:0">Week 1: Launch & Introduce (Apr 7-13)</h3>
+    <select onchange="smSwitchWeek(this.value)" style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--t1);padding:6px 10px;font-size:12px">
+      <option value="1">Week 1: Launch & Introduce</option>
+      <option value="2">Week 2: Deepen Value</option>
+      <option value="3">Week 3: Build Community</option>
+      <option value="4">Week 4: Drive Conversions</option>
+      <option value="5">Weeks 5-6: Product Depth</option>
+      <option value="7">Weeks 7-8: Conversion Push</option>
+    </select>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:12px" id="sm-cal-table">
+    <thead><tr style="border-bottom:1px solid var(--brd)">
+      <th style="text-align:left;padding:8px;color:var(--t3);font-weight:600">Day</th>
+      <th style="text-align:left;padding:8px;color:var(--t3);font-weight:600">Type</th>
+      <th style="text-align:left;padding:8px;color:var(--t3);font-weight:600">Topic</th>
+      <th style="text-align:left;padding:8px;color:var(--t3);font-weight:600">CTA</th>
+      <th style="text-align:center;padding:8px;color:var(--t3);font-weight:600">Status</th>
+    </tr></thead>
+    <tbody id="sm-cal-body"></tbody>
+  </table>
+</div>
+
+<!-- TAB: Post Queue -->
+<div class="card sm-panel" id="sm-posts" style="display:none">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <h3 style="margin:0">Post Queue (12 Ready Captions)</h3>
+    <span style="font-size:11px;color:var(--t3)">Click any post to expand + copy</span>
+  </div>
+  <div id="sm-posts-list" style="display:grid;gap:10px"></div>
+</div>
+
+<!-- TAB: Reel Ideas -->
+<div class="card sm-panel" id="sm-reels" style="display:none">
+  <h3 style="margin-bottom:16px">Reel Ideas (8 Concepts)</h3>
+  <div id="sm-reels-list" style="display:grid;gap:12px"></div>
+</div>
+
+<!-- TAB: Story Templates -->
+<div class="card sm-panel" id="sm-stories" style="display:none">
+  <h3 style="margin-bottom:16px">Reusable Story Templates</h3>
+  <div id="sm-stories-list" style="display:grid;gap:12px"></div>
+</div>
+
+<!-- TAB: Hashtags -->
+<div class="card sm-panel" id="sm-hashtags" style="display:none">
+  <h3 style="margin-bottom:16px">Hashtag Strategy</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+    <div>
+      <h4 style="font-size:13px;color:var(--acc);margin-bottom:8px">Branded (Always Include)</h4>
+      <div id="sm-branded-tags" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+    <div>
+      <h4 style="font-size:13px;color:#22c55e;margin-bottom:8px">Community (Rotate 8-12 Per Post)</h4>
+      <div id="sm-community-tags" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    </div>
+  </div>
+  <div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:8px;font-size:12px;color:var(--t2)">
+    <strong style="color:var(--t1)">Mix Per Post:</strong> 3 branded + 20-22 community/niche hashtags. Rotate community hashtags to test performance. Avoid hashtag stuffing. Track top performers in analytics.
+  </div>
+</div>
+
+<!-- TAB: Growth Strategy -->
+<div class="card sm-panel" id="sm-strategy" style="display:none">
+  <h3 style="margin-bottom:16px">Growth & Engagement Strategy</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #6366f1">
+      <h4 style="font-size:13px;margin-bottom:8px">Organic Growth</h4>
+      <ul style="font-size:12px;color:var(--t2);line-height:1.8;padding-left:16px">
+        <li>Comment on 10-15 relevant trading posts daily</li>
+        <li>Reply to all comments within first hour of posting</li>
+        <li>Follow engaged traders/finance accounts (500-800/week)</li>
+        <li>Study 3-4 competitor accounts for content ideas</li>
+        <li>1-2 collab posts with micro-influencers by Week 4</li>
+      </ul>
+    </div>
+    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #22c55e">
+      <h4 style="font-size:13px;margin-bottom:8px">Community Building</h4>
+      <ul style="font-size:12px;color:var(--t2);line-height:1.8;padding-left:16px">
+        <li>Launch Discord/Telegram group by Week 3</li>
+        <li>Mention "join the community" in bio + CTAs</li>
+        <li>Create insider content for community members</li>
+        <li>Weekly Discord AMA starting Week 4</li>
+        <li>Feature community wins in social proof posts</li>
+      </ul>
+    </div>
+    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #f59e0b">
+      <h4 style="font-size:13px;margin-bottom:8px">Paid Amplification</h4>
+      <ul style="font-size:12px;color:var(--t2);line-height:1.8;padding-left:16px">
+        <li>Week 2: $50/week testing top 2 posts from Week 1</li>
+        <li>Week 3+: Scale to $100-200/week on Reels + Carousels</li>
+        <li>Target lookalike audiences (website visitors + trial signups)</li>
+        <li>Budget split: 60% trial signups, 40% engagement</li>
+        <li>Refresh creative every 2-4 weeks</li>
+      </ul>
+    </div>
+    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #ef4444">
+      <h4 style="font-size:13px;margin-bottom:8px">Cross-Promotion</h4>
+      <ul style="font-size:12px;color:var(--t2);line-height:1.8;padding-left:16px">
+        <li>Repurpose Reels to TikTok (same format)</li>
+        <li>Cross-post best Reels to YouTube Shorts</li>
+        <li>Share quotes/insights on Twitter/X</li>
+        <li>Newsletter mentions for top performing posts</li>
+        <li>Embed IG content on tradecommandpro.com</li>
+      </ul>
+    </div>
+  </div>
+  <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid var(--acc)">
+    <h4 style="font-size:13px;margin-bottom:8px">Posting Cadence</h4>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;font-size:12px;color:var(--t2)">
+      <div><strong style="color:var(--t1)">Feed Posts</strong><br>4-5x/week | Tue-Thu 8-10am ET</div>
+      <div><strong style="color:var(--t1)">Reels</strong><br>2-3x/week | Wed, Fri, Sun 9am ET</div>
+      <div><strong style="color:var(--t1)">Stories</strong><br>3-5x/day | Trading hours + 7pm ET</div>
+      <div><strong style="color:var(--t1)">Carousels</strong><br>1-2x/week | Mixed into feed</div>
+    </div>
+  </div>
+</div>
+
+<!-- Bio Preview -->
+<div class="card" style="margin-top:20px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="margin:0">Instagram Bio</h3>
+    <a href="https://instagram.com/tradecommandpro" target="_blank" class="btn btn-ghost" style="font-size:11px">Open @tradecommandpro</a>
+  </div>
+  <div style="display:flex;gap:16px;align-items:flex-start;background:var(--bg);padding:16px;border-radius:10px">
+    <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">⚡</div>
+    <div>
+      <div style="font-weight:700;font-size:14px">tradecommandpro</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:4px;line-height:1.5;white-space:pre-line">AI trade signals + real-time market data for day traders
+Built by traders, for traders. Not financial advice.
+tradecommandpro.com</div>
+      <div style="margin-top:8px;display:flex;gap:12px;font-size:11px;color:var(--t3)">
+        <span>Highlights: Free Trial | Trade Signals | Market Briefings | Features | Founder | Community</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
 <div class="page" id="biz-settings-page">
   <div class="card">
     <h3>Business Settings</h3>
@@ -2037,7 +2214,7 @@ const titles = {
   'biz-dashboard':'📊 Biz Dashboard','biz-crm':'🎯 CRM & Pipeline','biz-prospecting':'🔍 Prospecting',
   'biz-leads':'👥 Leads','biz-marketing':'📣 Marketing','biz-campaigns':'📢 Campaigns',
   'biz-revenue':'💰 Revenue','biz-analytics':'📈 Biz Analytics','biz-advisor':'🤖 AI Advisor',
-  'biz-plan':'📋 Growth Plan','biz-scheduled':'📅 Scheduled','biz-beta':'🚀 Beta Launch','biz-newsletters':'✉️ Email Templates','biz-files':'📁 Files','biz-settings':'⚙️ Biz Settings'
+  'biz-plan':'📋 Growth Plan','biz-scheduled':'📅 Scheduled','biz-beta':'🚀 Beta Launch','biz-newsletters':'✉️ Email Templates','biz-files':'📁 Files','biz-social':'📱 Social Media','biz-settings':'⚙️ Biz Settings'
 };
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', () => {
@@ -2077,6 +2254,7 @@ function loadPage(page) {
     case 'biz-scheduled': loadScheduled(); break;
     case 'biz-campaigns': loadCampaigns(); break;
     case 'biz-plan': loadGrowthPlan(); break;
+    case 'biz-social': loadSocial(); break;
     case 'changelog': loadChangelog(); break;
   }
 }
@@ -3584,6 +3762,198 @@ function loadBetaPlanChecks() {
   var saved = JSON.parse(localStorage.getItem('tc_beta_plan_checks')||'[]');
   var cbs = document.querySelectorAll('.bp-cb');
   cbs.forEach(function(cb,i){ cb.checked = saved[i]||false; });
+}
+
+// ═══ SOCIAL MEDIA ═══
+var smCalData = {
+  '1': [
+    {day:'Mon 4/7',type:'Carousel',topic:'"What is TradeCommand Pro?" (4-slide explainer)',cta:'Sign up free trial',status:'draft'},
+    {day:'Tue 4/8',type:'Reel',topic:'"Why I built TradeCommand Pro" (30-sec founder story)',cta:'Visit tradecommandpro.com',status:'draft'},
+    {day:'Wed 4/9',type:'Post',topic:'"3 Data Sources Most Day Traders Ignore"',cta:'Save this / Comment',status:'draft'},
+    {day:'Thu 4/10',type:'Reel',topic:'"Watch the AI signal this trade" (demo dashboard)',cta:'Free trial link in bio',status:'draft'},
+    {day:'Fri 4/11',type:'Post',topic:'Early user testimonial screenshot',cta:'Try free 7 days',status:'draft'},
+    {day:'Sun 4/13',type:'Stories',topic:'5 stories: Onboarding walkthrough',cta:'Swipe up or link',status:'draft'}
+  ],
+  '2': [
+    {day:'Mon 4/14',type:'Post',topic:'"The Biggest Mistake New Day Traders Make"',cta:'React + share',status:'draft'},
+    {day:'Tue 4/15',type:'Reel',topic:'"AI says DON\'T trade this stock (here\'s why)"',cta:'Free trial',status:'draft'},
+    {day:'Wed 4/16',type:'Carousel',topic:'"Free vs Pro vs Elite" tier comparison',cta:'Compare plans',status:'draft'},
+    {day:'Thu 4/17',type:'Reel',topic:'"Real-time market data from 15+ sources" (quick demo)',cta:'Learn more',status:'draft'},
+    {day:'Fri 4/18',type:'Post',topic:'"I lost $15K before building this" (founder vulnerability)',cta:'Comment your story',status:'draft'},
+    {day:'Sat 4/19',type:'Stories',topic:'Daily market briefing format example',cta:'Swipe up',status:'draft'}
+  ],
+  '3': [
+    {day:'Mon 4/21',type:'Post',topic:'"What\'s your biggest trading pain?" (poll)',cta:'Answer in replies',status:'draft'},
+    {day:'Tue 4/22',type:'Reel',topic:'"This indicator is cooking..." (trending audio + signal)',cta:'Join free community',status:'draft'},
+    {day:'Wed 4/23',type:'Post',topic:'"How to read an AI trade signal (correctly)"',cta:'Save this',status:'draft'},
+    {day:'Thu 4/24',type:'Reel',topic:'"Day trader morning routine with TradeCommand Pro"',cta:'Free trial',status:'draft'},
+    {day:'Fri 4/25',type:'Post',topic:'Another user win + screenshot',cta:'You could be next',status:'draft'},
+    {day:'Sat 4/26',type:'Stories',topic:'Behind-the-scenes: Code/feature being built',cta:'Swipe up',status:'draft'}
+  ],
+  '4': [
+    {day:'Mon 4/28',type:'Post',topic:'"5 Free Tools + TradeCommand = Unstoppable"',cta:'Save + comment',status:'draft'},
+    {day:'Tue 4/29',type:'Reel',topic:'"Comparing my trades vs the AI signals" (reality check)',cta:'Get signals',status:'draft'},
+    {day:'Wed 4/30',type:'Carousel',topic:'"Week 1 Results: Users who actually used the signals"',cta:'Your turn',status:'draft'},
+    {day:'Thu 5/1',type:'Reel',topic:'"Red flag: Signs you shouldn\'t trade today"',cta:'Learn more',status:'draft'},
+    {day:'Fri 5/2',type:'Post',topic:'Top questions from the community (Q&A)',cta:'Ask below',status:'draft'},
+    {day:'Sat 5/3',type:'Stories',topic:'Testimonials compilation (3-4 slides)',cta:'Try free',status:'draft'}
+  ],
+  '5': [
+    {day:'Week 5-6',type:'Theme',topic:'Product Depth + Advanced Education',cta:'Deep-dives',status:'planned'},
+    {day:'',type:'Post',topic:'Feature deep-dives (each tier, each data source)',cta:'Learn more',status:'planned'},
+    {day:'',type:'Reel',topic:'Advanced trading concepts (position sizing, risk/reward)',cta:'Save this',status:'planned'},
+    {day:'',type:'Post',topic:'Signal review posts (real trades from the week)',cta:'Try it yourself',status:'planned'},
+    {day:'',type:'Stories',topic:'Community spotlight series (user wins from Discord)',cta:'Join community',status:'planned'}
+  ],
+  '7': [
+    {day:'Week 7-8',type:'Theme',topic:'Conversion Push + Scaling',cta:'Sign up now',status:'planned'},
+    {day:'',type:'Post',topic:'Limited-time offers (extended trial, first month discount)',cta:'Claim offer',status:'planned'},
+    {day:'',type:'Carousel',topic:'Comparison: TradeCommand vs other platforms',cta:'Try free',status:'planned'},
+    {day:'',type:'Post',topic:'Case study: user journey from signup to first profitable trade',cta:'Start yours',status:'planned'},
+    {day:'',type:'Reel',topic:'Referral incentive announcement',cta:'Share + earn',status:'planned'}
+  ]
+};
+
+var smPosts = [
+  {id:1,title:'"What is TradeCommand Pro?"',type:'Carousel',caption:'Most day traders are flying blind.\n\nYou\'ve got 15+ data sources scattered across 10 different apps. TradingView. Finnhub. NewsAPI. Reddit sentiment. You\'re stitching together a frankenstein of information, hoping you don\'t miss the move.\n\nWe built TradeCommand Pro to fix this.\n\nOne dashboard. AI-generated signals. Real-time data from every source that matters. Tells you WHEN to trade AND when NOT to trade (this one saves accounts).\n\nFree tier gets you the basics. Pro ($29/mo) adds AI signals + personalized alerts. Elite ($79/mo) is for traders who want the edge.\n\nNot financial advice \u2014 educational tool only. But if you\'re tired of leaving money on the table, the data doesn\'t lie.\n\nFree trial link in bio.'},
+  {id:2,title:'"3 Data Sources Most Traders Ignore"',type:'Post',caption:'You\'re probably tracking stock price. Maybe volume.\n\nBut the traders who consistently make money are watching THREE data sources you\'ve probably never heard of:\n\n1\uFE0F\u20E3 Sentiment Analysis (Reddit + Twitter)\nRetail traders move markets. Tracking what\'s being discussed RIGHT NOW gives you a 15-min edge.\n\n2\uFE0F\u20E3 Options Flow Data\nWhen big money moves, options volume spikes FIRST. It\'s the canary in the coal mine.\n\n3\uFE0F\u20E3 Earnings Whispers + Insider Activity\nInstitutional traders position before announcements. The data is public. Most people just don\'t know where to look.\n\nTradeCommand Pro aggregates all three (+ 12 more sources) and tells you what to do with it.\n\nFree trial. No credit card. See if the data changes your edge.'},
+  {id:3,title:'"Early User Win"',type:'Post',caption:'\uD83C\uDFAF "Started the free trial on Monday. By Friday, the AI signals called a 12% pop on NVDA I would\'ve YOLO\'d into without position sizing data. Saved me from a dumb trade AND made $800 on the signal. Already on Pro."\n\nNot everyone has that result. Some traders use the free tier and just learn.\n\nBut this is why we built it:\n\nSmarter traders win bigger. Better data beats guessing.\n\nIf that resonates, trial is 7 days free. Link in bio.'},
+  {id:4,title:'"Biggest Mistake New Traders Make"',type:'Post',caption:'Trading without a decision framework.\n\nYou enter a trade based on a feeling. Price moves $0.50 against you. Now you\'re panicked. Do you hold? Cut loss? Add to position?\n\nYou didn\'t have a plan for AFTER you entered.\n\nThe traders who win have rules:\n- Entry signal (what triggers the trade?)\n- Risk limit (how much can I lose?)\n- Target exit (where\'s profit-taking?)\n- Exit rule (what breaks my thesis?)\n\nTradeCommand Pro does this \u2014 our AI signals come with action plans. Not just "buy TSLA." But "buy TSLA at 180, stop loss 179, target 185, thesis breaks if it closes below 177."\n\nThat\'s the edge. Not the signal. The PLAN.\n\nStart free. Build your framework.'},
+  {id:5,title:'"I Lost $15K Before Building This"',type:'Post',caption:'Three years ago, I thought I was a genius trader.\n\nSaw a stock pump. FOMO\'d in. Didn\'t know the options flow said institutional money was LEAVING. Lost $4K in 20 minutes.\n\nDid it again. Different ticker. Same outcome. $6K down.\n\nThen I took $5K and actually STUDIED. Learned about data. Real data. Not YouTube hype.\n\nStarted tracking 15+ data sources. Made my money back. Then some. But the process was exhausting.\n\nThat\'s why I built TradeCommand Pro.\n\nNot because I wanted to sell you something. Because I got tired of grinding the same manual work every morning.\n\nI eat my own cooking. That\'s the only promise I make.\n\nTry free. See if it works for you too.'},
+  {id:6,title:'"What\'s Your Biggest Trading Pain?"',type:'Post',caption:'Let me ask you directly:\n\nWhat\'s the ONE thing that costs you money in your trading?\n\nIs it:\n- FOMO (entering too many trades)\n- Exiting too early (paper handed)\n- No stop loss (riding winners into losses)\n- Not knowing what data to trust\n- Revenge trading after a loss\n- Position sizing wrong\n- Or something else?\n\nComment below. Seriously.\n\nI\'m reading every response. Every single one tells us what features matter most.\n\nDrop it below. Let\'s talk.'},
+  {id:7,title:'"How to Read an AI Signal (Correctly)"',type:'Post',caption:'Just saw someone use our AI signal wrong.\n\nSaw the "BUY TSLA" alert and market-ordered immediately.\n\nThat\'s not how this works.\n\nAn AI signal is a hypothesis. Not a guarantee.\n\nThe CORRECT way:\n1. Read the signal + action plan\n2. Check the chart yourself\n3. Check the context (earnings coming?)\n4. Confirm your risk/reward ratio\n5. THEN enter if it aligns with your plan\n\nThe signal is your research assistant. Not your trade buddy.\n\nTradeCommand Pro is built for traders who think. Not traders who react.\n\nUse it right. Results follow.'},
+  {id:8,title:'"Another User Win"',type:'Post',caption:'"I\'ve been trading for 8 months. Mostly losing money. Signed up for TradeCommand last week. The daily briefing alone changed how I see market context. Today\'s alert on PLTR hit my profit target. First winning week in 3 months."\n\nNot every trader gets results immediately. Some take 2-3 weeks.\n\nBut when you combine:\n- Real data (15+ sources)\n- AI signals (high probability setups)\n- Action plans (entry, exit, thesis break)\n- Your own discipline\n\n= more wins than losses\n\nYour free trial is ready. Link in bio.'},
+  {id:9,title:'"5 Free Tools + TradeCommand = Unstoppable"',type:'Post',caption:'You don\'t NEED paid tools to be a profitable trader.\n\nBut you DO need to stack the right free tools first.\n\nFree Tools (the baseline):\n- TradingView (charts + scanning)\n- Finnhub (earnings, news, data)\n- Options Chain (your broker\'s built-in)\n- Stock Market API (free tier)\n- Reddit/Twitter (sentiment)\n\nThe problem: They\'re all separate. 5 tabs. 15 minutes per trade.\n\nTradeCommand Pro glues them together. One dashboard. One AI signal. One decision.\n\nYou\'re paying for TIME, SIGNAL CLARITY, and DISCIPLINE.\n\nFree trial. Do the math yourself.'},
+  {id:10,title:'"Top Questions From the Community"',type:'Post',caption:'Got 200+ questions in the DMs this week. Top 5:\n\n\u2753 "Can I use this on mobile?" \u2014 Not yet. Working on it.\n\u2753 "Does this work for options?" \u2014 Equity signals yes. Options spreads coming.\n\u2753 "Is this financial advice?" \u2014 No. Educational only.\n\u2753 "What if I lose money?" \u2014 You own your decisions. Better information, not guarantees.\n\u2753 "Why solo founder?" \u2014 Control. Speed. Skin in the game.\n\nHit the comments if your question didn\'t make top 5.\n\nAnd hey \u2014 7 days free trial is enough to know if this is your thing.'},
+  {id:11,title:'"The Signal That Saved an Account"',type:'Post',caption:'One of our users almost went broke yesterday.\n\nThey had NVDA at $115. Thesis was bullish. But our AI signal said something different.\n\nOptions flow: institutional money EXITING.\nReddit sentiment: flipped cautious.\nMacro headwinds: appearing.\n\nSignal: DON\'T TRADE\n\nUser exits. Next day: Earnings miss. NVDA drops 8%.\n\nUser would\'ve lost $3K. Instead they\'re up $1.2K.\n\nThe BIGGEST money in trading isn\'t what you make. It\'s what you DON\'T LOSE.\n\nThat\'s why we built AI that says DON\'T TRADE as often as BUY/SELL.\n\nSometimes the best trade is the one you didn\'t make.\n\nFree trial. Let the data protect your account too.'},
+  {id:12,title:'"Why Max Built This (Full Story)"',type:'Post',caption:'I\'m a trader. Not a developer. Not a startup guy.\n\nBut in 2022, I was hemorrhaging money and I didn\'t know why.\n\nWhat I actually needed was DATA.\n\nSo I started aggregating: News APIs, sentiment databases, options flow, macro indicators, earnings calendars, SEC filings.\n\nStitched them into a dashboard. 3 hours every morning before market open.\n\nI went from -$40K to +$60K.\n\nSpent 18 months building TradeCommand Pro solo. Night shifts. Weekends. While still trading.\n\nThe product isn\'t perfect. Neither am I. Neither is the stock market.\n\nBut it works. And I\'m betting my own trading capital on it every single day.\n\nThat\'s the only promise: I eat my own cooking.\n\n7 days. No credit card. Link in bio.'}
+];
+
+var smReels = [
+  {id:1,title:'Why I Built TradeCommand Pro',hook:'I lost $15K day trading before I built this...',outline:'30-sec founder story: losses, epiphany about data, building the platform, today\'s results',audio:'Motivational/lo-fi beats',cta:'Free trial link in bio'},
+  {id:2,title:'Watch the AI Signal This Trade',hook:'The AI just flagged this stock. Watch what happens next...',outline:'Screen record dashboard: signal appears, show entry/exit/stop, fast-forward to result',audio:'Trending suspenseful audio',cta:'Get signals free for 7 days'},
+  {id:3,title:'AI Says DON\'T Trade This Stock',hook:'Everyone\'s buying this stock. The AI says run...',outline:'Show hyped ticker, reveal contrarian data (options flow, sentiment flip), show what happened next',audio:'Dramatic reveal audio',cta:'Free trial \u2014 protect your account'},
+  {id:4,title:'15+ Data Sources in 10 Seconds',hook:'This is what a $500/mo Bloomberg terminal looks like for $29...',outline:'Quick dashboard tour: flip through data sources, real-time quotes, sentiment, options flow, news',audio:'Fast-paced tech/electronic',cta:'Try it free'},
+  {id:5,title:'This Indicator Is Cooking',hook:'POV: You\'re watching options flow data and big money just moved...',outline:'Show real-time signal forming, explain what the data means, reveal the trade setup',audio:'Trending "cooking" audio',cta:'Join free community'},
+  {id:6,title:'Day Trader Morning Routine',hook:'5:30 AM. Coffee. TradeCommand. Let\'s see what\'s moving...',outline:'Morning routine montage: check briefing, review signals, set watchlist, market open reaction',audio:'Morning routine trending audio',cta:'Start your mornings smarter'},
+  {id:7,title:'My Trades vs the AI Signals',hook:'I traded my gut vs the AI for a week. Here\'s who won...',outline:'Split screen: my picks vs AI picks, track both through the week, reveal P&L comparison',audio:'Competition/face-off audio',cta:'See for yourself \u2014 free trial'},
+  {id:8,title:'Signs You Shouldn\'t Trade Today',hook:'If you see ANY of these 5 signs, close your laptop...',outline:'5 red flags: low volume, no clear setup, revenge trading, news uncertainty, overexposed',audio:'Warning/alert trending audio',cta:'The AI catches these for you'}
+];
+
+var smStories = [
+  {id:1,title:'Daily Market Briefing',format:'3 slides: date header, market movers (up/down/watch), CTA to check signals',stickers:'Date sticker, "See My Signals" link',use:'Every weekday morning 9am or evening 6pm'},
+  {id:2,title:'Quick Trading Tip',format:'1-2 slides: hook question, then the tip with explanation',stickers:'Poll ("Do you make this mistake?"), "Learn More" link',use:'3-4x per week, mid-morning or afternoon'},
+  {id:3,title:'Poll / Question',format:'2-3 slides: engaging question, poll with 2-4 options, results + commentary',stickers:'Poll sticker, Quiz sticker, "Reply" CTA',use:'1-2x per week, Thursday-Friday for weekend reading'},
+  {id:4,title:'Behind-the-Scenes',format:'2-4 slides: code/whiteboard screenshot, what you\'re building, feedback loop',stickers:'Clock sticker, "Live soon?" poll, "Join Community" link',use:'1x per week, show the real process'},
+  {id:5,title:'Testimonial Spotlight',format:'2 slides: user quote screenshot, your commentary on what made it work',stickers:'"Try Free" link sticker',use:'1-2x per week after real testimonials come in'}
+];
+
+var smBrandedTags = ['#TradeCommandPro','#TradeSmartSignals','#TradeCommandCommunity'];
+var smCommunityTags = ['#DayTrading','#DayTrader','#TradingSignals','#StockMarket','#MarketData','#RetailInvesting','#TradingEdge','#MarketIntelligence','#StockTrading','#TraderLife','#FinTech','#TradingCommunity','#StockAlert','#MarketAnalysis','#AlgoTrading','#TradingPsychology','#RiskManagement','#FinancialData','#SmartTrading','#DataDriven','#BuildInPublic','#FounderStory'];
+
+function loadSocial() {
+  smRenderCal('1');
+  smRenderPosts();
+  smRenderReels();
+  smRenderStories();
+  smRenderHashtags();
+  // Load saved stats
+  var stats = JSON.parse(localStorage.getItem('tc_sm_stats')||'{"followers":0,"engagement":"0","posts":0,"clicks":0,"week":1}');
+  document.getElementById('sm-followers').textContent = stats.followers.toLocaleString();
+  document.getElementById('sm-engagement').textContent = stats.engagement+'%';
+  document.getElementById('sm-posts-count').textContent = stats.posts;
+  document.getElementById('sm-clicks').textContent = stats.clicks.toLocaleString();
+  document.getElementById('sm-week-badge').textContent = 'Week '+stats.week;
+}
+
+function smTab(tab, btn) {
+  document.querySelectorAll('.sm-panel').forEach(function(p){p.style.display='none';});
+  document.getElementById('sm-'+tab).style.display='block';
+  document.querySelectorAll('.sm-tab').forEach(function(b){b.className='btn btn-ghost sm-tab';});
+  btn.className='btn btn-primary sm-tab active';
+}
+
+function smRenderCal(week) {
+  var rows = smCalData[week]||[];
+  var html = '';
+  rows.forEach(function(r){
+    var saved = JSON.parse(localStorage.getItem('tc_sm_cal_status')||'{}');
+    var key = week+'-'+r.day+'-'+r.topic;
+    var st = saved[key]||r.status;
+    var colors = {draft:'rgba(245,158,11,.15);color:#f59e0b',published:'rgba(34,197,94,.15);color:#22c55e',planned:'rgba(99,102,241,.15);color:#6366f1',scheduled:'rgba(59,130,246,.15);color:#3b82f6'};
+    var typeColors = {Post:'#3b82f6',Reel:'#ef4444',Carousel:'#f59e0b',Stories:'#a855f7',Theme:'#6366f1'};
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.04)">';
+    html += '<td style="padding:10px 8px;font-weight:600;white-space:nowrap">'+r.day+'</td>';
+    html += '<td style="padding:10px 8px"><span style="background:'+(typeColors[r.type]||'#6366f1')+';color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600">'+r.type+'</span></td>';
+    html += '<td style="padding:10px 8px;max-width:300px">'+r.topic+'</td>';
+    html += '<td style="padding:10px 8px;color:var(--t2);font-size:11px">'+r.cta+'</td>';
+    html += '<td style="padding:10px 8px;text-align:center"><select onchange="smSaveStatus(\''+week+'\',\''+key.replace(/'/g,"\\'")+'\',this.value)" style="background:'+colors[st].split(';')[0]+';'+colors[st].split(';')[1]+';border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:600;cursor:pointer">';
+    ['draft','scheduled','published','planned'].forEach(function(s){html+='<option value="'+s+'"'+(s===st?' selected':'')+'>'+s.charAt(0).toUpperCase()+s.slice(1)+'</option>';});
+    html += '</select></td></tr>';
+  });
+  document.getElementById('sm-cal-body').innerHTML = html;
+}
+
+function smSwitchWeek(w) { smRenderCal(w); }
+function smSaveStatus(week, key, val) {
+  var saved = JSON.parse(localStorage.getItem('tc_sm_cal_status')||'{}');
+  saved[key] = val;
+  localStorage.setItem('tc_sm_cal_status', JSON.stringify(saved));
+}
+
+function smRenderPosts() {
+  var html = '';
+  smPosts.forEach(function(p){
+    html += '<div style="background:var(--bg);border-radius:10px;border:1px solid var(--brd);overflow:hidden">';
+    html += '<div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">';
+    html += '<div><span style="font-weight:700;font-size:13px">#'+p.id+' '+p.title+'</span> <span style="font-size:10px;color:var(--t3);margin-left:6px">'+p.type+'</span></div>';
+    html += '<span style="color:var(--t3);font-size:10px">Click to expand</span></div>';
+    html += '<div style="display:none;padding:0 16px 16px;border-top:1px solid var(--brd)">';
+    html += '<pre style="white-space:pre-wrap;font-family:inherit;font-size:12px;color:var(--t2);line-height:1.6;margin:12px 0;max-height:300px;overflow-y:auto">'+p.caption+'</pre>';
+    html += '<button class="btn btn-primary" style="font-size:11px" onclick="navigator.clipboard.writeText(smPosts['+(p.id-1)+'].caption);toast(\'Caption copied!\',\'grn\')">Copy Caption</button>';
+    html += '</div></div>';
+  });
+  document.getElementById('sm-posts-list').innerHTML = html;
+}
+
+function smRenderReels() {
+  var html = '';
+  smReels.forEach(function(r){
+    html += '<div style="background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid #ef4444">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start">';
+    html += '<div><div style="font-weight:700;font-size:13px">#'+r.id+' '+r.title+'</div>';
+    html += '<div style="font-size:11px;color:#ef4444;margin-top:4px;font-style:italic">Hook: "'+r.hook+'"</div></div>';
+    html += '<span style="font-size:10px;color:var(--t3);white-space:nowrap">'+r.audio+'</span></div>';
+    html += '<div style="font-size:12px;color:var(--t2);margin-top:8px;line-height:1.5">'+r.outline+'</div>';
+    html += '<div style="margin-top:8px;font-size:11px;color:var(--acc)">CTA: '+r.cta+'</div></div>';
+  });
+  document.getElementById('sm-reels-list').innerHTML = html;
+}
+
+function smRenderStories() {
+  var html = '';
+  var colors = ['#6366f1','#22c55e','#f59e0b','#3b82f6','#a855f7'];
+  smStories.forEach(function(s,i){
+    html += '<div style="background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid '+colors[i%5]+'">';
+    html += '<div style="font-weight:700;font-size:13px;margin-bottom:6px">'+s.title+'</div>';
+    html += '<div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:6px"><strong style="color:var(--t1)">Format:</strong> '+s.format+'</div>';
+    html += '<div style="font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:6px"><strong style="color:var(--t1)">Stickers:</strong> '+s.stickers+'</div>';
+    html += '<div style="font-size:11px;color:var(--t3)">Use: '+s.use+'</div></div>';
+  });
+  document.getElementById('sm-stories-list').innerHTML = html;
+}
+
+function smRenderHashtags() {
+  var bHtml = '';
+  smBrandedTags.forEach(function(t){
+    bHtml += '<span style="background:rgba(99,102,241,.15);color:#6366f1;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="navigator.clipboard.writeText(\''+t+'\');toast(\'Copied!\',\'grn\')">'+t+'</span>';
+  });
+  document.getElementById('sm-branded-tags').innerHTML = bHtml;
+  var cHtml = '';
+  smCommunityTags.forEach(function(t){
+    cHtml += '<span style="background:rgba(34,197,94,.1);color:#22c55e;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer" onclick="navigator.clipboard.writeText(\''+t+'\');toast(\'Copied!\',\'grn\')">'+t+'</span>';
+  });
+  document.getElementById('sm-community-tags').innerHTML = cHtml;
 }
 
 // ═══ FILE PREVIEW ═══

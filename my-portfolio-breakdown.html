@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Portfolio Breakdown</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0e17; color: #e1e5ee; padding: 24px; min-height: 100vh; }
+
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .subtitle { color: #8892a4; font-size: 14px; margin-bottom: 32px; }
+
+  /* Big picture cards */
+  .big-picture { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .bp-card { background: #141926; border: 1px solid #1e2636; border-radius: 14px; padding: 20px; }
+  .bp-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #6b7589; margin-bottom: 8px; }
+  .bp-value { font-size: 28px; font-weight: 700; }
+  .bp-sub { font-size: 12px; color: #6b7589; margin-top: 4px; }
+  .green { color: #00e676; }
+  .red { color: #ff5252; }
+  .white { color: #e1e5ee; }
+
+  /* Explainer */
+  .explainer { background: #141926; border: 1px solid #1e2636; border-radius: 14px; padding: 24px; margin-bottom: 40px; }
+  .explainer h2 { font-size: 18px; margin-bottom: 12px; }
+  .explainer p { font-size: 14px; color: #a0a8b8; line-height: 1.7; margin-bottom: 10px; }
+  .explainer strong { color: #e1e5ee; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; margin-bottom: 40px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 12px 14px; background: #141926; color: #6b7589; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; border-bottom: 1px solid #1e2636; white-space: nowrap; }
+  td { padding: 14px; border-bottom: 1px solid #1a1f2e; white-space: nowrap; }
+  tr:hover td { background: #141926; }
+  .ticker { font-weight: 700; font-size: 15px; }
+  .help { display: inline-block; width: 16px; height: 16px; background: #1e2636; color: #6b7589; border-radius: 50%; font-size: 10px; text-align: center; line-height: 16px; cursor: help; margin-left: 4px; position: relative; }
+  .help:hover::after { content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #2a3148; color: #e1e5ee; padding: 8px 12px; border-radius: 8px; font-size: 11px; white-space: nowrap; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,.4); }
+
+  /* Per-stock cards (mobile-friendly) */
+  .stock-cards { display: none; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+  .stock-card { background: #141926; border: 1px solid #1e2636; border-radius: 14px; padding: 20px; }
+  .stock-card .sc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .stock-card .sc-ticker { font-size: 20px; font-weight: 700; }
+  .stock-card .sc-shares { font-size: 12px; color: #6b7589; }
+  .stock-card .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stock-card .sc-item { }
+  .stock-card .sc-item-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #6b7589; margin-bottom: 2px; }
+  .stock-card .sc-item-value { font-size: 15px; font-weight: 600; }
+
+  /* Glossary */
+  .glossary { background: #141926; border: 1px solid #1e2636; border-radius: 14px; padding: 24px; }
+  .glossary h2 { font-size: 18px; margin-bottom: 16px; }
+  .glossary dl { }
+  .glossary dt { font-weight: 700; font-size: 14px; color: #e1e5ee; margin-top: 12px; }
+  .glossary dd { font-size: 13px; color: #a0a8b8; line-height: 1.6; margin-left: 0; margin-bottom: 4px; }
+
+  @media (max-width: 700px) {
+    .table-wrap { display: none; }
+    .stock-cards { display: flex; }
+    .big-picture { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Your Portfolio — Plain English</h1>
+<p class="subtitle">Snapshot from March 25, 2026 · After Hours</p>
+
+<!-- ========== BIG PICTURE ========== -->
+<div class="big-picture">
+  <div class="bp-card">
+    <div class="bp-label">Money You Put In</div>
+    <div class="bp-value white">$5,000.00</div>
+    <div class="bp-sub">This is your starting capital</div>
+  </div>
+  <div class="bp-card">
+    <div class="bp-label">Portfolio Value Now</div>
+    <div class="bp-value white">$5,024.40</div>
+    <div class="bp-sub">Stocks + cash combined</div>
+  </div>
+  <div class="bp-card">
+    <div class="bp-label">Total Profit / Loss</div>
+    <div class="bp-value green">+$24.40</div>
+    <div class="bp-sub">+0.49% return overall</div>
+  </div>
+  <div class="bp-card">
+    <div class="bp-label">Cash (Not Invested)</div>
+    <div class="bp-value white">$2,759.92</div>
+    <div class="bp-sub">55.2% of your money is in cash</div>
+  </div>
+  <div class="bp-card">
+    <div class="bp-label">Money In Stocks</div>
+    <div class="bp-value white">$2,264.48</div>
+    <div class="bp-sub">44.8% of your money is invested</div>
+  </div>
+  <div class="bp-card">
+    <div class="bp-label">Open Positions</div>
+    <div class="bp-value white">8</div>
+    <div class="bp-sub">Across 7 different stocks</div>
+  </div>
+</div>
+
+<!-- ========== EXPLAINER ========== -->
+<div class="explainer">
+  <h2>What does this all mean?</h2>
+  <p>You started with <strong>$5,000</strong>. You've used about <strong>$2,240</strong> of that to buy stocks. The rest (<strong>$2,760</strong>) is still sitting as cash, ready to use.</p>
+  <p>Right now, your stocks are worth <strong>$2,264.48</strong> — that's <strong>$24.40 more</strong> than what you paid for them. So you're up overall. That's a <strong>+0.49% gain</strong>.</p>
+  <p>Your biggest winners are your two <strong>SMCI</strong> positions, which are up <strong>+8.19%</strong> each. Your biggest drag is <strong>SNOW</strong> (down $1.46) and <strong>RIVN</strong> (down $1.44). Most other positions are flat — you likely just bought them.</p>
+</div>
+
+<!-- ========== DETAILED TABLE (desktop) ========== -->
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>Stock</th>
+      <th>Shares</th>
+      <th>You Paid <span class="help" data-tip="Price per share when you bought">?</span></th>
+      <th>Total Cost <span class="help" data-tip="Shares × entry price = what you spent">?</span></th>
+      <th>Price Now</th>
+      <th>Value Now <span class="help" data-tip="Shares × current price = what it's worth">?</span></th>
+      <th>Gain/Loss $ <span class="help" data-tip="Value now minus what you paid">?</span></th>
+      <th>Per Share <span class="help" data-tip="How much you made or lost on each share">?</span></th>
+      <th>Gain/Loss %</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="ticker">ARM</td>
+      <td>1</td>
+      <td>$134.96</td>
+      <td>$134.96</td>
+      <td>$134.96</td>
+      <td>$134.96</td>
+      <td class="white">$0.00</td>
+      <td class="white">$0.00</td>
+      <td class="white">0.00%</td>
+      <td>🟡 Flat</td>
+    </tr>
+    <tr>
+      <td class="ticker">COIN</td>
+      <td>4</td>
+      <td>$181.04</td>
+      <td>$724.16</td>
+      <td>$181.04</td>
+      <td>$724.16</td>
+      <td class="white">$0.00</td>
+      <td class="white">$0.00</td>
+      <td class="white">0.00%</td>
+      <td>🟡 Flat</td>
+    </tr>
+    <tr>
+      <td class="ticker">MARA</td>
+      <td>45</td>
+      <td>$8.25</td>
+      <td>$371.25</td>
+      <td>$8.25</td>
+      <td>$371.25</td>
+      <td class="white">$0.00</td>
+      <td class="white">$0.00</td>
+      <td class="white">0.00%</td>
+      <td>🟡 Flat</td>
+    </tr>
+    <tr>
+      <td class="ticker">RIVN</td>
+      <td>3</td>
+      <td>$16.10</td>
+      <td>$48.30</td>
+      <td>$15.62</td>
+      <td>$46.86</td>
+      <td class="red">-$1.44</td>
+      <td class="red">-$0.48</td>
+      <td class="red">-2.98%</td>
+      <td>🔴 Down</td>
+    </tr>
+    <tr>
+      <td class="ticker">SMCI</td>
+      <td>5</td>
+      <td>$22.23</td>
+      <td>$111.15</td>
+      <td>$24.05</td>
+      <td>$120.25</td>
+      <td class="green">+$9.10</td>
+      <td class="green">+$1.82</td>
+      <td class="green">+8.19%</td>
+      <td>🟢 Winner</td>
+    </tr>
+    <tr>
+      <td class="ticker">SMCI</td>
+      <td>10</td>
+      <td>$22.23</td>
+      <td>$222.30</td>
+      <td>$24.05</td>
+      <td>$240.50</td>
+      <td class="green">+$18.20</td>
+      <td class="green">+$1.82</td>
+      <td class="green">+8.19%</td>
+      <td>🟢 Winner</td>
+    </tr>
+    <tr>
+      <td class="ticker">SNOW</td>
+      <td>2</td>
+      <td>$161.34</td>
+      <td>$322.68</td>
+      <td>$160.61</td>
+      <td>$321.22</td>
+      <td class="red">-$1.46</td>
+      <td class="red">-$0.73</td>
+      <td class="red">-0.45%</td>
+      <td>🔴 Down</td>
+    </tr>
+    <tr>
+      <td class="ticker">SOUN</td>
+      <td>48</td>
+      <td>$6.36</td>
+      <td>$305.28</td>
+      <td>$6.36</td>
+      <td>$305.28</td>
+      <td class="white">$0.00</td>
+      <td class="white">$0.00</td>
+      <td class="white">0.00%</td>
+      <td>🟡 Flat</td>
+    </tr>
+    <tr style="background:#141926; font-weight:700;">
+      <td class="ticker">TOTAL</td>
+      <td></td>
+      <td></td>
+      <td>$2,240.08</td>
+      <td></td>
+      <td>$2,264.48</td>
+      <td class="green">+$24.40</td>
+      <td></td>
+      <td class="green">+1.09%</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ========== STOCK CARDS (mobile) ========== -->
+<div class="stock-cards">
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">ARM</span><span class="sc-shares">1 share</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$134.96</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$134.96</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value white">$0.00</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value white">$0.00</div></div>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">COIN</span><span class="sc-shares">4 shares</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$724.16</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$724.16</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value white">$0.00</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value white">$0.00</div></div>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">MARA</span><span class="sc-shares">45 shares</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$371.25</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$371.25</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value white">$0.00</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value white">$0.00</div></div>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">RIVN</span><span class="sc-shares">3 shares</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$48.30</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$46.86</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value red">-$1.44</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value red">-$0.48</div></div>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">SMCI</span><span class="sc-shares">5 shares</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$111.15</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$120.25</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value green">+$9.10</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value green">+$1.82</div></div>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">SMCI</span><span class="sc-shares">10 shares</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$222.30</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$240.50</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value green">+$18.20</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value green">+$1.82</div></div>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">SNOW</span><span class="sc-shares">2 shares</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$322.68</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$321.22</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value red">-$1.46</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value red">-$0.73</div></div>
+    </div>
+  </div>
+  <div class="stock-card">
+    <div class="sc-header"><span class="sc-ticker">SOUN</span><span class="sc-shares">48 shares</span></div>
+    <div class="sc-grid">
+      <div class="sc-item"><div class="sc-item-label">You Paid</div><div class="sc-item-value">$305.28</div></div>
+      <div class="sc-item"><div class="sc-item-label">Worth Now</div><div class="sc-item-value">$305.28</div></div>
+      <div class="sc-item"><div class="sc-item-label">Profit/Loss</div><div class="sc-item-value white">$0.00</div></div>
+      <div class="sc-item"><div class="sc-item-label">Per Share</div><div class="sc-item-value white">$0.00</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== GLOSSARY ========== -->
+<div class="glossary">
+  <h2>Glossary — What These Words Mean</h2>
+  <dl>
+    <dt>Entry Price (You Paid)</dt>
+    <dd>The price per share when you bought the stock. If you bought 5 shares of SMCI at $22.23, that's your entry price.</dd>
+
+    <dt>Current Price (Price Now)</dt>
+    <dd>What one share is selling for right now on the market.</dd>
+
+    <dt>Total Cost</dt>
+    <dd>Shares you own × the price you paid. Example: 5 shares × $22.23 = $111.15. That's the money you put into that stock.</dd>
+
+    <dt>Value Now</dt>
+    <dd>Shares you own × today's price. Example: 5 shares × $24.05 = $120.25. That's what your shares are worth right now.</dd>
+
+    <dt>Gain/Loss Per Share</dt>
+    <dd>Current price minus what you paid. SMCI: $24.05 - $22.23 = +$1.82 per share. You made $1.82 on every share you hold.</dd>
+
+    <dt>Gain/Loss %</dt>
+    <dd>How much you're up or down as a percentage. +8.19% means for every $100 you put in, you've made $8.19.</dd>
+
+    <dt>Stop Loss</dt>
+    <dd>A safety net price. If the stock drops to this price, you sell automatically to limit your losses. Think of it like a "bail out" point.</dd>
+
+    <dt>Take Profit (Target)</dt>
+    <dd>Your goal price. If the stock rises to this price, you sell and lock in your win.</dd>
+
+    <dt>Cash Available</dt>
+    <dd>Money in your account that isn't invested in any stock yet. You can use it to buy more stocks.</dd>
+
+    <dt>Portfolio Value</dt>
+    <dd>Everything combined — the value of all your stocks plus your cash. This is your total account balance.</dd>
+
+    <dt>P&L (Profit and Loss)</dt>
+    <dd>The difference between what you have now and what you started with. +$24.40 means you've made $24.40 so far.</dd>
+  </dl>
+</div>
+
+<p style="text-align:center; color:#4a5268; font-size:11px; margin-top:32px;">Generated from your TradeCommand Pro dashboard · March 25, 2026</p>
+
+</body>
+</html>
