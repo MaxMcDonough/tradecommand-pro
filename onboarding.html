@@ -238,6 +238,35 @@ select.form-input option{background:var(--bg2);color:var(--t1)}
 }
 .launch-btn:hover::before{transform:translateX(100%)}
 
+/* ── AUTOPILOT CARD ── */
+.autopilot-card{
+  background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(6,182,212,.1));
+  border:2px solid rgba(59,130,246,.3);border-radius:var(--radius);
+  padding:22px 24px;cursor:pointer;transition:all .3s;margin-bottom:20px;
+}
+.autopilot-card:hover{
+  border-color:var(--accent);background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(6,182,212,.15));
+  box-shadow:0 4px 24px rgba(59,130,246,.2);transform:translateY(-1px);
+}
+.autopilot-inner{display:flex;align-items:center;gap:16px}
+.autopilot-icon{font-size:32px;flex-shrink:0}
+.autopilot-text{flex:1}
+.autopilot-title{font-size:16px;font-weight:800;color:var(--t1);margin-bottom:4px}
+.autopilot-desc{font-size:13px;color:var(--t2);line-height:1.5}
+.autopilot-arrow{font-size:22px;color:var(--accent);font-weight:700;flex-shrink:0;transition:transform .2s}
+.autopilot-card:hover .autopilot-arrow{transform:translateX(4px)}
+
+.divider-or{
+  text-align:center;margin:24px 0 28px;position:relative;
+}
+.divider-or::before{
+  content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);
+}
+.divider-or span{
+  position:relative;background:var(--bg);padding:0 16px;
+  font-size:12px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;
+}
+
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   #onboarding{padding:24px 16px 40px}
@@ -429,6 +458,20 @@ select.form-input option{background:var(--bg2);color:var(--t1)}
       <h1 class="step-title">Your Trading Preferences</h1>
       <p class="step-subtitle">Help us tailor your dashboard. Select all that apply — we'll customize your feed accordingly.</p>
     </div>
+
+    <!-- Autopilot Option -->
+    <div class="autopilot-card" onclick="activateAutopilot()">
+      <div class="autopilot-inner">
+        <span class="autopilot-icon">🚀</span>
+        <div class="autopilot-text">
+          <div class="autopilot-title">Autopilot — Give Me Everything</div>
+          <div class="autopilot-desc">Skip the details. Enable all styles, all sectors, all notifications. You can fine-tune later in Settings.</div>
+        </div>
+        <div class="autopilot-arrow">→</div>
+      </div>
+    </div>
+
+    <div class="divider-or"><span>or customize below</span></div>
 
     <div class="form-group">
       <label class="form-label">Trading Style (select all that apply)</label>
@@ -661,6 +704,18 @@ function toggleSwitch(el) {
   el.classList.toggle('on');
   const id = el.id.replace('tog-', '');
   onboardData.notifications[id] = el.classList.contains('on');
+}
+
+// ═══ AUTOPILOT ═══
+function activateAutopilot() {
+  // Select all trading styles
+  onboardData.styles = ['day-trading','swing','scalping','long-term'];
+  // Select all sectors
+  onboardData.sectors = ['tech','finance','healthcare','energy','consumer','crypto'];
+  // Enable all notifications
+  onboardData.notifications = { signals:true, market:true, digest:true, updates:true };
+  // Jump straight to step 4
+  goStep(4);
 }
 
 // ═══ STEP NAVIGATION ═══
