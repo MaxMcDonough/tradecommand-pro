@@ -33,7 +33,7 @@
 <link rel="canonical" href="https://tradecommandpro.com/">
 
 <!-- ===== FAVICON (emoji fallback) ===== -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -231,7 +231,7 @@ section{padding:100px 40px}
 .price-desc{font-size:13px;color:var(--t2);margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--brd);line-height:1.6}
 .price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
 .price-features li{font-size:13px;color:var(--t2);display:flex;align-items:flex-start;gap:9px}
-.price-features li::before{content:'✓';color:#30d158;font-weight:700;flex-shrink:0;margin-top:1px}
+.price-features li::before{content:'<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';color:#30d158;font-weight:700;flex-shrink:0;margin-top:1px}
 .price-features li.no{color:var(--t3)}
 .price-features li.no::before{content:'–';color:var(--t3)}
 .btn-price{display:block;width:100%;padding:13px;text-align:center;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .3s}
@@ -343,7 +343,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 .sp-text p{font-size:15px;color:var(--t2);line-height:1.8;margin-bottom:20px}
 .sp-bullets{display:flex;flex-direction:column;gap:9px}
 .sp-bullet{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--t2)}
-.sp-bullet::before{content:'✓';color:#30d158;font-weight:700;flex-shrink:0;margin-top:1px}
+.sp-bullet::before{content:'<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';color:#30d158;font-weight:700;flex-shrink:0;margin-top:1px}
 .sp-visual{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 60px rgba(0,0,0,.4);backdrop-filter:blur(24px) saturate(1.4)}
 .sp-try{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:11px 22px;background:linear-gradient(135deg,#0a84ff,#3a9fff);color:#fff;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;transition:box-shadow .2s}
 .sp-try:hover{box-shadow:0 8px 24px rgba(10,132,255,.35)}
@@ -474,14 +474,92 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 .access-modal-skip:hover{border-color:rgba(255,255,255,.3);color:#fff}
 @media(max-width:480px){.access-modal{padding:28px 20px;border-radius:14px}}
 
-</style>
+
+    .icon {
+        display: inline-block;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }
+    
+    .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 4px;
+    }
+    
+    .status-green {
+        background: #30d158;
+    }
+    
+    .status-red {
+        background: #ff453a;
+    }
+    
+    .status-yellow {
+        background: #ffd60a;
+    }
+    
+    .icon {
+        display: inline-block;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }
+    
+    .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 4px;
+    }
+    
+    .status-green {
+        background: #30d158;
+    }
+    
+    .status-red {
+        background: #ff453a;
+    }
+    
+    .status-yellow {
+        background: #ffd60a;
+    }
+    
+    .icon {
+        display: inline-block;
+        vertical-align: middle;
+        flex-shrink: 0;
+    }
+    
+    .status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 4px;
+    }
+    
+    .status-green {
+        background: #30d158;
+    }
+    
+    .status-red {
+        background: #ff453a;
+    }
+    
+    .status-yellow {
+        background: #ffd60a;
+    }
+    </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
 <!-- ── FLOATING CTA BAR ──────────────────────────────────── -->
 <div id="float-cta">
-  <div class="fcta-text"><strong>⚡ TradeCommand Pro</strong> — Free AI trade signals, live prices &amp; step-by-step plans. Set up in 60 seconds.</div>
+  <div class="fcta-text"><strong><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> TradeCommand Pro</strong> — Free AI trade signals, live prices &amp; step-by-step plans. Set up in 60 seconds.</div>
   <div class="fcta-btns">
     <a href="dashboard.html?tab=signup" class="btn-hero" style="padding:10px 20px;font-size:13px">Get Started →</a>
     <button class="fcta-dismiss" onclick="document.getElementById('float-cta').classList.remove('show');localStorage.setItem('tcp_fcta','1')" title="Dismiss">×</button>
@@ -491,7 +569,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <!-- ── NAVIGATION ──────────────────────────────────────── -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">
-    <span class="bolt">⚡</span>
+    <span class="bolt"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
     <span>TradeCommand Pro</span>
   </a>
   <div class="nav-links">
@@ -548,11 +626,11 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
     <div class="hero-visual fade-in fade-in-delay-2">
       <div class="mockup-badge2">
         <div class="mb2-sym">AMD · AI Signal</div>
-        <div class="mb2-action">🟢 BUY — 57 shares @ $192.88</div>
+        <div class="mb2-action"><span class="status-dot status-green"></span> BUY — 57 shares @ $192.88</div>
       </div>
       <div class="dashboard-mockup">
         <div class="db-topbar">
-          <span class="db-logo">⚡ TradeCommand Pro</span>
+          <span class="db-logo"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> TradeCommand Pro</span>
           <div class="db-tickers">
             <div class="db-tk">SPY <span class="up">+0.67%</span></div>
             <div class="db-tk">QQQ <span class="up">+1.06%</span></div>
@@ -585,7 +663,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
       </div>
       <div class="mockup-badge">
         <div class="mb-label">5× Daily Briefings</div>
-        <div class="mb-val">🟢 Market Open</div>
+        <div class="mb-val"><span class="status-dot status-green"></span> Market Open</div>
       </div>
     </div>
   </div>
@@ -627,38 +705,38 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="howitworks">
   <div class="section-inner">
     <div class="centered fade-in">
-      <div class="section-badge">⚡ Simple Setup</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Simple Setup</div>
       <h2 class="section-title">Up and trading in <em>minutes</em></h2>
       <p class="section-sub">No trading experience required. No complex software. Just open the dashboard and start getting signals.</p>
     </div>
     <div class="steps">
       <div class="step fade-in fade-in-delay-1">
         <div class="step-num">01</div>
-        <div class="step-icon">🔑</div>
+        <div class="step-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
         <h3>Grab 3 Free API Keys</h3>
         <p>Sign up in 30 seconds. All data feeds included — no credit card ever required.</p>
       </div>
       <div class="step fade-in fade-in-delay-2">
         <div class="step-num">02</div>
-        <div class="step-icon">⚡</div>
+        <div class="step-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
         <h3>Open Your Dashboard</h3>
         <p>Paste your keys once. The dashboard saves them forever and auto-launches next time — just open the file.</p>
       </div>
       <div class="step fade-in fade-in-delay-3">
         <div class="step-num">03</div>
-        <div class="step-icon">🤖</div>
+        <div class="step-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg></div>
         <h3>Review AI Signals</h3>
         <p>8-factor AI engine analyzes every stock on your watchlist using RSI, MACD, volume, Reddit sentiment, and more.</p>
       </div>
       <div class="step fade-in fade-in-delay-4">
         <div class="step-num">04</div>
-        <div class="step-icon">📋</div>
+        <div class="step-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div>
         <h3>Get Your Action Plan</h3>
         <p>Click any stock for an exact plan: how many shares, entry price, stop loss, target, and max loss in dollars.</p>
       </div>
       <div class="step fade-in">
         <div class="step-num">05</div>
-        <div class="step-icon">🇨🇦</div>
+        <div class="step-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/><rect x="4" y="2" width="16" height="20" rx="2"/></svg></div>
         <h3>Execute on Wealthsimple</h3>
         <p>One click opens Wealthsimple Trade. Commission-free. Place your trade in under 30 seconds.</p>
       </div>
@@ -670,79 +748,79 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="features">
   <div class="section-inner">
     <div class="fade-in">
-      <div class="section-badge">🎯 Everything You Need</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Everything You Need</div>
       <h2 class="section-title">The full <em>arsenal</em></h2>
       <p class="section-sub">Every tool a professional trader uses, distilled into one dashboard that opens in a browser tab.</p>
     </div>
     <div class="features-grid">
       <div class="feat fade-in">
-        <span class="feat-icon">🤖</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg></span>
         <h3>8-Factor AI Signals</h3>
         <p>RSI, MACD, SMA, EMA, VWAP, Bollinger Bands, ATR, and volume ratio — all combined into a single BUY / SELL / WATCH signal with confidence score.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in fade-in-delay-1">
-        <span class="feat-icon">📋</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></span>
         <h3>Step-by-Step Trade Plans</h3>
         <p>Click any stock to get an exact plan: how many shares to buy, entry price, stop loss, profit target, and maximum dollar loss — all calculated from your account balance.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in fade-in-delay-2">
-        <span class="feat-icon">⚡</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
         <h3>15-Second Live Prices</h3>
         <p>Real-time quotes via our proprietary data feed. Prices refresh every 15 seconds automatically. No stale data.</p>
         <span class="feat-tag live">Live</span>
       </div>
       <div class="feat fade-in fade-in-delay-3">
-        <span class="feat-icon">📰</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="6" x2="18" y2="6"/><line x1="10" y1="10" x2="18" y2="10"/><line x1="10" y1="14" x2="18" y2="14"/></svg></span>
         <h3>Multi-Source News Intel</h3>
         <p>Market headlines aggregated from 15+ sources into one unified feed. Company-specific news loads instantly when you click any stock.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in">
-        <span class="feat-icon">💬</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span>
         <h3>Social Sentiment Radar</h3>
         <p>Live tracking of 5+ major trading communities. Ticker mention rankings updated every 5 minutes based on real-time volume and sentiment.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in fade-in-delay-1">
-        <span class="feat-icon">📊</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
         <h3>Fundamentals Dashboard</h3>
         <p>P/E ratio, EPS, 52-week range, beta, revenue, analyst target price, and forward P/E — loaded into every stock's detail view via our Fundamental Analysis Engine.</p>
         <span class="feat-tag pro">Free Key</span>
       </div>
       <div class="feat fade-in fade-in-delay-2">
-        <span class="feat-icon">🗓</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
         <h3>5× Daily Briefings</h3>
         <p>Pre-Market, Open, Midday, Power Hour, and Post-Close intelligence briefings delivered on a schedule — every trading day.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in fade-in-delay-3">
-        <span class="feat-icon">🏦</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M12 3l9 7H3l9-7z"/><line x1="6" y1="10" x2="6" y2="21"/><line x1="10" y1="10" x2="10" y2="21"/><line x1="14" y1="10" x2="14" y2="21"/><line x1="18" y1="10" x2="18" y2="21"/></svg></span>
         <h3>Treasury Yield Curve</h3>
         <p>Live US Treasury rates (Bills, Notes, Bonds) from the official government API. Critical for understanding interest rate pressure on equities.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in">
-        <span class="feat-icon">📈</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
         <h3>TradingView Charts</h3>
         <p>Professional-grade interactive charts with RSI, MACD, and Volume overlays embedded directly in the stock detail modal. No separate tab needed.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in fade-in-delay-1">
-        <span class="feat-icon">🧠</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg></span>
         <h3>Fear & Greed Index</h3>
         <p>Real-time market sentiment gauge (0–100) from alternative.me. Know whether the market is in panic or euphoria before placing any trade.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in fade-in-delay-2">
-        <span class="feat-icon">🪙</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M15.5 9.5a3.5 3.5 0 00-7 0c0 2 3.5 3 3.5 5a3.5 3.5 0 01-7 0"/></svg></span>
         <h3>Top 30 Crypto Live</h3>
         <p>Top 30 crypto assets by market cap with 24-hour change, trending coins, and Fear & Greed metrics — all in a single pane.</p>
         <span class="feat-tag free">Free</span>
       </div>
       <div class="feat fade-in fade-in-delay-3">
-        <span class="feat-icon">🇨🇦</span>
+        <span class="feat-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/><rect x="4" y="2" width="16" height="20" rx="2"/></svg></span>
         <h3>Wealthsimple Integration</h3>
         <p>Every stock detail page has a one-click "Trade on Wealthsimple" button. Commission-free trading, built for Canadian investors.</p>
         <span class="feat-tag free">Free</span>
@@ -755,16 +833,16 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="spotlight">
   <div class="section-inner spotlight-inner">
     <div class="centered fade-in">
-      <div class="section-badge">🔍 Deep Dive</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Deep Dive</div>
       <h2 class="section-title">Built for serious <em>traders</em></h2>
       <p class="section-sub">Every feature is precision-engineered to help you move faster, trade smarter, and protect your capital.</p>
     </div>
     <div class="spotlight-tabs fade-in">
-      <div class="sptab active" onclick="showSpotlight('signals',this)">🤖 AI Signals</div>
-      <div class="sptab" onclick="showSpotlight('plan',this)">📋 Trade Plans</div>
-      <div class="sptab" onclick="showSpotlight('session',this)">📊 Session Tracker</div>
-      <div class="sptab" onclick="showSpotlight('reddit',this)">💬 Social Radar</div>
-      <div class="sptab" onclick="showSpotlight('briefings',this)">🗓 Daily Briefings</div>
+      <div class="sptab active" onclick="showSpotlight('signals',this)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg> AI Signals</div>
+      <div class="sptab" onclick="showSpotlight('plan',this)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Trade Plans</div>
+      <div class="sptab" onclick="showSpotlight('session',this)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Session Tracker</div>
+      <div class="sptab" onclick="showSpotlight('reddit',this)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Social Radar</div>
+      <div class="sptab" onclick="showSpotlight('briefings',this)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Daily Briefings</div>
     </div>
     <div class="sp-panels fade-in">
 
@@ -784,7 +862,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <a href="dashboard.html" class="sp-try">See Live Signals →</a>
         </div>
         <div class="sp-visual">
-          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🎯 Live Signal Cards</div>
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Live Signal Cards</div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:13px;display:flex;justify-content:space-between;align-items:center">
               <div><div style="font-size:15px;font-weight:700">NVDA</div><div style="font-size:11px;color:var(--t3);margin-top:2px">$121.80 · +2.70%</div></div>
@@ -822,7 +900,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <a href="dashboard.html" class="sp-try">Try the Planner →</a>
         </div>
         <div class="sp-visual">
-          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">📋 Trade Action Plan — AMD</div>
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Trade Action Plan — AMD</div>
           <div style="display:flex;flex-direction:column;gap:0">
             <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Account Balance</span><span style="font-size:13px;font-weight:700">$5,000</span></div>
             <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:12px;color:var(--t3)">Risk Per Trade</span><span style="font-size:13px;font-weight:700">2% ($100)</span></div>
@@ -850,7 +928,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <a href="dashboard.html" class="sp-try">Open the Dashboard →</a>
         </div>
         <div class="sp-visual">
-          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">📊 Live Session Summary</div>
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Live Session Summary</div>
           <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between">
             <div><div style="font-size:11px;color:var(--t3)">Session P&amp;L</div><div style="font-size:22px;font-weight:800;color:#10b981">+$247.80</div></div>
             <div><div style="font-size:11px;color:var(--t3)">Deployed</div><div style="font-size:16px;font-weight:700">$2,508</div></div>
@@ -884,7 +962,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <a href="dashboard.html" class="sp-try">See Social Radar →</a>
         </div>
         <div class="sp-visual">
-          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">🔥 Top Community Mentions Today</div>
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 23c-3.866 0-7-3.134-7-7 0-2.8 1.6-5.2 3-7l1.5 1.5c.3.3.8.1.8-.3V4c0-.3.2-.5.5-.6.3-.1.5.1.7.3l4.8 5.6c1.4 1.7 2.2 3.8 2.2 6 0 3.866-3.134 7-7 7z"/></svg> Top Community Mentions Today</div>
           <div style="display:flex;flex-direction:column;gap:7px">
             <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:8px">
               <div style="width:28px;height:28px;border-radius:6px;background:rgba(239,68,68,.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#ef4444">1</div>
@@ -920,22 +998,22 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <a href="dashboard.html" class="sp-try">Read Today's Brief →</a>
         </div>
         <div class="sp-visual">
-          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">📋 Today's Briefings</div>
+          <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Today's Briefings</div>
           <div style="display:flex;flex-direction:column;gap:7px">
             <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
-              <div style="width:36px;height:36px;border-radius:8px;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🌅</div>
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(245,158,11,.15);display:flex;align-items:center;justify-content:center;font-size:16px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 00-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/><line x1="23" y1="22" x2="1" y2="22"/><polyline points="8 6 12 2 16 6"/></svg></div>
               <div><div style="font-size:13px;font-weight:700">Pre-Market Brief</div><div style="font-size:11px;color:var(--grn)">● Available Now · 6:30am</div></div>
             </div>
             <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
-              <div style="width:36px;height:36px;border-radius:8px;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;font-size:16px">📈</div>
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;font-size:16px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
               <div><div style="font-size:13px;font-weight:700">Market Open Brief</div><div style="font-size:11px;color:var(--grn)">● Available Now · 9:30am</div></div>
             </div>
             <div style="background:var(--bg2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
-              <div style="width:36px;height:36px;border-radius:8px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:16px">☀️</div>
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(16,185,129,.12);display:flex;align-items:center;justify-content:center;font-size:16px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div>
               <div><div style="font-size:13px;font-weight:700">Midday Update</div><div style="font-size:11px;color:var(--t3)">12:00pm</div></div>
             </div>
             <div style="background:var(--bg2);border-radius:8px;padding:12px;display:flex;align-items:center;gap:12px">
-              <div style="width:36px;height:36px;border-radius:8px;background:rgba(139,92,246,.12);display:flex;align-items:center;justify-content:center;font-size:16px">⚡</div>
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(139,92,246,.12);display:flex;align-items:center;justify-content:center;font-size:16px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
               <div><div style="font-size:13px;font-weight:700">Power Hour Brief</div><div style="font-size:11px;color:var(--t3)">3:00pm</div></div>
             </div>
           </div>
@@ -950,7 +1028,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="preview" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="centered fade-in">
-      <div class="section-badge">🖥 Live Preview</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Live Preview</div>
       <h2 class="section-title">Your command <em>center</em></h2>
       <p class="section-sub">Everything you need in one dark, fast, professional dashboard. No login required — just open and trade.</p>
     </div>
@@ -961,18 +1039,18 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <div class="pf-dot" style="background:#f59e0b"></div>
           <div class="pf-dot" style="background:#10b981"></div>
         </div>
-        <div class="pf-url">⚡ TradeCommand Pro — Day Trading Intelligence Center</div>
+        <div class="pf-url"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> TradeCommand Pro — Day Trading Intelligence Center</div>
       </div>
       <div class="pf-nav">
-        <div class="pf-tab on">📊 Trading</div>
-        <div class="pf-tab">🧠 Intel</div>
-        <div class="pf-tab">🪙 Crypto</div>
-        <div class="pf-tab">📰 News</div>
-        <div class="pf-tab">📋 Journal</div>
+        <div class="pf-tab on"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Trading</div>
+        <div class="pf-tab"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg> Intel</div>
+        <div class="pf-tab"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M15.5 9.5a3.5 3.5 0 00-7 0c0 2 3.5 3 3.5 5a3.5 3.5 0 01-7 0"/></svg> Crypto</div>
+        <div class="pf-tab"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="6" x2="18" y2="6"/><line x1="10" y1="10" x2="18" y2="10"/><line x1="10" y1="14" x2="18" y2="14"/></svg> News</div>
+        <div class="pf-tab"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Journal</div>
       </div>
       <div class="pf-content">
         <div class="pf-watchlist">
-          <div class="pf-mini-title">📋 Watchlist</div>
+          <div class="pf-mini-title"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Watchlist</div>
           <div class="pf-stock"><span class="pf-sym">AAPL</span><span class="pf-price">$228.87</span><span class="pf-chg green-chg">+0.63%</span></div>
           <div class="pf-stock"><span class="pf-sym">NVDA</span><span class="pf-price">$121.80</span><span class="pf-chg green-chg">+2.70%</span></div>
           <div class="pf-stock"><span class="pf-sym">AMD</span><span class="pf-price">$192.88</span><span class="pf-chg green-chg">+2.24%</span></div>
@@ -982,19 +1060,19 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <div class="pf-stock"><span class="pf-sym">MSFT</span><span class="pf-price">$388.45</span><span class="pf-chg red-chg">−0.54%</span></div>
         </div>
         <div class="pf-chart">
-          <div class="pf-mini-title">📈 SPY — Live Chart · 3 Month</div>
+          <div class="pf-mini-title"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> SPY — Live Chart · 3 Month</div>
           <div class="chart-bars">
             <div class="cb" style="height:40%;background:#3b82f6"></div><div class="cb" style="height:45%;background:#3b82f6"></div><div class="cb" style="height:38%;background:#3b82f6"></div><div class="cb" style="height:52%;background:#3b82f6"></div><div class="cb" style="height:48%;background:#3b82f6"></div><div class="cb" style="height:55%;background:#10b981"></div><div class="cb" style="height:60%;background:#10b981"></div><div class="cb" style="height:58%;background:#10b981"></div><div class="cb" style="height:65%;background:#10b981"></div><div class="cb" style="height:62%;background:#10b981"></div><div class="cb" style="height:70%;background:#10b981"></div><div class="cb" style="height:75%;background:#06b6d4"></div><div class="cb" style="height:72%;background:#06b6d4"></div><div class="cb" style="height:80%;background:#06b6d4"></div><div class="cb" style="height:78%;background:#06b6d4"></div><div class="cb" style="height:85%;background:#06b6d4"></div><div class="cb" style="height:82%;background:#06b6d4"></div><div class="cb" style="height:90%;background:#06b6d4"></div><div class="cb" style="height:88%;background:#06b6d4"></div><div class="cb" style="height:95%;background:#06b6d4"></div>
           </div>
           <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
             <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(59,130,246,.12);color:var(--blu)">RSI: 62 (Neutral)</span>
             <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(16,185,129,.12);color:var(--grn)">MACD: Bullish Cross</span>
-            <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(6,182,212,.12);color:var(--cyn)">Above VWAP ✓</span>
+            <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(6,182,212,.12);color:var(--cyn)">Above VWAP <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
             <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:rgba(245,158,11,.12);color:var(--ylw)">Vol: 1.4× Avg</span>
           </div>
         </div>
         <div class="pf-signals">
-          <div class="pf-mini-title">🎯 AI Signals</div>
+          <div class="pf-mini-title"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> AI Signals</div>
           <div class="sig-item si-buy"><span style="font-weight:600">NVDA $121.80</span><span class="sig-label sl-buy">STRONG BUY</span></div>
           <div class="sig-item si-buy"><span style="font-weight:600">AMD $192.88</span><span class="sig-label sl-buy">BUY</span></div>
           <div class="sig-item si-buy"><span style="font-weight:600">META $608.90</span><span class="sig-label sl-buy">BUY</span></div>
@@ -1035,7 +1113,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="compare">
   <div class="section-inner">
     <div class="centered fade-in">
-      <div class="section-badge">⚖️ vs The Competition</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20m-4-10h8"/><circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/><line x1="12" y1="20" x2="12" y2="22"/></svg> vs The Competition</div>
       <h2 class="section-title">What Wall Street pays for.<br><em>Now free.</em></h2>
       <p class="section-sub">Professional traders spend hundreds per month on tools that don't do half of what TradeCommand Pro does for $0.</p>
     </div>
@@ -1044,7 +1122,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         <thead>
           <tr>
             <th style="width:220px">Feature</th>
-            <th class="hl" style="text-align:center">⚡ TradeCommand Pro</th>
+            <th class="hl" style="text-align:center"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> TradeCommand Pro</th>
             <th style="text-align:center">Bloomberg Terminal</th>
             <th style="text-align:center">ThinkorSwim</th>
             <th style="text-align:center">Webull</th>
@@ -1052,17 +1130,17 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </thead>
         <tbody>
           <tr><td class="feat-lbl">Monthly Price</td><td class="hl" style="text-align:center;color:var(--grn);font-weight:800">Free → $29</td><td style="text-align:center;color:var(--red)">$600+</td><td style="text-align:center">Free (US only)</td><td style="text-align:center">Free</td></tr>
-          <tr><td class="feat-lbl">AI Trade Signals</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
-          <tr><td class="feat-lbl">Step-by-Step Action Plans</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
-          <tr><td class="feat-lbl">Automatic Position Sizing</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cprt">Manual</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
-          <tr><td class="feat-lbl">Social Sentiment (5+ communities)</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cprt">Partial</span></td></tr>
-          <tr><td class="feat-lbl">Real-Time Price Quotes</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td></tr>
-          <tr><td class="feat-lbl">5× Daily AI Briefings</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
-          <tr><td class="feat-lbl">Fear &amp; Greed Index</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cprt">Paid Add-on</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
-          <tr><td class="feat-lbl">Live Session P&amp;L Tracker</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cprt">Complex</span></td><td style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="ck">✓</span></td></tr>
-          <tr><td class="feat-lbl">Canadian / Wealthsimple</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
-          <tr><td class="feat-lbl">Beginner Trading Guide</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cprt">Complex Docs</span></td><td style="text-align:center"><span class="cprt">Partial</span></td></tr>
-          <tr><td class="feat-lbl">Open Source</td><td class="hl" style="text-align:center"><span class="ck">✓</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td><td style="text-align:center"><span class="cx">✗</span></td></tr>
+          <tr><td class="feat-lbl">AI Trade Signals</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">Step-by-Step Action Plans</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">Automatic Position Sizing</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cprt">Manual</span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">Social Sentiment (5+ communities)</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cprt">Partial</span></td></tr>
+          <tr><td class="feat-lbl">Real-Time Price Quotes</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">5× Daily AI Briefings</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">Fear &amp; Greed Index</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cprt">Paid Add-on</span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">Live Session P&amp;L Tracker</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cprt">Complex</span></td><td style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">Canadian / Wealthsimple</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td></tr>
+          <tr><td class="feat-lbl">Beginner Trading Guide</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cprt">Complex Docs</span></td><td style="text-align:center"><span class="cprt">Partial</span></td></tr>
+          <tr><td class="feat-lbl">Open Source</td><td class="hl" style="text-align:center"><span class="ck"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td><td style="text-align:center"><span class="cx"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1077,13 +1155,13 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="sources" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="centered fade-in">
-      <div class="section-badge">📡 Fully Connected</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 6.5 6.5 2 12 2"/><path d="M5 12a7 7 0 017-7"/><circle cx="12" cy="12" r="2"/><path d="M12 14v8"/></svg> Fully Connected</div>
       <h2 class="section-title">Data from every <em>angle</em></h2>
       <p class="section-sub">We pull from the same sources professional traders use — price feeds, fundamentals, sentiment, news, and government data.</p>
     </div>
     <div class="sources-grid">
       <div class="source-card fade-in">
-        <div class="source-icon" style="background:rgba(59,130,246,.12)">📡</div>
+        <div class="source-icon" style="background:rgba(59,130,246,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 6.5 6.5 2 12 2"/><path d="M5 12a7 7 0 017-7"/><circle cx="12" cy="12" r="2"/><path d="M12 14v8"/></svg></div>
         <div class="source-body">
           <div class="source-name">Real-Time Data Feed</div>
           <div class="source-desc">Real-time stock quotes, WebSocket streaming, earnings calendar, company profiles, and market news. Built into all plans.</div>
@@ -1091,7 +1169,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in fade-in-delay-1">
-        <div class="source-icon" style="background:rgba(139,92,246,.12)">📊</div>
+        <div class="source-icon" style="background:rgba(139,92,246,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <div class="source-body">
           <div class="source-name">Fundamental Analysis Engine</div>
           <div class="source-desc">Company fundamentals: P/E ratio, EPS, 52-week range, beta, revenue, analyst price targets, and forward guidance.</div>
@@ -1099,7 +1177,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in fade-in-delay-2">
-        <div class="source-icon" style="background:rgba(16,185,129,.12)">📰</div>
+        <div class="source-icon" style="background:rgba(16,185,129,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a2 2 0 01-2 2zm0 0a2 2 0 01-2-2v-9c0-1.1.9-2 2-2h2"/><line x1="10" y1="6" x2="18" y2="6"/><line x1="10" y1="10" x2="18" y2="10"/><line x1="10" y1="14" x2="18" y2="14"/></svg></div>
         <div class="source-body">
           <div class="source-name">News Intelligence</div>
           <div class="source-desc">Top business headlines and company-specific news articles from multiple sources. Built into all plans.</div>
@@ -1107,7 +1185,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in">
-        <div class="source-icon" style="background:rgba(249,115,22,.12)">💬</div>
+        <div class="source-icon" style="background:rgba(249,115,22,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
         <div class="source-body">
           <div class="source-name">Social Sentiment Engine</div>
           <div class="source-desc">Hot threads from 5+ major trading communities. Real-time retail sentiment tracking and analysis.</div>
@@ -1115,7 +1193,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in fade-in-delay-1">
-        <div class="source-icon" style="background:rgba(245,158,11,.12)">🔥</div>
+        <div class="source-icon" style="background:rgba(245,158,11,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 23c-3.866 0-7-3.134-7-7 0-2.8 1.6-5.2 3-7l1.5 1.5c.3.3.8.1.8-.3V4c0-.3.2-.5.5-.6.3-.1.5.1.7.3l4.8 5.6c1.4 1.7 2.2 3.8 2.2 6 0 3.866-3.134 7-7 7z"/></svg></div>
         <div class="source-body">
           <div class="source-name">Market Mentions Index</div>
           <div class="source-desc">Most-mentioned tickers across all trading communities, ranked by mention volume and sentiment shift.</div>
@@ -1123,7 +1201,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in fade-in-delay-2">
-        <div class="source-icon" style="background:rgba(6,182,212,.12)">🪙</div>
+        <div class="source-icon" style="background:rgba(6,182,212,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12"/><path d="M15.5 9.5a3.5 3.5 0 00-7 0c0 2 3.5 3 3.5 5a3.5 3.5 0 01-7 0"/></svg></div>
         <div class="source-body">
           <div class="source-name">Crypto Data</div>
           <div class="source-desc">Top 30 cryptocurrencies by market cap, 24-hour change, trending coins, and crypto Fear & Greed Index.</div>
@@ -1131,7 +1209,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in">
-        <div class="source-icon" style="background:rgba(16,185,129,.12)">🧠</div>
+        <div class="source-icon" style="background:rgba(16,185,129,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 017 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 017-7z"/><line x1="9" y1="21" x2="15" y2="21"/></svg></div>
         <div class="source-body">
           <div class="source-name">alternative.me</div>
           <div class="source-desc">Fear & Greed Index (0–100) updated daily. Know whether the market is in extreme fear or greed before trading.</div>
@@ -1139,7 +1217,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in fade-in-delay-1">
-        <div class="source-icon" style="background:rgba(245,158,11,.12)">🏦</div>
+        <div class="source-icon" style="background:rgba(245,158,11,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M12 3l9 7H3l9-7z"/><line x1="6" y1="10" x2="6" y2="21"/><line x1="10" y1="10" x2="10" y2="21"/><line x1="14" y1="10" x2="14" y2="21"/><line x1="18" y1="10" x2="18" y2="21"/></svg></div>
         <div class="source-body">
           <div class="source-name">US Treasury (Official)</div>
           <div class="source-desc">Live yield curve from fiscaldata.treasury.gov — Bills, Notes, and Bonds. Critical macro context for equity traders.</div>
@@ -1147,7 +1225,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="source-card fade-in fade-in-delay-2">
-        <div class="source-icon" style="background:rgba(59,130,246,.12)">📈</div>
+        <div class="source-icon" style="background:rgba(59,130,246,.12)"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
         <div class="source-body">
           <div class="source-name">TradingView</div>
           <div class="source-desc">Professional interactive charts embedded in every stock detail view. RSI, MACD, Volume overlays. Fully interactive.</div>
@@ -1162,13 +1240,13 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="calculator">
   <div class="section-inner calc-inner">
     <div class="centered fade-in">
-      <div class="section-badge">🧮 Try It Live</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="16" y1="10" x2="16" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="16" y1="14" x2="16" y2="14.01"/><line x1="8" y1="18" x2="16" y2="18"/></svg> Try It Live</div>
       <h2 class="section-title">Calculate your <em>position size</em></h2>
       <p class="section-sub">The same risk calculator built into every signal. Enter your numbers and see how the trade plan protects your capital — before you touch a single share.</p>
     </div>
     <div class="calc-grid">
       <div class="calc-form fade-in">
-        <h3>🔢 Your Trade Setup</h3>
+        <h3><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V7"/><path d="M8 17v-6a2 2 0 014 0v6"/><path d="M16 7v10"/><path d="M20 7v10"/></svg> Your Trade Setup</h3>
         <div class="calc-field">
           <label>Account Balance ($)</label>
           <input type="number" id="calc-bal" value="5000" oninput="calcPosition()" min="100">
@@ -1189,10 +1267,10 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
           <label>Target Price ($)</label>
           <input type="number" id="calc-target" value="208.00" oninput="calcPosition()" step="0.01">
         </div>
-        <p style="font-size:12px;color:var(--t3);margin-top:8px">⚡ In the dashboard, these numbers are generated automatically from each AI signal.</p>
+        <p style="font-size:12px;color:var(--t3);margin-top:8px"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> In the dashboard, these numbers are generated automatically from each AI signal.</p>
       </div>
       <div class="calc-result fade-in fade-in-delay-1">
-        <h3>📋 Your Trade Plan</h3>
+        <h3><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg> Your Trade Plan</h3>
         <div class="calc-row"><span class="lbl">Max Risk ($)</span><span class="val red" id="cr-maxloss">$100.00</span></div>
         <div class="calc-row"><span class="lbl">Shares to Buy</span><span class="val blu" id="cr-shares">13 shares</span></div>
         <div class="calc-row"><span class="lbl">Capital Deployed</span><span class="val" id="cr-invested">$2,507.44</span></div>
@@ -1210,7 +1288,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="pricing">
   <div class="section-inner">
     <div class="centered fade-in">
-      <div class="section-badge">💰 Simple Pricing</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5m0 4v1"/><path d="M9 11h6a2 2 0 010 4H9a2 2 0 010-4z"/></svg> Simple Pricing</div>
       <h2 class="section-title">Start free. Upgrade <em>when ready.</em></h2>
       <p class="section-sub">All the core features are free forever. Pro and Elite unlock advanced capabilities as you grow as a trader.</p>
     </div>
@@ -1279,7 +1357,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         <button onclick="openAccessModal('elite')" class="btn-price btn-price-elite">Get Elite — $79/mo →</button>
       </div>
     </div>
-    <p class="price-note fade-in">⚡ <strong>Pro tip:</strong> All data feeds are included with every plan. No API keys to manage. <a href="#sources" style="color:var(--blu)">See all sources →</a></p>
+    <p class="price-note fade-in"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> <strong>Pro tip:</strong> All data feeds are included with every plan. No API keys to manage. <a href="#sources" style="color:var(--blu)">See all sources →</a></p>
   </div>
 </section>
 
@@ -1293,7 +1371,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
     </div>
     <div class="testi-grid">
       <div class="testi fade-in">
-        <div class="testi-stars">★★★★★</div>
+        <div class="testi-stars"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg></div>
         <p class="testi-text">The action plan is a game-changer. It tells me exactly how many shares to buy, where to set my stop, and what to target. I don't have to do any math — I just follow the plan.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6)">M</div>
@@ -1305,7 +1383,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="testi fade-in fade-in-delay-1">
-        <div class="testi-stars">★★★★★</div>
+        <div class="testi-stars"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg></div>
         <p class="testi-text">I was completely overwhelmed by trading before this. Now I open the dashboard, check the signals, and I know exactly what to do. The 5 daily briefings keep me informed without drowning in data.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">S</div>
@@ -1317,7 +1395,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         </div>
       </div>
       <div class="testi fade-in fade-in-delay-2">
-        <div class="testi-stars">★★★★★</div>
+        <div class="testi-stars"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 10.26 24 10.27 17.18 16.70 20.09 24.97 12 18.54 3.91 24.97 6.82 16.70 0 10.27 8.91 10.26"/></polygon></svg></div>
         <p class="testi-text">The Reddit + AI signal combo caught the GME momentum building before it ran 40% in two days. This tool pulls in data I would never have checked manually. Worth every penny.</p>
         <div class="testi-author">
           <div class="testi-avatar" style="background:linear-gradient(135deg,#f97316,#f59e0b)">J</div>
@@ -1361,26 +1439,26 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
   <div class="section-inner">
     <div class="about-inner">
       <div class="about-body fade-in">
-        <div class="section-badge">👤 Our Story</div>
+        <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Our Story</div>
         <h2 class="section-title">Built by a trader,<br>for <em>traders</em></h2>
         <p class="section-sub">TradeCommand Pro was born out of frustration. Retail investors have access to the same markets as hedge funds — but none of the tools.</p>
         <div class="about-list">
           <div class="about-item">
-            <div class="about-icon">🎯</div>
+            <div class="about-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
             <div>
               <h4>Our Mission</h4>
               <p>Give every retail investor — from complete beginners to experienced traders — access to professional-grade data and AI-powered analysis. No $500/month Bloomberg Terminal required.</p>
             </div>
           </div>
           <div class="about-item">
-            <div class="about-icon">🇨🇦</div>
+            <div class="about-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/><rect x="4" y="2" width="16" height="20" rx="2"/></svg></div>
             <div>
               <h4>Built for Canada</h4>
               <p>TradeCommand Pro is built with Wealthsimple Trade at its core — Canada's leading commission-free trading platform. We're proud to be Canadian-built and Canadian-first.</p>
             </div>
           </div>
           <div class="about-item">
-            <div class="about-icon">🔒</div>
+            <div class="about-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
             <div>
               <h4>Your Data Stays Yours</h4>
               <p>All API keys and settings are stored locally in your browser — never on our servers. We don't see your portfolio, your trades, or your watchlist. Ever.</p>
@@ -1390,22 +1468,22 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
       </div>
       <div class="about-visual fade-in fade-in-delay-1">
         <div class="about-card">
-          <div class="ac-icon">📊</div>
+          <div class="ac-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
           <div class="ac-title">Professional-Grade Intelligence</div>
           <div class="ac-sub">The same data sources used by institutional traders — now in a single dashboard that opens in your browser.</div>
         </div>
         <div class="about-card">
-          <div class="ac-icon">🤖</div>
+          <div class="ac-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg></div>
           <div class="ac-title">AI That Explains Itself</div>
           <div class="ac-sub">Every signal comes with a reason. Every trade plan comes with a step-by-step explanation. No black boxes.</div>
         </div>
         <div class="about-card">
-          <div class="ac-icon">⚡</div>
+          <div class="ac-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
           <div class="ac-title">Free by Design</div>
           <div class="ac-sub">The core dashboard is free forever. We believe access to good trading tools shouldn't be a privilege.</div>
         </div>
         <div class="about-card">
-          <div class="ac-icon">🇨🇦</div>
+          <div class="ac-icon"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/><rect x="4" y="2" width="16" height="20" rx="2"/></svg></div>
           <div class="ac-title">Wealthsimple-Native</div>
           <div class="ac-sub">One-click execution on Canada's largest commission-free trading platform — built right into every stock view.</div>
         </div>
@@ -1418,7 +1496,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <section id="faq" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="centered fade-in">
-      <div class="section-badge">❓ Questions</div>
+      <div class="section-badge"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0 8h.01"/></svg> Questions</div>
       <h2 class="section-title">Everything you need to <em>know</em></h2>
     </div>
     <div class="faq-list fade-in">
@@ -1473,7 +1551,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <!-- ── FINAL CTA ──────────────────────────────────────────── -->
 <section id="cta">
   <div class="cta-inner">
-    <div class="section-badge" style="margin:0 auto 20px;display:inline-flex">⚡ Start Today</div>
+    <div class="section-badge" style="margin:0 auto 20px;display:inline-flex"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Start Today</div>
     <h2 class="fade-in">Start trading <em>smarter</em> today.</h2>
     <p class="fade-in fade-in-delay-1">Join traders across Canada who are using TradeCommand Pro to make more informed decisions. Free forever. Set up in 60 seconds.</p>
     <div class="hero-cta-btns fade-in fade-in-delay-2" style="justify-content:center">
@@ -1505,9 +1583,9 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
         <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
         Post to Reddit
       </a>
-      <button onclick="navigator.clipboard.writeText('https://maxmcdonough.github.io/tradecommand-pro/').then(()=>{this.textContent='✅ Copied!';setTimeout(()=>this.textContent='🔗 Copy Link',2000)})"
+      <button onclick="navigator.clipboard.writeText('https://maxmcdonough.github.io/tradecommand-pro/').then(()=>{this.textContent='<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Copied!';setTimeout(()=>this.textContent='<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link',2000)})"
         style="display:flex;align-items:center;gap:8px;padding:12px 22px;background:var(--card);border:1px solid var(--brd2);color:var(--t1);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">
-        🔗 Copy Link
+        <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy Link
       </button>
     </div>
   </div>
@@ -1517,13 +1595,13 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <div class="logo">⚡ TradeCommand Pro</div>
+      <div class="logo"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> TradeCommand Pro</div>
       <p>Professional day trading intelligence for retail investors. 15+ live data sources, AI-powered signals, and step-by-step trade plans. Built for Canadian traders.</p>
       <div class="footer-social">
         <a class="social-btn" href="https://twitter.com/intent/tweet?text=Just%20found%20TradeCommand%20Pro%20%E2%80%94%20a%20free%20day%20trading%20intelligence%20dashboard%20with%20AI%20signals%2C%2012%20sector%20portfolios%2C%20Reddit%20sentiment%20and%20live%20quotes%20%E2%9A%A1&url=https%3A%2F%2Fmaxmcdonough.github.io%2Ftradecommand-pro%2F&hashtags=daytrading,stocks,trading" target="_blank" rel="noopener" title="Share on X / Twitter" style="text-decoration:none">𝕏</a>
-        <a class="social-btn" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmaxmcdonough.github.io%2Ftradecommand-pro%2F&title=TradeCommand%20Pro%20%E2%80%94%20Free%20Day%20Trading%20Intelligence%20Dashboard%20with%20AI%20Signals%20%2B%2012%20Sector%20Portfolios" target="_blank" rel="noopener" title="Share on Reddit" style="text-decoration:none">🔴</a>
+        <a class="social-btn" href="https://www.reddit.com/submit?url=https%3A%2F%2Fmaxmcdonough.github.io%2Ftradecommand-pro%2F&title=TradeCommand%20Pro%20%E2%80%94%20Free%20Day%20Trading%20Intelligence%20Dashboard%20with%20AI%20Signals%20%2B%2012%20Sector%20Portfolios" target="_blank" rel="noopener" title="Share on Reddit" style="text-decoration:none"><span class="status-dot status-red"></span></a>
         <a class="social-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fmaxmcdonough.github.io%2Ftradecommand-pro%2F" target="_blank" rel="noopener" title="Share on LinkedIn" style="text-decoration:none">in</a>
-        <a class="social-btn" href="mailto:?subject=TradeCommand%20Pro%20%E2%80%94%20Free%20Day%20Trading%20Dashboard&body=Check%20out%20TradeCommand%20Pro%20%E2%80%94%20a%20free%20day%20trading%20intelligence%20dashboard%20with%20real-time%20quotes%2C%20AI%20signals%2C%20and%20sector%20portfolios%3A%0A%0Ahttps%3A%2F%2Fmaxmcdonough.github.io%2Ftradecommand-pro%2F" title="Share via Email" style="text-decoration:none">✉</a>
+        <a class="social-btn" href="mailto:?subject=TradeCommand%20Pro%20%E2%80%94%20Free%20Day%20Trading%20Dashboard&body=Check%20out%20TradeCommand%20Pro%20%E2%80%94%20a%20free%20day%20trading%20intelligence%20dashboard%20with%20real-time%20quotes%2C%20AI%20signals%2C%20and%20sector%20portfolios%3A%0A%0Ahttps%3A%2F%2Fmaxmcdonough.github.io%2Ftradecommand-pro%2F" title="Share via Email" style="text-decoration:none"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 10l5 4 5-4"/></svg></a>
       </div>
     </div>
     <div class="footer-col">
@@ -1557,7 +1635,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2026 TradeCommand Pro. All rights reserved. Built in Vancouver, BC 🇨🇦</p>
+    <p>© 2026 TradeCommand Pro. All rights reserved. Built in Vancouver, BC <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 3 3.5.5-2.5 2.5.5 3.5L12 11l-3 1.5.5-3.5L7 6.5l3.5-.5z"/><rect x="4" y="2" width="16" height="20" rx="2"/></svg></p>
     <div class="footer-legal">
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Service</a>
@@ -1565,7 +1643,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(255,255,255,.08);padding:
     </div>
   </div>
   <div class="disclaimer">
-    ⚠️ <strong>Not Financial Advice.</strong> TradeCommand Pro is an educational and analytical tool only. All signals, trade plans, and briefings are computer-generated for informational purposes and do not constitute financial, investment, or trading advice. Past performance does not guarantee future results. Trading involves substantial risk of loss and is not suitable for all investors. Always conduct your own research and consult a qualified financial advisor before making any investment decisions. Never trade with money you cannot afford to lose.
+    <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> <strong>Not Financial Advice.</strong> TradeCommand Pro is an educational and analytical tool only. All signals, trade plans, and briefings are computer-generated for informational purposes and do not constitute financial, investment, or trading advice. Past performance does not guarantee future results. Trading involves substantial risk of loss and is not suitable for all investors. Always conduct your own research and consult a qualified financial advisor before making any investment decisions. Never trade with money you cannot afford to lose.
   </div>
 </footer>
 
@@ -1690,8 +1768,8 @@ calcPosition();
 <!-- ===== ACCESS MODAL ===== -->
 <div id="access-modal-overlay">
   <div class="access-modal">
-    <button class="access-modal-close" onclick="closeAccessModal()">✕</button>
-    <div class="access-modal-logo">⚡ TradeCommand</div>
+    <button class="access-modal-close" onclick="closeAccessModal()"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="access-modal-logo"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> TradeCommand</div>
     <div id="access-plan-banner" class="access-modal-plan-banner" style="display:none"></div>
     <h3 id="access-modal-title">Create your free account</h3>
     <p id="access-modal-sub">Sign up to access the full dashboard and all features.</p>
@@ -1715,13 +1793,13 @@ function openAccessModal(plan) {
   const title = document.getElementById('access-modal-title');
   const sub = document.getElementById('access-modal-sub');
   if (plan === 'pro') {
-    banner.textContent = '📦 Pro Plan — $29/mo';
+    banner.textContent = '<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Pro Plan — $29/mo';
     banner.className = 'access-modal-plan-banner pro';
     banner.style.display = 'block';
     title.textContent = 'Start your Pro trial';
     sub.textContent = 'Enter your email to create an account and activate Pro.';
   } else if (plan === 'elite') {
-    banner.textContent = '👑 Elite Plan — $79/mo';
+    banner.textContent = '<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h20M3 8l1 12h16l1-12M7 8l2-4h6l2 4M7 12h10M7 16h10"/><circle cx="6" cy="5" r="1"/><circle cx="12" cy="3" r="1.5"/><circle cx="18" cy="5" r="1"/></svg> Elite Plan — $79/mo';
     banner.className = 'access-modal-plan-banner elite';
     banner.style.display = 'block';
     title.textContent = 'Get Elite access';
