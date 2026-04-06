@@ -1816,7 +1816,7 @@ input, select, button { font-family: inherit; }
         <span class="market-clock" id="clock">--:--:--</span>
       </div>
       <div class="topbar-right">
-        <span id="trial-badge" class="topbar-badge badge-trial" style="display:none"></span>
+        <span id="trial-badge" class="topbar-badge badge-trial" style="display:none;cursor:pointer" onclick="showUpgradeModal()" title="Click to upgrade your plan"></span>
         <button id="btn-upgrade" class="btn btn-sm btn-primary" style="display:none" onclick="showUpgradeModal()">Upgrade</button>
         <!-- NOTIFICATION BELL -->
         <div class="notif-bell" onclick="toggleNotifPanel(event)" id="notif-bell">
