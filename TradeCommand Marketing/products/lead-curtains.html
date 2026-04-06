@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Curtains - PNWX Radiation Protection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #1a1a26;
+            --accent: #4f8fff;
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient orbs background */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-2) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 15, 0.8);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Product sections */
+        .products {
+            position: relative;
+            z-index: 2;
+            margin: 4rem 0;
+        }
+
+        .product-section {
+            margin-bottom: 4rem;
+            animation: slideInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .product-section:nth-child(1) { animation-delay: 0.1s; }
+        .product-section:nth-child(2) { animation-delay: 0.2s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(79, 143, 255, 0.05) 0%, rgba(0, 212, 170, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .product-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .features {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: rgba(79, 143, 255, 0.05);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+        }
+
+        .features h4 {
+            color: var(--accent-2);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .features ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .features li {
+            color: var(--text-secondary);
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-2);
+        }
+
+        .pricing-section {
+            margin: 2.5rem 0;
+        }
+
+        .pricing-section h4 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-table th {
+            background: rgba(79, 143, 255, 0.1);
+            color: var(--accent);
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pricing-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .pricing-table tr:hover {
+            background: rgba(79, 143, 255, 0.03);
+        }
+
+        .pricing-value {
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+
+        .specs {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 212, 170, 0.05);
+            border-left: 3px solid var(--accent-2);
+            border-radius: 8px;
+        }
+
+        .specs h4 {
+            color: var(--accent-2);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .specs p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            position: relative;
+            z-index: 2;
+            margin: 5rem 0 3rem;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 143, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            background: rgba(26, 26, 38, 0.5);
+            backdrop-filter: blur(10px);
+            margin-top: 5rem;
+        }
+
+        footer .container {
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .product-card {
+                padding: 1.5rem;
+            }
+
+            .product-title {
+                font-size: 1.3rem;
+            }
+
+            .pricing-table th,
+            .pricing-table td {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .cta-section h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="../pnwx-redesign.html" class="logo">PNWX</a>
+            <ul>
+                <li><a href="../pnwx-redesign.html#products">Products</a></li>
+                <li><a href="../pnwx-redesign.html#about">About</a></li>
+                <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+                <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Lead Curtains</h1>
+        <p class="subtitle">Custom manufactured radiation containment curtains for procedure rooms and interventional suites.</p>
+    </section>
+
+    <!-- Products -->
+    <div class="container">
+        <section class="products">
+            <!-- Product 1: Solid Panel Mobile Curtain -->
+            <div class="product-section">
+                <div class="product-card">
+                    <h2 class="product-title">Solid Panel Mobile Curtain (Infab)</h2>
+                    <p class="product-description">Custom manufactured radiation protection using the same high-quality materials as our lead aprons. Featuring a lead vinyl core with multiple poly cloth color options.</p>
+
+                    <div class="features">
+                        <h4>Key Features</h4>
+                        <ul>
+                            <li>High quality lead vinyl core with multiple poly cloth colors</li>
+                            <li>Nylon track glides with S-hooks and heavy-duty carriers</li>
+                            <li>Curved track available (nominal fee)</li>
+                            <li>Maximum single panel width: 48"</li>
+                            <li>Velcro connectors for multi-panel configurations</li>
+                            <li>Grommet holes every 6" (add 3" height for track system)</li>
+                        </ul>
+                    </div>
+
+                    <div class="pricing-section">
+                        <h4>Pricing (Per Square Foot)</h4>
+                        <table class="pricing-table">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Lead Thickness</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>683650</td>
+                                    <td>0.25mm Pb</td>
+                                    <td class="pricing-value">$45/sqft</td>
+                                </tr>
+                                <tr>
+                                    <td>683660</td>
+                                    <td>0.50mm Pb</td>
+                                    <td class="pricing-value">$90/sqft</td>
+                                </tr>
+                                <tr>
+                                    <td>683670</td>
+                                    <td>0.75mm Pb</td>
+                                    <td class="pricing-value">$130/sqft</td>
+                                </tr>
+                                <tr>
+                                    <td>683675</td>
+                                    <td>1.00mm Pb</td>
+                                    <td class="pricing-value">$175/sqft</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pricing-section">
+                        <h4>Track & Hardware</h4>
+                        <table class="pricing-table">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>683680</td>
+                                    <td>Straight track</td>
+                                    <td class="pricing-value">$80/linear ft</td>
+                                </tr>
+                                <tr>
+                                    <td>683690</td>
+                                    <td>Curved track</td>
+                                    <td class="pricing-value">Call</td>
+                                </tr>
+                                <tr>
+                                    <td>683694</td>
+                                    <td>End stops (pair)</td>
+                                    <td class="pricing-value">$40</td>
+                                </tr>
+                                <tr>
+                                    <td>683695</td>
+                                    <td>Ceiling splice</td>
+                                    <td class="pricing-value">$90</td>
+                                </tr>
+                                <tr>
+                                    <td>683696</td>
+                                    <td>Trim chain</td>
+                                    <td class="pricing-value">$10/inch</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="specs">
+                        <h4>Track Specifications</h4>
+                        <p><strong>Straight Track:</strong> 6063-T5 aluminum, 1¾"×2", 0.080" thickness</p>
+                        <p><strong>Curved Track:</strong> 5/8"×1-11/16", 0.0094" thickness</p>
+                        <p><strong>Important:</strong> Tracking over 9' requires motor freight. Mounting hardware NOT included.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2: Mobile Radiation Protection Curtain -->
+            <div class="product-section">
+                <div class="product-card">
+                    <h2 class="product-title">Mobile Radiation Protection Curtain</h2>
+                    <p class="product-description">Custom manufactured mobile solution with nylon/vinyl options. Heavy-duty carriers and 4-caster base design for maximum mobility and ease of use.</p>
+
+                    <div class="features">
+                        <h4>Key Features</h4>
+                        <ul>
+                            <li>Custom manufactured with nylon/vinyl options</li>
+                            <li>Heavy-duty carriers with 4-caster base on each side</li>
+                            <li>Hook & loop back straps for secure fastening</li>
+                            <li>Opening for passage and accessibility</li>
+                            <li>Exceptional mobility for procedure room flexibility</li>
+                        </ul>
+                    </div>
+
+                    <div class="pricing-section">
+                        <h4>Pricing (Per Square Foot)</h4>
+                        <table class="pricing-table">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Lead Thickness</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>683589</td>
+                                    <td>0.25mm</td>
+                                    <td class="pricing-value">$55.38/sqft</td>
+                                </tr>
+                                <tr>
+                                    <td>683590</td>
+                                    <td>0.50mm</td>
+                                    <td class="pricing-value">$92.31/sqft</td>
+                                </tr>
+                                <tr>
+                                    <td>683591</td>
+                                    <td>1.0mm</td>
+                                    <td class="pricing-value">$138.46/sqft</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="specs">
+                        <h4>Weight Specifications</h4>
+                        <p><strong>0.50mm Configuration:</strong> Approximately 1.8 lbs per square foot (excluding frame)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container">
+        <section class="cta-section">
+            <h3>Ready to Protect Your Team?</h3>
+            <p>Contact our specialists to discuss your radiation protection needs and receive a custom quote for your procedure room or interventional suite.</p>
+            <a href="../pnwx-redesign.html#contact" class="btn">Get in Touch</a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 PNWX Radiation Protection. All rights reserved.</p>
+            <p><a href="../pnwx-redesign.html#contact">Contact</a> | <a href="../pnwx-redesign.html">Home</a></p>
+        </div>
+    </footer>
+</body>
+</html>

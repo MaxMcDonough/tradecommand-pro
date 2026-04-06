@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Ray Grids - PNWX Medical Imaging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #1a1a26;
+            --accent: #4f8fff;
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient orbs background effect */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(79, 143, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            left: -200px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            bottom: -150px;
+            right: -150px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: flex-start;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Header */
+        header {
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Section styling */
+        section {
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Card styling with glassmorphism */
+        .card {
+            background: rgba(26, 26, 38, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(26, 26, 38, 0.8);
+            border-color: rgba(79, 143, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        /* Specifications list */
+        .specs-list {
+            list-style: none;
+        }
+
+        .specs-list li {
+            padding: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .specs-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+
+        /* Grid for specifications */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .spec-item {
+            background: rgba(26, 26, 38, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+
+        /* Encasement options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-card {
+            background: rgba(26, 26, 38, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .option-card:hover {
+            background: rgba(26, 26, 38, 0.9);
+            border-color: var(--accent);
+            transform: translateY(-6px);
+        }
+
+        .option-card h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .option-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, rgba(79, 143, 255, 0.1) 0%, rgba(0, 212, 170, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 3rem 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            color: var(--bg-primary);
+            padding: 1rem 3rem;
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(79, 143, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(79, 143, 255, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="../pnwx-redesign.html#products">Products</a></li>
+            <li><a href="../pnwx-redesign.html#about">About</a></li>
+            <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+            <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="content-wrapper">
+        <header>
+            <h1>X-Ray Grids</h1>
+            <p>High-performance anti-scatter x-ray grids for improved image quality across all modalities.</p>
+        </header>
+
+        <main>
+            <!-- Standard X-Ray Grids Section -->
+            <section>
+                <h2>Standard X-Ray Grids (103 lpi)</h2>
+                
+                <div class="card">
+                    <h3>Premium Materials & Specifications</h3>
+                    <ul class="specs-list">
+                        <li>99.99% purity aluminum strips (±0.02mm)</li>
+                        <li>99.85% purity lead strips (±0.001mm)</li>
+                        <li>Smooth enameled aluminum covers</li>
+                        <li>Carbon fiber composite available</li>
+                        <li>Radiographic tested before shipment</li>
+                        <li>Parallel grid option for research & traumatology</li>
+                    </ul>
+                </div>
+
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">Available Sizes</div>
+                        <div class="spec-value">7 Options</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">9"×11" to 15"×37"</p>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Ratio Options</div>
+                        <div class="spec-value">8:1, 10:1, 12:1</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Focal Distance Range</div>
+                        <div class="spec-value">34" - 72"</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Available Sizes:</strong> 9"×11", 11"×13", 12"×15", 15"×18", 17¼"×17¾", 17¼"×18⅞", 15"×37"</p>
+                    <p style="color: var(--text-secondary);"><strong>Pricing:</strong> <span style="color: var(--accent-2);">Call for quote</span></p>
+                </div>
+            </section>
+
+            <!-- Ultra-High Line Grids Section -->
+            <section>
+                <h2>Ultra-High Line Grids (Digital CR/DR)</h2>
+                
+                <div class="card">
+                    <h3>Optimized for Digital Imaging</h3>
+                    <ul class="specs-list">
+                        <li>178 lpi option for advanced digital systems</li>
+                        <li>200 lpi option for highest resolution</li>
+                        <li>Same focal distances as standard grids</li>
+                        <li>Same ratio options (8:1, 10:1, 12:1)</li>
+                        <li>Fully compatible with CR/DR systems</li>
+                    </ul>
+                </div>
+
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="spec-label">LPI Options</div>
+                        <div class="spec-value">178 & 200</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label">Optimized For</div>
+                        <div class="spec-value">Digital Imaging</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p style="color: var(--text-secondary);"><strong>Pricing:</strong> <span style="color: var(--accent-2);">Call for quote</span></p>
+                </div>
+            </section>
+
+            <!-- Grid Encasement Options Section -->
+            <section>
+                <h2>Grid Encasement Options</h2>
+                
+                <div class="options-grid">
+                    <div class="option-card">
+                        <h4>🔲 Flat (No Flange)</h4>
+                        <p><strong>Material:</strong> Lexan plastic<br>
+                        <strong>Features:</strong> No cassette attachment required<br>
+                        <strong>Sizes:</strong> 10×12, 24cm×30cm, 14×17</p>
+                    </div>
+
+                    <div class="option-card">
+                        <h4>📋 Drop-On</h4>
+                        <p><strong>Material:</strong> Polycarbonate with powder coated aluminum corners<br>
+                        <strong>Features:</strong> Snap on/off design for easy use<br>
+                        <strong>Sizes:</strong> 10×12, 24cm×30cm, 14×17</p>
+                    </div>
+
+                    <div class="option-card">
+                        <h4>🛝 XRAC (With Channels)</h4>
+                        <p><strong>Material:</strong> White Tufak polycarbonate with polyethylene channels<br>
+                        <strong>Features:</strong> Channeled design for guided placement<br>
+                        <strong>Sizes:</strong> 8×10 through 14×17</p>
+                    </div>
+
+                    <div class="option-card">
+                        <h4>⚡ XRAC EZ Slide-II</h4>
+                        <p><strong>Material:</strong> Aluminum with closed welded corners<br>
+                        <strong>Features:</strong> Smooth sliding action, durable construction<br>
+                        <strong>Sizes:</strong> 8×10 through 14×17</p>
+                    </div>
+
+                    <div class="option-card">
+                        <h4>🚑 XRAC EZ Slide-III Portable</h4>
+                        <p><strong>Material:</strong> Lightweight aluminum<br>
+                        <strong>Features:</strong> Compact design for mobile imaging<br>
+                        <strong>Sizes:</strong> 14×17 only</p>
+                    </div>
+
+                    <div class="option-card">
+                        <h4>⚖️ Weight Bearing</h4>
+                        <p><strong>Material:</strong> PVC with polycarbonate faceplate<br>
+                        <strong>Features:</strong> Bariatric rated up to 750 lbs, waterproof<br>
+                        <strong>Sizes:</strong> 14×17, 17×17</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p style="color: var(--text-secondary);"><strong>All Encasement Options Pricing:</strong> <span style="color: var(--accent-2);">Call for quote</span></p>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section>
+                <div class="cta-section">
+                    <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">Ready to Upgrade Your Imaging?</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">Get a custom quote tailored to your facility's needs.</p>
+                    <a href="mailto:contact@pnwx.com" class="cta-button">Request a Quote</a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 PNWX Medical Imaging. All rights reserved.</p>
+            <p>X-Ray Grids - Premium medical imaging solutions for diagnostic excellence.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Scanner - AI Stock Analysis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0e17;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #e0e7ff;
+        }
+
+        .container {
+            width: 650px;
+            height: 420px;
+            background: #0a0e17;
+            border: 2px solid #3b82f6;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* CRT Scanlines Effect */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15) 0px,
+                rgba(0, 0, 0, 0.15) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .ai-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #10b981;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        }
+
+        .signal-counter {
+            font-size: 13px;
+            font-weight: 600;
+            color: #3b82f6;
+            letter-spacing: 0.5px;
+        }
+
+        .counter-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #10b981;
+            display: inline-block;
+            margin-left: 4px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            height: 280px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .stock-card {
+            background: #0f1219;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            color: #9ca3af;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stock-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: none;
+        }
+
+        /* Sparkline (CSS-based) */
+        .sparkline {
+            height: 20px;
+            margin: 4px 0;
+            position: relative;
+            background: url('data:image/svg+xml,<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><polyline points="5,15 15,8 25,12 35,6 45,10 55,4 65,11 75,7 85,9 95,5" fill="none" stroke="%23666" stroke-width="1"/></svg>') no-repeat center;
+            background-size: contain;
+            opacity: 0.5;
+        }
+
+        .ticker {
+            font-weight: 700;
+            font-size: 13px;
+            color: #e0e7ff;
+            letter-spacing: 0.5px;
+        }
+
+        .price {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
+        .change {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 1px;
+        }
+
+        /* Activation States */
+        .stock-card.activated {
+            opacity: 1;
+            border-color: #3b82f6;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4), inset 0 0 8px rgba(59, 130, 246, 0.1);
+        }
+
+        .stock-card.buy-signal {
+            border-color: #10b981;
+            background: #0a1f1a;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.5), inset 0 0 8px rgba(16, 185, 129, 0.15);
+        }
+
+        .stock-card.buy-signal .ticker,
+        .stock-card.buy-signal .price {
+            color: #10b981;
+        }
+
+        .stock-card.sell-signal {
+            border-color: #ef4444;
+            background: #1f0f0f;
+            box-shadow: 0 0 16px rgba(239, 68, 68, 0.5), inset 0 0 8px rgba(239, 68, 68, 0.15);
+        }
+
+        .stock-card.sell-signal .ticker,
+        .stock-card.sell-signal .price {
+            color: #ef4444;
+        }
+
+        .signal-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+            animation: badgeFade 3s ease-out forwards;
+        }
+
+        .signal-badge.buy {
+            background: rgba(16, 185, 129, 0.8);
+            color: #0a0e17;
+        }
+
+        .signal-badge.sell {
+            background: rgba(239, 68, 68, 0.8);
+            color: #fff;
+        }
+
+        @keyframes badgeFade {
+            0% { opacity: 1; transform: scale(1); }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+
+        /* Radar Sweep */
+        .radar-sweep {
+            position: absolute;
+            top: 35px;
+            left: 0;
+            width: 60px;
+            height: 280px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0.4), transparent);
+            z-index: 2;
+            animation: radarSweep 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes radarSweep {
+            0% { left: -100px; }
+            85% { left: calc(100% + 100px); }
+            100% { left: calc(100% + 100px); }
+        }
+
+        .footer {
+            position: relative;
+            z-index: 5;
+            margin-top: 10px;
+            font-size: 11px;
+            color: #4b5563;
+            letter-spacing: 0.5px;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="ai-badge">
+                <span class="pulse-dot"></span>
+                AI SCANNING
+            </div>
+            <div class="signal-counter">
+                Signals Found: <span class="counter-number">0</span>
+            </div>
+        </div>
+
+        <div class="grid-container" id="grid">
+            <!-- Stock cards will be generated here -->
+        </div>
+
+        <div class="radar-sweep"></div>
+
+        <div class="footer">
+            Analyzing 8 technical indicators across 200+ stocks...
+        </div>
+    </div>
+
+    <script>
+        const stocks = [
+            { ticker: 'AAPL', price: '$189.45', change: '+2.3%' },
+            { ticker: 'NVDA', price: '$875.20', change: '+4.1%' },
+            { ticker: 'TSLA', price: '$242.80', change: '-1.2%' },
+            { ticker: 'MSFT', price: '$425.30', change: '+3.5%' },
+            { ticker: 'META', price: '$512.90', change: '+2.8%' },
+            { ticker: 'GOOG', price: '$168.50', change: '+1.9%' },
+            { ticker: 'AMZN', price: '$198.75', change: '+2.2%' },
+            { ticker: 'AMD', price: '$195.40', change: '+5.3%' },
+            { ticker: 'NFLX', price: '$245.60', change: '+1.5%' },
+            { ticker: 'CRM', price: '$298.20', change: '-0.8%' },
+            { ticker: 'COIN', price: '$127.35', change: '+6.2%' },
+            { ticker: 'PLTR', price: '$45.80', change: '+3.7%' }
+        ];
+
+        const grid = document.getElementById('grid');
+        let signalCount = 0;
+
+        // Create stock cards
+        stocks.forEach((stock, index) => {
+            const card = document.createElement('div');
+            card.className = 'stock-card';
+            card.id = `stock-${index}`;
+            card.innerHTML = `
+                <div class="ticker">${stock.ticker}</div>
+                <div class="sparkline"></div>
+                <div class="price">${stock.price}</div>
+                <div class="change">${stock.change}</div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Radar scan and signal logic
+        function performScan() {
+            // Reset all cards to dormant
+            document.querySelectorAll('.stock-card').forEach(card => {
+                card.classList.remove('activated', 'buy-signal', 'sell-signal');
+                // Remove old badges
+                const oldBadge = card.querySelector('.signal-badge');
+                if (oldBadge) oldBadge.remove();
+            });
+
+            // Pick 2-3 random stocks for signals
+            const numSignals = Math.floor(Math.random() * 2) + 2; // 2-3 signals
+            const indices = new Set();
+            while (indices.size < numSignals) {
+                indices.add(Math.floor(Math.random() * stocks.length));
+            }
+
+            // Distribute signals throughout the scan
+            Array.from(indices).forEach((index, i) => {
+                const delay = (i + 1) * (6000 / (numSignals + 1)); // Spread signals during scan
+                setTimeout(() => {
+                    const card = document.getElementById(`stock-${index}`);
+                    const isSignal = Math.random() > 0.3; // 70% chance of a signal when activated
+
+                    if (isSignal) {
+                        const isBuy = Math.random() > 0.5;
+                        card.classList.add(isBuy ? 'buy-signal' : 'sell-signal');
+
+                        // Add signal badge
+                        const badge = document.createElement('div');
+                        badge.className = `signal-badge ${isBuy ? 'buy' : 'sell'}`;
+                        badge.textContent = isBuy ? 'BUY' : 'SELL';
+                        card.appendChild(badge);
+
+                        // Increment counter
+                        signalCount++;
+                        document.querySelector('.counter-number').textContent = signalCount;
+                    } else {
+                        card.classList.add('activated');
+                    }
+
+                    // Return to dim after signal fades (3s)
+                    setTimeout(() => {
+                        card.classList.remove('activated', 'buy-signal', 'sell-signal');
+                    }, 3000);
+                }, delay);
+            });
+
+            // Perform next scan after pause
+            setTimeout(performScan, 8000); // 6s scan + 2s pause
+        }
+
+        // Start scanning
+        performScan();
+    </script>
+</body>
+</html>

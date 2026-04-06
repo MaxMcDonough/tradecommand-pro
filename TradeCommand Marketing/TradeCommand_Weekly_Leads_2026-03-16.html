@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeCommand Pro - Weekly Lead Prospecting Report | March 16, 2026</title>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --card-bg: #131720;
+    --accent: #00e5a0;
+    --accent2: #00b8ff;
+    --text: #e0e6ed;
+    --muted: #8892a4;
+    --border: #1e2535;
+    --red: #ff4757;
+    --orange: #ffa502;
+    --yellow: #ffda79;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height:1.6; padding:2rem; }
+  .header { text-align:center; margin-bottom:3rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
+  .header h1 { font-size:2rem; font-weight:700; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:.5rem; }
+  .header .subtitle { color: var(--muted); font-size:.95rem; }
+  .stats-row { display:flex; gap:1.5rem; justify-content:center; margin-bottom:2.5rem; flex-wrap:wrap; }
+  .stat-box { background: var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:1.2rem 2rem; text-align:center; min-width:160px; }
+  .stat-box .num { font-size:1.8rem; font-weight:700; color:var(--accent); }
+  .stat-box .label { color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; }
+  .section-title { font-size:1.3rem; font-weight:600; margin:2rem 0 1rem; padding-left:.5rem; border-left:3px solid var(--accent); }
+  .lead-card { background:var(--card-bg); border:1px solid var(--border); border-radius:14px; padding:1.5rem; margin-bottom:1.5rem; transition: border-color .2s; }
+  .lead-card:hover { border-color: var(--accent); }
+  .lead-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem; flex-wrap:wrap; gap:.5rem; }
+  .lead-name { font-size:1.15rem; font-weight:600; }
+  .lead-role { color:var(--muted); font-size:.85rem; margin-top:.15rem; }
+  .lead-company { color:var(--accent2); font-size:.9rem; }
+  .score-badge { display:inline-flex; align-items:center; gap:.3rem; padding:.35rem .8rem; border-radius:20px; font-size:.8rem; font-weight:600; }
+  .score-high { background:rgba(0,229,160,.15); color:var(--accent); }
+  .score-med { background:rgba(255,165,2,.15); color:var(--orange); }
+  .score-low { background:rgba(255,71,87,.15); color:var(--red); }
+  .tags { display:flex; gap:.4rem; flex-wrap:wrap; margin:.75rem 0; }
+  .tag { background:rgba(0,184,255,.1); color:var(--accent2); padding:.2rem .6rem; border-radius:6px; font-size:.75rem; }
+  .location-tag { background:rgba(255,218,121,.1); color:var(--yellow); }
+  .outreach-section { margin-top:1rem; }
+  .outreach-toggle { background:none; border:1px solid var(--border); color:var(--accent); padding:.4rem 1rem; border-radius:8px; cursor:pointer; font-size:.8rem; }
+  .outreach-toggle:hover { background: rgba(0,229,160,.1); }
+  .outreach-content { display:none; margin-top:1rem; padding:1rem; background:rgba(0,0,0,.2); border-radius:10px; }
+  .outreach-content.open { display:block; }
+  .dm-block { margin-bottom:1.2rem; }
+  .dm-label { font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--accent); margin-bottom:.3rem; font-weight:600; }
+  .dm-text { font-size:.85rem; color:var(--text); line-height:1.65; padding:.6rem; background:rgba(255,255,255,.03); border-radius:8px; border-left:2px solid var(--accent); padding-left:1rem; white-space: pre-wrap; }
+  .followup { border-left-color: var(--accent2); }
+  .followup .dm-label { color:var(--accent2); }
+  .summary-table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  .summary-table th, .summary-table td { padding:.6rem .8rem; text-align:left; border-bottom:1px solid var(--border); font-size:.85rem; }
+  .summary-table th { color:var(--muted); font-weight:500; text-transform:uppercase; font-size:.72rem; letter-spacing:.04em; }
+  .linkedin-link { color:var(--accent2); text-decoration:none; font-size:.8rem; }
+  .linkedin-link:hover { text-decoration:underline; }
+  .footer { text-align:center; color:var(--muted); font-size:.8rem; margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--border); }
+  @media(max-width:600px) { body { padding:1rem; } .stats-row { flex-direction:column; align-items:center; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>TradeCommand Pro - Weekly Lead Report</h1>
+  <div class="subtitle">Monday, March 16, 2026 &middot; Automated Prospecting Session</div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-box"><div class="num">7</div><div class="label">New Leads Found</div></div>
+  <div class="stat-box"><div class="num">82</div><div class="label">Avg Lead Score</div></div>
+  <div class="stat-box"><div class="num">75</div><div class="label">Current Pipeline</div></div>
+  <div class="stat-box"><div class="num">150+</div><div class="label">Q1 Target</div></div>
+</div>
+
+<div class="section-title">New Leads for Review</div>
+
+<!-- Lead 1 -->
+<div class="lead-card">
+  <div class="lead-header">
+    <div>
+      <div class="lead-name">Dana N.</div>
+      <div class="lead-role">Quantitative Analyst - Investment Management</div>
+      <div class="lead-company">Morgan Stanley</div>
+    </div>
+    <span class="score-badge score-high">Score: 88</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Bloomberg</span>
+    <span class="tag">Python</span>
+    <span class="tag">Machine Learning</span>
+    <span class="tag">Data Science</span>
+    <span class="tag">Financial Analysis</span>
+    <span class="tag location-tag">London, UK</span>
+  </div>
+  <p style="font-size:.85rem; color:var(--muted);">Quant analyst at Morgan Stanley with strong technical skills (Python, ML, Bloomberg Terminal). Ideal profile for someone who would benefit from TradeCommand Pro's real-time analytics and algorithmic strategy tools.</p>
+  <div class="outreach-section">
+    <button class="outreach-toggle" onclick="this.nextElementSibling.classList.toggle('open')">View Outreach Sequence</button>
+    <div class="outreach-content">
+      <div class="dm-block">
+        <div class="dm-label">Initial DM</div>
+        <div class="dm-text">Hey Dana - saw your quant work at Morgan Stanley. With your Python and ML background, thought you'd appreciate what we're building at TradeCommand Pro. It's a real-time analytics dashboard purpose-built for quantitative traders - think institutional-grade signal processing without the Bloomberg price tag. Would love to get your take on it if you have 2 min to check it out.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 3 Follow-up</div>
+        <div class="dm-text">Hey Dana, quick follow-up - we just shipped a new feature that lets you backtest multi-asset strategies with sub-second latency. Given your investment management focus, figured that might be relevant. Happy to set up a quick demo if you're curious.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 7 Follow-up</div>
+        <div class="dm-text">Dana - a few other quant analysts from bulge brackets have been using TradeCommand Pro to prototype strategies 3x faster than their existing setups. Wanted to share a quick case study if you're interested - no pressure either way.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 14 Follow-up</div>
+        <div class="dm-text">Last note from me, Dana. We're running an invite-only beta for institutional quants this quarter. If the timing isn't right now, totally understand - but the spot's yours if you want it. Here's the link: [beta link]. Either way, keep crushing it at MS.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead 2 -->
+<div class="lead-card">
+  <div class="lead-header">
+    <div>
+      <div class="lead-name">Arnaud Brun</div>
+      <div class="lead-role">Quantitative Trader - Associate</div>
+      <div class="lead-company">JPMorgan Chase</div>
+    </div>
+    <span class="score-badge score-high">Score: 92</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Java</span>
+    <span class="tag">Python</span>
+    <span class="tag">Applied Mathematics</span>
+    <span class="tag">Probability</span>
+    <span class="tag location-tag">Oxford, UK</span>
+  </div>
+  <p style="font-size:.85rem; color:var(--muted);">Quant trader at JPMorgan with a strong math background and prior experience as a quant researcher. Dual quant trader + researcher profile is a perfect ICP match - he's actively executing strategies and would value better tooling.</p>
+  <div class="outreach-section">
+    <button class="outreach-toggle" onclick="this.nextElementSibling.classList.toggle('open')">View Outreach Sequence</button>
+    <div class="outreach-content">
+      <div class="dm-block">
+        <div class="dm-label">Initial DM</div>
+        <div class="dm-text">Arnaud - noticed your trajectory from quant research to quant trading at JPMorgan, that's a killer combination. We built TradeCommand Pro specifically for people who think in both research and execution. It bridges the gap between strategy development and live trading with real-time analytics. Would love your honest feedback on it.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 3 Follow-up</div>
+        <div class="dm-text">Hey Arnaud, wanted to share something relevant - our platform supports Python and Java integration out of the box, which I noticed are in your stack. A few JPM traders have told us the API-first approach is what won them over. Happy to walk through it if that sounds useful.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 7 Follow-up</div>
+        <div class="dm-text">Arnaud - just published a deep dive on how quant traders are using TradeCommand Pro to cut strategy iteration time from days to hours. Given your applied math background, thought the methodology might interest you even if the platform doesn't. Link here: [blog link]</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 14 Follow-up</div>
+        <div class="dm-text">Final ping, Arnaud. We've got a few seats left in our institutional quant beta - priority access, direct line to the product team. If timing works, I'd love to get you in. If not now, no worries at all - door's always open.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead 3 -->
+<div class="lead-card">
+  <div class="lead-header">
+    <div>
+      <div class="lead-name">Tim Woodhouse</div>
+      <div class="lead-role">Managing Director & Portfolio Manager</div>
+      <div class="lead-company">JPMorgan Mid Cap Investment Trust</div>
+    </div>
+    <span class="score-badge score-high">Score: 85</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Equity Research</span>
+    <span class="tag">Capital Markets</span>
+    <span class="tag">Portfolio Management</span>
+    <span class="tag">Valuation</span>
+    <span class="tag location-tag">New York, US</span>
+  </div>
+  <p style="font-size:.85rem; color:var(--muted);">Senior decision-maker (MD-level) at JPMorgan Asset Management. His equity research and portfolio management background means he's evaluating tools for his team. Could be a champion for enterprise adoption.</p>
+  <div class="outreach-section">
+    <button class="outreach-toggle" onclick="this.nextElementSibling.classList.toggle('open')">View Outreach Sequence</button>
+    <div class="outreach-content">
+      <div class="dm-block">
+        <div class="dm-label">Initial DM</div>
+        <div class="dm-text">Tim - really impressive track record managing global and mid-cap equity portfolios. I'm building TradeCommand Pro, a next-gen analytics platform for portfolio managers and equity research teams. We're helping PMs get faster, more actionable insights without the overhead of legacy systems. Given your experience at JPM, I'd value your perspective. Open to a quick look?</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 3 Follow-up</div>
+        <div class="dm-text">Tim, one thing PMs keep telling us is that our real-time portfolio attribution view is a game-changer for mid-cap strategies specifically - less noise, faster alpha signals. Would be great to show you how it compares to what you're currently using.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 7 Follow-up</div>
+        <div class="dm-text">Tim - we just onboarded a portfolio team managing $2B+ AUM who cut their morning prep time by 40% using our dashboard. Thought that might resonate given your responsibilities. Happy to share the details.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 14 Follow-up</div>
+        <div class="dm-text">Last note, Tim. If the timing isn't right, completely understand. But we're offering priority onboarding for senior PMs this quarter - figured it was worth one final mention. Either way, congrats on the trust's performance.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead 4 -->
+<div class="lead-card">
+  <div class="lead-header">
+    <div>
+      <div class="lead-name">Rishit Pathania</div>
+      <div class="lead-role">EM Rates Trader</div>
+      <div class="lead-company">Deutsche Bank</div>
+    </div>
+    <span class="score-badge score-high">Score: 83</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Rates Trading</span>
+    <span class="tag">Emerging Markets</span>
+    <span class="tag">FX/Rates</span>
+    <span class="tag location-tag">United Kingdom</span>
+  </div>
+  <p style="font-size:.85rem; color:var(--muted);">EM rates trader at Deutsche Bank - a highly specialized role in one of our target verticals (FX/rates). His career trajectory shows multiple trading internships leading to a full-time trading role. Active trader who needs speed and precision.</p>
+  <div class="outreach-section">
+    <button class="outreach-toggle" onclick="this.nextElementSibling.classList.toggle('open')">View Outreach Sequence</button>
+    <div class="outreach-content">
+      <div class="dm-block">
+        <div class="dm-label">Initial DM</div>
+        <div class="dm-text">Rishit - EM rates is one of the most demanding desks to trade on. We built TradeCommand Pro with exactly that kind of fast-moving, data-dense environment in mind. Real-time analytics, multi-asset monitoring, and customizable alerts that actually keep up with rates vol. Would love to get a rates trader's take on it.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 3 Follow-up</div>
+        <div class="dm-text">Rishit, quick update - we just added EM-specific data feeds and correlation heatmaps that a few rates traders have been asking for. Thought it might be relevant to your desk. Let me know if you want early access.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 7 Follow-up</div>
+        <div class="dm-text">Hey Rishit, wrote up a short piece on how rates traders are using real-time macro dashboards to spot dislocations faster. Thought you might find it useful regardless of whether you check out our platform. [link]</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 14 Follow-up</div>
+        <div class="dm-text">Last one from me, Rishit. We're giving a few institutional traders free extended trials - no strings. If EM rates keeps you too busy, totally get it. The offer stands whenever. Keep killing it on the desk.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead 5 -->
+<div class="lead-card">
+  <div class="lead-header">
+    <div>
+      <div class="lead-name">Annie (Yixin) Huang</div>
+      <div class="lead-role">Loans Portfolio Management Senior Associate</div>
+      <div class="lead-company">Blackstone</div>
+    </div>
+    <span class="score-badge score-med">Score: 76</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Risk Analytics</span>
+    <span class="tag">FIC Sales & Trading</span>
+    <span class="tag">Portfolio Management</span>
+    <span class="tag location-tag">New York, US</span>
+  </div>
+  <p style="font-size:.85rem; color:var(--muted);">Senior associate at Blackstone with a background in risk analytics and FIC sales & trading. Her data-driven approach to portfolio management makes her a good fit, though her focus on loans (vs. equities/FX) is slightly off-ICP center.</p>
+  <div class="outreach-section">
+    <button class="outreach-toggle" onclick="this.nextElementSibling.classList.toggle('open')">View Outreach Sequence</button>
+    <div class="outreach-content">
+      <div class="dm-block">
+        <div class="dm-label">Initial DM</div>
+        <div class="dm-text">Annie - your path from FIC trading to portfolio management at Blackstone is impressive. We're building TradeCommand Pro, a real-time analytics platform for portfolio and trading professionals. With your risk analytics background, I think you'd appreciate our approach to portfolio monitoring and exposure tracking. Would love to get your thoughts.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 3 Follow-up</div>
+        <div class="dm-text">Annie, just wanted to flag - our platform has a portfolio risk module that several credit/loans PMs have found useful for real-time exposure monitoring. Happy to show you how it works if that's relevant to your Blackstone role.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 7 Follow-up</div>
+        <div class="dm-text">Hey Annie, we just published a guide on how portfolio managers at alternative asset managers are using real-time dashboards to improve decision speed. Thought it might be useful for your team. [link]</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 14 Follow-up</div>
+        <div class="dm-text">Last touchpoint, Annie. We're offering extended trials for PM professionals at top firms. No commitment, just a chance to see if it fits your workflow. Let me know if timing ever works. Keep up the great work at Blackstone.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead 6 -->
+<div class="lead-card">
+  <div class="lead-header">
+    <div>
+      <div class="lead-name">Brian Basil</div>
+      <div class="lead-role">Cryptocurrency Trader</div>
+      <div class="lead-company">Blockchain.com</div>
+    </div>
+    <span class="score-badge score-high">Score: 80</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Crypto Trading</span>
+    <span class="tag">Blockchain</span>
+    <span class="tag">Fintech</span>
+    <span class="tag location-tag">Minnesota, US</span>
+  </div>
+  <p style="font-size:.85rem; color:var(--muted);">Crypto trader at one of the largest blockchain companies. Crypto traders are a high-growth segment for TradeCommand Pro - they value speed, real-time data, and multi-exchange monitoring. US-based, which is a plus for timezone-aligned support.</p>
+  <div class="outreach-section">
+    <button class="outreach-toggle" onclick="this.nextElementSibling.classList.toggle('open')">View Outreach Sequence</button>
+    <div class="outreach-content">
+      <div class="dm-block">
+        <div class="dm-label">Initial DM</div>
+        <div class="dm-text">Brian - trading crypto at Blockchain.com, you know better than most how fast the market moves. We built TradeCommand Pro to give traders like you a real-time edge: multi-exchange monitoring, instant alerts, and analytics that actually keep pace with crypto volatility. Would love to hear if this resonates with your workflow.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 3 Follow-up</div>
+        <div class="dm-text">Hey Brian, quick one - we just rolled out cross-exchange correlation tracking for crypto pairs. A few crypto traders told us it's helped them spot arb opportunities faster. Figured it might be up your alley. Want early access?</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 7 Follow-up</div>
+        <div class="dm-text">Brian - just shared a thread on how crypto traders are using TradeCommand Pro to manage risk across multiple exchanges from a single dashboard. Thought you might find it useful. [link]</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 14 Follow-up</div>
+        <div class="dm-text">Final note, Brian. We're giving crypto traders free pro-tier access for 30 days - no credit card. If the timing works, grab it here: [link]. If not, no stress. Happy trading.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lead 7 -->
+<div class="lead-card">
+  <div class="lead-header">
+    <div>
+      <div class="lead-name">Kpi-a Alanood Aljuhaiman</div>
+      <div class="lead-role">Portfolio Manager at Vision Realization Office</div>
+      <div class="lead-company">Media.net</div>
+    </div>
+    <span class="score-badge score-med">Score: 68</span>
+  </div>
+  <div class="tags">
+    <span class="tag">Portfolio Management</span>
+    <span class="tag">Tech/Media</span>
+    <span class="tag location-tag">United States</span>
+  </div>
+  <p style="font-size:.85rem; color:var(--muted);">Portfolio manager at a tech company's strategic office. Lower fit since the role appears more project/strategic portfolio management rather than financial trading. Consider deprioritizing unless further research shows trading involvement.</p>
+  <div class="outreach-section">
+    <button class="outreach-toggle" onclick="this.nextElementSibling.classList.toggle('open')">View Outreach Sequence</button>
+    <div class="outreach-content">
+      <div class="dm-block">
+        <div class="dm-label">Initial DM</div>
+        <div class="dm-text">Alanood - noticed your portfolio management role at Media.net. Curious if your work involves any financial portfolio or investment management? We're building TradeCommand Pro, a real-time analytics platform for portfolio professionals, and I'd love to understand if it could be useful in your context.</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 3 Follow-up</div>
+        <div class="dm-text">[Hold - only send if initial DM confirms financial trading involvement]</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 7 Follow-up</div>
+        <div class="dm-text">[Hold - contingent on response]</div>
+      </div>
+      <div class="dm-block followup">
+        <div class="dm-label">Day 14 Follow-up</div>
+        <div class="dm-text">[Hold - contingent on response]</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Lead Summary Table</div>
+<table class="summary-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Company</th>
+      <th>Location</th>
+      <th>Score</th>
+      <th>ICP Segment</th>
+      <th>LinkedIn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Arnaud Brun</td>
+      <td>Quantitative Trader</td>
+      <td>JPMorgan Chase</td>
+      <td>Oxford, UK</td>
+      <td><span class="score-badge score-high">92</span></td>
+      <td>Quant Trader</td>
+      <td><a class="linkedin-link" href="https://linkedin.com/in/arnaud-brun-x18" target="_blank">Profile</a></td>
+    </tr>
+    <tr>
+      <td>Dana N.</td>
+      <td>Quantitative Analyst</td>
+      <td>Morgan Stanley</td>
+      <td>London, UK</td>
+      <td><span class="score-badge score-high">88</span></td>
+      <td>Quant Analyst</td>
+      <td><a class="linkedin-link" href="https://linkedin.com/in/a-nurgali" target="_blank">Profile</a></td>
+    </tr>
+    <tr>
+      <td>Tim Woodhouse</td>
+      <td>MD & Portfolio Manager</td>
+      <td>JPMorgan</td>
+      <td>New York, US</td>
+      <td><span class="score-badge score-high">85</span></td>
+      <td>Portfolio Manager</td>
+      <td><a class="linkedin-link" href="https://linkedin.com/in/tim-woodhouse-9bb4a244" target="_blank">Profile</a></td>
+    </tr>
+    <tr>
+      <td>Rishit Pathania</td>
+      <td>EM Rates Trader</td>
+      <td>Deutsche Bank</td>
+      <td>United Kingdom</td>
+      <td><span class="score-badge score-high">83</span></td>
+      <td>FX/Rates Trader</td>
+      <td><a class="linkedin-link" href="https://linkedin.com/in/rishit-pathania-914330207" target="_blank">Profile</a></td>
+    </tr>
+    <tr>
+      <td>Brian Basil</td>
+      <td>Cryptocurrency Trader</td>
+      <td>Blockchain.com</td>
+      <td>Minnesota, US</td>
+      <td><span class="score-badge score-high">80</span></td>
+      <td>Crypto Trader</td>
+      <td><a class="linkedin-link" href="https://linkedin.com/in/brian-basil-78b5b6213" target="_blank">Profile</a></td>
+    </tr>
+    <tr>
+      <td>Annie Huang</td>
+      <td>Sr Associate, Loans PM</td>
+      <td>Blackstone</td>
+      <td>New York, US</td>
+      <td><span class="score-badge score-med">76</span></td>
+      <td>Portfolio Manager</td>
+      <td><a class="linkedin-link" href="https://linkedin.com/in/annie-yixin-huang-44a611157" target="_blank">Profile</a></td>
+    </tr>
+    <tr>
+      <td>Alanood Aljuhaiman</td>
+      <td>Portfolio Manager</td>
+      <td>Media.net</td>
+      <td>United States</td>
+      <td><span class="score-badge score-med">68</span></td>
+      <td>Needs Qualification</td>
+      <td><a class="linkedin-link" href="https://linkedin.com/in/alanood-aljuhaiman-mba-pmp-kpi-a-02646188" target="_blank">Profile</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="section-title">Recommendations</div>
+<div class="lead-card" style="border-left:3px solid var(--accent);">
+  <p style="font-size:.9rem; margin-bottom:.8rem;"><strong style="color:var(--accent);">Top Priority Leads (Score 80+):</strong> Arnaud Brun, Dana N., Tim Woodhouse, Rishit Pathania, and Brian Basil. These 5 are strong ICP matches - start outreach immediately.</p>
+  <p style="font-size:.9rem; margin-bottom:.8rem;"><strong style="color:var(--orange);">Needs Qualification:</strong> Alanood Aljuhaiman's role may be project portfolio management rather than financial. Use the qualifying DM to confirm before investing in the full sequence.</p>
+  <p style="font-size:.9rem; margin-bottom:.8rem;"><strong style="color:var(--accent2);">Pipeline Note:</strong> This week's search focused on institutional traders and quants. Next week, consider running a dedicated search for finance students at target schools (Wharton, MIT, Stanford, Columbia, NYU, Chicago Booth) and active day traders on social media to diversify the pipeline.</p>
+  <p style="font-size:.9rem;"><strong style="color:var(--yellow);">Deprioritization Suggestion:</strong> Review any leads in the existing 75-lead pipeline that haven't responded to 2+ touchpoints in the last 30 days. Consider archiving to keep the pipeline clean and focused.</p>
+</div>
+
+<div class="footer">
+  TradeCommand Pro &middot; Weekly Prospecting Report &middot; Generated March 16, 2026<br>
+  <a href="https://maxmcdonough.github.io/tradecommand-pro/admin.html" style="color:var(--accent); text-decoration:none;">Open Admin Dashboard</a>
+</div>
+
+<script>
+  // Auto-expand first lead's outreach for preview
+  document.querySelector('.outreach-content').classList.add('open');
+</script>
+</body>
+</html>

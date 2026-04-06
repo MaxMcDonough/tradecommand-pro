@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - Testimonial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1080px;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 50%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Decorative elements */
+        .quote-mark {
+            position: absolute;
+            font-size: 200px;
+            color: rgba(99, 102, 241, 0.15);
+            top: -40px;
+            left: 40px;
+            line-height: 1;
+        }
+
+        .glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .glow-1 {
+            top: -200px;
+            right: -200px;
+        }
+
+        .glow-2 {
+            bottom: -200px;
+            left: -200px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+            animation: pulse 5s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px;
+            max-width: 900px;
+        }
+
+        .testimonial-card {
+            background: rgba(99, 102, 241, 0.08);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            padding: 50px 40px;
+            backdrop-filter: blur(20px);
+            margin-bottom: 40px;
+        }
+
+        .quote {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .star {
+            font-size: 28px;
+            color: #fbbf24;
+        }
+
+        .author-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .author-info {
+            text-align: left;
+        }
+
+        .author-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .author-title {
+            font-size: 13px;
+            color: #a5b4fc;
+        }
+
+        .trust-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #10b981;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 18px;
+            color: #cbd5e1;
+            margin-top: 30px;
+            font-weight: 500;
+        }
+
+        .brand-name {
+            color: #6366f1;
+            font-weight: 800;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #fff;
+            padding: 16px 48px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.4);
+        }
+
+        .url {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-mark">"</div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <div class="container">
+        <div class="trust-badge">⭐ TRUSTED BY TRADERS</div>
+
+        <div class="testimonial-card">
+            <div class="quote">Finally a dashboard built by a trader, for traders.</div>
+            
+            <div class="stars">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+            </div>
+
+            <div class="author-section">
+                <div class="avatar">📈</div>
+                <div class="author-info">
+                    <div class="author-name">Alex Chen</div>
+                    <div class="author-title">Day Trader, NYC</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="brand-tagline">Join thousands using <span class="brand-name">TradeCommand Pro</span> to master their trades.</p>
+
+        <button class="cta-button">Try It Free</button>
+        <div class="url">tradecommandpro.com</div>
+    </div>
+</body>
+</html>

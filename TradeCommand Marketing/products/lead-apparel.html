@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Protective Apparel | PNWX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a26;
+            --bg-card-hover: #22222f;
+            --accent: #4f8fff;
+            --accent-glow: rgba(79, 143, 255, 0.15);
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+            --border-hover: rgba(255,255,255,0.12);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Orb Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(79, 143, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 15, 0.7);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        nav .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        nav .cta-btn {
+            background: linear-gradient(135deg, var(--accent) 0%, #3a6fd9 100%);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(79, 143, 255, 0.3);
+        }
+
+        nav .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(79, 143, 255, 0.5);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .breadcrumb {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        /* Product Section */
+        .products-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .products-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .product-line {
+            margin-bottom: 4rem;
+        }
+
+        .product-line h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .product-line .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+        }
+
+        .product-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(79, 143, 255, 0.15);
+        }
+
+        .product-card h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .model-code {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-2);
+            margin: 1rem 0;
+        }
+
+        .product-features {
+            flex: 1;
+            margin: 1.5rem 0;
+        }
+
+        .product-features ul {
+            list-style: none;
+        }
+
+        .product-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .product-features li::before {
+            content: '✓';
+            color: var(--accent-2);
+            font-weight: bold;
+        }
+
+        .add-cart-btn {
+            background: linear-gradient(135deg, var(--accent) 0%, #3a6fd9 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        .add-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 143, 255, 0.4);
+        }
+
+        /* Why Infab Section */
+        .why-infab {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .why-infab h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--accent);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .benefit-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-glow);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .benefit-item h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .benefit-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(79, 143, 255, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .cta-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-item label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .contact-item a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: var(--accent-2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            nav .nav-links {
+                gap: 1rem;
+            }
+
+            .why-infab {
+                padding: 2rem;
+            }
+
+            .contact-info {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">PNW | PNWX</div>
+            <ul class="nav-links">
+                <li><a href="../pnwx-redesign.html#products">Products</a></li>
+                <li><a href="../pnwx-redesign.html#about">About</a></li>
+                <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+                <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+            </ul>
+            <button class="cta-btn">Get a Quote</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="breadcrumb">Home > Products > Lead Apparel</div>
+        <h1>Lead Protective Apparel</h1>
+        <p>Industry-leading Infab Lightning Fast and Revolution series aprons — the most comfortable, fastest-shipping lead apparel on the market.</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="products-section">
+        <!-- Lightning Fast Series -->
+        <div class="product-line">
+            <h3>Lightning Fast Series</h3>
+            <p class="subtitle">Ki-Armor Lead Free technology — ships in 24 hours</p>
+
+            <div class="products-grid">
+                <div class="product-card">
+                    <h4>Frontal Apron</h4>
+                    <div class="model-code">UFP-KI-LF</div>
+                    <div class="price">$595.00</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>0.50mm LE full front panel</li>
+                            <li>Hook and Loop closure</li>
+                            <li>Double welt chest pocket</li>
+                            <li>6 nylon color options</li>
+                            <li>5 sizing options</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Vest/Skirt Set</h4>
+                    <div class="model-code">UVS-KI-LF</div>
+                    <div class="price">$895.00</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>0.50mm front overlap</li>
+                            <li>0.25mm back protection</li>
+                            <li>Hook and Loop closure</li>
+                            <li>Complete set included</li>
+                            <li>Multiple color options</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Full Wrap</h4>
+                    <div class="model-code">UFW-KI-LF</div>
+                    <div class="price">$895.00</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>0.50mm front overlap</li>
+                            <li>0.25mm back protection</li>
+                            <li>Hook and Loop closure</li>
+                            <li>360-degree coverage</li>
+                            <li>Exceptional comfort</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Thyroid Collar</h4>
+                    <div class="model-code">UST-S1</div>
+                    <div class="price">$98.00</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>0.50mm protection</li>
+                            <li>Thyroid-specific coverage</li>
+                            <li>Lightweight design</li>
+                            <li>Comfortable fit</li>
+                            <li>Complements other apparel</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revolution Series -->
+        <div class="product-line">
+            <h3>Revolution Series</h3>
+            <p class="subtitle">KIARMOR core with Cool Wear lining — 40% greater protection while lighter and more comfortable</p>
+
+            <div class="products-grid">
+                <div class="product-card">
+                    <h4>Full Overlap Lumbar Support Vest & Skirt</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Enhanced lumbar support</li>
+                            <li>Moisture-wicking interior</li>
+                            <li>Waterproof exterior</li>
+                            <li>Flame resistant</li>
+                            <li>Superior comfort</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Elastic Back Full Wrap Apron</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Most comfortable full-wrap design</li>
+                            <li>Elastic back adjustment</li>
+                            <li>360-degree coverage</li>
+                            <li>Cool Wear lining</li>
+                            <li>All-day comfort</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Elastic Back Hook-n-Loop Frontal Apron</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Flexible back adjustment</li>
+                            <li>Easy front closure</li>
+                            <li>Moisture-wicking</li>
+                            <li>Abrasion resistant</li>
+                            <li>Bacterial resistant</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Frontal Black Belt Apron</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>6" orthopedic elastic belt</li>
+                            <li>Lumbar support</li>
+                            <li>Frontal protection</li>
+                            <li>Enhanced stability</li>
+                            <li>Professional appearance</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Full Wrap with Black Belt</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Complete coverage + lumbar support</li>
+                            <li>Orthopedic belt included</li>
+                            <li>360-degree protection</li>
+                            <li>Enhanced comfort</li>
+                            <li>Maximum support</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Hook-n-Loop Frontal Apron</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Redesigned improved fit</li>
+                            <li>Easy fastening</li>
+                            <li>Cool Wear technology</li>
+                            <li>Light and breathable</li>
+                            <li>Enhanced durability</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Lumbar Vest/Skirt with Black Belt</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Integrated black belt</li>
+                            <li>Lumbar-focused design</li>
+                            <li>Vest and skirt combo</li>
+                            <li>Premium support</li>
+                            <li>All-day wearability</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Reverse Vest & Skirt</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Left shoulder Surgery Drop-Away Velcro</li>
+                            <li>Quick access design</li>
+                            <li>Surgical precision</li>
+                            <li>Full protection elsewhere</li>
+                            <li>Specialized fit</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+
+                <div class="product-card">
+                    <h4>Skirts & Vests</h4>
+                    <div class="model-code">Revolution</div>
+                    <div class="price">Call for pricing</div>
+                    <div class="product-features">
+                        <ul>
+                            <li>Male and female options</li>
+                            <li>Custom fit styling</li>
+                            <li>Superior comfort</li>
+                            <li>Professional look</li>
+                            <li>All-day comfort</li>
+                        </ul>
+                    </div>
+                    <button class="add-cart-btn">Add to Quote</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Infab -->
+        <section class="why-infab">
+            <h3>Why Infab?</h3>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <h4>Lightning Fast Shipping</h4>
+                    <p>Get your protective apparel in as little as 24 hours with our Lightning Fast Series. No compromises on speed or quality.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">☁️</div>
+                    <h4>Unmatched Comfort</h4>
+                    <p>Revolution Series with Cool Wear lining technology keeps you comfortable all day long. Moisture-wicking, lightweight, and breathable.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛡️</div>
+                    <h4>Lead-Free Technology</h4>
+                    <p>Ki-Armor lead-free protection delivers maximum safety without the weight. 40% greater protection while staying lighter and more flexible.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🎯</div>
+                    <h4>Industry-Leading Protection</h4>
+                    <p>Trusted by healthcare professionals worldwide. Proven protection for X-ray, fluoroscopy, and radiation environments.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔧</div>
+                    <h4>Customizable Options</h4>
+                    <p>Choose from multiple styles, sizes, and color options. Male and female fits. Find the perfect match for your needs.</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✨</div>
+                    <h4>Durable & Professional</h4>
+                    <p>Flame-resistant, abrasion-resistant, and bacterial-resistant materials built to last through your busiest shifts.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h3>Ready to Protect Your Team?</h3>
+            <p>Get in touch with our specialists to find the perfect protective apparel solution for your facility.</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <label>Call Us</label>
+                    <a href="tel:+1-800-555-PNWX">(800) 555-PNWX</a>
+                </div>
+                <div class="contact-item">
+                    <label>Email</label>
+                    <a href="mailto:sales@pnwx.com">sales@pnwx.com</a>
+                </div>
+                <div class="contact-item">
+                    <label>Chat</label>
+                    <a href="#chat">Live Chat Support</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Products</h4>
+                <ul>
+                    <li><a href="#">Lead Apparel</a></li>
+                    <li><a href="#">Protective Equipment</a></li>
+                    <li><a href="#">Accessories</a></li>
+                    <li><a href="#">Custom Solutions</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="../pnwx-redesign.html#about">About PNWX</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Certifications</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Warranty</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Pacific Northwest X-Ray Inc. All rights reserved. | PNWX Protective Solutions</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || href === '#chat') return;
+                
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe product cards
+        document.querySelectorAll('.product-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // CTA button functionality
+        document.querySelector('nav .cta-btn').addEventListener('click', function() {
+            const ctaSection = document.querySelector('.cta-section');
+            ctaSection.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

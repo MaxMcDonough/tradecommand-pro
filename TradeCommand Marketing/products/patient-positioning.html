@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Positioning — Merchant Boards | PNWX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #1a1a26;
+            --accent: #4f8fff;
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+            --spacing: 1rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background orbs */
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: -100px;
+            right: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-2);
+            bottom: 100px;
+            left: -50px;
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            margin-left: 2rem;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero section */
+        .hero {
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        /* Products section */
+        .products {
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .products .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .product-card:hover {
+            border-color: var(--accent);
+            background: rgba(79, 143, 255, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(79, 143, 255, 0.15);
+        }
+
+        .product-model {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .product-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .product-specs {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-specs li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.7rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .product-specs li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+
+        .product-cta {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), #3a6ce6);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .product-cta:hover {
+            transform: translateX(4px);
+            box-shadow: 0 8px 20px rgba(79, 143, 255, 0.3);
+        }
+
+        /* Features comparison */
+        .comparison {
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .comparison .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: rgba(79, 143, 255, 0.1);
+            padding: 1.5rem;
+            text-align: left;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .feature {
+            color: var(--text-primary);
+            font-weight: 500;
+            width: 30%;
+        }
+
+        .check {
+            color: var(--accent-2);
+            font-weight: 700;
+        }
+
+        .cross {
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background: rgba(26, 26, 38, 0.5);
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            nav a {
+                margin-left: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Scroll reveal effect */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem;">PNWX</div>
+            <div style="display: flex;">
+                <a href="../pnwx-redesign.html#products">Products</a>
+                <a href="../pnwx-redesign.html#about">About</a>
+                <a href="../pnwx-redesign.html#brands">Brands</a>
+                <a href="../pnwx-redesign.html#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Patient Positioning</h1>
+            <p class="subtitle">X-Ray Merchant Boards and patient assistance devices for safe, accurate positioning during imaging.</p>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products">
+        <div class="container">
+            <h2 class="section-title">Our Product Line</h2>
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card reveal">
+                    <div class="product-model">1104-C3a</div>
+                    <h3 class="product-name">Merchant Board for DR Panels</h3>
+                    <div class="product-price">$2,296.00</div>
+                    <p class="product-description">Professional-grade DR panel positioning board with dual removable aluminum C-Channel arms.</p>
+                    <ul class="product-specs">
+                        <li>DR Panels up to 1-1/4" thick</li>
+                        <li>29" floor to top, 18" front to back</li>
+                        <li>Fixed 45-degree angle</li>
+                        <li>Dual removable aluminum arms</li>
+                        <li>8" or 12" distance settings</li>
+                        <li>White sanitizable laminate</li>
+                        <li>Heavy-duty swivel casters</li>
+                        <li>Patient leg strap for dual-leg imaging</li>
+                        <li>Quick-release removable design</li>
+                        <li>6-8 week build-to-order</li>
+                    </ul>
+                    <button class="product-cta">Get Quote</button>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card reveal">
+                    <div class="product-model">1104-C3</div>
+                    <h3 class="product-name">Merchant Board (No Arms)</h3>
+                    <div class="product-price">$1,685.00</div>
+                    <p class="product-description">Same professional specifications as the DR Panel model, without side arms for versatile imaging setups.</p>
+                    <ul class="product-specs">
+                        <li>29" floor to top, 18" front to back</li>
+                        <li>Fixed 45-degree angle</li>
+                        <li>White sanitizable laminate</li>
+                        <li>Heavy-duty swivel casters</li>
+                        <li>Patient leg strap included</li>
+                        <li>Aluminum corner reinforcements</li>
+                        <li>Adjustable slide-stop pins</li>
+                        <li>Collapsible design</li>
+                        <li>6-8 week build-to-order</li>
+                        <li>Custom colors available</li>
+                    </ul>
+                    <button class="product-cta">Get Quote</button>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card reveal">
+                    <div class="product-model">1104</div>
+                    <h3 class="product-name">Light Duty Film Cassette Board</h3>
+                    <div class="product-price">$1,225.00</div>
+                    <p class="product-description">Adjustable tilting board for film cassette and CR imaging with one-finger release locking.</p>
+                    <ul class="product-specs">
+                        <li>Solid oak with formica top</li>
+                        <li>12-3/8"W × 18"L tilting surface</li>
+                        <li>Adjustable: 29½" to 36" height</li>
+                        <li>Adjustable: 10 to 80 degrees tilt</li>
+                        <li>Auto-locking hinge</li>
+                        <li>One-finger release mechanism</li>
+                        <li>Collapsible for storage</li>
+                        <li>CR compatible (NOT for DR)</li>
+                        <li>90-day warranty included</li>
+                        <li>6-8 week shipping</li>
+                    </ul>
+                    <button class="product-cta">Get Quote</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title">Feature Comparison</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>1104-C3a (DR with Arms)</th>
+                        <th>1104-C3 (DR No Arms)</th>
+                        <th>1104 (Film/CR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="feature">Panel Type Support</td>
+                        <td><span class="check">✓ DR Panels</span></td>
+                        <td><span class="check">✓ DR Panels</span></td>
+                        <td><span class="check">✓ Film/CR</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Removable Arms</td>
+                        <td><span class="check">✓ Yes</span></td>
+                        <td><span class="cross">—</span></td>
+                        <td><span class="cross">—</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Angle Adjustment</td>
+                        <td><span class="cross">Fixed 45°</span></td>
+                        <td><span class="cross">Fixed 45°</span></td>
+                        <td><span class="check">✓ 10–80°</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Height Adjustment</td>
+                        <td><span class="cross">29" fixed</span></td>
+                        <td><span class="cross">29" fixed</span></td>
+                        <td><span class="check">✓ 29½–36"</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Patient Leg Strap</td>
+                        <td><span class="check">✓ Yes</span></td>
+                        <td><span class="check">✓ Yes</span></td>
+                        <td><span class="cross">—</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Casters</td>
+                        <td><span class="check">✓ Heavy-Duty</span></td>
+                        <td><span class="check">✓ Heavy-Duty</span></td>
+                        <td><span class="cross">—</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Material</td>
+                        <td><span class="check">✓ Laminate</span></td>
+                        <td><span class="check">✓ Laminate</span></td>
+                        <td><span class="check">✓ Oak/Formica</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Collapsible</td>
+                        <td><span class="check">✓ Yes</span></td>
+                        <td><span class="check">✓ Yes</span></td>
+                        <td><span class="check">✓ Yes</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature">Price</td>
+                        <td><span class="check">$2,296</span></td>
+                        <td><span class="check">$1,685</span></td>
+                        <td><span class="check">$1,225</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section style="padding: 4rem 2rem; text-align: center; position: relative;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 class="section-title" style="margin-bottom: 1.5rem;">Ready to Improve Patient Positioning?</h2>
+            <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem;">Contact our team to discuss which merchant board solution is right for your imaging facility.</p>
+            <button class="product-cta" style="padding: 1rem 3rem; font-size: 1rem;">Contact Sales</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="../pnwx-redesign.html#products">Products</a>
+            <a href="../pnwx-redesign.html#about">About</a>
+            <a href="../pnwx-redesign.html#brands">Brands</a>
+            <a href="../pnwx-redesign.html#contact">Contact</a>
+        </div>
+        <p>&copy; 2026 PNWX. Patient positioning solutions for modern imaging facilities.</p>
+    </footer>
+
+    <script>
+        // Scroll reveal animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // CTA button handlers
+        document.querySelectorAll('.product-cta').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Quote request functionality would integrate with your CRM system.');
+            });
+        });
+    </script>
+</body>
+</html>

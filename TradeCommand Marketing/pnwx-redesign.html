@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pacific Northwest X-Ray Inc. — Radiology Equipment, Supplies & Accessories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-card: #1a1a26;
+    --bg-card-hover: #22222f;
+    --accent: #4f8fff;
+    --accent-glow: rgba(79, 143, 255, 0.15);
+    --accent-2: #00d4aa;
+    --text-primary: #f0f0f5;
+    --text-secondary: #9090a8;
+    --text-muted: #606078;
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(255,255,255,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ───── Ambient Background ───── */
+  .ambient {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .ambient .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.25;
+    animation: float 20s ease-in-out infinite;
+  }
+  .ambient .orb:nth-child(1) { width: 600px; height: 600px; background: var(--accent); top: -10%; left: -5%; animation-delay: 0s; }
+  .ambient .orb:nth-child(2) { width: 500px; height: 500px; background: #7c3aed; bottom: 10%; right: -5%; animation-delay: -7s; }
+  .ambient .orb:nth-child(3) { width: 400px; height: 400px; background: var(--accent-2); top: 50%; left: 40%; animation-delay: -14s; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -30px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+
+  /* ───── Layout ───── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* ───── Nav ───── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 0.85rem; color: #000;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition);
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--text-primary); }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+    background: var(--accent); border-radius: 2px;
+    transition: var(--transition);
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: var(--accent);
+    color: #000 !important;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: var(--transition);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .nav-cta:hover { background: #6aa0ff; transform: translateY(-1px); box-shadow: 0 8px 30px rgba(79,143,255,0.3); }
+  .nav-cta::after { display: none !important; }
+
+  .mobile-toggle { display: none; background: none; border: none; color: var(--text-primary); cursor: pointer; }
+
+  /* ───── Hero ───── */
+  .hero {
+    padding: 160px 0 100px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(79, 143, 255, 0.2);
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-2); animation: pulse 2s ease infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 580px;
+    margin: 0 auto 40px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+  .btn {
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+  .btn-primary:hover { background: #6aa0ff; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(79,143,255,0.35); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-hover);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 72px;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .stat-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ───── Section Headings ───── */
+  .section-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .section-header h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .section-header p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* ───── Products Grid ───── */
+  #products { padding: 80px 0; }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .product-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(79,143,255,0.06), transparent);
+    opacity: 0;
+    transition: var(--transition);
+  }
+  .product-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .product-card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .card-icon.blue { background: rgba(79,143,255,0.12); }
+  .card-icon.green { background: rgba(0,212,170,0.12); }
+  .card-icon.purple { background: rgba(124,58,237,0.12); }
+  .card-icon.orange { background: rgba(255,150,50,0.12); }
+  .card-icon.pink { background: rgba(236,72,153,0.12); }
+  .card-icon.cyan { background: rgba(34,211,238,0.12); }
+
+  .product-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    position: relative; z-index: 1;
+  }
+  .product-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    position: relative; z-index: 1;
+  }
+  .card-arrow {
+    margin-top: 20px;
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    position: relative; z-index: 1;
+    transition: var(--transition);
+  }
+  .product-card:hover .card-arrow { gap: 10px; }
+  a.product-link { text-decoration: none; color: inherit; display: block; }
+
+  /* ── Featured / Large Card ── */
+  .featured-card {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--bg-card), #1e1e30);
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 40px;
+  }
+  .featured-card .featured-content { flex: 1; }
+  .featured-card .featured-visual {
+    width: 200px; height: 200px;
+    background: linear-gradient(135deg, var(--accent-glow), rgba(124,58,237,0.1));
+    border-radius: 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+    flex-shrink: 0;
+  }
+
+  /* ───── About / Why Us ───── */
+  #about { padding: 100px 0; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .about-text h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+  .about-text p {
+    color: var(--text-secondary);
+    font-size: 1.02rem;
+    margin-bottom: 16px;
+  }
+  .about-features {
+    list-style: none;
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .about-features li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  .about-features .check {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(0,212,170,0.12);
+    color: var(--accent-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .about-visual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .about-stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+    transition: var(--transition);
+  }
+  .about-stat-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+  .about-stat-card .icon { font-size: 2rem; margin-bottom: 12px; }
+  .about-stat-card h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .about-stat-card p { color: var(--text-muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+
+  /* ───── Brands Marquee ───── */
+  .brands { padding: 60px 0; overflow: hidden; }
+  .brands h3 {
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    animation: scroll 30s linear infinite;
+  }
+  .marquee-item {
+    flex-shrink: 0;
+    padding: 14px 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ───── CTA ───── */
+  .cta-section {
+    padding: 100px 0;
+  }
+  .cta-box {
+    background: linear-gradient(135deg, #1a1a30, #12121a);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 72px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; width: 600px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    transform: translateX(-50%);
+  }
+  .cta-box h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .cta-box p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+  .cta-contacts {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .cta-contact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+  }
+  .cta-contact .icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--accent-glow);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  /* ───── Footer ───── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 48px 0 32px;
+  }
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .footer-brand p {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    margin-top: 10px;
+    max-width: 300px;
+    line-height: 1.5;
+  }
+  .footer-links { display: flex; gap: 60px; }
+  .footer-col h4 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-col a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition);
+  }
+  .footer-col a:hover { color: var(--text-primary); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-bottom p { color: var(--text-muted); font-size: 0.82rem; }
+
+  /* ───── Scroll Reveal ───── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ───── Search Overlay ───── */
+  .search-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 160px;
+  }
+  .search-overlay.active { display: flex; }
+  .search-box {
+    width: 90%;
+    max-width: 580px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius);
+    padding: 8px;
+  }
+  .search-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 16px 20px;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+  }
+  .search-box input::placeholder { color: var(--text-muted); }
+
+  /* ───── Responsive ───── */
+  @media (max-width: 900px) {
+    .featured-card { grid-column: span 1; flex-direction: column; }
+    .featured-card .featured-visual { width: 100%; height: 140px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-stats { gap: 32px; }
+    .footer-links { gap: 32px; }
+  }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+    .mobile-toggle { display: block; }
+    .products-grid { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; gap: 20px; }
+    .cta-box { padding: 48px 24px; }
+    .cta-contacts { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient BG -->
+<div class="ambient">
+  <div class="orb"></div>
+  <div class="orb"></div>
+  <div class="orb"></div>
+</div>
+
+<!-- Nav -->
+<nav>
+  <div class="container">
+    <a href="#" class="logo">
+      <div class="logo-icon">PNW</div>
+      PNWX
+    </a>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#brands">Brands</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Get a Quote &#8599;</a>
+    <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span class="dot"></span> Trusted since 1997 — Serving radiology professionals nationwide</div>
+    <h1>Radiology Equipment,<br><span class="gradient">Supplies & Accessories</span></h1>
+    <p>Your single source for x-ray products, protective apparel, test phantoms, shielding solutions, and everything in between.</p>
+    <div class="hero-actions">
+      <a href="#products" class="btn btn-primary">Browse Products &#8595;</a>
+      <a href="#contact" class="btn btn-secondary">Contact Sales</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">25+</div>
+        <div class="stat-label">Years in Business</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">1,000+</div>
+        <div class="stat-label">Products Available</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Brand Partners</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products -->
+<section id="products">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Our Product Lines</h2>
+      <p>Professional-grade radiology equipment and supplies — from protective apparel to precision test tools.</p>
+    </div>
+
+    <div class="products-grid">
+
+      <!-- Featured: Lead Apparel -->
+      <a href="products/lead-apparel.html" class="product-link product-card featured-card reveal">
+        <div class="featured-content">
+          <div class="card-icon blue">&#x1F6E1;</div>
+          <h3>Lead Protective Apparel</h3>
+          <p>Industry-leading Infab Revolution and Lightning Fast aprons. The most comfortable, fastest-shipping lead apparel on the market — built for all-day wear in demanding clinical environments.</p>
+          <span class="card-arrow">Shop Apparel &rarr;</span>
+        </div>
+        <div class="featured-visual">&#x1F97C;</div>
+      </a>
+
+      <!-- Test Phantoms -->
+      <a href="products/test-phantoms.html" class="product-link product-card reveal">
+        <div class="card-icon green">&#x1F50D;</div>
+        <h3>Test Phantoms</h3>
+        <p>Resolution test tools, line-pair phantoms, system test phantoms, and fluoroscopy QA equipment for precise calibration.</p>
+        <span class="card-arrow">Explore &rarr;</span>
+      </a>
+
+      <!-- Surgical Gloves -->
+      <a href="products/surgical-gloves.html" class="product-link product-card reveal">
+        <div class="card-icon purple">&#x1F9E4;</div>
+        <h3>Surgical Radiation Gloves</h3>
+        <p>Proguard surgical radiation-reducing gloves — maximum dexterity with reliable radiation protection.</p>
+        <span class="card-arrow">View Gloves &rarr;</span>
+      </a>
+
+      <!-- MRI Phantoms -->
+      <a href="products/mri-phantoms.html" class="product-link product-card reveal">
+        <div class="card-icon cyan">&#x1FA7B;</div>
+        <h3>MRI Phantoms</h3>
+        <p>ACR accredited Medium MRI Phantoms by Pro-Project for compliance testing and quality assurance.</p>
+        <span class="card-arrow">Learn More &rarr;</span>
+      </a>
+
+      <!-- Lead Shielding -->
+      <a href="products/lead-glass-barriers.html" class="product-link product-card reveal">
+        <div class="card-icon orange">&#x1F6A7;</div>
+        <h3>Lead Glass &amp; Barriers</h3>
+        <p>Lead glass windows and mobile lead barriers by Infab — reliable shielding solutions for any facility.</p>
+        <span class="card-arrow">View Shielding &rarr;</span>
+      </a>
+
+      <!-- Animal Immobilizers -->
+      <a href="products/veterinary-positioning.html" class="product-link product-card reveal">
+        <div class="card-icon pink">&#x1F43E;</div>
+        <h3>Veterinary Positioning</h3>
+        <p>Pet-Sitioner small animal immobilizers for precise, stress-free veterinary radiography positioning.</p>
+        <span class="card-arrow">Explore &rarr;</span>
+      </a>
+
+      <!-- X-Ray Supplies -->
+      <a href="products/table-pads.html" class="product-link product-card reveal">
+        <div class="card-icon blue">&#x2699;</div>
+        <h3>X-Ray Table Pads</h3>
+        <p>Comfortable, durable table pads designed for patient comfort during prolonged imaging procedures.</p>
+        <span class="card-arrow">View Pads &rarr;</span>
+      </a>
+
+      <!-- Patient Boards -->
+      <a href="products/patient-positioning.html" class="product-link product-card reveal">
+        <div class="card-icon green">&#x1F6CF;</div>
+        <h3>Patient Positioning</h3>
+        <p>X-Ray Merchant Boards and patient assistance devices for safe, accurate positioning during imaging.</p>
+        <span class="card-arrow">Explore &rarr;</span>
+      </a>
+
+      <!-- Lead Curtains -->
+      <a href="products/lead-curtains.html" class="product-link product-card reveal">
+        <div class="card-icon purple">&#x1F3ED;</div>
+        <h3>Lead Curtains</h3>
+        <p>Flexible lead curtains for radiation containment in procedure rooms and interventional suites.</p>
+        <span class="card-arrow">View Products &rarr;</span>
+      </a>
+
+      <!-- Silver Recovery -->
+      <a href="products/silver-recovery.html" class="product-link product-card reveal">
+        <div class="card-icon cyan">&#x267B;</div>
+        <h3>Silver Recovery Systems</h3>
+        <p>Eco-friendly silver recovery systems for compliant processing of radiographic film chemistry.</p>
+        <span class="card-arrow">Learn More &rarr;</span>
+      </a>
+
+      <!-- X-Ray Grids -->
+      <a href="products/xray-grids.html" class="product-link product-card reveal">
+        <div class="card-icon orange">&#x1F4D0;</div>
+        <h3>X-Ray Grids</h3>
+        <p>High-performance anti-scatter x-ray grids for improved image quality across all modalities.</p>
+        <span class="card-arrow">View Grids &rarr;</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <h2>Why Radiology Professionals Choose <span class="gradient">PNWX</span></h2>
+        <p>For over 25 years, Pacific Northwest X-Ray has been the trusted source for radiology equipment, parts, and accessories. We're based in Gresham, Oregon — and we ship nationwide.</p>
+        <p>Our website is our catalog — browse our full product line and reach out for expert guidance on exactly what you need.</p>
+        <ul class="about-features">
+          <li><span class="check">&#10003;</span> Expert product knowledge &amp; guidance</li>
+          <li><span class="check">&#10003;</span> Fast shipping on in-stock items</li>
+          <li><span class="check">&#10003;</span> Competitive pricing on all brands</li>
+          <li><span class="check">&#10003;</span> Serving the U.S. since 1997</li>
+        </ul>
+      </div>
+      <div class="about-visual reveal">
+        <div class="about-stat-card">
+          <div class="icon">&#x1F3E5;</div>
+          <h4>25+</h4>
+          <p>Years Serving Clinics</p>
+        </div>
+        <div class="about-stat-card">
+          <div class="icon">&#x1F4E6;</div>
+          <h4>Fast</h4>
+          <p>Nationwide Shipping</p>
+        </div>
+        <div class="about-stat-card">
+          <div class="icon">&#x1F91D;</div>
+          <h4>50+</h4>
+          <p>Brand Partnerships</p>
+        </div>
+        <div class="about-stat-card">
+          <div class="icon">&#x2B50;</div>
+          <h4>Top</h4>
+          <p>Rated Service</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Brands -->
+<section id="brands" class="brands">
+  <div class="container">
+    <h3 class="reveal">Brands We Carry</h3>
+    <div style="overflow:hidden;">
+      <div class="marquee-track">
+        <div class="marquee-item">Infab</div>
+        <div class="marquee-item">Proguard</div>
+        <div class="marquee-item">Pro-Project</div>
+        <div class="marquee-item">Pet-Sitioner</div>
+        <div class="marquee-item">X-Ray Merchant</div>
+        <div class="marquee-item">Nuclear Associates</div>
+        <div class="marquee-item">Victoreen</div>
+        <div class="marquee-item">Gammex</div>
+        <div class="marquee-item">Supertech</div>
+        <div class="marquee-item">Biodex</div>
+        <!-- Duplicate for seamless scroll -->
+        <div class="marquee-item">Infab</div>
+        <div class="marquee-item">Proguard</div>
+        <div class="marquee-item">Pro-Project</div>
+        <div class="marquee-item">Pet-Sitioner</div>
+        <div class="marquee-item">X-Ray Merchant</div>
+        <div class="marquee-item">Nuclear Associates</div>
+        <div class="marquee-item">Victoreen</div>
+        <div class="marquee-item">Gammex</div>
+        <div class="marquee-item">Supertech</div>
+        <div class="marquee-item">Biodex</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / Contact -->
+<section id="contact" class="cta-section">
+  <div class="container">
+    <div class="cta-box reveal">
+      <h2>Ready to Order?</h2>
+      <p>Get in touch with our team for quotes, product info, or help finding exactly what you need.</p>
+      <div class="hero-actions">
+        <a href="mailto:sales@pnwx.com" class="btn btn-primary">&#9993; Email Us</a>
+        <a href="tel:+18008279729" class="btn btn-secondary">&#9742; 800-827-9729</a>
+      </div>
+      <div class="cta-contacts">
+        <div class="cta-contact">
+          <div class="icon">&#9742;</div>
+          <div>
+            <div style="color:var(--text-primary);font-weight:600;">Local: 503-667-3000</div>
+            <div style="font-size:0.8rem;">Fax: 503-666-8855</div>
+          </div>
+        </div>
+        <div class="cta-contact">
+          <div class="icon">&#9993;</div>
+          <div>
+            <div style="color:var(--text-primary);font-weight:600;">Toll-Free: 800-827-9729</div>
+            <div style="font-size:0.8rem;">Mon–Fri, 8am–5pm PST</div>
+          </div>
+        </div>
+        <div class="cta-contact">
+          <div class="icon">&#x1F4CD;</div>
+          <div>
+            <div style="color:var(--text-primary);font-weight:600;">P.O. Box 625</div>
+            <div style="font-size:0.8rem;">Gresham, OR 97030 U.S.A.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-icon">PNW</div>
+          PNWX
+        </a>
+        <p>Pacific Northwest X-Ray Inc. — Your source for radiology equipment, supplies, parts &amp; accessories since 1997.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="#">Lead Apparel</a></li>
+            <li><a href="#">Test Phantoms</a></li>
+            <li><a href="#">MRI Equipment</a></li>
+            <li><a href="#">Shielding</a></li>
+            <li><a href="#">X-Ray Grids</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="tel:+18008279729">800-827-9729</a></li>
+            <li><a href="tel:+15036673000">503-667-3000</a></li>
+            <li><a href="mailto:sales@pnwx.com">Email Sales</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 1997–2026 Pacific Northwest X-Ray Inc. All rights reserved.</p>
+      <p>This website is our catalog — no printed catalog available.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll Reveal JS -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

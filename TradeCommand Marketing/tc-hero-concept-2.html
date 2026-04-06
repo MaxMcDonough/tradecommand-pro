@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Race - Concept 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e17;
+            --card: #0f1219;
+            --acc: #3b82f6;
+            --grn: #10b981;
+            --red: #ef4444;
+            --blu: #3b82f6;
+            --purp: #a855f7;
+            --org: #f97316;
+            --ylw: #eab308;
+        }
+
+        body {
+            background-color: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 650px;
+            height: 420px;
+            background: linear-gradient(135deg, #0f1219 0%, #12161f 100%);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.2), inset 0 0 40px rgba(59, 130, 246, 0.05);
+        }
+
+        /* ============ PARALLAX LAYERS ============ */
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .sky {
+            background: linear-gradient(180deg, #0a0e17 0%, #0d1117 50%, #0f1219 100%);
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 20% 30%, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 60% 70%, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 50% 50%, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 80% 10%, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 10% 90%, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 40% 20%, white, rgba(255,255,255,0)),
+                radial-gradient(1px 1px at 90% 60%, white, rgba(255,255,255,0));
+            background-size: 200% 200%;
+            background-position: 0% 0%;
+            opacity: 0.3;
+            animation: starTwinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.5; }
+        }
+
+        .grid-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(59, 130, 246, 0.05) 25%, rgba(59, 130, 246, 0.05) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, 0.05) 75%, rgba(59, 130, 246, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(59, 130, 246, 0.05) 25%, rgba(59, 130, 246, 0.05) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, 0.05) 75%, rgba(59, 130, 246, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            z-index: 2;
+        }
+
+        .ground-middle {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+            height: 100px;
+            z-index: 3;
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, rgba(16, 185, 129, 0.02) 100%);
+            overflow: hidden;
+        }
+
+        .track-lines {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(90deg, transparent 0px, transparent 40px, rgba(16, 185, 129, 0.15) 40px, rgba(16, 185, 129, 0.15) 42px),
+                repeating-linear-gradient(90deg, transparent 0px, transparent 20px, rgba(16, 185, 129, 0.08) 20px, rgba(16, 185, 129, 0.08) 21px);
+            animation: scrollTrack 8s linear infinite;
+        }
+
+        @keyframes scrollTrack {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ground-fast {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 4;
+            background: linear-gradient(180deg, rgba(10, 14, 23, 0.5) 0%, #0a0e17 100%);
+            overflow: hidden;
+        }
+
+        .ground-texture {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, rgba(59, 130, 246, 0.1), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(59, 130, 246, 0.1), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(59, 130, 246, 0.1), transparent),
+                radial-gradient(2px 2px at 80% 10%, rgba(59, 130, 246, 0.1), transparent);
+            background-size: 60px 60px;
+            animation: scrollGround 3s linear infinite;
+        }
+
+        @keyframes scrollGround {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ============ LANE DIVIDERS ============ */
+        .lane-dividers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .lane-divider {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            border-top: 1px dashed rgba(59, 130, 246, 0.15);
+        }
+
+        .lane-divider:nth-child(1) { top: 20%; }
+        .lane-divider:nth-child(2) { top: 35%; }
+        .lane-divider:nth-child(3) { top: 50%; }
+        .lane-divider:nth-child(4) { top: 65%; }
+
+        /* ============ RACERS (STOCKS) ============ */
+        .racers-container {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: 260px;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .lane {
+            position: absolute;
+            width: 100%;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .lane:nth-child(1) { top: 0px; }
+        .lane:nth-child(2) { top: 52px; }
+        .lane:nth-child(3) { top: 104px; }
+        .lane:nth-child(4) { top: 156px; }
+        .lane:nth-child(5) { top: 208px; }
+
+        .racer {
+            position: absolute;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: left 2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 10;
+            cursor: default;
+        }
+
+        .racer.nvda {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .racer.aapl {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .racer.tsla {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .racer.msft {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .racer.meta {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .racer-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.8;
+        }
+
+        /* Gallop animation for racers */
+        @keyframes gallop {
+            0%, 100% { transform: translateY(0px); }
+            25% { transform: translateY(-4px); }
+            50% { transform: translateY(0px); }
+            75% { transform: translateY(-2px); }
+        }
+
+        .racer.nvda { animation: gallop 0.6s ease-in-out infinite; }
+        .racer.aapl { animation: gallop 0.6s ease-in-out infinite 0.1s; }
+        .racer.tsla { animation: gallop 0.6s ease-in-out infinite 0.2s; }
+        .racer.msft { animation: gallop 0.6s ease-in-out infinite 0.15s; }
+        .racer.meta { animation: gallop 0.6s ease-in-out infinite 0.25s; }
+
+        /* Particle effects */
+        .particle-trail {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleDrift 0.8s ease-out forwards;
+        }
+
+        @keyframes particleDrift {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-30px) translateY(10px);
+                opacity: 0;
+            }
+        }
+
+        /* ============ LEADERBOARD ============ */
+        .leaderboard {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(15, 18, 25, 0.9);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 10px 12px;
+            width: 140px;
+            z-index: 20;
+            backdrop-filter: blur(4px);
+        }
+
+        .leaderboard-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .leaderboard-entry:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-entry.gold {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+
+        .leaderboard-position {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.5);
+            margin-right: 6px;
+            width: 16px;
+        }
+
+        .leaderboard-ticker {
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .leaderboard-gain {
+            color: #10b981;
+            font-weight: 600;
+            font-size: 10px;
+        }
+
+        .leaderboard-gain.negative {
+            color: #ef4444;
+        }
+
+        /* ============ STATUS AREA ============ */
+        .status-area {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.3);
+            }
+        }
+
+        .market-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            background: rgba(15, 18, 25, 0.9);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 6px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .market-time {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+        }
+
+        .market-volume {
+            font-size: 9px;
+            color: rgba(59, 130, 246, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Parallax Layers -->
+        <div class="parallax-layer sky">
+            <div class="stars"></div>
+            <div class="grid-pattern"></div>
+        </div>
+
+        <!-- Track Lines (Middle) -->
+        <div class="ground-middle">
+            <div class="track-lines"></div>
+        </div>
+
+        <!-- Ground Texture (Fast) -->
+        <div class="ground-fast">
+            <div class="ground-texture"></div>
+        </div>
+
+        <!-- Lane Dividers -->
+        <div class="lane-dividers">
+            <div class="lane-divider"></div>
+            <div class="lane-divider"></div>
+            <div class="lane-divider"></div>
+            <div class="lane-divider"></div>
+        </div>
+
+        <!-- Racers -->
+        <div class="racers-container">
+            <div class="lane" data-lane="0">
+                <div class="racer nvda" data-ticker="NVDA">
+                    <div class="racer-dot"></div>
+                    <span>NVDA</span>
+                </div>
+            </div>
+            <div class="lane" data-lane="1">
+                <div class="racer aapl" data-ticker="AAPL">
+                    <div class="racer-dot"></div>
+                    <span>AAPL</span>
+                </div>
+            </div>
+            <div class="lane" data-lane="2">
+                <div class="racer tsla" data-ticker="TSLA">
+                    <div class="racer-dot"></div>
+                    <span>TSLA</span>
+                </div>
+            </div>
+            <div class="lane" data-lane="3">
+                <div class="racer msft" data-ticker="MSFT">
+                    <div class="racer-dot"></div>
+                    <span>MSFT</span>
+                </div>
+            </div>
+            <div class="lane" data-lane="4">
+                <div class="racer meta" data-ticker="META">
+                    <div class="racer-dot"></div>
+                    <span>META</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard">
+            <div class="leaderboard-title">Position</div>
+            <div class="leaderboard-content">
+                <div class="leaderboard-entry gold">
+                    <span class="leaderboard-position">1st</span>
+                    <span class="leaderboard-ticker">NVDA</span>
+                    <span class="leaderboard-gain">+4.2%</span>
+                </div>
+                <div class="leaderboard-entry">
+                    <span class="leaderboard-position">2nd</span>
+                    <span class="leaderboard-ticker">AAPL</span>
+                    <span class="leaderboard-gain">+2.8%</span>
+                </div>
+                <div class="leaderboard-entry">
+                    <span class="leaderboard-position">3rd</span>
+                    <span class="leaderboard-ticker">TSLA</span>
+                    <span class="leaderboard-gain">+1.5%</span>
+                </div>
+                <div class="leaderboard-entry">
+                    <span class="leaderboard-position">4th</span>
+                    <span class="leaderboard-ticker">MSFT</span>
+                    <span class="leaderboard-gain negative">-0.3%</span>
+                </div>
+                <div class="leaderboard-entry">
+                    <span class="leaderboard-position">5th</span>
+                    <span class="leaderboard-ticker">META</span>
+                    <span class="leaderboard-gain negative">-1.2%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Area -->
+        <div class="status-area">
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                LIVE
+            </div>
+            <div class="market-info">
+                <div class="market-time" id="market-time">3:42 PM EST</div>
+                <div class="market-volume">Vol: 2.4M</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track current positions and gains
+        const stocks = ['NVDA', 'AAPL', 'TSLA', 'MSFT', 'META'];
+        let positions = { NVDA: 0, AAPL: 1, TSLA: 2, MSFT: 3, META: 4 };
+        let gains = {
+            NVDA: 4.2,
+            AAPL: 2.8,
+            TSLA: 1.5,
+            MSFT: -0.3,
+            META: -1.2
+        };
+
+        // Container reference
+        const container = document.querySelector('.container');
+        const containerRect = container.getBoundingClientRect();
+
+        // Calculate racer positions based on progress
+        function updateRacerPositions() {
+            const racers = document.querySelectorAll('.racer');
+            
+            racers.forEach(racer => {
+                const ticker = racer.dataset.ticker;
+                // Simulate progress: 10% to 80% of container width
+                const minLeft = 40;
+                const maxLeft = container.offsetWidth - 120;
+                const range = maxLeft - minLeft;
+                
+                // Use gain as a proxy for position (normalized to 0-100)
+                const minGain = Math.min(...Object.values(gains));
+                const maxGain = Math.max(...Object.values(gains));
+                const gainRange = maxGain - minGain || 1;
+                const progress = ((gains[ticker] - minGain) / gainRange) * 100;
+                
+                const newLeft = minLeft + (range * progress / 100);
+                racer.style.left = newLeft + 'px';
+
+                // Create particle effects
+                if (Math.random() > 0.6) {
+                    createParticle(racer);
+                }
+            });
+        }
+
+        // Create particle trail effect
+        function createParticle(racer) {
+            const particle = document.createElement('div');
+            particle.className = 'particle-trail';
+            
+            const rect = racer.getBoundingClientRect();
+            particle.style.left = (rect.left - container.getBoundingClientRect().left - 15) + 'px';
+            particle.style.top = (rect.top - container.getBoundingClientRect().top + 10) + 'px';
+            
+            container.appendChild(particle);
+            
+            setTimeout(() => particle.remove(), 800);
+        }
+
+        // Shuffle positions and update gains
+        function shufflePositions() {
+            // Randomly increase/decrease gains
+            Object.keys(gains).forEach(ticker => {
+                const change = (Math.random() - 0.5) * 1.5; // -0.75 to +0.75
+                gains[ticker] = parseFloat((gains[ticker] + change).toFixed(1));
+            });
+
+            // Update racer positions
+            updateRacerPositions();
+
+            // Update leaderboard
+            updateLeaderboard();
+        }
+
+        // Update leaderboard display
+        function updateLeaderboard() {
+            // Sort stocks by gain (descending)
+            const sorted = Object.keys(gains).sort((a, b) => gains[b] - gains[a]);
+            
+            const entries = document.querySelectorAll('.leaderboard-entry');
+            entries.forEach((entry, index) => {
+                const ticker = sorted[index];
+                const gain = gains[ticker];
+                const isPositive = gain >= 0;
+                const gainText = isPositive ? `+${gain}%` : `${gain}%`;
+                
+                // Update content
+                entry.classList.toggle('gold', index === 0);
+                entry.querySelector('.leaderboard-ticker').textContent = ticker;
+                const gainSpan = entry.querySelector('.leaderboard-gain');
+                gainSpan.textContent = gainText;
+                gainSpan.classList.toggle('negative', !isPositive);
+            });
+        }
+
+        // Update market time
+        function updateMarketTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('market-time').textContent = `${hours}:${minutes} EST`;
+        }
+
+        // Initialize and start updates
+        updateRacerPositions();
+        updateLeaderboard();
+        updateMarketTime();
+
+        // Update every 3 seconds
+        setInterval(() => {
+            shufflePositions();
+        }, 3500);
+
+        // Update time every second
+        setInterval(() => {
+            updateMarketTime();
+        }, 1000);
+
+        // Smooth update on window resize
+        window.addEventListener('resize', () => {
+            updateRacerPositions();
+        });
+    </script>
+</body>
+</html>

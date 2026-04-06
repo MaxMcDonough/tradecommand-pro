@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeCommand Pro — Weekly Lead Prospecting Report</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0e17; color: #e0e6ed; line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 28px; color: #00d4aa; margin-bottom: 4px; }
+  .subtitle { color: #7a8ba3; font-size: 14px; margin-bottom: 32px; }
+  .stats-row { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+  .stat-card { background: #131a2b; border: 1px solid #1e2a40; border-radius: 12px; padding: 20px; flex: 1; min-width: 150px; }
+  .stat-card .label { color: #7a8ba3; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-card .value { font-size: 32px; font-weight: 700; color: #fff; margin-top: 4px; }
+  .stat-card .value.green { color: #00d4aa; }
+  .stat-card .value.amber { color: #f5a623; }
+  .stat-card .value.blue { color: #4a9eff; }
+  .section { margin-bottom: 36px; }
+  .section-title { font-size: 20px; color: #fff; margin-bottom: 16px; border-bottom: 1px solid #1e2a40; padding-bottom: 8px; }
+  .lead-card { background: #131a2b; border: 1px solid #1e2a40; border-radius: 12px; padding: 20px; margin-bottom: 16px; transition: border-color 0.2s; }
+  .lead-card:hover { border-color: #00d4aa; }
+  .lead-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .lead-name { font-size: 18px; font-weight: 600; color: #fff; }
+  .lead-role { color: #7a8ba3; font-size: 14px; }
+  .lead-company { color: #4a9eff; font-size: 14px; font-weight: 500; }
+  .score-badge { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .score-high { background: rgba(0,212,170,0.15); color: #00d4aa; }
+  .score-mid { background: rgba(245,166,35,0.15); color: #f5a623; }
+  .skills-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+  .skill-tag { background: #1a2438; color: #7a8ba3; padding: 2px 10px; border-radius: 12px; font-size: 12px; }
+  .outreach-section { margin-top: 14px; }
+  .outreach-label { font-size: 12px; color: #00d4aa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600; }
+  .dm-box { background: #0d1420; border-left: 3px solid #00d4aa; padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: #c8d3e0; margin-bottom: 10px; }
+  .followup { margin-top: 8px; }
+  .followup-header { font-size: 12px; color: #f5a623; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; cursor: pointer; font-weight: 600; }
+  .followup-step { background: #0d1420; border-left: 3px solid #1e2a40; padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 13px; color: #9aa8ba; margin-bottom: 6px; }
+  .followup-step strong { color: #c8d3e0; }
+  .segment-tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+  .seg-trader { background: rgba(74,158,255,0.15); color: #4a9eff; }
+  .seg-quant { background: rgba(168,85,247,0.15); color: #a855f7; }
+  .seg-fintech { background: rgba(245,166,35,0.15); color: #f5a623; }
+  .notes { background: #131a2b; border: 1px solid #1e2a40; border-radius: 12px; padding: 20px; font-size: 14px; color: #9aa8ba; }
+  .notes li { margin-bottom: 8px; }
+  a { color: #4a9eff; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>TradeCommand Pro — Weekly Lead Report</h1>
+  <p class="subtitle">Week of March 23, 2026 · Generated Monday morning · For review by Max</p>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="label">New Leads Found</div><div class="value green">10</div></div>
+    <div class="stat-card"><div class="label">Avg Lead Score</div><div class="value amber">82</div></div>
+    <div class="stat-card"><div class="label">Current Pipeline</div><div class="value blue">75</div></div>
+    <div class="stat-card"><div class="label">Pipeline Target</div><div class="value">150+</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">New Leads — Traders at Financial Institutions</div>
+
+    <!-- Lead 1 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Joyce Lin <span class="segment-tag seg-trader">Trader</span></div>
+          <div class="lead-company">JPMorgan Chase</div>
+          <div class="lead-role">Rates Trader — Vice President · New York, NY</div>
+          <div class="skills-row">
+            <span class="skill-tag">Python</span><span class="skill-tag">C++</span><span class="skill-tag">Data Analysis</span><span class="skill-tag">ML/E-Trading</span>
+          </div>
+        </div>
+        <div class="score-badge score-high">Score: 92</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Joyce — saw your background spanning e-trading, ML, and automated strategies at JPMorgan. That's exactly the profile we built TradeCommand Pro for: real-time dashboards that plug into the workflows quant-driven traders actually use. Would love to get 5 min of your take on what's still missing in rates execution tooling.</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Quick follow-up — we just shipped a new rates-specific P&L heatmap that a few sell-side desks are beta testing. Happy to share a 2-min walkthrough if you're curious."</div>
+          <div class="followup-step"><strong>Day 7:</strong> "One more thought — TradeCommand Pro's automated strategy monitoring might pair well with your ML work. Here's a short case study from a similar desk: [link]. No pressure either way."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last ping — if the timing isn't right now, totally understand. We're running a live demo for institutional traders on April 2nd. Would love to have you if the schedule works."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 2 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Amer Suljendic <span class="segment-tag seg-trader">Trader</span></div>
+          <div class="lead-company">Barclays Investment Bank</div>
+          <div class="lead-role">FX Forwards / STIR Trader · New York, NY</div>
+          <div class="skills-row">
+            <span class="skill-tag">Financial Markets</span><span class="skill-tag">Statistics</span><span class="skill-tag">Research</span>
+          </div>
+        </div>
+        <div class="score-badge score-high">Score: 85</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Amer — FX forwards and STIR is a fast-moving space. We built TradeCommand Pro to give traders like you a single-pane view of cross-asset risk, P&L, and execution analytics in real time. Curious if you've been looking for better tooling on the rates/FX side?</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Following up — we recently added FX-specific modules (spot/forward blotter, swap curve overlays) that a few dealers have asked about. Want me to send you a quick preview?"</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Thought you might find this relevant — a short writeup on how TradeCommand Pro reduces manual reconciliation for FX desks by ~40%. Happy to share more details."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last note — we're hosting a live session for sell-side FX traders on April 2. Would be great to get your perspective if you're free."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 3 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Anthony Palino <span class="segment-tag seg-trader">Trader</span></div>
+          <div class="lead-company">Morgan Stanley</div>
+          <div class="lead-role">Equity Trader · New York, NY</div>
+          <div class="skills-row">
+            <span class="skill-tag">Accounting</span><span class="skill-tag">Leadership</span><span class="skill-tag">Excel</span><span class="skill-tag">Capital Markets</span>
+          </div>
+        </div>
+        <div class="score-badge score-mid">Score: 80</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Anthony — noticed you're on the equity desk at Morgan Stanley with a solid background in capital markets. TradeCommand Pro is a real-time dashboard built specifically for equity traders who want faster signal-to-execution and cleaner P&L tracking. Would love to hear what tools you're currently using and where the gaps are.</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Quick follow-up — our equity module includes sector rotation heatmaps and intraday P&L attribution. Curious if that would add value for your workflow?"</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Sharing a 90-second clip of TradeCommand Pro's equity dashboard in action. A few equity desks have told us it cuts their end-of-day reconciliation in half."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Final note — if now's not the right time, no worries. We have a live demo coming up April 2 and would welcome your perspective as an equity trader."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 4 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Kim Anthony <span class="segment-tag seg-trader">Trader</span></div>
+          <div class="lead-company">Goldman Sachs</div>
+          <div class="lead-role">Trader · New York, NY</div>
+        </div>
+        <div class="score-badge score-mid">Score: 78</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Kim — saw you're trading at Goldman Sachs. We built TradeCommand Pro as a next-gen dashboard for institutional traders who want real-time analytics without the lag and clutter of legacy systems. Would love to get your take on what's working (or not) in your current setup.</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Quick follow-up — a few GS alumni on the buy side are already using TradeCommand Pro. Happy to connect you if it'd help to hear a peer perspective."</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Here's a quick comparison of TradeCommand Pro vs. legacy terminal dashboards — the speed difference on execution analytics is pretty striking."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last touchpoint — we're running a live demo April 2 for institutional traders. No pitch, just a product walkthrough. Happy to save you a spot."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 5 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Jean Regueros <span class="segment-tag seg-trader">Trader</span></div>
+          <div class="lead-company">HSBC Holdings</div>
+          <div class="lead-role">Trader · United States</div>
+        </div>
+        <div class="score-badge score-mid">Score: 72</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Jean — saw you're trading at HSBC. We're building TradeCommand Pro as a modern, real-time alternative to the dashboards most institutional desks are stuck with. Curious if you've been looking for something faster and more customizable for your workflow?</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Following up — TradeCommand Pro was designed for exactly the multi-asset, global trading environment at firms like HSBC. Happy to show you a quick demo tailored to your desk."</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Thought you might find this useful — a breakdown of how TradeCommand Pro handles cross-timezone position tracking for global desks."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last ping — we're hosting a live demo April 2. No commitment, just a product walkthrough. Would love to have you."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">New Leads — Quantitative Analysts & Researchers</div>
+
+    <!-- Lead 6 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Wei Wang <span class="segment-tag seg-quant">Quant</span></div>
+          <div class="lead-company">JPMorgan Chase</div>
+          <div class="lead-role">Senior Quantitative Analyst · New York, NY</div>
+          <div class="skills-row">
+            <span class="skill-tag">Algorithm Dev</span><span class="skill-tag">E-Trading Systems</span><span class="skill-tag">Market Microstructure</span><span class="skill-tag">Python</span><span class="skill-tag">SQL</span>
+          </div>
+        </div>
+        <div class="score-badge score-high">Score: 90</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Wei — your work on algorithm development and electronic trading systems at JPMorgan is right in our wheelhouse. TradeCommand Pro exposes a full API layer for quant teams to pipe custom signals into real-time dashboards. Would love to get your technical take on what's missing from the tools you use daily.</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Quick follow-up — our Python SDK lets quant teams push custom analytics straight into TradeCommand Pro's dashboard. Here's the docs if you want to take a look: [link]."</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Thought this might resonate — a case study on how a quant desk uses TradeCommand Pro to monitor algo performance and market microstructure metrics in one view."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last note — we're running a technical deep-dive for quant teams on April 5. API integration, custom dashboards, backtesting overlays. Would be great to have your perspective."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 7 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Alan Xinghua Z. <span class="segment-tag seg-quant">Quant</span></div>
+          <div class="lead-company">Morgan Stanley</div>
+          <div class="lead-role">Quantitative Analyst · New York, NY</div>
+          <div class="skills-row">
+            <span class="skill-tag">C++</span><span class="skill-tag">MATLAB</span><span class="skill-tag">Stochastic Calculus</span><span class="skill-tag">Monte Carlo</span><span class="skill-tag">Financial Modeling</span>
+          </div>
+        </div>
+        <div class="score-badge score-high">Score: 87</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Alan — your quantitative finance background at Morgan Stanley (stochastic calc, Monte Carlo, financial modeling) is exactly the kind of expertise we're building for. TradeCommand Pro lets quant analysts visualize model outputs, backtest results, and live market data in a single real-time dashboard. Curious if that fills a gap for you?</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Following up — we recently added a Monte Carlo visualization module that a few quant desks have been testing. Want me to send you a preview?"</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Quick share — here's how TradeCommand Pro integrates with C++ and MATLAB pipelines for real-time model monitoring. Thought it might be relevant to your workflow."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last touchpoint — hosting a quant-focused technical demo on April 5. API integration, custom model overlays, backtesting. Would be great to have a Morgan Stanley perspective."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 8 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Ting Wang <span class="segment-tag seg-quant">Quant</span></div>
+          <div class="lead-company">UBS Group AG</div>
+          <div class="lead-role">Quantitative Analyst · New York, NY</div>
+        </div>
+        <div class="score-badge score-mid">Score: 79</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Ting — saw you're doing quant work at UBS. We built TradeCommand Pro to give quantitative teams real-time visibility into positions, risk, and model performance without bouncing between five different tools. Would love to hear how your current stack holds up and where you'd want it to be better.</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Quick follow-up — a few quant analysts at bulge brackets have told us the biggest pain point is fragmented dashboards. TradeCommand Pro solves that. Happy to show you."</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Sharing a short case study on how TradeCommand Pro consolidated 4 separate tools into one dashboard for a quant desk. Thought it might resonate."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last note — live quant demo on April 5 if you're interested. No strings attached."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 9 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Valentin N. <span class="segment-tag seg-quant">Quant</span></div>
+          <div class="lead-company">BlackRock</div>
+          <div class="lead-role">Quantitative Analyst · New York, NY</div>
+        </div>
+        <div class="score-badge score-high">Score: 84</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Valentin — quant work at BlackRock means you're dealing with serious scale. TradeCommand Pro was designed for exactly that: real-time dashboards that handle large portfolios, multi-strategy views, and custom analytics without lag. Curious if you've been looking for something more flexible than what's available internally?</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Following up — TradeCommand Pro scales to handle the kind of multi-strategy, multi-asset complexity that BlackRock quants deal with daily. Happy to walk you through the architecture."</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Quick thought — our API lets quant teams build custom modules on top of TradeCommand Pro's core dashboard. Here's a short technical overview."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last ping — technical deep-dive for quant teams on April 5. Would love to get your take as someone working at the intersection of scale and quantitative analysis."</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead 10 -->
+    <div class="lead-card">
+      <div class="lead-header">
+        <div>
+          <div class="lead-name">Baiyuan Gao <span class="segment-tag seg-quant">Quant</span></div>
+          <div class="lead-company">Citigroup</div>
+          <div class="lead-role">Quantitative Analyst · Georgetown, TX</div>
+          <div class="skills-row">
+            <span class="skill-tag">Python</span><span class="skill-tag">ML</span><span class="skill-tag">Statistics</span><span class="skill-tag">PySpark</span><span class="skill-tag">SQL</span><span class="skill-tag">Tableau</span>
+          </div>
+        </div>
+        <div class="score-badge score-mid">Score: 76</div>
+      </div>
+      <div class="outreach-section">
+        <div class="outreach-label">Initial DM</div>
+        <div class="dm-box">Hey Baiyuan — your background in ML, Python, and data viz at Citi is a great fit for what we're building. TradeCommand Pro combines real-time market dashboards with full Python/PySpark integration so quant teams can go from analysis to visualization without context-switching. Would love to hear if that's a pain point for you.</div>
+        <div class="followup">
+          <div class="followup-header">3-Touch Follow-Up Sequence</div>
+          <div class="followup-step"><strong>Day 3:</strong> "Following up — our Python SDK and PySpark connectors were built with data-heavy quant workflows in mind. Here's a quick look at the integration docs."</div>
+          <div class="followup-step"><strong>Day 7:</strong> "Thought this might be relevant — a walkthrough of how TradeCommand Pro replaces Tableau + custom scripts with one unified dashboard for quant analysts."</div>
+          <div class="followup-step"><strong>Day 14:</strong> "Last note — technical demo for quant teams on April 5. We'll cover Python SDK, data pipelines, and custom dashboards. Would be great to have you."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Pipeline Recommendations</div>
+    <div class="notes">
+      <p style="margin-bottom: 12px;"><strong style="color:#00d4aa;">Prioritize These Leads This Week:</strong></p>
+      <ul style="padding-left: 20px; margin-bottom: 20px;">
+        <li><strong style="color:#fff;">Joyce Lin (92)</strong> — VP-level at JPMorgan with ML + e-trading experience. Highest conversion potential. Reach out first.</li>
+        <li><strong style="color:#fff;">Wei Wang (90)</strong> — Senior quant at JPMorgan building e-trading systems. Perfect technical champion. DM today.</li>
+        <li><strong style="color:#fff;">Alan Z. (87)</strong> — Morgan Stanley quant with deep modeling skills. Strong fit for API/SDK pitch.</li>
+        <li><strong style="color:#fff;">Amer Suljendic (85)</strong> — Barclays FX desk, active in forwards/STIR. Great for FX module feedback.</li>
+        <li><strong style="color:#fff;">Valentin N. (84)</strong> — BlackRock quant. Buy-side perspective + scale use case.</li>
+      </ul>
+      <p style="margin-bottom: 12px;"><strong style="color:#f5a623;">Suggestions for Existing Pipeline:</strong></p>
+      <ul style="padding-left: 20px; margin-bottom: 20px;">
+        <li>Review leads who haven't responded after 3+ touches — consider archiving or moving to a nurture-only cadence.</li>
+        <li>Leads at firms where we now have new contacts (JPMorgan, Morgan Stanley) could benefit from a multi-threaded approach.</li>
+        <li>Consider deprioritizing any leads outside financial services / trading that were added speculatively.</li>
+      </ul>
+      <p style="margin-bottom: 12px;"><strong style="color:#4a9eff;">Next Week's Prospecting Plan:</strong></p>
+      <ul style="padding-left: 20px;">
+        <li>Target finance students at Wharton, MIT, Stanford, Columbia, NYU, and Chicago Booth (campus ambassador pipeline).</li>
+        <li>Expand to buy-side: hedge fund traders and PMs at Citadel, Two Sigma, DE Shaw, AQR, Point72.</li>
+        <li>Search for active day traders and swing traders with social media presence (fintwit, YouTube, Discord communities).</li>
+        <li>Explore crypto/digital asset traders at firms like Galaxy Digital, Cumberland, Jump Crypto.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align: center; color: #4a5568; font-size: 12px; padding: 20px 0; border-top: 1px solid #1e2a40; margin-top: 20px;">
+    TradeCommand Pro Lead Prospecting · Week of March 23, 2026 · Pipeline: 75 → 85 leads · Target: 150+ by end of Q1
+  </div>
+</div>
+</body>
+</html>

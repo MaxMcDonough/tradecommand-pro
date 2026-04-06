@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Ray Table Pads | PNWX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #1a1a26;
+            --accent: #4f8fff;
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Orbs Background */
+        .ambient-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.08;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            top: -100px;
+            left: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent-2);
+            bottom: -50px;
+            right: -50px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 50%;
+            right: 10%;
+            animation: float 22s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        main {
+            padding-top: 100px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            margin-bottom: 40px;
+        }
+
+        /* Section */
+        .section {
+            padding: 100px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        /* Cards with Glassmorphism */
+        .glass-card {
+            background: rgba(26, 26, 38, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: slideInUp 0.6s ease forwards;
+        }
+
+        .glass-card:nth-child(1) { animation-delay: 0.1s; }
+        .glass-card:nth-child(2) { animation-delay: 0.2s; }
+        .glass-card:nth-child(3) { animation-delay: 0.3s; }
+        .glass-card:nth-child(4) { animation-delay: 0.4s; }
+        .glass-card:nth-child(5) { animation-delay: 0.5s; }
+        .glass-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .glass-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            background: rgba(26, 26, 38, 0.6);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .product-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .product-card .badge {
+            display: inline-block;
+            background: rgba(79, 143, 255, 0.15);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            border: 1px solid rgba(79, 143, 255, 0.3);
+        }
+
+        .product-card .spec {
+            margin: 10px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .product-card .spec strong {
+            color: var(--text-primary);
+        }
+
+        /* Pricing Table */
+        .pricing-section {
+            margin: 60px 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(26, 26, 38, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(79, 143, 255, 0.1);
+            color: var(--accent);
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            color: var(--text-secondary);
+        }
+
+        tr:hover {
+            background: rgba(79, 143, 255, 0.05);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            margin-top: 40px;
+        }
+
+        .comparison-table th {
+            text-align: center;
+        }
+
+        .comparison-table td {
+            text-align: center;
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(255, 100, 100, 0.08);
+            border: 1px solid rgba(255, 100, 100, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 40px 0;
+            color: #ff9999;
+        }
+
+        .warning-box strong {
+            color: #ffb3b3;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+            color: var(--bg-primary);
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 143, 255, 0.3);
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(26, 26, 38, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 80px 0;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 30px;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid var(--border);
+            padding: 60px 0;
+            margin-top: 100px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .section h2 {
+                font-size: 28px;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            main {
+                padding-top: 80px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient Orbs -->
+    <div class="ambient-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="../pnwx-redesign.html" class="nav-logo">PNWX</a>
+            <ul class="nav-links">
+                <li><a href="../pnwx-redesign.html#products">Products</a></li>
+                <li><a href="../pnwx-redesign.html#about">About</a></li>
+                <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+                <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>X-Ray Table Pads</h1>
+                <p>Comfortable, durable table pads for patient comfort during prolonged imaging procedures.</p>
+            </div>
+        </section>
+
+        <!-- Standard Pads Section -->
+        <section class="section">
+            <div class="container">
+                <h2>Standard Table Pads</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 50px; font-size: 16px;">Premium comfort with proven durability and multiple covering options</p>
+                
+                <div class="products-grid">
+                    <!-- Standard 72"×23¼" -->
+                    <div class="glass-card product-card">
+                        <span class="badge">Standard Size</span>
+                        <h3>Standard Pad</h3>
+                        <div class="spec"><strong>Dimensions:</strong> 72" × 23¼"</div>
+                        <div class="spec"><strong>Thickness Options:</strong> 1" Comfort or 2" Firm</div>
+                        <div class="spec"><strong>Hardware:</strong> Brass eyelets for hanging</div>
+                    </div>
+
+                    <!-- Plus 80"×30" -->
+                    <div class="glass-card product-card">
+                        <span class="badge">Extended Size</span>
+                        <h3>Plus Pad</h3>
+                        <div class="spec"><strong>Dimensions:</strong> 80" × 30"</div>
+                        <div class="spec"><strong>Thickness Options:</strong> 1" Comfort or 2" Firm</div>
+                        <div class="spec"><strong>Hardware:</strong> Brass eyelets for hanging</div>
+                    </div>
+
+                    <!-- Covering Options -->
+                    <div class="glass-card product-card">
+                        <span class="badge">Economy</span>
+                        <h3>Economy Vinyl</h3>
+                        <div class="spec"><strong>Color:</strong> Light Blue</div>
+                        <div class="spec"><strong>Durability:</strong> Entry-level protection</div>
+                        <div class="spec"><strong>Best For:</strong> Cost-conscious facilities</div>
+                    </div>
+
+                    <div class="glass-card product-card">
+                        <span class="badge">Professional</span>
+                        <h3>Upholstery Vinyl</h3>
+                        <div class="spec"><strong>Colors:</strong> Black, Blue</div>
+                        <div class="spec"><strong>Durability:</strong> Enhanced protection</div>
+                        <div class="spec"><strong>Best For:</strong> General-use facilities</div>
+                    </div>
+
+                    <div class="glass-card product-card">
+                        <span class="badge">Premium</span>
+                        <h3>Techno-TUFF</h3>
+                        <div class="spec"><strong>Color:</strong> Black</div>
+                        <div class="spec"><strong>Durability:</strong> Maximum resistance</div>
+                        <div class="spec"><strong>Best For:</strong> High-traffic facilities</div>
+                    </div>
+
+                    <div class="glass-card product-card">
+                        <span class="badge">Accessory</span>
+                        <h3>GSS-49 Disposable Sheets</h3>
+                        <div class="spec"><strong>Dimensions:</strong> 90" × 40"</div>
+                        <div class="spec"><strong>Material:</strong> Single-use sterile</div>
+                        <div class="spec"><strong>Best For:</strong> Sanitation protocols</div>
+                    </div>
+                </div>
+
+                <!-- Pricing Table -->
+                <div class="pricing-section">
+                    <h3 style="text-align: center; margin-bottom: 30px; color: var(--text-primary);">Standard Size Pricing</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Covering Type</th>
+                                    <th>1" Comfort</th>
+                                    <th>2" Firm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Economy Vinyl</td>
+                                    <td>$209.33</td>
+                                    <td>$541.92</td>
+                                </tr>
+                                <tr>
+                                    <td>Upholstery Vinyl - Black</td>
+                                    <td>$441.33</td>
+                                    <td>$569.48</td>
+                                </tr>
+                                <tr>
+                                    <td>Upholstery Vinyl - Blue</td>
+                                    <td>$442.66</td>
+                                    <td>$644.81</td>
+                                </tr>
+                                <tr>
+                                    <td>Techno-TUFF</td>
+                                    <td>$457.33</td>
+                                    <td>$596.19</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="text-align: center; margin: 40px 0 30px 0; color: var(--text-primary);">Plus Size Pricing</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Covering Type</th>
+                                    <th>1" Comfort</th>
+                                    <th>2" Firm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Economy Vinyl</td>
+                                    <td>$409 - $433</td>
+                                    <td>$725.33</td>
+                                </tr>
+                                <tr>
+                                    <td>Upholstery Vinyl</td>
+                                    <td>$595 - $660</td>
+                                    <td>$860 - $905</td>
+                                </tr>
+                                <tr>
+                                    <td>Techno-TUFF</td>
+                                    <td>$660</td>
+                                    <td>$860</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 style="text-align: center; margin: 40px 0 30px 0; color: var(--text-primary);">Disposable Options</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Size</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>GSS-49 Stretcher Sheets</td>
+                                    <td>90" × 40"</td>
+                                    <td>$160.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Radiolucent Section -->
+        <section class="section">
+            <div class="container">
+                <h2>Premium Radiolucent Pads</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 50px; font-size: 16px;">The ultimate imaging solution with sealed boxed corners and radiolucent materials</p>
+                
+                <div class="products-grid">
+                    <div class="glass-card product-card">
+                        <span class="badge">Premium Feature</span>
+                        <h3>4-Way Stretch Material</h3>
+                        <div class="spec"><strong>Benefit:</strong> Superior flexibility and durability</div>
+                        <div class="spec"><strong>Imaging:</strong> Radiolucent construction</div>
+                        <div class="spec"><strong>Finish:</strong> Sealed boxed corners</div>
+                    </div>
+
+                    <div class="glass-card product-card">
+                        <span class="badge">Premium Feature</span>
+                        <h3>Premium Upholstery Vinyl</h3>
+                        <div class="spec"><strong>Benefit:</strong> Professional appearance & durability</div>
+                        <div class="spec"><strong>Imaging:</strong> Radiolucent construction</div>
+                        <div class="spec"><strong>Finish:</strong> Sealed boxed corners</div>
+                    </div>
+
+                    <div class="glass-card product-card">
+                        <span class="badge">Optional Add-on</span>
+                        <h3>Anti-Slip Surface</h3>
+                        <div class="spec"><strong>Benefit:</strong> Enhanced patient safety</div>
+                        <div class="spec"><strong>Application:</strong> Available on premium pads</div>
+                        <div class="spec"><strong>Recommended:</strong> High-motion procedures</div>
+                    </div>
+                </div>
+
+                <!-- Premium Pricing Table -->
+                <div class="pricing-section">
+                    <h3 style="text-align: center; margin-bottom: 30px; color: var(--text-primary);">Premium Radiolucent Pad Pricing</h3>
+                    <div class="table-wrapper">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Pad Type & Material</th>
+                                    <th>Standard Comfort</th>
+                                    <th>Standard Firm</th>
+                                    <th>Plus Comfort</th>
+                                    <th>Plus Firm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>4-Way Stretch</td>
+                                    <td>$969 - $1,354.92</td>
+                                    <td>$1,168.25 - $1,429.84</td>
+                                    <td>$1,466.67 - $1,817.14</td>
+                                    <td>$1,541.59 - $1,869.21</td>
+                                </tr>
+                                <tr>
+                                    <td>Premium Upholstery Vinyl</td>
+                                    <td>$969 - $1,354.92</td>
+                                    <td>$1,168.25 - $1,429.84</td>
+                                    <td>$1,466.67 - $1,817.14</td>
+                                    <td>$1,541.59 - $1,869.21</td>
+                                </tr>
+                                <tr>
+                                    <td>Memory Foam</td>
+                                    <td>$1,640.63 - $1,752.38</td>
+                                    <td colspan="2" style="text-align: center; color: var(--text-muted);">Standard Size Only</td>
+                                    <td>$1,908.57 - $2,033.02</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Important Note:</strong> Table pads over 1¼" thick for diagnostic imaging are NOT recommended. Please consult with your imaging equipment specialist before selecting premium firm options for diagnostic procedures.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section class="section">
+            <div class="container">
+                <h2>Product Comparison</h2>
+                <div class="table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Standard Pads</th>
+                                <th>Premium Radiolucent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Radiolucent Material</td>
+                                <td>Standard</td>
+                                <td>Yes - Optimized</td>
+                            </tr>
+                            <tr>
+                                <td>Sealed Boxed Corners</td>
+                                <td>Standard edges</td>
+                                <td>Yes - Premium finish</td>
+                            </tr>
+                            <tr>
+                                <td>Anti-Slip Options</td>
+                                <td>Not available</td>
+                                <td>Available</td>
+                            </tr>
+                            <tr>
+                                <td>Material Variety</td>
+                                <td>3 options</td>
+                                <td>Multiple premium options</td>
+                            </tr>
+                            <tr>
+                                <td>Memory Foam</td>
+                                <td>Not available</td>
+                                <td>Yes - Select models</td>
+                            </tr>
+                            <tr>
+                                <td>Price Range</td>
+                                <td>$209 - $905</td>
+                                <td>$969 - $2,033</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section container">
+            <h2>Ready to Upgrade Patient Comfort?</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Get in touch with our team to discuss the ideal table pad solution for your facility.</p>
+            <a href="../pnwx-redesign.html#contact" class="cta-button">Contact Sales</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#">X-Ray Table Pads</a></li>
+                        <li><a href="#">Imaging Solutions</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="../pnwx-redesign.html#about">About</a></li>
+                        <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PNWX Medical Solutions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

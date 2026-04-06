@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's New — TradeCommand Pro v2.5</title>
+<style>
+  body { margin: 0; padding: 0; background: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .wrapper { max-width: 600px; margin: 0 auto; background: #111; }
+  .header { background: #0f1923; padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1a3a1a; }
+  .header span { color: #fff; font-weight: 700; font-size: 18px; }
+  .version-badge { background: linear-gradient(135deg, #00e676, #00c853); color: #000; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 20px; }
+  .hero { padding: 50px 30px 40px; text-align: center; background: linear-gradient(180deg, #0f1923 0%, #111 100%); }
+  .hero h1 { color: #fff; font-size: 28px; margin: 0 0 12px; }
+  .hero h1 span { color: #00e676; }
+  .hero p { color: #888; font-size: 15px; line-height: 1.7; margin: 0; }
+  .update-section { padding: 30px; }
+  .update-section h2 { color: #fff; font-size: 18px; margin: 0 0 20px; display: flex; align-items: center; gap: 8px; }
+  .update-card { background: #1a1a2e; border: 1px solid #222; border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+  .update-card .preview { background: linear-gradient(135deg, #0f1923, #1a1a2e); padding: 30px; text-align: center; border-bottom: 1px solid #222; }
+  .update-card .preview .mock { background: #0a0a15; border: 1px solid #333; border-radius: 8px; padding: 20px; display: inline-block; }
+  .update-card .preview .mock-bar { display: flex; gap: 8px; margin-bottom: 12px; }
+  .update-card .preview .mock-pill { background: #222; color: #888; font-size: 10px; padding: 4px 10px; border-radius: 4px; }
+  .update-card .preview .mock-pill.active { background: #00e676; color: #000; }
+  .update-card .preview .mock-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .update-card .preview .mock-cell { background: #1a1a2e; border-radius: 4px; padding: 8px; text-align: center; }
+  .update-card .preview .mock-cell .val { color: #00e676; font-size: 14px; font-weight: 700; }
+  .update-card .preview .mock-cell .lbl { color: #666; font-size: 9px; text-transform: uppercase; }
+  .update-card .body { padding: 20px; }
+  .update-card .body h3 { color: #fff; font-size: 16px; margin: 0 0 8px; }
+  .update-card .body p { color: #888; font-size: 13px; line-height: 1.6; margin: 0; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 4px; margin-right: 6px; margin-bottom: 8px; }
+  .tag.new { background: rgba(0,230,118,0.15); color: #00e676; }
+  .tag.improved { background: rgba(68,138,255,0.15); color: #448aff; }
+  .tag.fixed { background: rgba(255,171,64,0.15); color: #ffab40; }
+  .changelog { padding: 0 30px 30px; }
+  .changelog h2 { color: #fff; font-size: 18px; margin: 0 0 16px; }
+  .log-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .log-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+  .log-dot.grn { background: #00e676; }
+  .log-dot.blu { background: #448aff; }
+  .log-dot.org { background: #ffab40; }
+  .log-text { color: #999; font-size: 13px; line-height: 1.5; }
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, #333, transparent); margin: 0 30px; }
+  .roadmap { padding: 30px; }
+  .roadmap h2 { color: #fff; font-size: 18px; margin: 0 0 16px; }
+  .roadmap-item { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .roadmap-item .status { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .roadmap-item .status.wip { background: #ffab40; }
+  .roadmap-item .status.planned { background: #448aff; }
+  .roadmap-item span { color: #ccc; font-size: 13px; }
+  .roadmap-item .eta { color: #666; font-size: 11px; margin-left: auto; }
+  .cta-section { text-align: center; padding: 30px; background: #0f1923; }
+  .cta-btn { display: inline-block; background: #00e676; color: #000; font-size: 14px; font-weight: 700; padding: 12px 32px; border-radius: 8px; text-decoration: none; }
+  .footer { padding: 24px 30px; text-align: center; border-top: 1px solid #222; }
+  .footer p { color: #555; font-size: 11px; line-height: 1.6; margin: 0; }
+  .footer a { color: #00e676; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <span>⚡ TradeCommand Pro</span>
+    <span class="version-badge">v2.5</span>
+  </div>
+
+  <div class="hero">
+    <h1>What's New in <span>v2.5</span></h1>
+    <p>We've been shipping fast. Here's what dropped this week — lead filtering, marketing analytics, and a smarter CRM.</p>
+  </div>
+
+  <div class="update-section">
+    <h2>🚀 Major Updates</h2>
+
+    <div class="update-card">
+      <div class="preview">
+        <div class="mock">
+          <div class="mock-bar">
+            <div class="mock-pill active">All Types</div>
+            <div class="mock-pill">LinkedIn</div>
+            <div class="mock-pill">Instagram</div>
+            <div class="mock-pill">Reddit</div>
+          </div>
+          <div class="mock-grid">
+            <div class="mock-cell"><div class="val">89</div><div class="lbl">Total Leads</div></div>
+            <div class="mock-cell"><div class="val">12</div><div class="lbl">Hot</div></div>
+            <div class="mock-cell"><div class="val">34%</div><div class="lbl">Conversion</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <span class="tag new">NEW</span>
+        <h3>Advanced Lead Filtering</h3>
+        <p>Filter your pipeline by lead type (Student, Investor, Finance Bro, etc.), outreach channel (LinkedIn, Instagram, Reddit, Email, Cold Call), status, and score tier. Find exactly the right leads in seconds.</p>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="body">
+        <span class="tag new">NEW</span>
+        <h3>Marketing Command Center</h3>
+        <p>New Marketing page shows channel distribution, lead type breakdown with clickable cards, ad creative gallery, and print materials management — all computed dynamically from your real lead data.</p>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="body">
+        <span class="tag improved">IMPROVED</span>
+        <h3>3-Touch Follow-Up System</h3>
+        <p>Every new lead now comes pre-loaded with 3 personalized follow-up messages (Day 3, Day 7, Day 14). Send, copy, or schedule each one right from the CRM panel.</p>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="body">
+        <span class="tag improved">IMPROVED</span>
+        <h3>Smarter AI Advisor</h3>
+        <p>The AI advisor now analyzes your actual pipeline data — conversion rates, lead scores, channel performance — instead of generic tips. 8 data-driven response types.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="changelog">
+    <h2>📋 Full Changelog</h2>
+    <div class="log-item"><div class="log-dot grn"></div><div class="log-text">Added multi-dimensional lead filtering (type, channel, status, score)</div></div>
+    <div class="log-item"><div class="log-dot grn"></div><div class="log-text">Added 14 new diverse leads across 9 outreach channels</div></div>
+    <div class="log-item"><div class="log-dot grn"></div><div class="log-text">Built Marketing page with dynamic analytics from live lead data</div></div>
+    <div class="log-item"><div class="log-dot grn"></div><div class="log-text">Added ad creative gallery and print materials section</div></div>
+    <div class="log-item"><div class="log-dot blu"></div><div class="log-text">Improved leads table with channel column and color-coded status badges</div></div>
+    <div class="log-item"><div class="log-dot blu"></div><div class="log-text">Enhanced CSV export to include channel data</div></div>
+    <div class="log-item"><div class="log-dot blu"></div><div class="log-text">Upgraded AI advisor with 8 data-driven response categories</div></div>
+    <div class="log-item"><div class="log-dot org"></div><div class="log-text">Fixed follow-up tracking persistence in localStorage</div></div>
+    <div class="log-item"><div class="log-dot org"></div><div class="log-text">Fixed SEED_LEADS syntax error from channel injection</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="roadmap">
+    <h2>🗺️ Coming Next</h2>
+    <div class="roadmap-item"><div class="status wip"></div><span>Email integration — send DMs directly from the CRM</span><span class="eta">v2.6</span></div>
+    <div class="roadmap-item"><div class="status wip"></div><span>Mobile-responsive dashboard redesign</span><span class="eta">v2.7</span></div>
+    <div class="roadmap-item"><div class="status planned"></div><span>Automated A/B testing for outreach messages</span><span class="eta">v3.0</span></div>
+    <div class="roadmap-item"><div class="status planned"></div><span>Team collaboration — shared pipelines + notes</span><span class="eta">v3.0</span></div>
+    <div class="roadmap-item"><div class="status planned"></div><span>Stripe revenue dashboard with MRR tracking</span><span class="eta">v3.1</span></div>
+  </div>
+
+  <div class="cta-section">
+    <a href="https://maxmcdonough.github.io/tradecommand-pro/" class="cta-btn">Try the New Features →</a>
+  </div>
+
+  <div class="footer">
+    <p>You're receiving this because you're a TradeCommand Pro user.<br>
+    <a href="#">Manage preferences</a> · <a href="#">Unsubscribe</a><br><br>
+    © 2026 TradeCommand Pro. All rights reserved.</p>
+  </div>
+</div>
+</body>
+</html>

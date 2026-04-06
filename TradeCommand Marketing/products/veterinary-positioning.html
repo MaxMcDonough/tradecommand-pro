@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinary Positioning | PNWX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #1a1a26;
+            --accent: #4f8fff;
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #0f0f18 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background orbs */
+        .orb-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.05;
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-2);
+            bottom: 10%;
+            right: -50px;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: var(--accent);
+            bottom: 20%;
+            left: 5%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.8);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Main content */
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Section styles */
+        .section {
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            color: var(--text-primary);
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+        }
+
+        /* Product grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: rgba(26, 26, 38, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.8rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: slideIn 0.6s ease;
+        }
+
+        .product-card:hover {
+            background: rgba(26, 26, 38, 0.9);
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(79, 143, 255, 0.15);
+        }
+
+        .product-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .product-sku {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-specs {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-2);
+            margin-bottom: 1rem;
+        }
+
+        .product-lead-time {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            padding-top: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        /* Category divider */
+        .category-header {
+            background: rgba(79, 143, 255, 0.08);
+            border-left: 3px solid var(--accent);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+
+        .category-header h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .category-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(79, 143, 255, 0.1) 0%, rgba(0, 212, 170, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 5rem 0;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1s ease 0.3s backwards;
+        }
+
+        .cta-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .cta-section p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent) 0%, #357ae8 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(79, 143, 255, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 15, 0.8);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                font-size: 0.85rem;
+            }
+
+            .cta-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient orbs -->
+    <div class="orb-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-brand">PNWX</div>
+            <ul class="nav-links">
+                <li><a href="../pnwx-redesign.html#products">Products</a></li>
+                <li><a href="../pnwx-redesign.html#about">About</a></li>
+                <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+                <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero reveal">
+            <h1>Veterinary Positioning</h1>
+            <p>Pet-Sitioner and Techno-Aide immobilizers for precise, stress-free veterinary radiography.</p>
+        </section>
+
+        <!-- Techno-Aide Veterinary Immobilizers -->
+        <section class="section reveal">
+            <div class="category-header">
+                <h3>Techno-Aide Veterinary Immobilizers</h3>
+                <p>V-shaped, radiolucent, foam sponge core, heavy-gauge "Techno-Tuff" black vinyl, 4 hook & loop straps, waterproof/stain-proof/anti-microbial. 5-10 business day lead time.</p>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-card reveal">
+                    <div class="product-sku">VIT-B</div>
+                    <div class="product-name">Bundle (All Sizes)</div>
+                    <div class="product-specs">
+                        Complete set including X-Large, Large, Medium, and Small immobilizers for comprehensive veterinary radiography needs.
+                    </div>
+                    <div class="product-price">$849.33</div>
+                    <div class="product-lead-time">5-10 business day lead time</div>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">VIT-X</div>
+                    <div class="product-name">X-Large Immobilizer</div>
+                    <div class="product-specs">
+                        36" × 14" × 9"<br>
+                        Large animal positioning
+                    </div>
+                    <div class="product-price">$345</div>
+                    <div class="product-lead-time">5-10 business day lead time</div>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">VIT-L</div>
+                    <div class="product-name">Large Immobilizer</div>
+                    <div class="product-specs">
+                        24" × 11" × 7"<br>
+                        Standard domestic animal sizing
+                    </div>
+                    <div class="product-price">$240</div>
+                    <div class="product-lead-time">5-10 business day lead time</div>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">VIT-M</div>
+                    <div class="product-name">Medium Immobilizer</div>
+                    <div class="product-specs">
+                        15" × 7" × 5"<br>
+                        Medium-sized pets
+                    </div>
+                    <div class="product-price">$165</div>
+                    <div class="product-lead-time">5-10 business day lead time</div>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">VIT-S</div>
+                    <div class="product-name">Small Immobilizer</div>
+                    <div class="product-specs">
+                        10" × 4" × 3"<br>
+                        Small animal and exotic pets
+                    </div>
+                    <div class="product-price">$140</div>
+                    <div class="product-lead-time">5-10 business day lead time</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Techno-Aide Stealth-Core Positioners -->
+        <section class="section reveal">
+            <div class="category-header">
+                <h3>Techno-Aide Stealth-Core Positioners</h3>
+                <p>Artifact-free, light mint-green, angled design. Available in standard and Stealth-Cote medical-grade finishes (resistant to blood, Betadine, barium, and alcohol).</p>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-card reveal">
+                    <div class="product-sku">YFCA / YCCA</div>
+                    <div class="product-name">Small Positioner</div>
+                    <div class="product-specs">
+                        7" × 12.5" × 3"<br>
+                        Small animal positioning
+                    </div>
+                    <div class="product-price">$36 / $249.33</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Standard / Stealth-Cote</p>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">YFCB / YCCB</div>
+                    <div class="product-name">Medium Positioner</div>
+                    <div class="product-specs">
+                        11.5" × 19.75" × 5"<br>
+                        Versatile mid-range sizing
+                    </div>
+                    <div class="product-price">$94.67 / $424</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Standard / Stealth-Cote</p>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">YFCC / YCCC</div>
+                    <div class="product-name">Large Positioner</div>
+                    <div class="product-specs">
+                        11" × 24" × 7"<br>
+                        Large animal applications
+                    </div>
+                    <div class="product-price">$260 / $689.14</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Standard / Stealth-Cote</p>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">YFCD / YCCD</div>
+                    <div class="product-name">X-Large Positioner</div>
+                    <div class="product-specs">
+                        14" × 36" × 9"<br>
+                        Large animal specialty positioning
+                    </div>
+                    <div class="product-price">$316 / $1,242.67</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">Standard / Stealth-Cote</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pet-Sitioner -->
+        <section class="section reveal">
+            <div class="category-header">
+                <h3>Pet-Sitioner</h3>
+                <p>Navy nylon-reinforced vinyl, V-shaped, hook & loop straps, minimal absorption, 1-year warranty, tear-resistant construction.</p>
+            </div>
+
+            <div class="products-grid">
+                <div class="product-card reveal">
+                    <div class="product-sku">PP104-SET</div>
+                    <div class="product-name">Bundle (SM + LG)</div>
+                    <div class="product-specs">
+                        Includes one Small and one Large Pet-Sitioner for diverse positioning needs.
+                    </div>
+                    <div class="product-price">$915</div>
+                    <div class="product-lead-time">1-year manufacturer warranty</div>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">PP103-XL</div>
+                    <div class="product-name">X-Large Pet-Sitioner</div>
+                    <div class="product-specs">
+                        48" × 14" × 8"<br>
+                        Large animal positioning
+                    </div>
+                    <div class="product-price">$614</div>
+                    <div class="product-lead-time">1-year manufacturer warranty</div>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">PP102-LG</div>
+                    <div class="product-name">Large Pet-Sitioner</div>
+                    <div class="product-specs">
+                        36" × 14" × 8"<br>
+                        Standard domestic animal sizing
+                    </div>
+                    <div class="product-price">$547</div>
+                    <div class="product-lead-time">1-year manufacturer warranty</div>
+                </div>
+
+                <div class="product-card reveal">
+                    <div class="product-sku">PP101-SM</div>
+                    <div class="product-name">Small Pet-Sitioner</div>
+                    <div class="product-specs">
+                        24" × 10" × 6"<br>
+                        Small animal and exotic pets
+                    </div>
+                    <div class="product-price">$415</div>
+                    <div class="product-lead-time">1-year manufacturer warranty</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Improve Your Radiography Setup?</h2>
+            <p>Contact our team to learn more about veterinary positioning solutions and request a quote for your clinic or hospital.</p>
+            <button class="cta-button">Get in Touch</button>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 PNWX. All rights reserved. | <a href="../pnwx-redesign.html#contact">Contact</a> | <a href="../pnwx-redesign.html#about">About</a></p>
+    </footer>
+
+    <script>
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        revealElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Smooth navigation link handling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && !href.includes('../')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // CTA button functionality
+        document.querySelector('.cta-button').addEventListener('click', () => {
+            window.location.hash = 'contact';
+            window.open('../pnwx-redesign.html#contact', '_self');
+        });
+    </script>
+</body>
+</html>

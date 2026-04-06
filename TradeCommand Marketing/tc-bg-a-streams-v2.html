@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeCommand Pro — AI-Powered Trading Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08090f;
+  --bg2:#0d1117;
+  --bg3:#111827;
+  --card:#111827;
+  --card2:#1a2236;
+  --card3:#1f2a42;
+  --brd:rgba(255,255,255,.07);
+  --brd2:rgba(255,255,255,.12);
+  --t1:#f1f5f9;
+  --t2:#94a3b8;
+  --t3:#64748b;
+  --blu:#3b82f6;
+  --cyn:#06b6d4;
+  --grn:#10b981;
+  --red:#ef4444;
+  --ylw:#f59e0b;
+  --pur:#8b5cf6;
+  --grad:linear-gradient(135deg,#3b82f6,#06b6d4);
+  --glow:0 0 60px rgba(59,130,246,.15),0 0 120px rgba(6,182,212,.08);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t1);overflow-x:hidden;line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+/* ═══ BACKGROUND STREAMS ═══ */
+.streams-bg{position:fixed;inset:0;z-index:0;overflow:hidden}
+.stream-col{position:absolute;font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.06);white-space:nowrap;line-height:2.2;letter-spacing:.5px;width:100px}
+.stream-col .si{padding:2px 0;transition:color .6s,text-shadow .6s}
+.stream-col .si.pg{color:rgba(16,185,129,.2);text-shadow:0 0 8px rgba(16,185,129,.25)}
+.stream-col .si.pr{color:rgba(239,68,68,.2);text-shadow:0 0 8px rgba(239,68,68,.25)}
+@keyframes flowUp{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+
+/* ═══ GLOW ═══ */
+.hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(59,130,246,.12) 0%,rgba(6,182,212,.06) 40%,transparent 70%);pointer-events:none;z-index:0}
+
+/* ═══ CONTENT ═══ */
+.content{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
+
+/* NAV */
+nav{padding:16px 40px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(12px);background:rgba(8,9,15,.85);border-bottom:1px solid var(--brd);position:relative;z-index:10}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700}
+.nav-logo span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-logo .bolt{font-size:20px;filter:drop-shadow(0 0 6px #3b82f6);-webkit-text-fill-color:initial}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--t2);transition:color .2s}
+.nav-links a:hover{color:var(--t1)}
+.nav-cta{display:flex;align-items:center;gap:10px}
+.btn-nav-ghost{padding:9px 20px;background:transparent;color:var(--t1);border:1px solid var(--brd2);border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;transition:border-color .2s,color .2s}
+.btn-nav-ghost:hover{border-color:var(--blu);color:var(--blu)}
+.btn-nav{padding:9px 20px;background:var(--grad);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s,box-shadow .2s}
+.btn-nav:hover{opacity:.9;box-shadow:0 4px 20px rgba(59,130,246,.35)}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;padding:100px 40px 60px;position:relative;overflow:hidden}
+.hero-inner{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:99px;font-size:12px;font-weight:600;color:var(--blu);margin-bottom:24px;letter-spacing:.5px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--grn);box-shadow:0 0 6px var(--grn);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Playfair Display',serif;font-size:64px;font-weight:800;line-height:1.1;margin-bottom:24px;letter-spacing:-1px;color:var(--t1)}
+h1 em{font-style:italic;background:linear-gradient(135deg,#3b82f6,#06b6d4,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:var(--t2);line-height:1.7;margin-bottom:36px;max-width:500px}
+.hero-cta-btns{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.btn-hero{padding:14px 24px;background:var(--grad);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;transition:box-shadow .2s,transform .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-hero:hover{box-shadow:0 8px 30px rgba(59,130,246,.4);transform:translateY(-1px)}
+.btn-hero-ghost{padding:14px 24px;background:transparent;color:var(--t1);border:1px solid var(--brd2);border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .2s,color .2s}
+.btn-hero-ghost:hover{border-color:var(--blu);color:var(--blu)}
+.hero-proof{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t3)}
+.hero-proof strong{color:var(--t2)}
+.hero-proof .live-dot{width:7px;height:7px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:pulse 2s infinite;flex-shrink:0}
+
+/* ═══ NEW DASHBOARD MOCKUP ═══ */
+.hero-visual{position:relative;overflow:visible;min-width:0}
+.mock{background:var(--card);border:1px solid var(--brd2);border-radius:16px;overflow:hidden;box-shadow:var(--glow),0 40px 80px rgba(0,0,0,.5)}
+
+/* Top bar */
+.mk-top{background:var(--bg2);border-bottom:1px solid var(--brd);padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.mk-logo{font-size:12px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.mk-status{display:flex;align-items:center;gap:10px}
+.mk-mkt{font-size:9px;font-weight:600;color:var(--grn);display:flex;align-items:center;gap:4px}
+.mk-mkt .mdot{width:5px;height:5px;border-radius:50%;background:var(--grn);box-shadow:0 0 4px var(--grn);animation:pulse 2s infinite}
+.mk-tabs{display:flex;gap:0;border-bottom:1px solid var(--brd);background:var(--bg2)}
+.mk-tab{padding:7px 14px;font-size:9px;font-weight:600;color:var(--t3);letter-spacing:.3px;border-bottom:2px solid transparent;transition:all .3s}
+.mk-tab.active{color:var(--blu);border-bottom-color:var(--blu)}
+
+/* Carousel body */
+.mk-body{min-height:320px;position:relative;overflow:hidden}
+.mk-slide{position:absolute;inset:0;padding:14px;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s;pointer-events:none}
+.mk-slide.active{opacity:1;transform:translateY(0);pointer-events:auto}
+
+/* ── SLIDE 1: AI Signal Analysis ── */
+.sig-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sig-sym{font-size:20px;font-weight:800;color:var(--t1)}
+.sig-verdict{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.5px}
+.sig-verdict.buy{background:rgba(16,185,129,.15);color:var(--grn);border:1px solid rgba(16,185,129,.25)}
+.sig-verdict.sell{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.sig-factors{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.sig-factor{background:var(--bg2);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center}
+.sf-name{font-size:10px;color:var(--t3);font-weight:500}
+.sf-val{font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.sf-val.bull{color:var(--grn)}
+.sf-val.bear{color:var(--red)}
+.sf-val.neut{color:var(--ylw)}
+.sig-conf{background:var(--bg2);border-radius:10px;padding:12px;display:flex;align-items:center;gap:14px}
+.sig-conf-pct{font-size:28px;font-weight:800;color:var(--grn)}
+.sig-conf-bar{flex:1}
+.sig-conf-label{font-size:9px;color:var(--t3);margin-bottom:4px;font-weight:600;letter-spacing:.5px}
+.sig-conf-track{height:6px;background:var(--brd);border-radius:4px;overflow:hidden}
+.sig-conf-fill{height:100%;border-radius:4px;transition:width 1s ease}
+
+/* ── SLIDE 2: Game Plan ── */
+.gp-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px}
+.gp-title.buy-t{color:var(--grn)}
+.gp-sym{font-size:20px;font-weight:800;margin-bottom:14px}
+.gp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.gp-cell{background:var(--bg2);border-radius:10px;padding:10px;text-align:center}
+.gp-cell-label{font-size:9px;color:var(--t3);margin-bottom:3px}
+.gp-cell-val{font-size:16px;font-weight:700}
+.gp-cell-sub{font-size:9px;margin-top:2px}
+.gp-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.gp-met{background:var(--bg2);border-radius:8px;padding:8px;text-align:center}
+.gp-met-label{font-size:8px;color:var(--t3);margin-bottom:2px}
+.gp-met-val{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.gp-reason{background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(139,92,246,.08));border:1px solid rgba(59,130,246,.2);border-radius:10px;padding:10px 12px}
+.gp-reason-title{font-size:10px;font-weight:700;color:var(--blu);margin-bottom:6px}
+.gp-reason-item{font-size:10px;color:var(--t2);padding:2px 0;display:flex;gap:5px}
+.gp-reason-item::before{content:'▸';color:var(--blu)}
+
+/* ── SLIDE 3: Live Portfolio ── */
+.pf-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.pf-box{background:var(--bg2);border-radius:10px;padding:10px;text-align:center}
+.pf-box-label{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.pf-box-val{font-size:16px;font-weight:800;font-family:'JetBrains Mono',monospace}
+.pf-chart{height:60px;background:var(--bg2);border-radius:8px;overflow:hidden;margin-bottom:12px;position:relative}
+.pf-chart canvas{width:100%;height:100%}
+.pf-rows{display:flex;flex-direction:column;gap:4px}
+.pf-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--bg2);border-radius:8px}
+.pf-row-left{display:flex;align-items:center;gap:8px}
+.pf-row-sym{font-size:12px;font-weight:700}
+.pf-row-shares{font-size:9px;color:var(--t3);font-family:'JetBrains Mono',monospace}
+.pf-row-pnl{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace}
+
+/* Floating badges — both at bottom, evenly spaced */
+.float-badges{position:absolute;bottom:-24px;left:0;right:0;display:flex;justify-content:space-between;padding:0 16px;z-index:3}
+.float-badge{background:var(--card2);border:1px solid rgba(59,130,246,.3);border-radius:10px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:floatB 5s ease-in-out infinite}
+.float-badge:nth-child(2){animation-delay:-2.5s;border-color:var(--brd2)}
+@keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.fb-sym{font-size:12px;font-weight:700;margin-bottom:2px}
+.fb-action{font-size:10px;font-weight:600}
+.fb-label{font-size:10px;color:var(--t2);font-weight:600;margin-bottom:2px}
+.fb-val{font-size:11px;font-weight:700}
+
+/* Responsive */
+@media(max-width:1024px){.hero-inner{grid-template-columns:1fr;gap:48px}.hero-visual{display:none}h1{font-size:48px}.nav-links{display:none}.btn-nav-ghost{display:none}}
+@media(max-width:768px){nav{padding:14px 20px}#hero{padding:90px 20px 60px}h1{font-size:40px}.hero-cta-btns{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- ═══ BACKGROUND STREAMS ═══ -->
+<div class="streams-bg" id="streams">
+  <div class="hero-glow"></div>
+</div>
+
+<!-- ═══ CONTENT ═══ -->
+<div class="content">
+
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="bolt">⚡</span>
+    <span>TradeCommand Pro</span>
+  </a>
+  <div class="nav-links">
+    <a href="#howitworks">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#calculator">Calculator</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#compare">Compare</a>
+    <a href="#about">About</a>
+  </div>
+  <div class="nav-cta">
+    <a href="#" class="btn-nav-ghost">Sign In</a>
+    <a href="#" class="btn-nav">Sign Up Free →</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        AI-Powered Trading Intelligence
+      </div>
+      <h1>Trade smarter.<br>Win <em>more.</em></h1>
+      <p class="hero-sub">The professional trading dashboard that gives retail investors the same edge as Wall Street. 15+ live data sources, AI signals with step-by-step trade plans, and one-click Wealthsimple execution.</p>
+      <div class="hero-cta-btns">
+        <a href="#" class="btn-hero">Create Free Account →</a>
+        <a href="#" class="btn-hero-ghost">Sign In</a>
+      </div>
+      <div class="hero-proof">
+        <span class="live-dot"></span>
+        <span><strong>Free to start.</strong> No credit card. Live in 60 seconds.</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Dashboard mockup -->
+      <div class="mock">
+        <div class="mk-top">
+          <span class="mk-logo">⚡ TradeCommand Pro</span>
+          <div class="mk-status">
+            <div class="mk-mkt"><span class="mdot"></span> Market Open</div>
+          </div>
+        </div>
+        <!-- Tab bar -->
+        <div class="mk-tabs" id="mkTabs">
+          <div class="mk-tab active" data-slide="0">📊 AI Signals</div>
+          <div class="mk-tab" data-slide="1">📋 Game Plan</div>
+          <div class="mk-tab" data-slide="2">💼 Portfolio</div>
+        </div>
+        <!-- Slides -->
+        <div class="mk-body">
+
+          <!-- SLIDE 0: 8-Factor AI Signal -->
+          <div class="mk-slide active" id="slide0">
+            <div class="sig-header">
+              <div class="sig-sym">NVDA</div>
+              <div class="sig-verdict buy">STRONG BUY</div>
+            </div>
+            <div class="sig-factors" id="sigFactors">
+              <div class="sig-factor"><span class="sf-name">RSI (14)</span><span class="sf-val bull">42.3 Bullish</span></div>
+              <div class="sig-factor"><span class="sf-name">MACD</span><span class="sf-val bull">Crossover ↑</span></div>
+              <div class="sig-factor"><span class="sf-name">SMA (50)</span><span class="sf-val bull">Above</span></div>
+              <div class="sig-factor"><span class="sf-name">EMA (20)</span><span class="sf-val bull">Trending ↑</span></div>
+              <div class="sig-factor"><span class="sf-name">VWAP</span><span class="sf-val neut">At level</span></div>
+              <div class="sig-factor"><span class="sf-name">ATR</span><span class="sf-val bull">Low vol</span></div>
+              <div class="sig-factor"><span class="sf-name">Bollinger</span><span class="sf-val bull">Mid-band</span></div>
+              <div class="sig-factor"><span class="sf-name">Volume</span><span class="sf-val bull">1.4x avg</span></div>
+            </div>
+            <div class="sig-conf">
+              <div class="sig-conf-pct" id="confPct">78%</div>
+              <div class="sig-conf-bar">
+                <div class="sig-conf-label">CONFIDENCE — 7/8 INDICATORS BULLISH</div>
+                <div class="sig-conf-track"><div class="sig-conf-fill" id="confFill" style="width:78%;background:var(--grn)"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 1: Game Plan -->
+          <div class="mk-slide" id="slide1">
+            <div class="gp-title buy-t">📋 Trade Game Plan</div>
+            <div class="gp-sym">BUY 12 NVDA</div>
+            <div class="gp-grid">
+              <div class="gp-cell">
+                <div class="gp-cell-label">Entry Price</div>
+                <div class="gp-cell-val" style="color:var(--t1)">$121.80</div>
+              </div>
+              <div class="gp-cell">
+                <div class="gp-cell-label">🛑 Stop Loss</div>
+                <div class="gp-cell-val" style="color:var(--red)">$115.71</div>
+                <div class="gp-cell-sub" style="color:var(--red)">-5.0%</div>
+              </div>
+              <div class="gp-cell">
+                <div class="gp-cell-label">🎯 Target</div>
+                <div class="gp-cell-val" style="color:var(--grn)">$140.07</div>
+                <div class="gp-cell-sub" style="color:var(--grn)">+15.0%</div>
+              </div>
+            </div>
+            <div class="gp-metrics">
+              <div class="gp-met"><div class="gp-met-label">Invested</div><div class="gp-met-val" style="color:var(--blu)">$1,461</div></div>
+              <div class="gp-met"><div class="gp-met-label">Max Loss</div><div class="gp-met-val" style="color:var(--red)">-$73.08</div></div>
+              <div class="gp-met"><div class="gp-met-label">Pot. Gain</div><div class="gp-met-val" style="color:var(--grn)">+$219.24</div></div>
+              <div class="gp-met"><div class="gp-met-label">R/R Ratio</div><div class="gp-met-val" style="color:var(--grn)">3.0:1</div></div>
+            </div>
+            <div class="gp-reason">
+              <div class="gp-reason-title">🧠 Strategy Reasoning</div>
+              <div class="gp-reason-item">RSI recovering from oversold with MACD crossover confirmation</div>
+              <div class="gp-reason-item">Price holding above 50-day SMA with increasing volume</div>
+              <div class="gp-reason-item">Bollinger Bands contracting — breakout setup forming</div>
+            </div>
+          </div>
+
+          <!-- SLIDE 2: Live Portfolio -->
+          <div class="mk-slide" id="slide2">
+            <div class="pf-summary">
+              <div class="pf-box">
+                <div class="pf-box-label">Positions</div>
+                <div class="pf-box-val" style="color:var(--t1)">4</div>
+              </div>
+              <div class="pf-box">
+                <div class="pf-box-label">Deployed</div>
+                <div class="pf-box-val" style="color:var(--blu)">$4,812</div>
+              </div>
+              <div class="pf-box">
+                <div class="pf-box-label">Unrealized P&L</div>
+                <div class="pf-box-val" id="pfTotal" style="color:var(--grn)">+$127.45</div>
+              </div>
+            </div>
+            <div class="pf-chart"><canvas id="pfChart"></canvas></div>
+            <div class="pf-rows" id="pfRows">
+              <div class="pf-row"><div class="pf-row-left"><span class="pf-row-sym">NVDA</span><span class="pf-row-shares">12 sh</span></div><span class="pf-row-pnl" style="color:var(--grn)">+$48.60</span></div>
+              <div class="pf-row"><div class="pf-row-left"><span class="pf-row-sym">AAPL</span><span class="pf-row-shares">25 sh</span></div><span class="pf-row-pnl" style="color:var(--grn)">+$62.50</span></div>
+              <div class="pf-row"><div class="pf-row-left"><span class="pf-row-sym">AMD</span><span class="pf-row-shares">30 sh</span></div><span class="pf-row-pnl" style="color:var(--grn)">+$39.90</span></div>
+              <div class="pf-row"><div class="pf-row-left"><span class="pf-row-sym">TSLA</span><span class="pf-row-shares">8 sh</span></div><span class="pf-row-pnl" style="color:var(--red)">-$23.55</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Floating badges — both at bottom, evenly spaced -->
+      <div class="float-badges">
+        <div class="float-badge" id="floatTop">
+          <div class="fb-sym">NVDA · AI Signal</div>
+          <div class="fb-action" style="color:var(--grn)">🟢 BUY — 12 shares @ $121.80</div>
+        </div>
+        <div class="float-badge">
+          <div class="fb-label">5× Daily Briefings</div>
+          <div class="fb-val" style="color:var(--grn)">🟢 Market Open</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+// ═══ TAB CAROUSEL — auto-cycles through slides ═══
+(function(){
+  const tabs = document.querySelectorAll('.mk-tab');
+  const slides = document.querySelectorAll('.mk-slide');
+  let current = 0;
+
+  function goTo(idx){
+    tabs.forEach(t => t.classList.remove('active'));
+    slides.forEach(s => s.classList.remove('active'));
+    tabs[idx].classList.add('active');
+    slides[idx].classList.add('active');
+    current = idx;
+  }
+
+  // Click tabs
+  tabs.forEach(t => t.addEventListener('click', () => goTo(+t.dataset.slide)));
+
+  // Auto-advance every 5 seconds
+  setInterval(() => goTo((current + 1) % slides.length), 5000);
+})();
+
+// ═══ PORTFOLIO LINE CHART ═══
+(function(){
+  const canvas = document.getElementById('pfChart');
+  if(!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = rect.width, H = rect.height;
+
+  const totalPts = Math.ceil(W);
+  let pts = [];
+  let val = 100;
+  for(let i = 0; i < totalPts + 200; i++){
+    const m = i > 0 ? (pts[pts.length-1] - (pts[pts.length-2]||val)) * 0.3 : 0;
+    val += m + (Math.random() - 0.47) * 2;
+    val = Math.max(60, Math.min(180, val));
+    pts.push(val);
+  }
+
+  let off = 0, fc = 0;
+
+  function draw(){
+    fc++;
+    if(fc % 30 === 0){
+      off++;
+      const l = pts[pts.length-1], p = pts[pts.length-2]||l;
+      let n = l + (l-p)*0.3 + (Math.random()-0.47)*2;
+      n = Math.max(60, Math.min(180, n));
+      pts.push(n);
+    }
+
+    ctx.clearRect(0,0,W,H);
+    const vis = pts.slice(off, off+totalPts);
+    const mn = Math.min(...vis)-5, mx = Math.max(...vis)+5, rng = mx-mn||1;
+
+    const isUp = vis[vis.length-1] >= vis[0];
+    const col = isUp ? '#10b981' : '#ef4444';
+
+    ctx.beginPath();
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    for(let i=0;i<vis.length;i++){
+      const x = (i/(totalPts-1))*W;
+      const y = 4 + (1-(vis[i]-mn)/rng)*(H-8);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+
+    // Fill
+    ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+    const g = ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0, isUp?'rgba(16,185,129,.1)':'rgba(239,68,68,.1)');
+    g.addColorStop(1,'transparent');
+    ctx.fillStyle=g;ctx.fill();
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ═══ ANIMATE PORTFOLIO P&L ═══
+(function(){
+  const rows = document.querySelectorAll('.pf-row');
+  const data = [{pnl:48.60},{pnl:62.50},{pnl:39.90},{pnl:-23.55}];
+
+  setInterval(() => {
+    let total = 0;
+    rows.forEach((row, i) => {
+      data[i].pnl += (Math.random()-0.5)*2;
+      const p = data[i].pnl;
+      total += p;
+      const el = row.querySelector('.pf-row-pnl');
+      el.textContent = (p>=0?'+':'-') + '$' + Math.abs(p).toFixed(2);
+      el.style.color = p>=0?'var(--grn)':'var(--red)';
+    });
+    const totalEl = document.getElementById('pfTotal');
+    totalEl.textContent = (total>=0?'+':'-') + '$' + Math.abs(total).toFixed(2);
+    totalEl.style.color = total>=0?'var(--grn)':'var(--red)';
+  }, 3000);
+})();
+
+// ═══ ANIMATE CONFIDENCE BAR ═══
+(function(){
+  const pctEl = document.getElementById('confPct');
+  const fillEl = document.getElementById('confFill');
+  let conf = 78;
+
+  setInterval(() => {
+    conf += (Math.random()-0.5)*4;
+    conf = Math.max(55, Math.min(95, conf));
+    const rounded = Math.round(conf);
+    pctEl.textContent = rounded + '%';
+    fillEl.style.width = rounded + '%';
+    fillEl.style.background = rounded >= 60 ? 'var(--grn)' : rounded >= 35 ? 'var(--ylw)' : 'var(--red)';
+    pctEl.style.color = rounded >= 60 ? 'var(--grn)' : rounded >= 35 ? 'var(--ylw)' : 'var(--red)';
+  }, 4000);
+})();
+
+// ═══ ROTATE FLOATING SIGNAL ═══
+(function(){
+  const el = document.getElementById('floatTop');
+  const sigs = [
+    {sym:'NVDA · AI Signal',action:'🟢 BUY — 12 shares @ $121.80',col:'var(--grn)'},
+    {sym:'AMD · AI Signal',action:'🟢 BUY — 57 shares @ $192.88',col:'var(--grn)'},
+    {sym:'AAPL · AI Signal',action:'🟢 BUY — 25 shares @ $228.87',col:'var(--grn)'},
+    {sym:'TSLA · AI Signal',action:'🟡 WATCH — Waiting for entry',col:'var(--ylw)'},
+    {sym:'MSFT · AI Signal',action:'🔴 SELL — Take profit @ $423',col:'var(--red)'},
+  ];
+  let idx = 0;
+
+  setInterval(() => {
+    idx = (idx+1) % sigs.length;
+    el.querySelector('.fb-sym').textContent = sigs[idx].sym;
+    const a = el.querySelector('.fb-action');
+    a.textContent = sigs[idx].action;
+    a.style.color = sigs[idx].col;
+  }, 6000);
+})();
+
+// ═══ BACKGROUND DATA STREAMS ═══
+(function(){
+  const container = document.getElementById('streams');
+  const tickers = ['AAPL','NVDA','TSLA','MSFT','META','AMD','GOOG','AMZN','SPY','QQQ','JPM','WMT','DIS','BA','V','KO','JNJ','HD','UNH','XOM'];
+  const prices = ['228.87','121.80','271.50','423.10','608.90','192.88','176.32','198.45','584.31','502.12','198.45','89.34','112.78','178.90','282.56','62.15','158.90','385.12','524.67','107.23'];
+  const pcts = ['+0.63%','+2.70%','-1.91%','+0.92%','+1.57%','+2.24%','+0.56%','-0.33%','+0.67%','+1.06%','-0.81%','+1.24%','+2.99%','+0.45%','+0.34%','+0.57%','-0.34%','+0.56%','+0.33%','-0.67%'];
+
+  for(let c=0;c<14;c++){
+    const col=document.createElement('div');
+    col.className='stream-col';
+    col.style.left=(c*7.5)+'%';
+    const speed=35+Math.random()*40;
+    col.style.animation=`flowUp ${speed}s linear infinite`;
+    col.style.animationDelay=-(Math.random()*speed)+'s';
+    col.style.height='300%';
+    col.style.top='0';
+    let html='';
+    for(let i=0;i<40;i++){
+      const idx=(c+i)%tickers.length;
+      html+=`<div class="si">${tickers[idx]} ${prices[idx]}</div>`;
+      if(i%2===0) html+=`<div class="si" style="opacity:.5">${pcts[idx]}</div>`;
+    }
+    col.innerHTML=html;
+    container.appendChild(col);
+    setInterval(()=>{
+      const items=col.querySelectorAll('.si');
+      const ri=items[Math.floor(Math.random()*items.length)];
+      const cls=Math.random()>.5?'pg':'pr';
+      ri.classList.add(cls);
+      setTimeout(()=>ri.classList.remove(cls),800);
+    },2000+Math.random()*4000);
+  }
+})();
+</script>
+</body>
+</html>

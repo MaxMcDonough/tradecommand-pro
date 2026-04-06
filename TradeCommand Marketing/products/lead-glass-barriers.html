@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Glass & Mobile Barriers | PNWX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #1a1a26;
+            --accent: #4f8fff;
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Orbs Background */
+        .ambient-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.15;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: -100px;
+            left: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent-2);
+            bottom: -50px;
+            right: -50px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: var(--accent);
+            top: 50%;
+            right: 10%;
+            animation: float 22s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.7);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 2;
+            padding-top: 100px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto 4rem;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Scroll Reveal */
+        .section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .section.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        /* Glassmorphism Cards */
+        .card {
+            background: rgba(26, 26, 38, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            background: rgba(26, 26, 38, 0.8);
+            transform: translateY(-5px);
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-card {
+            background: rgba(26, 26, 38, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            border-color: var(--accent);
+            background: rgba(26, 26, 38, 0.8);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(79, 143, 255, 0.1);
+        }
+
+        .product-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .product-specs {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .product-price {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+
+        .product-code {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        .subsection-title {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--accent-2);
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(79, 143, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin: 3rem 0;
+        }
+
+        .cta-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 143, 255, 0.3);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: rgba(79, 143, 255, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(26, 26, 38, 0.6);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-2);
+        }
+
+        /* List Styling */
+        ul {
+            margin-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Spec boxes */
+        .spec-box {
+            background: rgba(79, 143, 255, 0.05);
+            border-left: 3px solid var(--accent);
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+
+        .spec-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .spec-value {
+            color: var(--accent-2);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient Orbs -->
+    <div class="ambient-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <nav-content>
+            <a href="../pnwx-redesign.html" class="nav-brand">PNWX</a>
+            <ul class="nav-links">
+                <li><a href="../pnwx-redesign.html#products">Products</a></li>
+                <li><a href="../pnwx-redesign.html#about">About</a></li>
+                <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+                <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+            </ul>
+        </nav-content>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero section">
+            <h1>Lead Glass & Mobile Barriers</h1>
+            <p>Comprehensive shielding solutions for medical imaging, radiation protection, and specialized applications. Premium quality barriers designed for safety and durability.</p>
+        </section>
+
+        <!-- Lead Glass Section -->
+        <section class="section">
+            <h2>Lead Glass Shielding</h2>
+
+            <div class="subsection-title">Standard Lead Glass</div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-code">Model 14307</div>
+                    <h3>Standard Glass</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Dimensions</div>
+                        <div>8" × 10"</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Thickness</div>
+                        <div>9mm</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Lead Content</div>
+                        <div>2.0mm Pb</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Weight</div>
+                        <div>7 lbs</div>
+                    </div>
+                    <div class="product-price">$495</div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-code">Model 14315</div>
+                    <h3>Standard Glass</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Dimensions</div>
+                        <div>12" × 16"</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Thickness</div>
+                        <div>7mm</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Lead Content</div>
+                        <div>1.6mm Pb</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Weight</div>
+                        <div>23 lbs</div>
+                    </div>
+                    <div class="product-price">$850</div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-code">Model 14316</div>
+                    <h3>Standard Glass</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Dimensions</div>
+                        <div>16" × 24"</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Thickness</div>
+                        <div>9mm</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Lead Content</div>
+                        <div>2.0mm Pb</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Weight</div>
+                        <div>43 lbs</div>
+                    </div>
+                    <div class="product-price">$1,550</div>
+                </div>
+            </div>
+
+            <div class="subsection-title">X-Ray Lead Glass</div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">5/16" thick with 1.6mm Pb equivalent. Refractive index 1.76-1.79 with 86-88% light transmission.</p>
+
+            <div class="two-column">
+                <div>
+                    <h4 style="color: var(--accent); margin-bottom: 1rem;">Available Sizes (Without Frame)</h4>
+                    <ul>
+                        <li>12" × 12"</li>
+                        <li>12" × 16"</li>
+                        <li>18" × 18"</li>
+                        <li>24" × 24"</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: var(--accent); margin-bottom: 1rem;">With Standard Frame (F Suffix)</h4>
+                    <ul>
+                        <li>12" × 12" Frame</li>
+                        <li>12" × 16" Frame</li>
+                        <li>18" × 18" Frame</li>
+                        <li>24" × 24" Frame</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection-title">Specialty Glass & Accessories</div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <h3>Safety Glass</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Door Application</div>
+                        <div>6" × 24"</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Certification</div>
+                        <div>ANSI Z97.1 / CPSC Compliant</div>
+                    </div>
+                    <div class="product-price">Custom Quote</div>
+                </div>
+
+                <div class="product-card">
+                    <h3>Glazing Tape</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Application</div>
+                        <div>Lead glass installation</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Durability</div>
+                        <div>Heavy duty, long-lasting</div>
+                    </div>
+                    <div class="product-price">Contact for pricing</div>
+                </div>
+
+                <div class="product-card">
+                    <h3>Polish Kit</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Product Code</div>
+                        <div>XR-POL</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Purpose</div>
+                        <div>Maintain glass clarity</div>
+                    </div>
+                    <div class="product-price">Contact for pricing</div>
+                </div>
+
+                <div class="product-card">
+                    <h3>Powder Coat Option</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Available For</div>
+                        <div>Telescopic frames</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Durability</div>
+                        <div>Professional finish</div>
+                    </div>
+                    <div class="product-price">Add $150+</div>
+                </div>
+            </div>
+
+            <div class="subsection-title">Telescopic Frames</div>
+            <div class="spec-box">
+                <div class="spec-label">Construction</div>
+                <div class="spec-value">16 gauge steel with 1/16" or 5/64" lead lining</div>
+                <div class="spec-label" style="margin-top: 1rem;">Wall Thickness Range</div>
+                <div class="spec-value">4.25" - 8" adjustable</div>
+                <div class="spec-label" style="margin-top: 1rem;">Lead Shipping</div>
+                <div class="spec-value">3-4 days</div>
+            </div>
+        </section>
+
+        <!-- Mobile Barriers Section -->
+        <section class="section">
+            <h2>Mobile Barriers (Infab)</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Professional-grade mobile radiation protection. TIG-welded powder coated steel construction with Lexan windows, 1.5mm Pb base, floor drape, and 4 locking casters.</p>
+
+            <div class="subsection-title">Specialized Protection Systems</div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-code">Model 076994</div>
+                    <h3>Physician Protection</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Glass Area</div>
+                        <div>45.7" W × 18.7" H</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Features</div>
+                        <div>Adjustable height, TIG-welded steel</div>
+                    </div>
+                    <div class="product-price">$8,095.38</div>
+                    <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">With tray: $9,692.31</div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-code">Model 076993</div>
+                    <h3>Technologist Protection</h3>
+                    <div class="product-specs">
+                        <div class="spec-label">Feature</div>
+                        <div>Retractable window design</div>
+                        <div class="spec-label" style="margin-top: 0.5rem;">Application</div>
+                        <div>Medical imaging protection</div>
+                    </div>
+                    <div class="product-price">$5,704.62</div>
+                </div>
+            </div>
+
+            <div class="subsection-title">Standard Barriers</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Type</th>
+                        <th>Lead Glass</th>
+                        <th>Acrylic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>683460</td>
+                        <td>Standard</td>
+                        <td>$3,484.62</td>
+                        <td>$4,176.92</td>
+                    </tr>
+                    <tr>
+                        <td>683465</td>
+                        <td>Small Window</td>
+                        <td>$3,990.00</td>
+                        <td>$4,675.00</td>
+                    </tr>
+                    <tr>
+                        <td>683468</td>
+                        <td>Medium Window</td>
+                        <td>$3,946.15</td>
+                        <td>$3,692.31</td>
+                    </tr>
+                    <tr>
+                        <td>683458</td>
+                        <td>Shorty</td>
+                        <td>$3,738.46</td>
+                        <td>$3,438.46</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="subsection-title">Large Barriers</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Type</th>
+                        <th>Lead Glass</th>
+                        <th>Acrylic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>683492</td>
+                        <td>Large Window</td>
+                        <td>$12,276.92</td>
+                        <td>$8,907.69</td>
+                    </tr>
+                    <tr>
+                        <td>683482</td>
+                        <td>Wide</td>
+                        <td>$7,200.00</td>
+                        <td>$7,153.85</td>
+                    </tr>
+                    <tr>
+                        <td>683488</td>
+                        <td>Extra Wide</td>
+                        <td>$11,981.54</td>
+                        <td>$9,221.54</td>
+                    </tr>
+                    <tr>
+                        <td>683476</td>
+                        <td>Extra Tall</td>
+                        <td>$8,123.08</td>
+                        <td>$7,569.23</td>
+                    </tr>
+                    <tr>
+                        <td>683473</td>
+                        <td>Mid-Tall</td>
+                        <td>$7,430.77</td>
+                        <td>$6,969.23</td>
+                    </tr>
+                    <tr>
+                        <td>683484</td>
+                        <td>Regular</td>
+                        <td>$5,815.38</td>
+                        <td>$5,307.69</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="subsection-title">Tilted Barriers</div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-code">Model 683461</div>
+                    <h3>Tilted Barrier</h3>
+                    <div class="product-price">$3,715.38</div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-code">Model 683462</div>
+                    <h3>Tilted with Curtain</h3>
+                    <div class="product-price">$3,941.54</div>
+                </div>
+            </div>
+
+            <div class="subsection-title">Customization Options</div>
+            <div class="spec-box">
+                <div class="spec-label">Available Colors</div>
+                <div class="spec-value">White, Gray, Black</div>
+                <div class="spec-label" style="margin-top: 1rem;">Custom Colors</div>
+                <div class="spec-value">7 additional options (+$150 per unit)</div>
+                <div class="spec-label" style="margin-top: 1rem;">Logo Customization</div>
+                <div class="spec-value">Available (+$275-395)</div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section section">
+            <h3>Ready to Protect Your Team?</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Contact our team for detailed specifications, custom quotes, and installation support.</p>
+            <a href="../pnwx-redesign.html#contact" class="btn">Get in Touch</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 PNWX Medical & Industrial Solutions. All rights reserved.</p>
+        <p><a href="../pnwx-redesign.html#contact">Contact</a> | <a href="../pnwx-redesign.html">Home</a></p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">Premium shielding and radiation protection products for medical imaging and industrial applications.</p>
+    </footer>
+
+    <script>
+        // Scroll Reveal Animation
+        const revealSections = () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (sectionTop < windowHeight * 0.75) {
+                    section.classList.add('revealed');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealSections);
+        revealSections(); // Initial check on page load
+    </script>
+</body>
+</html>

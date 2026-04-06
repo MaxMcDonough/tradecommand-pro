@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - AI-Powered Trading</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e17;
+            --blu: #3b82f6;
+            --cyn: #06b6d4;
+            --grn: #10b981;
+            --red: #ef4444;
+            --text: #ffffff;
+            --text-muted: #9ca3af;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Canvas background */
+        #networkCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Content overlay */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 23, 0.5);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .nav-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-center a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-center a:hover {
+            color: var(--blu);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .btn-nav {
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, var(--blu), var(--cyn));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Hero section */
+        .hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 3rem;
+            position: relative;
+        }
+
+        /* Glow effect behind content */
+        .glow-orb {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            left: 20%;
+            top: 30%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 550px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--grn);
+            margin-bottom: 1.5rem;
+        }
+
+        .badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--grn);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text), var(--cyn));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtext {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 0.6rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blu), var(--cyn));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1.5px solid rgba(59, 130, 246, 0.5);
+            color: var(--blu);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--blu);
+        }
+
+        .trust-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Dashboard mockup */
+        .dashboard-mockup {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+            perspective: 1000px;
+        }
+
+        .dashboard-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 1.2rem;
+            padding: 2rem;
+            transform: rotateY(-15deg) rotateX(5deg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .ticker {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--grn);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.3rem;
+        }
+
+        .chart-placeholder {
+            height: 100px;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(6, 182, 212, 0.1), rgba(16, 185, 129, 0.1));
+            border-radius: 0.6rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 0.5rem;
+        }
+
+        .chart-bar {
+            width: 20%;
+            background: var(--blu);
+            border-radius: 0.3rem 0.3rem 0 0;
+            opacity: 0.6;
+        }
+
+        .signals {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .signal-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .signal-buy {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--grn);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .signal-sell {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .floating-badges {
+            position: relative;
+            height: 50px;
+        }
+
+        .floating-badge {
+            position: absolute;
+            padding: 0.6rem 1.2rem;
+            background: rgba(10, 14, 23, 0.9);
+            border: 1px solid;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-positive {
+            color: var(--grn);
+            border-color: rgba(16, 185, 129, 0.3);
+            right: 0;
+            top: 0;
+            animation-delay: 0s;
+        }
+
+        .floating-signal {
+            color: var(--grn);
+            border-color: rgba(16, 185, 129, 0.3);
+            right: 0;
+            bottom: 0;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .dashboard-card {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtext {
+                font-size: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .dashboard-card {
+                transform: rotateY(0deg) rotateX(0deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="networkCanvas"></canvas>
+    
+    <div class="content-wrapper">
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-logo">📊 TradeCommand Pro</div>
+            <div class="nav-center">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            <div class="nav-right">
+                <button class="btn-nav">Get Started</button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="glow-orb"></div>
+            
+            <div class="hero-content">
+                <div class="badge">🟢 LIVE • Real-time market data</div>
+                <h1>Your Edge in the Market</h1>
+                <p class="subtext">AI-powered trade signals, live data feeds, and session portfolio tracking — all in one dashboard.</p>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary">Start Trading →</button>
+                    <button class="btn btn-secondary">Watch Demo</button>
+                </div>
+
+                <div class="trust-badges">
+                    <div class="trust-badge">Finnhub</div>
+                    <div class="trust-badge">CoinGecko</div>
+                    <div class="trust-badge">Reddit</div>
+                    <div class="trust-badge">SEC EDGAR</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Mockup -->
+            <div class="dashboard-mockup">
+                <div class="dashboard-card">
+                    <div class="dashboard-header">
+                        <span class="ticker">NVDA</span>
+                        <span class="ticker">TSLA</span>
+                        <span class="ticker">AAPL</span>
+                    </div>
+
+                    <div class="chart-placeholder">
+                        <div class="chart-bar" style="height: 60%;"></div>
+                        <div class="chart-bar" style="height: 75%;"></div>
+                        <div class="chart-bar" style="height: 50%;"></div>
+                        <div class="chart-bar" style="height: 85%;"></div>
+                        <div class="chart-bar" style="height: 65%;"></div>
+                    </div>
+
+                    <div class="signals">
+                        <div class="signal-badge signal-buy">🟢 BUY</div>
+                        <div class="signal-badge signal-sell">🔴 SELL</div>
+                        <div class="signal-badge signal-buy">👀 WATCH</div>
+                    </div>
+
+                    <div class="floating-badges">
+                        <div class="floating-badge floating-positive">+$342 Today</div>
+                        <div class="floating-badge floating-signal">🟢 BUY NVDA</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Node configuration
+        const nodes = [];
+        const nodeCount = 70;
+        const connectionDistance = 150;
+        let mouseX = canvas.width / 2;
+        let mouseY = canvas.height / 2;
+
+        class Node {
+            constructor(x, y, isHub = false) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = isHub ? 4 : 2 + Math.random() * 2;
+                this.baseColor = '#3b82f6';
+                this.color = this.baseColor;
+                this.isHub = isHub;
+                this.activationTime = 0;
+                this.activationDuration = 0;
+                this.activationType = null;
+                this.originalRadius = this.radius;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
+                    this.vx *= -1;
+                    this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x));
+                }
+                if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
+                    this.vy *= -1;
+                    this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y));
+                }
+
+                // Repel from mouse
+                const dx = this.x - mouseX;
+                const dy = this.y - mouseY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 100) {
+                    const force = (100 - distance) * 0.02;
+                    this.vx += (dx / distance) * force;
+                    this.vy += (dy / distance) * force;
+                }
+
+                // Damping
+                this.vx *= 0.99;
+                this.vy *= 0.99;
+
+                // Update activation
+                if (this.activationTime > 0) {
+                    this.activationTime--;
+                    const progress = 1 - (this.activationTime / this.activationDuration);
+                    this.radius = this.originalRadius + (progress * 3);
+                } else {
+                    this.radius = this.originalRadius;
+                    this.color = this.baseColor;
+                }
+            }
+
+            activate(type) {
+                this.activationType = type;
+                this.activationTime = 120;
+                this.activationDuration = 120;
+                this.color = type === 'buy' ? '#10b981' : '#ef4444';
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.8;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // Initialize nodes
+        for (let i = 0; i < nodeCount; i++) {
+            const isHub = Math.random() < 0.15;
+            nodes.push(new Node(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height,
+                isHub
+            ));
+        }
+
+        // Activation tracking
+        let lastActivationTime = 0;
+        let lastWaveTime = 0;
+        const waves = [];
+
+        class Wave {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.radius = 10;
+                this.maxRadius = 150;
+                this.color = color;
+                this.life = 100;
+            }
+
+            update() {
+                this.radius += 3;
+                this.life--;
+                return this.life > 0;
+            }
+
+            draw() {
+                ctx.strokeStyle = this.color;
+                ctx.globalAlpha = (this.life / 100) * 0.3;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // Activation labels
+        const labels = [];
+        const tickers = ['NVDA', 'TSLA', 'AAPL', 'MSFT', 'AMZN', 'GOOGL', 'META', 'BTC', 'ETH'];
+        const symbols = ['▲', '▼'];
+
+        class Label {
+            constructor(x, y, text, color) {
+                this.x = x;
+                this.y = y;
+                this.text = text;
+                this.color = color;
+                this.life = 120;
+                this.maxLife = 120;
+            }
+
+            update() {
+                this.life--;
+                return this.life > 0;
+            }
+
+            draw() {
+                ctx.font = 'bold 12px Inter';
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life / this.maxLife;
+                ctx.fillText(this.text, this.x, this.y);
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        let frameCount = 0;
+
+        function drawConnections() {
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const dx = nodes[j].x - nodes[i].x;
+                    const dy = nodes[j].y - nodes[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        let lineColor = '#3b82f6';
+                        let lineOpacity = 0.08;
+
+                        // If either node is activated, pulse the connection
+                        if (nodes[i].activationTime > 0 || nodes[j].activationTime > 0) {
+                            const activatedNode = nodes[i].activationTime > 0 ? nodes[i] : nodes[j];
+                            lineColor = activatedNode.color;
+                            lineOpacity = 0.2 * (nodes[i].activationTime > 0 ? nodes[i].activationTime / nodes[i].activationDuration : nodes[j].activationTime / nodes[j].activationDuration);
+                        }
+
+                        ctx.strokeStyle = lineColor;
+                        ctx.globalAlpha = lineOpacity;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(nodes[i].x, nodes[i].y);
+                        ctx.lineTo(nodes[j].x, nodes[j].y);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            // Clear canvas with fade effect
+            ctx.fillStyle = 'rgba(10, 14, 23, 0.95)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Update nodes
+            nodes.forEach(node => node.update());
+
+            // Update waves
+            for (let i = waves.length - 1; i >= 0; i--) {
+                if (!waves[i].update()) {
+                    waves.splice(i, 1);
+                } else {
+                    waves[i].draw();
+                }
+            }
+
+            // Update and draw labels
+            for (let i = labels.length - 1; i >= 0; i--) {
+                if (!labels[i].update()) {
+                    labels.splice(i, 1);
+                } else {
+                    labels[i].draw();
+                }
+            }
+
+            // Draw connections
+            drawConnections();
+
+            // Draw nodes
+            nodes.forEach(node => node.draw());
+
+            // Random activation logic
+            if (frameCount - lastActivationTime > 120 + Math.random() * 180) {
+                const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
+                const type = Math.random() > 0.5 ? 'buy' : 'sell';
+                randomNode.activate(type);
+
+                // Add label
+                const ticker = tickers[Math.floor(Math.random() * tickers.length)];
+                const symbol = type === 'buy' ? '▲' : '▼';
+                const labelText = `${ticker} ${symbol}`;
+                labels.push(new Label(randomNode.x + 15, randomNode.y - 10, labelText, randomNode.color));
+
+                // Create wave
+                waves.push(new Wave(randomNode.x, randomNode.y, randomNode.color));
+
+                lastActivationTime = frameCount;
+            }
+
+            frameCount++;
+            requestAnimationFrame(animate);
+        }
+
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        animate();
+    </script>
+</body>
+</html>

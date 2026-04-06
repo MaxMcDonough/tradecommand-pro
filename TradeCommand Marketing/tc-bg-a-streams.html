@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - AI-Powered Trading Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e17;
+            --card: rgba(15, 18, 25, 0.8);
+            --blu: #3b82f6;
+            --cyn: #06b6d4;
+            --grn: #10b981;
+            --red: #ef4444;
+            --text: #ffffff;
+            --text-dim: #9ca3af;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* === BACKGROUND STREAMS CONTAINER === */
+        .streams-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .stream-column {
+            position: absolute;
+            width: 80px;
+            height: 200%;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.06);
+            white-space: nowrap;
+            top: 0;
+            line-height: 1.8;
+            letter-spacing: 1px;
+        }
+
+        .stream-item {
+            padding: 8px 0;
+            height: auto;
+            transition: color 0.6s ease;
+        }
+
+        .stream-item.pulse-grn {
+            color: rgba(16, 185, 129, 0.2);
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+            animation: pulse-green 0.8s ease-out;
+        }
+
+        .stream-item.pulse-red {
+            color: rgba(239, 68, 68, 0.2);
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+            animation: pulse-red 0.8s ease-out;
+        }
+
+        @keyframes pulse-green {
+            0% {
+                color: rgba(16, 185, 129, 0.25);
+                text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+            }
+            100% {
+                color: rgba(16, 185, 129, 0.06);
+                text-shadow: none;
+            }
+        }
+
+        @keyframes pulse-red {
+            0% {
+                color: rgba(239, 68, 68, 0.25);
+                text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            }
+            100% {
+                color: rgba(239, 68, 68, 0.06);
+                text-shadow: none;
+            }
+        }
+
+        @keyframes flow-slow {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes flow-medium {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes flow-fast {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        /* === GLOW BACKDROP === */
+        .glow-backdrop {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(6, 182, 212, 0.04) 40%, transparent 70%);
+            filter: blur(40px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* === MAIN CONTENT (ON TOP) === */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === NAVBAR === */
+        nav {
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 23, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav-center {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        nav-center a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        nav-center a:hover {
+            color: var(--cyn);
+        }
+
+        .nav-button {
+            background: var(--blu);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #2563eb;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 80px 48px;
+            gap: 60px;
+        }
+
+        .hero-left {
+            max-width: 550px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--grn);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--grn);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #9ca3af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtext {
+            font-size: 18px;
+            color: var(--text-dim);
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blu) 0%, #2563eb 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--cyn);
+            color: var(--cyn);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+        }
+
+        .trust-badges {
+            font-size: 13px;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+        }
+
+        .trust-badges span {
+            margin-right: 12px;
+        }
+
+        /* === DASHBOARD MOCKUP === */
+        .hero-right {
+            position: relative;
+            flex: 1;
+            height: 450px;
+        }
+
+        .dashboard-card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            position: absolute;
+            width: 420px;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%) rotateY(-15deg) rotateZ(5deg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            perspective: 1000px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .dashboard-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ticker-list {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
+
+        .ticker-chip {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--blu);
+        }
+
+        .chart-placeholder {
+            background: rgba(6, 182, 212, 0.05);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            border-radius: 8px;
+            height: 120px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 16px 12px;
+        }
+
+        .chart-bar {
+            width: 8px;
+            background: linear-gradient(180deg, var(--cyn) 0%, var(--blu) 100%);
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+
+        .signal-badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .signal-badge {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .signal-buy {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--grn);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .signal-sell {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .floating-badges {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .float-badge {
+            position: absolute;
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            animation: float-animation 4s ease-in-out infinite;
+        }
+
+        .float-badge.gain {
+            color: var(--grn);
+            border-color: rgba(16, 185, 129, 0.3);
+            right: -60px;
+            bottom: 80px;
+        }
+
+        .float-badge.buy {
+            color: var(--blu);
+            border-color: rgba(59, 130, 246, 0.3);
+            right: -60px;
+            bottom: 20px;
+        }
+
+        @keyframes float-animation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .hero {
+                flex-direction: column;
+                padding: 60px 32px;
+            }
+
+            .hero-right {
+                height: 300px;
+            }
+
+            .dashboard-card {
+                width: 100%;
+                transform: translateY(-50%) rotateY(0) rotateZ(0);
+            }
+
+            h1 {
+                font-size: 48px;
+            }
+
+            nav {
+                padding: 16px 32px;
+            }
+
+            nav-center {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-right {
+                display: none;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- BACKGROUND STREAMS -->
+    <div class="streams-container">
+        <div class="glow-backdrop"></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content-wrapper">
+        <!-- NAVBAR -->
+        <nav>
+            <div class="logo">📊 TradeCommand Pro</div>
+            <nav-center>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+            </nav-center>
+            <button class="nav-button">Get Started</button>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-left">
+                <div class="badge">
+                    <span class="dot"></span>
+                    LIVE • Real-time market data
+                </div>
+                <h1>Your Edge in the Market</h1>
+                <p class="subtext">
+                    AI-powered trade signals, live data feeds, and seamless portfolio tracking — all in one unified dashboard.
+                </p>
+                <div class="button-group">
+                    <button class="btn btn-primary">Start Trading →</button>
+                    <button class="btn btn-ghost">Watch Demo</button>
+                </div>
+                <div class="trust-badges">
+                    <span>Finnhub</span>
+                    <span>CoinGecko</span>
+                    <span>Reddit</span>
+                    <span>SEC EDGAR</span>
+                </div>
+            </div>
+
+            <!-- DASHBOARD MOCKUP -->
+            <div class="hero-right">
+                <div class="dashboard-card">
+                    <div class="dashboard-header">
+                        <span class="dashboard-title">Live Portfolio</span>
+                        <span style="font-size: 11px; color: var(--grn);">+2.4% today</span>
+                    </div>
+                    
+                    <div class="ticker-list">
+                        <div class="ticker-chip">AAPL</div>
+                        <div class="ticker-chip">NVDA</div>
+                        <div class="ticker-chip">TSLA</div>
+                        <div class="ticker-chip">MSFT</div>
+                    </div>
+
+                    <div class="chart-placeholder">
+                        <div class="chart-bar" style="height: 60%;"></div>
+                        <div class="chart-bar" style="height: 85%;"></div>
+                        <div class="chart-bar" style="height: 70%;"></div>
+                        <div class="chart-bar" style="height: 90%;"></div>
+                        <div class="chart-bar" style="height: 75%;"></div>
+                    </div>
+
+                    <div class="signal-badges">
+                        <div class="signal-badge signal-buy">BUY</div>
+                        <div class="signal-badge signal-sell">SELL</div>
+                        <div class="signal-badge" style="background: rgba(6, 182, 212, 0.15); color: var(--cyn); border: 1px solid rgba(6, 182, 212, 0.3);">WATCH</div>
+                    </div>
+                </div>
+
+                <div class="floating-badges">
+                    <div class="float-badge gain">🟢 +$342 Today</div>
+                    <div class="float-badge buy">🟢 BUY NVDA</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // ===== ANIMATED DATA STREAMS =====
+        const streamsContainer = document.querySelector('.streams-container');
+        
+        const tickers = ['AAPL', 'NVDA', 'TSLA', 'MSFT', 'META', 'AMD', 'GOOG', 'AMZN', 'SPY', 'QQQ', 'BTC', 'ETH', 'GLD', 'NFLX', 'CRM'];
+        const prices = ['189.42', '875.30', '248.56', '412.78', '507.23', '165.89', '154.32', '198.45', '598.76', '423.12', '68542.00', '3421.50', '199.45', '267.34', '354.12'];
+        const changes = ['+2.4%', '-0.8%', '+1.2%', '+3.1%', '-1.5%', '+0.9%', '+2.8%', '-0.3%', '+1.7%', '+2.2%', '+4.2%', '-1.1%', '+0.5%', '+3.4%', '-2.1%'];
+
+        function createStreamColumn(index) {
+            const column = document.createElement('div');
+            column.className = 'stream-column';
+            
+            const speeds = ['35s', '42s', '48s', '55s', '65s'];
+            const speed = speeds[index % speeds.length];
+            const offset = index * 7;
+            
+            column.style.left = offset + '%';
+            column.style.animation = `flow-${index % 3 === 0 ? 'slow' : index % 3 === 1 ? 'medium' : 'fast'} ${speed} linear infinite`;
+            
+            // Generate 30+ data items for continuous flow
+            let html = '';
+            for (let i = 0; i < 35; i++) {
+                const tickerIdx = (index + i) % tickers.length;
+                const priceIdx = (index + i) % prices.length;
+                const changeIdx = (index + i) % changes.length;
+                
+                const ticker = tickers[tickerIdx];
+                const price = prices[priceIdx];
+                const change = changes[changeIdx];
+                
+                const isPositive = change.startsWith('+');
+                const pulseClass = Math.random() > 0.85 ? (isPositive ? 'pulse-grn' : 'pulse-red') : '';
+                
+                html += `<div class="stream-item ${pulseClass}">${ticker} ${price}</div>`;
+                if (i % 2 === 0) {
+                    html += `<div class="stream-item ${pulseClass}" style="opacity: 0.4;">${change}</div>`;
+                }
+            }
+            
+            column.innerHTML = html;
+            streamsContainer.appendChild(column);
+            
+            // Occasionally pulse items
+            setInterval(() => {
+                const items = column.querySelectorAll('.stream-item');
+                const randomItem = items[Math.floor(Math.random() * items.length)];
+                const isGain = Math.random() > 0.5;
+                randomItem.classList.add(isGain ? 'pulse-grn' : 'pulse-red');
+                setTimeout(() => {
+                    randomItem.classList.remove(isGain ? 'pulse-grn' : 'pulse-red');
+                }, 800);
+            }, Math.random() * 4000 + 3000);
+        }
+
+        // Create 12 stream columns
+        for (let i = 0; i < 12; i++) {
+            createStreamColumn(i);
+        }
+
+        // Add CSS animations dynamically
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes flow-slow {
+                0% { transform: translateY(0); }
+                100% { transform: translateY(-50%); }
+            }
+            @keyframes flow-medium {
+                0% { transform: translateY(0); }
+                100% { transform: translateY(-50%); }
+            }
+            @keyframes flow-fast {
+                0% { transform: translateY(0); }
+                100% { transform: translateY(-50%); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

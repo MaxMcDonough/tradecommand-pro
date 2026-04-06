@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MRI Phantoms | PNWX - Pro-MRI Quality Assurance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-card: #1a1a26;
+      --accent: #4f8fff;
+      --accent-2: #00d4aa;
+      --text-primary: #f0f0f5;
+      --text-secondary: #9090a8;
+      --text-muted: #606078;
+      --border: rgba(255,255,255,0.06);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    /* Animated ambient orbs */
+    .orb-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--accent);
+      top: -100px;
+      right: -100px;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: var(--accent-2);
+      bottom: 100px;
+      left: -50px;
+      animation: float 25s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, -30px); }
+    }
+
+    /* Navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 15, 0.8);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+    }
+
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Hero section */
+    .hero {
+      padding: 4rem 0;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Products section */
+    .products {
+      padding: 3rem 0;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: slideIn 0.6s ease forwards;
+    }
+
+    .product-card:nth-child(1) { animation-delay: 0.1s; }
+    .product-card:nth-child(2) { animation-delay: 0.2s; }
+    .product-card:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .product-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(79, 143, 255, 0.1);
+    }
+
+    .product-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .product-sku {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .product-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .product-specs {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .spec-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .spec-item::before {
+      content: "▸";
+      color: var(--accent-2);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    /* Components section */
+    .components {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .components h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+    }
+
+    .components-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .component {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .component:hover {
+      border-color: var(--accent-2);
+      background: rgba(0, 212, 170, 0.05);
+    }
+
+    .component-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .component-spec {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Accessories section */
+    .accessories {
+      margin-bottom: 3rem;
+    }
+
+    .accessories h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+    }
+
+    .accessories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .accessory-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .accessory-item:hover {
+      border-color: var(--accent);
+      background: rgba(79, 143, 255, 0.05);
+    }
+
+    .accessory-code {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .accessory-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Standards section */
+    .standards {
+      background: linear-gradient(135deg, rgba(79, 143, 255, 0.1), rgba(0, 212, 170, 0.1));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2.5rem;
+      margin-bottom: 3rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .standards h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .standards-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .standard-badge {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+
+    .standard-badge:hover {
+      border-color: var(--accent-2);
+      color: var(--accent-2);
+    }
+
+    /* CTA Section */
+    .cta {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--bg-primary);
+      padding: 1rem 2.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(79, 143, 255, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 3rem;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: var(--accent-2);
+    }
+
+    /* Scroll reveal effect */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .components-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .accessories-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient orbs -->
+  <div class="orb-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <a href="../pnwx-redesign.html" class="nav-logo">PNWX</a>
+      <ul class="nav-links">
+        <li><a href="../pnwx-redesign.html#products">Products</a></li>
+        <li><a href="../pnwx-redesign.html#about">About</a></li>
+        <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+        <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="scroll-reveal">MRI Phantoms</h1>
+      <p class="scroll-reveal">ACR accredited Pro-MRI phantoms for MRI quality assurance, calibration, and compliance testing.</p>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products">
+    <div class="container">
+      <div class="products-grid">
+        <!-- Product 1 -->
+        <div class="product-card scroll-reveal">
+          <div class="product-name">Pro-MRI ACR Medium MRI Phantom</div>
+          <div class="product-sku">Model 09-301</div>
+          <div class="product-price">$2,888.00</div>
+          <div class="product-specs">
+            <div class="spec-item">ACR Accredited with case included</div>
+            <div class="spec-item">Cylinder: 178mm outer dia × 157mm height</div>
+            <div class="spec-item">Inner: 165mm × 134mm</div>
+            <div class="spec-item">Fill: 10 mmol nickel chloride + 75 mmol sodium chloride</div>
+            <div class="spec-item">NOSE/CHIN orientation markings</div>
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem;">
+              <strong>Measures:</strong> Geometric distortion, spatial resolution, slice thickness, interslice gap, image bandwidth, low contrast detectability, uniformity, SNR, slice offset, water-fat shift
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card scroll-reveal">
+          <div class="product-name">Pro-MRI ACR Large MRI Phantom</div>
+          <div class="product-sku">Model 09-302</div>
+          <div class="product-price">$2,888.00</div>
+          <div class="product-specs">
+            <div class="spec-item">ACR Accredited with case included</div>
+            <div class="spec-item">Large format for enhanced resolution testing</div>
+            <div class="spec-item">Premium construction and materials</div>
+            <div class="spec-item">Comprehensive quality assurance capabilities</div>
+            <div class="spec-item">Full compliance testing support</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Components Section -->
+  <section class="components scroll-reveal">
+    <div class="container">
+      <h2>Insert Components</h2>
+      <div class="components-grid">
+        <div class="component">
+          <div class="component-name">Resolution Insert</div>
+          <div class="component-spec">0.8-1.1mm hole matrices for precise spatial resolution evaluation</div>
+        </div>
+        <div class="component">
+          <div class="component-name">Slice Thickness Insert</div>
+          <div class="component-spec">158×52×10mm PMMA for accurate slice thickness measurement</div>
+        </div>
+        <div class="component">
+          <div class="component-name">Geometric Distortion Insert</div>
+          <div class="component-spec">3×3 array with 40mm spacing for distortion analysis</div>
+        </div>
+        <div class="component">
+          <div class="component-name">Low Contrast Insert</div>
+          <div class="component-spec">1.4-5.1% contrast with 7.0-1.5mm holes for detectability testing</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accessories Section -->
+  <section class="accessories">
+    <div class="container scroll-reveal">
+      <h2>Accessories</h2>
+      <div class="accessories-grid">
+        <div class="accessory-item">
+          <div class="accessory-code">09-104</div>
+          <div class="accessory-name">Detachable 3-Axis Spirit Level</div>
+        </div>
+        <div class="accessory-item">
+          <div class="accessory-code">09-102</div>
+          <div class="accessory-name">Heavy Duty Carrying Case</div>
+        </div>
+        <div class="accessory-item">
+          <div class="accessory-code">09-103</div>
+          <div class="accessory-name">6 Removable Vials (12 Total)</div>
+        </div>
+        <div class="accessory-item">
+          <div class="accessory-code">09-201</div>
+          <div class="accessory-name">Pro-MRI SpineRect</div>
+        </div>
+        <div class="accessory-item">
+          <div class="accessory-code">09-202</div>
+          <div class="accessory-name">Pro-MRI Agar</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Standards Section -->
+  <section class="standards scroll-reveal">
+    <div class="container">
+      <h2>Compliance & Standards</h2>
+      <div class="standards-list">
+        <div class="standard-badge">ACR MRI Accreditation Program</div>
+        <div class="standard-badge">IPEM Report 80</div>
+        <div class="standard-badge">AAPM Report 28</div>
+        <div class="standard-badge">AAPM Report 34</div>
+        <div class="standard-badge">AAPM Report 100</div>
+        <div class="standard-badge">CE Certified</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <button class="cta-button" onclick="window.location.href='../pnwx-redesign.html#contact'">
+        Request a Quote
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 PNWX. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+      <p style="margin-top: 1rem; font-size: 0.85rem;">Pro-MRI phantoms meet international standards for medical imaging quality assurance.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal animation
+    const revealElements = document.querySelectorAll('.scroll-reveal');
+    
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    revealElements.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

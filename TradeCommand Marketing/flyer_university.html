@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - University Flyer</title>
+    <!-- PRINT INSTRUCTIONS: Set margins to 0.5", paper size to Letter (8.5x11"), scaling to 100%, background graphics ON -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .flyer-container {
+            width: 8.5in;
+            height: 11in;
+            margin: 20px auto;
+            padding: 0.4in;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .accent-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #10b981);
+        }
+
+        .header {
+            text-align: center;
+            padding: 0.3in 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 0.1in;
+            color: #ffffff;
+            text-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .header h1 span {
+            color: #10b981;
+        }
+
+        .subheader {
+            font-size: 18px;
+            font-weight: 500;
+            color: #a1a5bb;
+            margin-bottom: 0.2in;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0.2in 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .features {
+            list-style: none;
+            margin: 0.3in 0;
+        }
+
+        .features li {
+            font-size: 14px;
+            margin: 0.15in 0;
+            padding-left: 0.25in;
+            position: relative;
+            color: #d1d5db;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 0.3in 0;
+            padding: 0.2in;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px dashed #6366f1;
+        }
+
+        .qr-placeholder {
+            width: 1.2in;
+            height: 1.2in;
+            margin: 0 auto 0.1in;
+            background: #ffffff;
+            border: 2px solid #6366f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #6366f1;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        .qr-text {
+            font-size: 12px;
+            color: #a1a5bb;
+            margin-top: 0.1in;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 0.25in;
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 3px solid #10b981;
+            margin: 0.2in 0;
+            border-radius: 4px;
+        }
+
+        .cta-section p {
+            font-size: 14px;
+            font-weight: 600;
+            color: #10b981;
+            margin: 0.05in 0;
+        }
+
+        .website {
+            font-size: 20px;
+            font-weight: 700;
+            color: #6366f1;
+            margin: 0.1in 0;
+        }
+
+        .tagline {
+            font-size: 13px;
+            color: #a1a5bb;
+            font-style: italic;
+        }
+
+        .tear-off-section {
+            text-align: center;
+            padding-top: 0.2in;
+            margin-top: 0.2in;
+            border-top: 2px dashed #6366f1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tear-off-title {
+            font-size: 11px;
+            color: #a1a5bb;
+            margin-bottom: 0.1in;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tear-off-tabs {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.1in;
+        }
+
+        .tear-tab {
+            flex: 1;
+            padding: 0.1in;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid #6366f1;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6366f1;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .flyer-container {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+
+            .tear-off-section {
+                break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .flyer-container {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flyer-container">
+        <div class="accent-line"></div>
+
+        <div class="header">
+            <h1>FREE Trading Dashboard<br>for <span>Students</span></h1>
+            <p class="subheader">Track Your Trades Like a Wall Street Pro</p>
+        </div>
+
+        <div class="content">
+            <ul class="features">
+                <li><strong>Real-time P&L Tracking</strong> — See every trade's performance instantly</li>
+                <li><strong>Strategy Attribution</strong> — Know which strategies work best for you</li>
+                <li><strong>Risk Analytics</strong> — Sharpe ratio, drawdown tracking & more</li>
+                <li><strong>Trade Journal & CRM</strong> — Organize trades and manage 75+ leads</li>
+            </ul>
+
+            <div class="qr-section">
+                <div class="qr-placeholder">SCAN ME</div>
+                <div class="qr-text">Replace with real QR code linking to tradecommandpro.com</div>
+            </div>
+
+            <div class="cta-section">
+                <p>No credit card required</p>
+                <div class="website">tradecommandpro.com</div>
+                <p class="tagline">Free forever for students</p>
+            </div>
+        </div>
+
+        <div class="tear-off-section">
+            <div class="tear-off-title">Need a link? Tear off a tab</div>
+            <div class="tear-off-tabs">
+                <div class="tear-tab">tradecommandpro.com</div>
+                <div class="tear-tab">tradecommandpro.com</div>
+                <div class="tear-tab">tradecommandpro.com</div>
+                <div class="tear-tab">tradecommandpro.com</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surgical Radiation Reducing Gloves | Pacific Northwest X-Ray Inc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-card: #1a1a26;
+            --accent: #4f8fff;
+            --accent-2: #00d4aa;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --text-muted: #606078;
+            --border: rgba(255,255,255,0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Orbs */
+        .orb-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            top: -100px;
+            right: -100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            bottom: -50px;
+            left: -50px;
+            animation: float 25s ease-in-out infinite 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+        }
+
+        nav ul {
+            max-width: 1200px;
+            margin: 0 auto;
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Header */
+        header {
+            padding: 4rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .breadcrumb span {
+            color: var(--text-secondary);
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            animation: slideInUp 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInScale 0.8s ease-out forwards;
+        }
+
+        /* Products Section */
+        .products-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, rgba(79, 143, 255, 0.05), rgba(0, 212, 170, 0.05));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .product-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px);
+        }
+
+        .product-card:hover::before {
+            opacity: 0.08;
+        }
+
+        .product-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .product-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .specs {
+            margin: 1.5rem 0;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            color: var(--text-secondary);
+        }
+
+        .spec-value {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .features-list {
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .feature {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .feature::before {
+            content: '✓';
+            color: var(--accent-2);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .price-tag {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Attenuation Charts */
+        .charts-section {
+            background: linear-gradient(135deg, rgba(79, 143, 255, 0.08), rgba(0, 212, 170, 0.08));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            margin: 4rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .charts-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-card {
+            background: rgba(26, 26, 38, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .chart-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th:first-child, td:first-child {
+            text-align: left;
+        }
+
+        th {
+            background: rgba(79, 143, 255, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .attenuation-value {
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+
+        /* Highlights Section */
+        .highlights-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .highlight-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .highlight-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .highlight-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(79, 143, 255, 0.1), rgba(0, 212, 170, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .cta-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: var(--bg-primary);
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(79, 143, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 60px rgba(79, 143, 255, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 15, 0.8);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="../pnwx-redesign.html#products">Products</a></li>
+            <li><a href="../pnwx-redesign.html#about">About</a></li>
+            <li><a href="../pnwx-redesign.html#brands">Brands</a></li>
+            <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <div class="breadcrumb">
+            <a href="../pnwx-redesign.html">Home</a>
+            <span>›</span>
+            <span>Products</span>
+            <span>›</span>
+            <span>Surgical Gloves</span>
+        </div>
+        <h1>Surgical Radiation Reducing Gloves</h1>
+        <p class="subtitle">Proguard latex-free, powder-free radiation reducing gloves and sleeves — maximum dexterity with reliable protection.</p>
+    </header>
+
+    <main>
+        <section class="products-section">
+            <h2 class="section-title">Product Lineup</h2>
+            <div class="products-grid">
+                <!-- Standard Protection -->
+                <div class="product-card reveal">
+                    <div class="product-header">
+                        <div class="product-badge">Standard Protection</div>
+                        <h3 class="product-name">Exam/Surgical Gloves</h3>
+                    </div>
+                    <div class="specs">
+                        <div class="spec-item">
+                            <span class="spec-label">RR1 Rating</span>
+                            <span class="spec-value">0.0088" (0.220mm)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">RR1 Price</span>
+                            <span class="spec-value">$44.00</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">RR2 Rating</span>
+                            <span class="spec-value">0.012" (0.280mm)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">RR2 Price</span>
+                            <span class="spec-value">$47.00</span>
+                        </div>
+                    </div>
+                    <div class="features-list">
+                        <div class="feature">Latex-free, powder-free</div>
+                        <div class="feature">Pure lead oxide composition</div>
+                        <div class="feature">Anatomically curved design</div>
+                        <div class="feature">12" length, sterile</div>
+                        <div class="feature">Sizes 6-9</div>
+                        <div class="feature">30% more attenuation vs competitors</div>
+                    </div>
+                    <div class="price-tag">From $44.00</div>
+                </div>
+
+                <!-- Higher Protection -->
+                <div class="product-card reveal">
+                    <div class="product-header">
+                        <div class="product-badge" style="background: linear-gradient(135deg, #ff6b6b, #ee5a6f);">Higher Protection</div>
+                        <h3 class="product-name">Premium Gloves</h3>
+                    </div>
+                    <div class="specs">
+                        <div class="spec-item">
+                            <span class="spec-label">RR3 Rating</span>
+                            <span class="spec-value">0.015" (0.380mm)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Price</span>
+                            <span class="spec-value">$63.00</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Sizes</span>
+                            <span class="spec-value">7-10</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Attenuation</span>
+                            <span class="spec-value">50% superior</span>
+                        </div>
+                    </div>
+                    <div class="features-list">
+                        <div class="feature">Ablations & PTCAs</div>
+                        <div class="feature">Biliary drainage procedures</div>
+                        <div class="feature">ICD & stent placement</div>
+                        <div class="feature">TIPS procedures</div>
+                        <div class="feature">Pacemaker installation</div>
+                    </div>
+                    <div class="price-tag">$63.00</div>
+                </div>
+
+                <!-- Sleeves -->
+                <div class="product-card reveal">
+                    <div class="product-header">
+                        <div class="product-badge" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);">Arm Protection</div>
+                        <h3 class="product-name">Radiation Reducing Sleeves</h3>
+                    </div>
+                    <div class="specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Rating</span>
+                            <span class="spec-value">0.012" (0.30mm)</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Small (6-7)</span>
+                            <span class="spec-value">$87.00</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Medium (7-8)</span>
+                            <span class="spec-value">$87.00</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Large (8-9)</span>
+                            <span class="spec-value">$87.00</span>
+                        </div>
+                    </div>
+                    <div class="features-list">
+                        <div class="feature">Fingertips to biceps coverage</div>
+                        <div class="feature">Latex-free construction</div>
+                        <div class="feature">Full arm protection</div>
+                        <div class="feature">Comfortable fit</div>
+                        <div class="feature">Professional grade</div>
+                    </div>
+                    <div class="price-tag">$87.00</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Attenuation Comparison Charts -->
+        <section class="charts-section">
+            <h2 class="charts-title">Attenuation Performance Comparison</h2>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <span class="chart-label">Standard Protection (RR1 & RR2)</span>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>kVp</th>
+                                <th>RR1 (0.220mm)</th>
+                                <th>RR2 (0.280mm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>60 kVp</td>
+                                <td class="attenuation-value">45%</td>
+                                <td class="attenuation-value">55%</td>
+                            </tr>
+                            <tr>
+                                <td>80 kVp</td>
+                                <td class="attenuation-value">35%</td>
+                                <td class="attenuation-value">43%</td>
+                            </tr>
+                            <tr>
+                                <td>100 kVp</td>
+                                <td class="attenuation-value">26%</td>
+                                <td class="attenuation-value">35%</td>
+                            </tr>
+                            <tr>
+                                <td>120 kVp</td>
+                                <td class="attenuation-value">23%</td>
+                                <td class="attenuation-value">31%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="chart-card">
+                    <span class="chart-label">Higher Protection (RR3)</span>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>kVp</th>
+                                <th>Attenuation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>60 kVp</td>
+                                <td class="attenuation-value">81%</td>
+                            </tr>
+                            <tr>
+                                <td>80 kVp</td>
+                                <td class="attenuation-value">69%</td>
+                            </tr>
+                            <tr>
+                                <td>100 kVp</td>
+                                <td class="attenuation-value">62%</td>
+                            </tr>
+                            <tr>
+                                <td>120 kVp</td>
+                                <td class="attenuation-value">59%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="chart-card">
+                    <span class="chart-label">Radiation Reducing Sleeves</span>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>kVp</th>
+                                <th>Attenuation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>60 kVp</td>
+                                <td class="attenuation-value">55%</td>
+                            </tr>
+                            <tr>
+                                <td>80 kVp</td>
+                                <td class="attenuation-value">43%</td>
+                            </tr>
+                            <tr>
+                                <td>100 kVp</td>
+                                <td class="attenuation-value">35%</td>
+                            </tr>
+                            <tr>
+                                <td>120 kVp</td>
+                                <td class="attenuation-value">31%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Highlights -->
+        <section class="highlights-section">
+            <h2 class="section-title">Why Choose Proguard</h2>
+            <div class="highlights-grid">
+                <div class="highlight-card reveal">
+                    <div class="highlight-icon">🛡️</div>
+                    <h3 class="highlight-title">Superior Protection</h3>
+                    <p class="highlight-desc">30% more attenuation than competitors with pure lead oxide composition for maximum radiation protection.</p>
+                </div>
+                <div class="highlight-card reveal">
+                    <div class="highlight-icon">✋</div>
+                    <h3 class="highlight-title">Maximum Dexterity</h3>
+                    <p class="highlight-desc">Anatomically curved design allows precise hand movement and control for delicate procedures.</p>
+                </div>
+                <div class="highlight-card reveal">
+                    <div class="highlight-icon">🔬</div>
+                    <h3 class="highlight-title">Sterile & Medical Grade</h3>
+                    <p class="highlight-desc">Latex-free, powder-free construction meets strict medical standards for any clinical environment.</p>
+                </div>
+                <div class="highlight-card reveal">
+                    <div class="highlight-icon">💪</div>
+                    <h3 class="highlight-title">Versatile Applications</h3>
+                    <p class="highlight-desc">From routine exams to complex ablations, biliary procedures, ICDs, stents, and pacemaker installation.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section reveal">
+            <h2 class="cta-title">Ready to Protect Your Team?</h2>
+            <p class="cta-desc">Contact Pacific Northwest X-Ray Inc today to learn about bulk pricing, custom sizing, and fast delivery options for your facility.</p>
+            <a href="../pnwx-redesign.html#contact" class="cta-button">Get in Touch</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Products</h3>
+                <ul>
+                    <li><a href="#standard">Standard Protection</a></li>
+                    <li><a href="#premium">Premium Gloves</a></li>
+                    <li><a href="#sleeves">Radiation Sleeves</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="../pnwx-redesign.html#about">About Us</a></li>
+                    <li><a href="../pnwx-redesign.html#brands">Our Brands</a></li>
+                    <li><a href="../pnwx-redesign.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Technical Specs</a></li>
+                    <li><a href="#">Safety Guidelines</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Pacific Northwest X-Ray Inc. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInScale 0.8s ease-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

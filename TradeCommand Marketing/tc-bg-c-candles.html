@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeCommand Pro - Your Edge in the Market</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e17;
+            --blu: #3b82f6;
+            --cyn: #06b6d4;
+            --grn: #10b981;
+            --red: #ef4444;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border-color: rgba(148, 163, 184, 0.2);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ==================== NAVIGATION ==================== */
+        nav {
+            position: relative;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 23, 0.8);
+        }
+
+        .nav-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-center a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-center a:hover {
+            color: var(--cyn);
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--blu), #2563eb);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* Canvas background */
+        #candleCanvas {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2;
+        }
+
+        /* Content wrapper */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 55%;
+            padding: 0 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--grn);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            width: fit-content;
+        }
+
+        .badge span {
+            width: 6px;
+            height: 6px;
+            background: var(--grn);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--cyn) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        /* Glow behind headline */
+        .headline-glow {
+            position: absolute;
+            top: -100px;
+            left: -200px;
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .subtext {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 1.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blu), #2563eb);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cyn);
+            color: var(--cyn);
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        .trust-section {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .trust-icon {
+            width: 20px;
+            height: 20px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        /* ==================== RIGHT SIDE DASHBOARD MOCKUP ==================== */
+        .hero-visual {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 3rem;
+        }
+
+        .dashboard-card {
+            width: 380px;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.3) 0%, rgba(15, 23, 42, 0.4) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            transform: perspective(1200px) rotateY(-15deg) rotateX(5deg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: floatCard 4s ease-in-out infinite;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: perspective(1200px) rotateY(-15deg) rotateX(5deg) translateY(0); }
+            50% { transform: perspective(1200px) rotateY(-15deg) rotateX(5deg) translateY(-15px); }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .card-period {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--blu);
+            padding: 0.35rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Mini chart in card */
+        .mini-chart {
+            height: 120px;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+            opacity: 0.9;
+        }
+
+        /* Tickers section */
+        .tickers {
+            margin-bottom: 1.5rem;
+        }
+
+        .ticker-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ticker-row:last-child {
+            border-bottom: none;
+        }
+
+        .ticker-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .ticker-symbol {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .ticker-price {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .ticker-change {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .ticker-change.up {
+            color: var(--grn);
+        }
+
+        .ticker-change.down {
+            color: var(--red);
+        }
+
+        /* Signal badges */
+        .signal-badges {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .signal-badge {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--grn);
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .signal-badge.sell {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: var(--red);
+        }
+
+        /* Floating badges */
+        .floating-badge {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.5) 0%, rgba(15, 23, 42, 0.6) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+            animation: floatBadge 3s ease-in-out infinite;
+        }
+
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .badge-gain {
+            top: 20px;
+            right: 20px;
+            color: var(--grn);
+            border-color: rgba(16, 185, 129, 0.3);
+            animation-delay: 0s;
+        }
+
+        .badge-signal {
+            bottom: 20px;
+            right: 20px;
+            color: var(--grn);
+            border-color: rgba(16, 185, 129, 0.3);
+            animation-delay: 1s;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                flex-direction: column;
+                padding: 3rem 0;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                padding: 2rem 2rem;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtext {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .cta-group {
+                justify-content: center;
+            }
+
+            .trust-section {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                padding-right: 2rem;
+                padding-bottom: 2rem;
+            }
+
+            .dashboard-card {
+                width: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtext {
+                font-size: 1rem;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">📊 TradeCommand Pro</div>
+        <div class="nav-center">
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#faq">FAQ</a>
+        </div>
+        <button class="nav-cta">Get Started</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Canvas for candlestick animation -->
+        <canvas id="candleCanvas"></canvas>
+
+        <!-- Left Content -->
+        <div class="hero-content">
+            <div class="badge">
+                <span></span>
+                LIVE • Real-time market data
+            </div>
+
+            <div style="position: relative;">
+                <div class="headline-glow"></div>
+                <h1>Your Edge in the Market</h1>
+            </div>
+
+            <p class="subtext">
+                AI-powered trade signals, live data feeds, and session portfolio tracking — all in one dashboard.
+            </p>
+
+            <div class="cta-group">
+                <button class="btn btn-primary">Start Trading →</button>
+                <button class="btn btn-secondary">Watch Demo</button>
+            </div>
+
+            <div class="trust-section">
+                <div class="trust-item">
+                    <div class="trust-icon">✓</div>
+                    <span>No credit card required</span>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">✓</div>
+                    <span>Setup in 2 minutes</span>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">✓</div>
+                    <span>Join 50K+ traders</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Dashboard Mockup -->
+        <div class="hero-visual">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-title">Portfolio</div>
+                    <div class="card-period">Today</div>
+                </div>
+
+                <!-- Mini Chart -->
+                <div class="mini-chart">
+                    <svg class="chart-svg" viewBox="0 0 350 120" preserveAspectRatio="xMidYMid meet">
+                        <!-- Gradient -->
+                        <defs>
+                            <linearGradient id="miniGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.3" />
+                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.05" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Line chart -->
+                        <polyline points="10,80 40,65 70,70 100,45 130,50 160,35 190,40 220,25 250,30 280,15 310,20 340,10" 
+                                  fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" />
+                        <!-- Fill -->
+                        <polygon points="10,80 40,65 70,70 100,45 130,50 160,35 190,40 220,25 250,30 280,15 310,20 340,10 340,120 10,120" 
+                                 fill="url(#miniGradient)" />
+                    </svg>
+                </div>
+
+                <!-- Tickers -->
+                <div class="tickers">
+                    <div class="ticker-row">
+                        <div class="ticker-left">
+                            <span class="ticker-symbol">NVDA</span>
+                            <span class="ticker-price">$847.50</span>
+                        </div>
+                        <span class="ticker-change up">+2.34%</span>
+                    </div>
+                    <div class="ticker-row">
+                        <div class="ticker-left">
+                            <span class="ticker-symbol">TSLA</span>
+                            <span class="ticker-price">$245.20</span>
+                        </div>
+                        <span class="ticker-change up">+1.87%</span>
+                    </div>
+                    <div class="ticker-row">
+                        <div class="ticker-left">
+                            <span class="ticker-symbol">MSFT</span>
+                            <span class="ticker-price">$423.10</span>
+                        </div>
+                        <span class="ticker-change down">-0.45%</span>
+                    </div>
+                </div>
+
+                <!-- Signal Badges -->
+                <div class="signal-badges">
+                    <span class="signal-badge">🟢 BUY NVDA</span>
+                    <span class="signal-badge sell">🔴 SELL MSFT</span>
+                </div>
+
+                <!-- Floating Badges -->
+                <div class="floating-badge badge-gain">+$342 Today</div>
+                <div class="floating-badge badge-signal">🟢 BUY NVDA</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ==================== CANDLESTICK ANIMATION ==================== 
+        const canvas = document.getElementById('candleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight * 0.55;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Colors
+        const colors = {
+            bg: '#0a0e17',
+            blu: '#3b82f6',
+            cyn: '#06b6d4',
+            grn: '#10b981',
+            red: '#ef4444'
+        };
+
+        // Candlestick data structure
+        class Candle {
+            constructor(x, open, close, high, low, volume) {
+                this.x = x;
+                this.open = open;
+                this.close = close;
+                this.high = high;
+                this.low = low;
+                this.volume = volume;
+                this.progress = 0;
+                this.isUp = close > open;
+            }
+
+            update(velocity) {
+                this.x -= velocity;
+                if (this.progress < 1) {
+                    this.progress += 0.02;
+                }
+            }
+
+            draw(ctx, height, scale, minPrice, maxPrice) {
+                const candleWidth = 8;
+                const padding = 3;
+                
+                // Normalize prices
+                const priceRange = maxPrice - minPrice;
+                const highY = height - ((this.high - minPrice) / priceRange) * height * this.progress;
+                const lowY = height - ((this.low - minPrice) / priceRange) * height * this.progress;
+                const openY = height - ((this.open - minPrice) / priceRange) * height * this.progress;
+                const closeY = height - ((this.close - minPrice) / priceRange) * height * this.progress;
+
+                const color = this.isUp ? colors.grn : colors.red;
+                const opacity = this.isUp ? 0.16 : 0.14;
+
+                // Draw wick
+                ctx.strokeStyle = color;
+                ctx.globalAlpha = opacity * 0.7;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(this.x, highY);
+                ctx.lineTo(this.x, lowY);
+                ctx.stroke();
+
+                // Draw body
+                const bodyTop = Math.min(openY, closeY);
+                const bodyHeight = Math.abs(closeY - openY) || 2;
+                
+                ctx.fillStyle = color;
+                ctx.globalAlpha = opacity;
+                ctx.fillRect(this.x - candleWidth / 2, bodyTop, candleWidth, bodyHeight);
+
+                // Draw glow beneath candle
+                ctx.globalAlpha = opacity * 0.3;
+                const gradientGlow = ctx.createLinearGradient(this.x, height, this.x, height - 30);
+                gradientGlow.addColorStop(0, color);
+                gradientGlow.addColorStop(1, 'transparent');
+                ctx.fillStyle = gradientGlow;
+                ctx.fillRect(this.x - candleWidth, height, candleWidth * 2, 30);
+
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // State
+        let candles = [];
+        let time = 0;
+        let animationFrameId;
+        const candleWidth = 11;
+        const velocity = 0.3;
+        const visibleCandles = 50;
+
+        // Generate realistic price action
+        function generateCandle(index) {
+            const basePrice = 100;
+            const trend = Math.sin(index * 0.05) * 15;
+            const noise = (Math.random() - 0.5) * 8;
+            const midPrice = basePrice + trend + noise;
+
+            const open = midPrice + (Math.random() - 0.5) * 4;
+            const close = midPrice + (Math.random() - 0.5) * 4;
+            const high = Math.max(open, close) + Math.random() * 3;
+            const low = Math.min(open, close) - Math.random() * 3;
+            const volume = Math.random() * 100;
+
+            return new Candle(0, open, close, high, low, volume);
+        }
+
+        // Initialize candles
+        for (let i = 0; i < visibleCandles; i++) {
+            const candle = generateCandle(i);
+            candle.x = canvas.width - (visibleCandles - i) * candleWidth;
+            candles.push(candle);
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.fillStyle = colors.bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            time++;
+
+            // Update and draw candles
+            candles.forEach(candle => {
+                candle.update(velocity);
+            });
+
+            // Remove off-screen candles and add new ones
+            if (candles[0].x < -candleWidth) {
+                candles.shift();
+                const newCandle = generateCandle(time + visibleCandles);
+                newCandle.x = candles[candles.length - 1].x + candleWidth;
+                candles.push(newCandle);
+            }
+
+            // Calculate price range for normalization
+            const prices = candles.flatMap(c => [c.high, c.low, c.open, c.close]);
+            const minPrice = Math.min(...prices);
+            const maxPrice = Math.max(...prices);
+            const priceRange = maxPrice - minPrice || 1;
+
+            // Draw price level lines
+            ctx.strokeStyle = colors.cyn;
+            ctx.globalAlpha = 0.08;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+
+            for (let i = 0; i < 4; i++) {
+                const y = (canvas.height / 4) * (i + 1);
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // Draw moving average
+            if (candles.length > 5) {
+                ctx.strokeStyle = colors.cyn;
+                ctx.globalAlpha = 0.15;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+
+                let started = false;
+                for (let i = 0; i < candles.length; i++) {
+                    const window = candles.slice(Math.max(0, i - 5), i + 1);
+                    const avg = window.reduce((sum, c) => sum + (c.open + c.close) / 2, 0) / window.length;
+                    const y = canvas.height - ((avg - minPrice) / priceRange) * canvas.height;
+
+                    if (!started) {
+                        ctx.moveTo(candles[i].x, y);
+                        started = true;
+                    } else {
+                        ctx.lineTo(candles[i].x, y);
+                    }
+                }
+                ctx.stroke();
+            }
+
+            // Draw volume bars
+            ctx.globalAlpha = 1;
+            candles.forEach(candle => {
+                const volumeHeight = (candle.volume / 100) * 20;
+                const color = candle.isUp ? colors.grn : colors.red;
+                ctx.fillStyle = color;
+                ctx.globalAlpha = 0.08;
+                ctx.fillRect(candle.x - 4, canvas.height - volumeHeight, 8, volumeHeight);
+            });
+
+            // Draw candles
+            ctx.globalAlpha = 1;
+            candles.forEach(candle => {
+                candle.draw(ctx, canvas.height, 1, minPrice, maxPrice);
+            });
+
+            // Gradient fade (top to bottom)
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, 'rgba(10, 14, 23, 1)');
+            gradient.addColorStop(0.5, 'rgba(10, 14, 23, 0.3)');
+            gradient.addColorStop(1, 'rgba(10, 14, 23, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.globalAlpha = 1;
+
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Cleanup
+        window.addEventListener('beforeunload', () => {
+            cancelAnimationFrame(animationFrameId);
+        });
+    </script>
+</body>
+</html>

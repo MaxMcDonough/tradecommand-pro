@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Pulse - Concept 4</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0e17;
+            --card: #0f1219;
+            --acc: #3b82f6;
+            --grn: #10b981;
+            --red: #ef4444;
+            --cyn: #06b6d4;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, #0d111f 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 650px;
+            height: 420px;
+            background: linear-gradient(135deg, var(--card) 0%, #0a0e18 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.2), inset 0 0 40px rgba(6, 182, 212, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Grid background */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 50px 40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Horizontal guide lines */
+        .guide-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .guide-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
+        }
+
+        /* Particle field */
+        .particle-field {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .particle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(6, 182, 212, 0.6);
+            border-radius: 50%;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                opacity: 0;
+                transform: translateX(0) translateY(0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-100px) translateY(-50px);
+            }
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+        }
+
+        .title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--cyn);
+            letter-spacing: 2px;
+        }
+
+        .heartbeat-icon {
+            display: inline-block;
+            font-size: 20px;
+            animation: pulse-icon 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .stats {
+            text-align: right;
+            font-size: 13px;
+        }
+
+        .sp500-value {
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .sp500-change {
+            color: var(--grn);
+            font-weight: 600;
+            animation: subtle-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Chart area */
+        .chart-area {
+            flex: 1;
+            position: relative;
+            z-index: 5;
+            padding: 15px 25px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Labels container */
+        .labels-container {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            bottom: 60px;
+            pointer-events: none;
+            z-index: 6;
+        }
+
+        .floating-label {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: float-up 2.5s ease-out forwards;
+        }
+
+        @keyframes float-up {
+            0% {
+                opacity: 1;
+                transform: translateY(0) translateX(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-60px) translateX(20px);
+            }
+        }
+
+        .ticker {
+            color: white;
+            font-weight: 700;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .badge-up {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--grn);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .badge-down {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        /* Breakout alert */
+        .breakout-alert {
+            position: absolute;
+            right: -300px;
+            top: 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--red);
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 15;
+            animation: slide-in 0.5s ease-out forwards;
+        }
+
+        @keyframes slide-in {
+            from {
+                opacity: 0;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-320px);
+            }
+        }
+
+        .breakout-alert.exit {
+            animation: slide-out 0.5s ease-in forwards;
+        }
+
+        @keyframes slide-out {
+            from {
+                opacity: 1;
+                transform: translateX(-320px);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(0);
+            }
+        }
+
+        /* Screen flash effect */
+        .flash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(239, 68, 68, 0.3);
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0;
+            animation: flash 0.3s ease-out;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Sector performance bar */
+        .sector-bar {
+            position: relative;
+            z-index: 8;
+            padding: 0 25px 20px;
+            border-top: 1px solid rgba(6, 182, 212, 0.1);
+        }
+
+        .sector-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .sectors {
+            display: flex;
+            gap: 6px;
+            height: 20px;
+        }
+
+        .sector {
+            flex: 1;
+            border-radius: 3px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0.8;
+        }
+
+        .sector::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            animation: breathe 2s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .sector-tech { background: linear-gradient(135deg, var(--acc), #1e40af); }
+        .sector-energy { background: linear-gradient(135deg, var(--grn), #059669); }
+        .sector-finance { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+        .sector-health { background: linear-gradient(135deg, var(--cyn), #0891b2); }
+        .sector-consumer { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="grid-bg"></div>
+        <div class="guide-lines" id="guideLines"></div>
+        <div class="particle-field" id="particleField"></div>
+
+        <div class="header">
+            <div class="title">
+                <span class="heartbeat-icon">♥️</span>
+                MARKET PULSE
+            </div>
+            <div class="stats">
+                <div class="sp500-value">S&P 500: <span id="sp500">5,842.31</span></div>
+                <div class="sp500-change">▲ +0.8%</div>
+            </div>
+        </div>
+
+        <div class="chart-area">
+            <canvas id="chartCanvas"></canvas>
+            <div class="labels-container" id="labelsContainer"></div>
+        </div>
+
+        <div class="sector-bar">
+            <div class="sector-label">SECTOR PERFORMANCE</div>
+            <div class="sectors">
+                <div class="sector sector-tech" title="Technology"></div>
+                <div class="sector sector-energy" title="Energy"></div>
+                <div class="sector sector-finance" title="Finance"></div>
+                <div class="sector sector-health" title="Healthcare"></div>
+                <div class="sector sector-consumer" title="Consumer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Setup
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.querySelector('.chart-area');
+        const labelsContainer = document.getElementById('labelsContainer');
+        const guideLines = document.getElementById('guideLines');
+
+        // Set canvas resolution
+        function resizeCanvas() {
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Create guide lines
+        function createGuideLines() {
+            guideLines.innerHTML = '';
+            const lineCount = 4;
+            for (let i = 1; i < lineCount; i++) {
+                const line = document.createElement('div');
+                line.className = 'guide-line';
+                line.style.top = (i * (100 / lineCount)) + '%';
+                guideLines.appendChild(line);
+            }
+        }
+        createGuideLines();
+
+        // Create particles
+        function createParticles() {
+            const particleField = document.getElementById('particleField');
+            particleField.innerHTML = '';
+            const particleCount = 30;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = 15 + Math.random() * 10;
+                particle.style.left = x + '%';
+                particle.style.top = y + '%';
+                particle.style.animationDelay = delay + 's';
+                particle.style.animationDuration = duration + 's';
+                particleField.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Data generation
+        const dataPoints = [];
+        let baseValue = 100;
+        let lastValue = baseValue;
+
+        function generateNextDataPoint() {
+            // Realistic stock movement with occasional spikes
+            const randomWalk = (Math.random() - 0.5) * 3; // Small fluctuations
+            const spikeChance = Math.random();
+            const spike = spikeChance < 0.05 ? (Math.random() - 0.5) * 8 : 0; // Occasional spikes
+            
+            const newValue = lastValue + randomWalk + spike;
+            // Keep within bounds
+            const boundedValue = Math.max(80, Math.min(120, newValue));
+            
+            lastValue = boundedValue;
+            return boundedValue;
+        }
+
+        // Initialize with some data
+        for (let i = 0; i < 40; i++) {
+            dataPoints.push(generateNextDataPoint());
+        }
+
+        // Chart drawing
+        const chartWidth = canvas.width / window.devicePixelRatio;
+        const chartHeight = canvas.height / window.devicePixelRatio;
+        const padding = 20;
+        const graphWidth = chartWidth - padding * 2;
+        const graphHeight = chartHeight - padding * 2;
+
+        function drawChart() {
+            // Clear canvas
+            ctx.fillStyle = 'rgba(10, 14, 23, 0)';
+            ctx.fillRect(0, 0, chartWidth, chartHeight);
+
+            if (dataPoints.length < 2) return;
+
+            // Draw line with glow
+            ctx.globalCompositeOperation = 'lighter';
+            
+            // Glow effect (multiple passes)
+            for (let glow = 15; glow > 0; glow -= 3) {
+                ctx.strokeStyle = `rgba(6, 182, 212, ${0.1 * (1 - glow/15)})`;
+                ctx.lineWidth = glow;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                drawLineChart();
+            }
+
+            // Main line
+            ctx.strokeStyle = '#06b6d4';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.globalCompositeOperation = 'source-over';
+            drawLineChart();
+
+            // Add fade effect on the left
+            const gradient = ctx.createLinearGradient(0, 0, 150, 0);
+            gradient.addColorStop(0, 'rgba(6, 182, 212, 0)');
+            gradient.addColorStop(0.3, 'rgba(6, 182, 212, 0.1)');
+            gradient.addColorStop(1, 'rgba(6, 182, 212, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 150, chartHeight);
+        }
+
+        function drawLineChart() {
+            ctx.beginPath();
+            const pointSpacing = graphWidth / (dataPoints.length - 1);
+
+            for (let i = 0; i < dataPoints.length; i++) {
+                const x = padding + (i * pointSpacing);
+                const normalized = (dataPoints[i] - 80) / 40; // 80-120 range
+                const y = padding + (graphHeight * (1 - normalized));
+
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+
+            ctx.stroke();
+        }
+
+        // Stock ticker data
+        const tickers = [
+            { symbol: 'NVDA', volatility: 1.8 },
+            { symbol: 'TSLA', volatility: 2.1 },
+            { symbol: 'AAPL', volatility: 0.9 },
+            { symbol: 'MSFT', volatility: 1.0 },
+            { symbol: 'AMD', volatility: 1.9 },
+            { symbol: 'GOOGL', volatility: 0.8 },
+            { symbol: 'META', volatility: 1.5 },
+            { symbol: 'AMZN', volatility: 1.2 }
+        ];
+
+        function getRandomTicker() {
+            return tickers[Math.floor(Math.random() * tickers.length)];
+        }
+
+        // Create floating labels
+        function createFloatingLabel(x, y, ticker, isPositive) {
+            const label = document.createElement('div');
+            label.className = 'floating-label';
+            label.style.left = x + 'px';
+            label.style.top = y + 'px';
+
+            const change = (Math.random() * 3 + 0.2).toFixed(1);
+            const badge = document.createElement('span');
+            badge.className = `badge ${isPositive ? 'badge-up' : 'badge-down'}`;
+            badge.textContent = (isPositive ? '+' : '-') + change + '%';
+
+            label.innerHTML = `<span class="ticker">${ticker.symbol}</span>`;
+            label.appendChild(badge);
+
+            labelsContainer.appendChild(label);
+            setTimeout(() => label.remove(), 2500);
+        }
+
+        // Breakout detection
+        let lastBreakoutTime = 0;
+        function triggerBreakout() {
+            const currentTime = Date.now();
+            if (currentTime - lastBreakoutTime < 8000) return; // Cooldown
+
+            lastBreakoutTime = currentTime;
+
+            // Flash effect
+            const flash = document.createElement('div');
+            flash.className = 'flash-overlay';
+            document.querySelector('.container').appendChild(flash);
+            setTimeout(() => flash.remove(), 300);
+
+            // Breakout alert
+            const ticker = getRandomTicker();
+            const alert = document.createElement('div');
+            alert.className = 'breakout-alert';
+            alert.innerHTML = `<span>⚡</span> BREAKOUT DETECTED: ${ticker.symbol}`;
+            document.querySelector('.container').appendChild(alert);
+
+            setTimeout(() => {
+                alert.classList.add('exit');
+                setTimeout(() => alert.remove(), 500);
+            }, 3000);
+        }
+
+        // Animation loop
+        let frameCount = 0;
+        function animate() {
+            frameCount++;
+
+            // Add new data point every few frames
+            if (frameCount % 3 === 0) {
+                dataPoints.push(generateNextDataPoint());
+                if (dataPoints.length > 100) {
+                    dataPoints.shift();
+                }
+
+                // Randomly create floating labels at peaks/dips
+                if (dataPoints.length > 5) {
+                    const lastValue = dataPoints[dataPoints.length - 1];
+                    const prevValue = dataPoints[dataPoints.length - 2];
+                    
+                    // Check for peak (local maximum)
+                    if (lastValue > prevValue && dataPoints.length > 2) {
+                        const prevPrev = dataPoints[dataPoints.length - 3];
+                        if (lastValue > prevPrev && Math.random() < 0.3) {
+                            const pointSpacing = graphWidth / (dataPoints.length - 1);
+                            const x = padding + ((dataPoints.length - 1) * pointSpacing);
+                            const normalized = (lastValue - 80) / 40;
+                            const y = padding + (graphHeight * (1 - normalized)) - 30;
+                            createFloatingLabel(x, y, getRandomTicker(), true);
+                        }
+                    }
+                    // Check for dip (local minimum)
+                    else if (lastValue < prevValue && dataPoints.length > 2) {
+                        const prevPrev = dataPoints[dataPoints.length - 3];
+                        if (lastValue < prevPrev && Math.random() < 0.3) {
+                            const pointSpacing = graphWidth / (dataPoints.length - 1);
+                            const x = padding + ((dataPoints.length - 1) * pointSpacing);
+                            const normalized = (lastValue - 80) / 40;
+                            const y = padding + (graphHeight * (1 - normalized)) + 20;
+                            createFloatingLabel(x, y, getRandomTicker(), false);
+                        }
+                    }
+                }
+
+                // Trigger breakout randomly
+                if (Math.random() < 0.02) {
+                    triggerBreakout();
+                }
+
+                // Update S&P 500 value subtly
+                if (frameCount % 60 === 0) {
+                    const currentValue = parseFloat(document.getElementById('sp500').textContent.replace(',', ''));
+                    const change = (Math.random() - 0.5) * 20;
+                    const newValue = currentValue + change;
+                    document.getElementById('sp500').textContent = newValue.toFixed(2);
+                }
+            }
+
+            drawChart();
+            requestAnimationFrame(animate);
+        }
+
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>
