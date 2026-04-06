@@ -1662,6 +1662,50 @@ input, select, button { font-family: inherit; }
 .plan-features { list-style: none; margin-top: 14px; text-align: left; font-size: 12px; color: var(--t2); }
 .plan-features li { padding: 4px 0; }
 .plan-features li::before { content: '✓ '; color: var(--green); font-weight: 700; }
+
+/* ═══════════════════════════════════════════════════════════
+   INTERACTIVE TUTORIAL — SPOTLIGHT WALKTHROUGH
+   ═══════════════════════════════════════════════════════════ */
+#tour-overlay{position:fixed;inset:0;z-index:10000;pointer-events:none;display:none}
+#tour-overlay.active{display:block}
+#tour-backdrop{position:fixed;inset:0;z-index:10001;pointer-events:auto}
+#tour-spotlight{position:absolute;z-index:10002;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.75);pointer-events:none;transition:all .4s cubic-bezier(.4,0,.2,1)}
+#tour-tooltip{position:absolute;z-index:10003;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:380px;width:90vw;pointer-events:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:tourFadeIn .3s ease}
+@keyframes tourFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#tour-tooltip::before{content:'';position:absolute;width:12px;height:12px;background:var(--bg2);border:1px solid var(--border);transform:rotate(45deg)}
+#tour-tooltip.arrow-top::before{top:-7px;left:30px;border-right:none;border-bottom:none}
+#tour-tooltip.arrow-bottom::before{bottom:-7px;left:30px;border-left:none;border-top:none}
+#tour-tooltip.arrow-left::before{left:-7px;top:24px;border-top:none;border-right:none}
+.tour-step-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:800;margin-right:8px;flex-shrink:0}
+.tour-title{font-size:16px;font-weight:800;color:var(--t1);display:flex;align-items:center;margin-bottom:8px}
+.tour-body{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:18px}
+.tour-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tour-progress{display:flex;gap:5px;align-items:center}
+.tour-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:all .2s}
+.tour-dot.active{background:var(--accent);width:18px;border-radius:4px}
+.tour-dot.done{background:var(--green)}
+.tour-btns{display:flex;gap:8px}
+.tour-btn{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:none}
+.tour-btn-primary{background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff}
+.tour-btn-primary:hover{opacity:.9;box-shadow:0 4px 16px rgba(59,130,246,.3)}
+.tour-btn-ghost{background:transparent;color:var(--t2);border:1px solid var(--border)}
+.tour-btn-ghost:hover{border-color:var(--accent);color:var(--t1)}
+.tour-btn-skip{background:transparent;color:var(--t3);border:none;font-size:12px;padding:8px 12px}
+.tour-btn-skip:hover{color:var(--t2)}
+.tour-key{display:inline-block;padding:2px 7px;background:var(--card);border:1px solid var(--border);border-radius:4px;font-size:11px;font-weight:600;color:var(--t2);font-family:monospace}
+
+/* Tour prompt dialog */
+#tour-prompt{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+#tour-prompt.active{display:flex}
+.tour-prompt-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:420px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.5);animation:tourFadeIn .3s ease}
+.tour-prompt-icon{font-size:48px;margin-bottom:16px}
+.tour-prompt-title{font-size:22px;font-weight:800;color:var(--t1);margin-bottom:8px}
+.tour-prompt-desc{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:24px}
+.tour-prompt-btns{display:flex;gap:10px;justify-content:center}
+
+/* Re-access tour button in settings */
+.tour-restart-btn{display:flex;align-items:center;gap:8px;padding:10px 18px;background:var(--accent2);border:1px solid rgba(59,130,246,.2);border-radius:10px;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:14px;border:none;width:100%}
+.tour-restart-btn:hover{background:rgba(59,130,246,.2)}
 </style>
 </head>
 <body>
@@ -2528,6 +2572,7 @@ input, select, button { font-family: inherit; }
           <div class="stg-row"><span class="stg-label">Email</span><span class="stg-val" id="stg-email">--</span></div>
           <div class="stg-row"><span class="stg-label">Plan</span><span class="stg-val" id="stg-plan">--</span></div>
           <div class="stg-row"><span class="stg-label">Account</span><button class="btn btn-sm btn-ghost" onclick="showUpgradeModal()">Upgrade Plan</button></div>
+          <button class="tour-restart-btn" onclick="startTour()">🎓 Retake Platform Tour</button>
         </div>
         <div class="settings-section">
           <h3>Watchlist Management</h3>
@@ -3190,6 +3235,10 @@ async function handleAuthState(user) {
     launch();
     // Legacy onboarding overlay — disabled; new users go through onboarding.html
     // if(!ud || !ud.onboarded) { ... }
+    // Show interactive tutorial for first-time visitors (after onboarding)
+    if(ud && ud.onboardingComplete && !localStorage.getItem('tcp_tour_seen')) {
+      setTimeout(showTourPrompt, 800);
+    }
   } catch(e) { console.error('Auth error:', e); }
 }
 
@@ -7214,6 +7263,293 @@ async function finishOnboarding() {
 }
 function skipOnboarding() { document.getElementById('onboarding-overlay').classList.add('hidden'); }
 
+// ═══════════════════════════════════════════════════════════
+// INTERACTIVE TUTORIAL — SPOTLIGHT WALKTHROUGH ENGINE
+// ═══════════════════════════════════════════════════════════
+const TOUR_STEPS = [
+  {
+    target: null, // centered, no spotlight
+    title: 'Welcome to TradeCommand Pro',
+    body: 'This is your trading command center. Let\'s walk through the key features so you can start trading with confidence. This will only take about 60 seconds.',
+    icon: '🎉',
+    position: 'center'
+  },
+  {
+    target: '#sidebar',
+    title: 'Navigation Sidebar',
+    body: 'This is your main navigation. Hover to expand it and see labels for each section: <strong>Trading, Holdings, Insights, Predictions, Autopilot, Discover,</strong> and <strong>Alerts</strong>. You\'ll find Settings at the bottom.',
+    icon: '📍',
+    position: 'right',
+    action: () => { const sb = document.getElementById('sidebar'); if(sb) sb.style.width = sb.style.minWidth = '220px'; },
+    cleanup: () => { const sb = document.getElementById('sidebar'); if(sb) sb.style.width = sb.style.minWidth = ''; }
+  },
+  {
+    target: '#topbar',
+    title: 'Market Status & Account',
+    body: 'The top bar shows <strong>real-time market status</strong> (pre-market, open, closed), the live clock in Eastern Time, your plan badge, notifications bell, and account info. You can sign out from here too.',
+    icon: '🕐',
+    position: 'bottom'
+  },
+  {
+    target: '[data-page="trading"]',
+    title: 'Trading — Home Base',
+    body: 'This is your main dashboard. Everything starts here — your watchlist, AI bot scanner, discover section, signals, holdings summary, and today\'s game plan. It\'s your mission control.',
+    icon: '📊',
+    position: 'right',
+    action: () => navigate('trading')
+  },
+  {
+    target: '.card:has(#bot-top-picks), [style*="bot-top-picks"]',
+    fallback: '#page-trading > .card:first-child',
+    title: 'AI Bot Scanner',
+    body: 'The <strong>TradeCommand AI Bot</strong> scans your watchlist using 8 factors: momentum, RSI, volume, trend, MACD, news sentiment, social buzz, and institutional flow. Hit <strong>"Run AI Scan Now"</strong> to generate fresh signals instantly.',
+    icon: '🤖',
+    position: 'bottom'
+  },
+  {
+    target: '#watchlist-container',
+    title: 'Your Watchlist',
+    body: 'These are the stocks you\'re tracking. Each card shows <strong>live price, change %, and an AI signal</strong> (Buy/Sell/Hold). Click any stock for deep analysis with charts, technicals, and AI summary. Use the <strong>filters</strong> above to show only Buy signals, Hot movers, etc.',
+    icon: '👁️',
+    position: 'bottom'
+  },
+  {
+    target: '#add-ticker-input',
+    title: 'Add Tickers',
+    body: 'Type any stock symbol here and press Enter or click <strong>+</strong> to add it to your watchlist. Try adding your favorite stocks — the AI will start scanning them immediately.',
+    icon: '➕',
+    position: 'bottom'
+  },
+  {
+    target: '[data-page="holdings"]',
+    title: 'Portfolio & Holdings',
+    body: 'Track all your <strong>open positions, P&L, cost basis,</strong> and <strong>sector allocation</strong> here. You can add positions manually, and the dashboard will track real-time profit/loss with charts and performance metrics.',
+    icon: '💼',
+    position: 'right',
+    action: () => navigate('holdings')
+  },
+  {
+    target: '[data-page="insights"]',
+    title: 'News & Insights',
+    body: 'Get a live feed of <strong>market news from Finnhub and NewsAPI</strong>, a real-time <strong>Reddit sentiment scanner</strong> pulling from r/wallstreetbets, r/stocks, and more, plus an <strong>economic calendar</strong> with upcoming events that move markets.',
+    icon: '🧠',
+    position: 'right',
+    action: () => navigate('insights')
+  },
+  {
+    target: '[data-page="predictions"]',
+    title: 'AI Predictions & Signals',
+    body: 'The heart of the platform. Each signal card shows: <strong>entry price, stop loss, target price, risk/reward ratio,</strong> and an <strong>AI confidence score</strong>. These are generated from the 8-factor analysis when you run the AI scanner.',
+    icon: '🎯',
+    position: 'right',
+    action: () => navigate('predictions')
+  },
+  {
+    target: '[data-page="autopilot"]',
+    title: 'Autopilot & Game Plan',
+    body: 'Queue up trades from your signals and let <strong>Autopilot</strong> manage them. It tracks your entries, stops, and targets — alerting you when conditions are met. Think of it as your automated trading assistant.',
+    icon: '🤖',
+    position: 'right',
+    action: () => navigate('autopilot')
+  },
+  {
+    target: '[data-page="discover"]',
+    title: 'Discover',
+    body: 'Find new trading opportunities with <strong>AI-ranked stocks, trending tickers, ETF screeners,</strong> and <strong>trade ideas</strong>. Everything is scored and sortable — click any row to analyze, or hit + to add to your watchlist.',
+    icon: '🔍',
+    position: 'right',
+    action: () => navigate('discover')
+  },
+  {
+    target: '[data-page="alerts"]',
+    title: 'Price Alerts',
+    body: 'Set custom alerts for <strong>price crossings, percentage moves, volume spikes,</strong> and more. Alerts can be <strong>recurring</strong> and trigger <strong>browser notifications, sounds, Telegram messages,</strong> and <strong>email</strong>. Up to 20 active alerts.',
+    icon: '🔔',
+    position: 'right',
+    action: () => navigate('alerts')
+  },
+  {
+    target: '#notif-bell',
+    title: 'Notification Center',
+    body: 'All your alerts, trade executions, and system notifications appear here. The red badge shows unread count. Click the bell to review and manage your notifications.',
+    icon: '🔔',
+    position: 'bottom',
+    action: () => navigate('trading')
+  },
+  {
+    target: null,
+    title: 'You\'re Ready to Trade!',
+    body: 'That\'s everything! Start by <strong>running the AI Scan</strong> on the Trading page to generate your first signals. Add stocks to your watchlist, explore Discover for ideas, and set up alerts for the ones you\'re watching.<br><br>You can <strong>retake this tour anytime</strong> from Settings → Retake Platform Tour.',
+    icon: '🚀',
+    position: 'center',
+    final: true
+  }
+];
+
+let tourStep = 0;
+let tourActive = false;
+
+function showTourPrompt() {
+  document.getElementById('tour-prompt').classList.add('active');
+}
+
+function dismissTour() {
+  document.getElementById('tour-prompt').classList.remove('active');
+  localStorage.setItem('tcp_tour_seen', '1');
+}
+
+function startTour() {
+  document.getElementById('tour-prompt').classList.remove('active');
+  tourStep = 0;
+  tourActive = true;
+  document.getElementById('tour-overlay').classList.add('active');
+  renderTourStep();
+  localStorage.setItem('tcp_tour_seen', '1');
+}
+
+function endTour() {
+  tourActive = false;
+  document.getElementById('tour-overlay').classList.remove('active');
+  // Clean up any step-specific actions
+  TOUR_STEPS.forEach(s => { if(s.cleanup) s.cleanup(); });
+  navigate('trading');
+  localStorage.setItem('tcp_tour_seen', '1');
+}
+
+function advanceTour() {
+  if(!tourActive) return;
+  const current = TOUR_STEPS[tourStep];
+  if(current && current.cleanup) current.cleanup();
+  if(current && current.final) { endTour(); return; }
+  if(tourStep < TOUR_STEPS.length - 1) {
+    tourStep++;
+    renderTourStep();
+  }
+}
+
+function prevTourStep() {
+  if(!tourActive || tourStep <= 0) return;
+  const current = TOUR_STEPS[tourStep];
+  if(current && current.cleanup) current.cleanup();
+  tourStep--;
+  renderTourStep();
+}
+
+function renderTourStep() {
+  const step = TOUR_STEPS[tourStep];
+  if(!step) return;
+
+  // Run any action (like navigating to a page)
+  if(step.action) step.action();
+
+  // Wait a tick for DOM updates after navigation
+  requestAnimationFrame(() => {
+    const spotlight = document.getElementById('tour-spotlight');
+    const tooltip = document.getElementById('tour-tooltip');
+    const backdrop = document.getElementById('tour-backdrop');
+
+    // Update content
+    document.getElementById('tour-step-num').textContent = tourStep + 1;
+    document.getElementById('tour-step-title').textContent = step.title;
+    document.getElementById('tour-step-body').innerHTML = step.body;
+
+    // Update dots
+    const dotsHtml = TOUR_STEPS.map((_, i) => {
+      let cls = 'tour-dot';
+      if(i < tourStep) cls += ' done';
+      else if(i === tourStep) cls += ' active';
+      return `<div class="${cls}"></div>`;
+    }).join('');
+    document.getElementById('tour-dots').innerHTML = dotsHtml;
+
+    // Show/hide back button
+    document.getElementById('tour-prev-btn').style.display = tourStep > 0 ? '' : 'none';
+
+    // Update next button text
+    const nextBtn = document.getElementById('tour-next-btn');
+    if(step.final) { nextBtn.textContent = 'Start Trading! 🚀'; }
+    else { nextBtn.textContent = 'Next →'; }
+
+    // Position spotlight
+    if(step.position === 'center' || !step.target) {
+      // No spotlight — centered tooltip
+      spotlight.style.display = 'none';
+      tooltip.className = '';
+      tooltip.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10003';
+      return;
+    }
+
+    let targetEl = document.querySelector(step.target);
+    if(!targetEl && step.fallback) targetEl = document.querySelector(step.fallback);
+    if(!targetEl) {
+      // Can't find target — show centered
+      spotlight.style.display = 'none';
+      tooltip.className = '';
+      tooltip.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10003';
+      return;
+    }
+
+    // Scroll target into view if needed
+    if(targetEl.scrollIntoView) {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    setTimeout(() => {
+      const rect = targetEl.getBoundingClientRect();
+      const pad = 8;
+
+      // Position spotlight
+      spotlight.style.display = 'block';
+      spotlight.style.top = (rect.top - pad) + 'px';
+      spotlight.style.left = (rect.left - pad) + 'px';
+      spotlight.style.width = (rect.width + pad * 2) + 'px';
+      spotlight.style.height = (rect.height + pad * 2) + 'px';
+
+      // Position tooltip
+      const tooltipW = 380;
+      const tooltipH = 240;
+      let top, left;
+      tooltip.className = '';
+
+      if(step.position === 'right') {
+        top = rect.top;
+        left = rect.right + 20;
+        tooltip.classList.add('arrow-left');
+        // If it would go off-screen right, put it below instead
+        if(left + tooltipW > window.innerWidth - 20) {
+          top = rect.bottom + 16;
+          left = Math.max(20, rect.left);
+          tooltip.className = 'arrow-top';
+        }
+      } else if(step.position === 'bottom') {
+        top = rect.bottom + 16;
+        left = Math.max(20, rect.left);
+        tooltip.classList.add('arrow-top');
+      } else if(step.position === 'top') {
+        top = rect.top - tooltipH - 16;
+        left = Math.max(20, rect.left);
+        tooltip.classList.add('arrow-bottom');
+      }
+
+      // Keep tooltip on screen
+      if(left + tooltipW > window.innerWidth - 20) left = window.innerWidth - tooltipW - 20;
+      if(left < 20) left = 20;
+      if(top < 10) top = rect.bottom + 16;
+      if(top + tooltipH > window.innerHeight - 20) top = Math.max(10, rect.top - tooltipH - 16);
+
+      tooltip.style.cssText = `position:fixed;top:${top}px;left:${left}px;z-index:10003`;
+    }, 100);
+  });
+}
+
+// Keyboard navigation for tour
+document.addEventListener('keydown', e => {
+  if(!tourActive) return;
+  if(e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); advanceTour(); }
+  if(e.key === 'ArrowLeft') { e.preventDefault(); prevTourStep(); }
+  if(e.key === 'Escape') endTour();
+});
+
 // ═══ NEWS FETCH (FINNHUB + NEWSAPI) ═══
 const cfNewsHeadlines = fns.httpsCallable('newsHeadlines');
 const cfNewsSearch = fns.httpsCallable('newsSearch');
@@ -8455,6 +8791,38 @@ window.addEventListener('DOMContentLoaded', () => {
     .finally(() => auth.onAuthStateChanged(handleAuthState));
 });
 </script>
+
+<!-- ═══ INTERACTIVE TUTORIAL ═══ -->
+<!-- Tour Prompt (first visit) -->
+<div id="tour-prompt">
+  <div class="tour-prompt-box">
+    <div class="tour-prompt-icon">🎓</div>
+    <div class="tour-prompt-title">Welcome to TradeCommand Pro!</div>
+    <div class="tour-prompt-desc">Want a quick walkthrough of the platform? We'll show you every major feature in about 60 seconds.</div>
+    <div class="tour-prompt-btns">
+      <button class="tour-btn tour-btn-ghost" onclick="dismissTour()">I'll explore on my own</button>
+      <button class="tour-btn tour-btn-primary" onclick="startTour()">Take the Tour →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tour Overlay -->
+<div id="tour-overlay">
+  <div id="tour-backdrop" onclick="advanceTour()"></div>
+  <div id="tour-spotlight"></div>
+  <div id="tour-tooltip">
+    <div class="tour-title"><span class="tour-step-badge" id="tour-step-num">1</span><span id="tour-step-title">Welcome</span></div>
+    <div class="tour-body" id="tour-step-body">Loading...</div>
+    <div class="tour-footer">
+      <div class="tour-progress" id="tour-dots"></div>
+      <div class="tour-btns">
+        <button class="tour-btn tour-btn-skip" onclick="endTour()">Skip tour</button>
+        <button class="tour-btn tour-btn-ghost" id="tour-prev-btn" onclick="prevTourStep()" style="display:none">Back</button>
+        <button class="tour-btn tour-btn-primary" id="tour-next-btn" onclick="advanceTour()">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Financial Disclaimer Footer -->
 <div id="financial-disclaimer" style="position:fixed;bottom:0;left:0;right:0;z-index:9998;background:rgba(15,17,25,.95);backdrop-filter:blur(8px);border-top:1px solid rgba(239,68,68,.2);padding:8px 16px;text-align:center;font-size:10px;color:rgba(255,255,255,.4);line-height:1.4">
