@@ -24,32 +24,32 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0d1117;--bg2:#161b22;--card:#1c2333;--brd:#30363d;--t1:#f0f6fc;--t2:#8b949e;--t3:#484f58;--acc:#6366f1;--grn:#10b981;--red:#ef4444;--ylw:#f59e0b}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t1);line-height:1.5}
+:root{--bg:#08080d;--bg2:#0e0e16;--card:rgba(255,255,255,.04);--brd:rgba(255,255,255,.07);--t1:#f5f5f7;--t2:#86868b;--t3:#48484a;--acc:#0a84ff;--grn:#30d158;--red:#ff453a;--ylw:#ffd60a}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t1);line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 a{color:var(--acc);text-decoration:none}
 input,select,textarea,button{font-family:inherit}
 
 /* Login */
-#login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg)}
-.login-box{background:var(--bg2);border:1px solid var(--brd);border-radius:16px;padding:40px;width:380px;text-align:center}
+#login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg);background-image:radial-gradient(circle at 20% 50%, rgba(10,132,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(48,209,152,0.05) 0%, transparent 50%)}
+.login-box{background:rgba(14,14,22,.92);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:40px;width:380px;text-align:center;backdrop-filter:blur(40px) saturate(1.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 8px 32px rgba(0,0,0,.3), 0 2px 4px rgba(0,0,0,.1)}
 .login-box h1{font-size:24px;margin-bottom:8px}
 .login-box p{color:var(--t2);font-size:13px;margin-bottom:24px}
 .login-box input{width:100%;padding:10px 14px;margin-bottom:12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:14px}
-.login-box button{width:100%;padding:10px;background:var(--acc);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+.login-box button{width:100%;padding:10px;background:linear-gradient(135deg, #0a84ff, #3a9fff);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
 .login-box button:hover{opacity:.9}
 #login-error{color:var(--red);font-size:12px;margin-top:8px;min-height:18px}
 
 /* Layout */
 #app{display:none;height:100vh;overflow:hidden}
 .app-wrap{display:flex;height:100%}
-.sidebar{width:220px;background:var(--bg);border-right:1px solid var(--brd);overflow-y:auto;flex-shrink:0;padding:16px 0}
+.sidebar{width:220px;background:rgba(14,14,22,.88);border-right:1px solid rgba(255,255,255,.08);backdrop-filter:blur(40px) saturate(1.6);overflow-y:auto;flex-shrink:0;padding:16px 0}
 .sidebar-brand{padding:12px 20px;font-size:16px;font-weight:800;border-bottom:1px solid var(--brd);margin-bottom:8px}
 .sidebar-label{font-size:10px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.1em;padding:16px 20px 6px}
 .nav-item{padding:9px 20px;font-size:13px;color:var(--t2);cursor:pointer;transition:all .15s;border-left:3px solid transparent}
-.nav-item:hover{color:var(--t1);background:rgba(99,102,241,.06)}
-.nav-item.active{color:var(--acc);background:rgba(99,102,241,.1);border-left-color:var(--acc);font-weight:600}
+.nav-item:hover{color:var(--t1);background:rgba(10,132,255,.06)}
+.nav-item.active{color:var(--acc);background:rgba(10,132,255,.1);border-left-color:#0a84ff;font-weight:600;box-shadow:inset 0 0 16px rgba(10,132,255,.05)}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.header{padding:16px 28px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;background:var(--bg2);flex-shrink:0}
+.header{padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;background:rgba(14,14,22,.85);backdrop-filter:blur(40px) saturate(1.6);flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
 .header h2{font-size:16px;font-weight:700}
 .header button{background:var(--red);color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:12px;cursor:pointer;font-weight:600}
 .content{flex:1;overflow-y:auto;padding:28px}
@@ -60,27 +60,30 @@ input,select,textarea,button{font-family:inherit}
 
 /* Components */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.stat{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:20px}
+.stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px;backdrop-filter:blur(24px) saturate(1.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 2px 4px rgba(0,0,0,.15), 0 8px 24px rgba(0,0,0,.12)}
 .stat-label{font-size:11px;color:var(--t2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
 .stat-val{font-size:24px;font-weight:800}
-.card{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:20px;margin-bottom:16px}
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px;margin-bottom:16px;backdrop-filter:blur(24px) saturate(1.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 2px 4px rgba(0,0,0,.15), 0 8px 24px rgba(0,0,0,.12)}
 .card h3{font-size:14px;font-weight:700;margin-bottom:12px}
 table{width:100%;border-collapse:collapse}
-th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--brd)}
+th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid rgba(255,255,255,.06)}
 td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04)}
 .badge{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:600}
-.badge-indigo{background:rgba(99,102,241,.15);color:#818cf8}
-.badge-green{background:rgba(16,185,129,.15);color:#10b981}
-.badge-yellow{background:rgba(245,158,11,.15);color:#f59e0b}
-.badge-red{background:rgba(239,68,68,.15);color:#ef4444}
+.badge-indigo{background:rgba(10,132,255,.15);color:#3a9fff;box-shadow:0 0 8px rgba(10,132,255,.2)}
+.badge-green{background:rgba(48,209,152,.15);color:#30d158;box-shadow:0 0 8px rgba(48,209,152,.2)}
+.badge-yellow{background:rgba(255,214,10,.15);color:#ffd60a;box-shadow:0 0 8px rgba(255,214,10,.2)}
+.badge-red{background:rgba(255,69,58,.15);color:#ff453a;box-shadow:0 0 8px rgba(255,69,58,.2)}
 .btn{padding:6px 14px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
 .btn:hover{opacity:.85}
-.btn-primary{background:var(--acc);color:#fff}
-.btn-danger{background:var(--red);color:#fff}
-.btn-ghost{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid var(--brd)}
-.search-box{padding:8px 14px;background:var(--bg);border:1px solid var(--brd);border-radius:8px;color:var(--t1);font-size:13px;width:220px}
-.table-wrap{background:var(--card);border:1px solid var(--brd);border-radius:12px;overflow:hidden}
-.table-bar{padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--brd)}
+.btn-primary{background:linear-gradient(135deg, #0a84ff, #3a9fff);color:#fff;box-shadow:0 4px 12px rgba(10,132,255,.2)}
+.btn-primary:hover{box-shadow:0 6px 20px rgba(10,132,255,.35)}
+.btn-danger{background:linear-gradient(135deg, #ff453a, #ff6b5a);color:#fff;box-shadow:0 4px 12px rgba(255,69,58,.2)}
+.btn-danger:hover{box-shadow:0 6px 20px rgba(255,69,58,.35)}
+.btn-ghost{background:rgba(255,255,255,.06);color:var(--t2);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px)}
+.search-box{padding:8px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--t1);font-size:13px;width:220px;backdrop-filter:blur(12px)}
+.search-box:focus{outline:none;border-color:rgba(10,132,255,.3);box-shadow:0 0 0 2px rgba(10,132,255,.1)}
+.table-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;backdrop-filter:blur(24px) saturate(1.4)}
+.table-bar{padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.06)}
 .table-bar h3{font-size:14px;font-weight:700}
 .empty-msg{text-align:center;padding:40px;color:var(--t3);font-size:13px}
 
@@ -89,9 +92,9 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 
 /* Lead Panel */
 #lead-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;backdrop-filter:blur(2px)}
-#lead-panel{position:fixed;top:0;right:0;width:520px;max-width:100vw;height:100vh;background:var(--bg);border-left:1px solid rgba(99,102,241,.3);z-index:9999;overflow-y:auto;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-12px 0 40px rgba(0,0,0,.6);display:flex;flex-direction:column}
-.lp-header{padding:20px 24px;border-bottom:1px solid var(--brd);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(16,185,129,.05))}
-.lp-tabs{display:flex;border-bottom:1px solid var(--brd);flex-shrink:0}
+#lead-panel{position:fixed;top:0;right:0;width:520px;max-width:100vw;height:100vh;background:rgba(14,14,22,.88);border-left:1px solid rgba(10,132,255,.2);z-index:9999;overflow-y:auto;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-12px 0 40px rgba(0,0,0,.6);display:flex;flex-direction:column;backdrop-filter:blur(40px)}
+.lp-header{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;background:linear-gradient(135deg,rgba(10,132,255,.08),rgba(48,209,152,.04))}
+.lp-tabs{display:flex;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0}
 .lp-tab{flex:1;padding:10px;font-size:12px;font-weight:600;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--t3);cursor:pointer}
 .lp-tab.active{color:var(--acc);border-bottom-color:var(--acc)}
 .lp-tab-content{display:none;padding:20px 24px;flex:1}
@@ -100,18 +103,18 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 .lp-field-label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
 
 /* User Panel */
-#user-panel{position:fixed;top:0;right:0;width:400px;max-width:100vw;height:100vh;background:var(--bg);border-left:1px solid var(--brd);z-index:9998;transform:translateX(100%);transition:transform .28s ease;overflow-y:auto;box-shadow:-8px 0 30px rgba(0,0,0,.4)}
+#user-panel{position:fixed;top:0;right:0;width:400px;max-width:100vw;height:100vh;background:rgba(14,14,22,.88);border-left:1px solid rgba(255,255,255,.08);z-index:9998;transform:translateX(100%);transition:transform .28s ease;overflow-y:auto;box-shadow:-8px 0 30px rgba(0,0,0,.4);backdrop-filter:blur(40px)}
 
 /* Kanban */
 .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.kanban-col{background:var(--bg2);border:1px solid var(--brd);border-radius:10px;padding:12px;min-height:300px}
+.kanban-col{background:rgba(14,14,22,.6);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;min-height:300px;backdrop-filter:blur(20px)}
 .kanban-col h4{font-size:12px;font-weight:700;color:var(--t2);text-transform:uppercase;margin-bottom:10px;letter-spacing:.04em}
-.kanban-card{background:var(--card);border:1px solid var(--brd);border-radius:8px;padding:12px;margin-bottom:8px}
+.kanban-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;margin-bottom:8px;backdrop-filter:blur(20px)}
 .kanban-card .name{font-size:13px;font-weight:600;color:var(--t1)}
 .kanban-card .meta{font-size:11px;color:var(--t2);margin-top:4px}
 
 /* Loading skeleton */
-.skeleton{background:linear-gradient(90deg,var(--brd) 25%,rgba(99,102,241,.1) 50%,var(--brd) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;display:inline-block;min-width:40px;color:transparent}
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,.07) 25%,rgba(10,132,255,.1) 50%,rgba(255,255,255,.07) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;display:inline-block;min-width:40px;color:transparent}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 /* Fade in */
 .page{animation:fadeIn .25s ease}
@@ -121,9 +124,10 @@ td{padding:10px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04
 .stat:hover{border-color:var(--acc);transform:translateY(-2px)}
 /* Card hover */
 .card{transition:border-color .2s}
-.card:hover{border-color:rgba(99,102,241,.2)}
+.card:hover{border-color:rgba(10,132,255,.2)}
 /* Table row highlight */
 tr{transition:background .15s}
+tbody tr:hover{background:rgba(255,255,255,.02)}
 /* Kanban card hover */
 .kanban-card{transition:transform .15s,border-color .15s;cursor:pointer}
 .kanban-card:hover{transform:translateY(-2px);border-color:var(--acc)}
@@ -135,17 +139,15 @@ tr{transition:background .15s}
 .btn:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .btn:active{transform:translateY(0)}
 /* Badge glow for hot scores */
-.badge-hot{background:rgba(16,185,129,.15);color:#10b981;box-shadow:0 0 8px rgba(16,185,129,.2)}
-/* Table row hover */
-tbody tr:hover{background:rgba(99,102,241,.04)}
+.badge-hot{background:rgba(48,209,152,.15);color:#30d158;box-shadow:0 0 8px rgba(48,209,152,.3)}
 /* Progress bar animation */
 @keyframes growBar{from{width:0}to{width:var(--w)}}
 .bar-anim{animation:growBar .6s ease-out forwards}
 /* Scrollbar styling */
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--brd);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:rgba(99,102,241,.3)}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.12)}
 
 @media(max-width:768px){
   .sidebar{position:fixed;left:-220px;z-index:999;height:100%;transition:left .2s}
@@ -1009,7 +1011,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
       <div class="lp-field" style="border-left:3px solid #1877F2;cursor:pointer" onclick="previewFile('fb_features','📘 Facebook Features Ad','1200x628 — Feature showcase for Facebook feed. Portfolio tracking, AI signals, risk management.')"><div style="font-size:12px;font-weight:700">📘 Facebook Features Ad</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1200x628 — Click to preview</div></div>
       <div class="lp-field" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ig_test','📸 Instagram Testimonial','1080x1080 — Social proof ad with 5-star rating and user quote.')"><div style="font-size:12px;font-weight:700">📸 Testimonial Post</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
       <div class="lp-field" style="border-left:3px solid #E1306C;cursor:pointer" onclick="previewFile('ig_car','📸 Carousel Slide 1','1080x1080 — 5 Reasons Traders Love TradeCommand Pro.')"><div style="font-size:12px;font-weight:700">📸 Carousel Slide 1</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
-      <div class="lp-field" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('spon','💎 Sponsored Post','1080x1080 — Dashboard mockup for paid promo.')"><div style="font-size:12px;font-weight:700">💎 Sponsored Post</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #0a84ff;cursor:pointer" onclick="previewFile('spon','💎 Sponsored Post','1080x1080 — Dashboard mockup for paid promo.')"><div style="font-size:12px;font-weight:700">💎 Sponsored Post</div><div style="font-size:11px;color:var(--t3);margin-top:4px">1080x1080 — Click to preview</div></div>
     </div>
   </div>
 
@@ -1018,9 +1020,9 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <h3>🖨️ Print Materials</h3>
     <p style="color:var(--t2);font-size:12px;margin-bottom:16px">Click to preview. Print-ready files in your Files section.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">
-      <div class="lp-field" style="border-left:3px solid #10b981;cursor:pointer" onclick="previewFile('uni_fly','🎓 University Flyer','8.5×11 inch — Dark gradient, QR code, tear-off tabs. FREE for Students headline.')"><div style="font-size:12px;font-weight:700">🎓 University Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:4px">8.5×11" tear-off — Click to preview</div></div>
-      <div class="lp-field" style="border-left:3px solid #f59e0b;cursor:pointer" onclick="previewFile('cof_fly','☕ Coffee Shop Flyer','8.5×11 inch — Professional design with plan comparison table.')"><div style="font-size:12px;font-weight:700">☕ Coffee Shop Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:4px">8.5×11" plans — Click to preview</div></div>
-      <div class="lp-field" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('biz_card','💼 Business Cards','3.5×2 inch — Front + Back. Logo, tagline, QR code, crop marks.')"><div style="font-size:12px;font-weight:700">💼 Business Cards</div><div style="font-size:11px;color:var(--t3);margin-top:4px">3.5×2" front+back — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #30d158;cursor:pointer" onclick="previewFile('uni_fly','🎓 University Flyer','8.5×11 inch — Dark gradient, QR code, tear-off tabs. FREE for Students headline.')"><div style="font-size:12px;font-weight:700">🎓 University Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:4px">8.5×11" tear-off — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #ffd60a;cursor:pointer" onclick="previewFile('cof_fly','☕ Coffee Shop Flyer','8.5×11 inch — Professional design with plan comparison table.')"><div style="font-size:12px;font-weight:700">☕ Coffee Shop Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:4px">8.5×11" plans — Click to preview</div></div>
+      <div class="lp-field" style="border-left:3px solid #0a84ff;cursor:pointer" onclick="previewFile('biz_card','💼 Business Cards','3.5×2 inch — Front + Back. Logo, tagline, QR code, crop marks.')"><div style="font-size:12px;font-weight:700">💼 Business Cards</div><div style="font-size:11px;color:var(--t3);margin-top:4px">3.5×2" front+back — Click to preview</div></div>
     </div>
   </div>
 
@@ -1095,7 +1097,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
           </div>
         </div>
 
-        <div class="lp-field" style="border-left:3px solid #10b981;cursor:pointer" onclick="openCampaign('campus_blitz')">
+        <div class="lp-field" style="border-left:3px solid #30d158;cursor:pointer" onclick="openCampaign('campus_blitz')">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div><div style="font-size:13px;font-weight:700">🎓 Campus Blitz</div><div style="font-size:11px;color:var(--t3);margin-top:2px">University flyers, finance club demos, professor outreach</div></div>
             <div style="text-align:right"><span class="badge badge-yellow" style="font-size:10px">Ready</span><div style="font-size:11px;color:var(--t3);margin-top:4px">30 flyers to print</div></div>
@@ -1256,7 +1258,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         </div>
       </div>
 
-      <div class="lp-field" style="border-left:3px solid #6366f1;cursor:pointer" onclick="toggleGrowthPhase('gp3')">
+      <div class="lp-field" style="border-left:3px solid #0a84ff;cursor:pointer" onclick="toggleGrowthPhase('gp3')">
         <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;font-size:14px">Q3: Scale</span><div style="display:flex;align-items:center;gap:8px"><span class="badge badge-indigo">Upcoming</span><span style="font-size:10px;color:var(--t3)" id="gp3-pct">0/12</span><span style="color:var(--t3);font-size:14px" id="gp3-arrow">▸</span></div></div>
         <div style="font-size:11px;color:var(--t3);margin-top:2px">Jul 1 – Sep 30, 2026</div>
         <div style="font-size:12px;color:var(--t2);margin-top:4px">500+ users → $5K MRR → Mobile app → API integrations → Content marketing</div>
@@ -1423,8 +1425,8 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">📸 Carousel Slide 1</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1080 · Carousel</div></div><span class="badge" style="font-size:9px;background:rgba(225,48,108,.15);color:#E1306C">IG</span></div>
         <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_instagram_carousel_1.html</div>
       </div>
-      <div class="lp-field file-card" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('ad_sponsored_post','💎 Sponsored Post','1080x1080 — Dashboard mockup sponsored post for paid promotion on IG/FB.')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">💎 Sponsored Post</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1080 · Paid Promo</div></div><span class="badge" style="font-size:9px;background:rgba(99,102,241,.15);color:#6366f1">AD</span></div>
+      <div class="lp-field file-card" style="border-left:3px solid #0a84ff;cursor:pointer" onclick="previewFile('ad_sponsored_post','💎 Sponsored Post','1080x1080 — Dashboard mockup sponsored post for paid promotion on IG/FB.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">💎 Sponsored Post</div><div style="font-size:11px;color:var(--t3);margin-top:2px">1080×1080 · Paid Promo</div></div><span class="badge" style="font-size:9px;background:rgba(10,132,255,.15);color:#0a84ff">AD</span></div>
         <div style="font-size:11px;color:var(--acc);margin-top:6px">ad_sponsored_post.html</div>
       </div>
     </div>
@@ -1434,16 +1436,16 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="card">
     <h3>🖨️ Print Materials</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px">
-      <div class="lp-field file-card" style="border-left:3px solid #10b981;cursor:pointer" onclick="previewFile('flyer_university','🎓 University Flyer','8.5×11 inch — Dark gradient design with QR code, tear-off tabs at bottom. Headline: FREE for Students. Lists features and $0/mo student pricing.')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🎓 University Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">8.5×11" · Tear-off tabs</div></div><span class="badge" style="font-size:9px;background:rgba(16,185,129,.15);color:#10b981">PRINT</span></div>
+      <div class="lp-field file-card" style="border-left:3px solid #30d158;cursor:pointer" onclick="previewFile('flyer_university','🎓 University Flyer','8.5×11 inch — Dark gradient design with QR code, tear-off tabs at bottom. Headline: FREE for Students. Lists features and $0/mo student pricing.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🎓 University Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">8.5×11" · Tear-off tabs</div></div><span class="badge" style="font-size:9px;background:rgba(48,209,152,.15);color:#30d158">PRINT</span></div>
         <div style="font-size:11px;color:var(--acc);margin-top:6px">flyer_university.html</div>
       </div>
-      <div class="lp-field file-card" style="border-left:3px solid #f59e0b;cursor:pointer" onclick="previewFile('flyer_coffeeshop','☕ Coffee Shop Flyer','8.5×11 inch — Professional design with plan comparison table (Free/Pro/Elite). Targeting young professionals in coffee shops near financial district.')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">☕ Coffee Shop Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">8.5×11" · Plans comparison</div></div><span class="badge" style="font-size:9px;background:rgba(245,158,11,.15);color:#f59e0b">PRINT</span></div>
+      <div class="lp-field file-card" style="border-left:3px solid #ffd60a;cursor:pointer" onclick="previewFile('flyer_coffeeshop','☕ Coffee Shop Flyer','8.5×11 inch — Professional design with plan comparison table (Free/Pro/Elite). Targeting young professionals in coffee shops near financial district.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">☕ Coffee Shop Flyer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">8.5×11" · Plans comparison</div></div><span class="badge" style="font-size:9px;background:rgba(255,214,10,.15);color:#ffd60a">PRINT</span></div>
         <div style="font-size:11px;color:var(--acc);margin-top:6px">flyer_coffeeshop.html</div>
       </div>
-      <div class="lp-field file-card" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('business_card','💼 Business Cards','3.5×2 inch — Front: logo + tagline + name/title. Back: QR code + feature list. Crop marks included for professional printing.')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">💼 Business Cards</div><div style="font-size:11px;color:var(--t3);margin-top:2px">3.5×2" · Front + Back</div></div><span class="badge" style="font-size:9px;background:rgba(99,102,241,.15);color:#6366f1">PRINT</span></div>
+      <div class="lp-field file-card" style="border-left:3px solid #0a84ff;cursor:pointer" onclick="previewFile('business_card','💼 Business Cards','3.5×2 inch — Front: logo + tagline + name/title. Back: QR code + feature list. Crop marks included for professional printing.')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">💼 Business Cards</div><div style="font-size:11px;color:var(--t3);margin-top:2px">3.5×2" · Front + Back</div></div><span class="badge" style="font-size:9px;background:rgba(10,132,255,.15);color:#0a84ff">PRINT</span></div>
         <div style="font-size:11px;color:var(--acc);margin-top:6px">business_card.html</div>
       </div>
     </div>
@@ -1465,7 +1467,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🎓 Student Offer</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Promo · Campus leads</div></div><span class="badge" style="font-size:9px;background:rgba(156,39,176,.15);color:#ce93d8">EMAIL</span></div>
         <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_03_student_offer.html</div>
       </div>
-      <div class="lp-field file-card" style="border-left:3px solid #6366f1;cursor:pointer" onclick="previewFile('newsletter_update','🚀 Product Update v2.5','New features: lead filtering, marketing page, follow-up system. Full changelog with colored dots. Roadmap preview of upcoming features. Interactive feature preview mockup.')">
+      <div class="lp-field file-card" style="border-left:3px solid #0a84ff;cursor:pointer" onclick="previewFile('newsletter_update','🚀 Product Update v2.5','New features: lead filtering, marketing page, follow-up system. Full changelog with colored dots. Roadmap preview of upcoming features. Interactive feature preview mockup.')">
         <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:13px;font-weight:700">🚀 Product Update</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Product · After each release</div></div><span class="badge badge-indigo" style="font-size:9px">EMAIL</span></div>
         <div style="font-size:11px;color:var(--acc);margin-top:6px">newsletter_04_product_update.html</div>
       </div>
@@ -1557,7 +1559,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <h3>📊 Progress to 50</h3>
     <div style="margin-top:12px;display:flex;align-items:center;gap:12px">
       <div style="flex:1;background:rgba(255,255,255,.06);border-radius:8px;height:24px;overflow:hidden">
-        <div id="beta-bar" style="height:100%;background:linear-gradient(90deg,#6366f1,#00e676);border-radius:8px;transition:width .5s;width:0%"></div>
+        <div id="beta-bar" style="height:100%;background:linear-gradient(90deg,#0a84ff,#00e676);border-radius:8px;transition:width .5s;width:0%"></div>
       </div>
       <span id="beta-pct" style="font-size:14px;font-weight:700;color:var(--acc)">0%</span>
     </div>
@@ -1572,7 +1574,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <h3>🎯 Channel Targets</h3>
     <p style="color:var(--t2);font-size:12px;margin-bottom:12px">Track reach-outs and sign-ups by channel. Signups update automatically when you log them in the beta tracker above.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px" id="beta-channels">
-      <div class="lp-field" style="border-left:3px solid #6366f1">
+      <div class="lp-field" style="border-left:3px solid #0a84ff">
         <div style="font-size:13px;font-weight:700;margin-bottom:6px">🤝 Friends &amp; Family</div>
         <div style="display:flex;gap:16px;align-items:center">
           <div style="text-align:center"><div style="font-size:10px;color:var(--t3);margin-bottom:2px">REACHED OUT</div><div style="display:flex;align-items:center;gap:4px"><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('friends',-1)">−</button><span id="ch-friends-reach" style="font-size:16px;font-weight:800;color:var(--ylw)">0</span><button class="btn btn-ghost" style="padding:1px 6px;font-size:12px" onclick="bumpChannelReach('friends',1)">+</button></div></div>
@@ -1709,7 +1711,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         </div>
       </div>
 
-      <div class="lp-field" style="border-left:3px solid #6366f1">
+      <div class="lp-field" style="border-left:3px solid #0a84ff">
         <div style="display:flex;justify-content:space-between;align-items:flex-start">
           <div>
             <div style="font-size:13px;font-weight:700">🚀 Product Update (v2.5)</div>
@@ -1770,7 +1772,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         <div style="font-size:12px;font-weight:700">Step 3: Weekly Signals</div>
         <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: First Monday after signup — recurring weekly</div>
       </div>
-      <div class="lp-field" style="border-left:3px solid #6366f1">
+      <div class="lp-field" style="border-left:3px solid #0a84ff">
         <div style="font-size:12px;font-weight:700">Step 4: Product Update</div>
         <div style="font-size:11px;color:var(--t2);margin-top:2px">Trigger: After each release — keep users informed</div>
       </div>
@@ -1795,7 +1797,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
   <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:var(--acc)" id="sm-followers">0</div><div style="font-size:11px;color:var(--t3)">Instagram Followers</div></div>
   <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:#22c55e" id="sm-engagement">0%</div><div style="font-size:11px;color:var(--t3)">Engagement Rate</div></div>
   <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:#3b82f6" id="sm-posts-count">0</div><div style="font-size:11px;color:var(--t3)">Posts Published</div></div>
-  <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:#f59e0b" id="sm-clicks">0</div><div style="font-size:11px;color:var(--t3)">Link Clicks</div></div>
+  <div class="card" style="text-align:center"><div style="font-size:24px;font-weight:800;color:#ffd60a" id="sm-clicks">0</div><div style="font-size:11px;color:var(--t3)">Link Clicks</div></div>
 </div>
 
 <!-- Campaign Progress -->
@@ -1805,9 +1807,9 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
     <span class="badge" style="background:rgba(34,197,94,.15);color:#22c55e" id="sm-week-badge">Week 1</span>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
-    <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Follower Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#6366f1,#3b82f6);width:0%;transition:width .5s" id="sm-follow-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-follow-pct">0</span>% of 5,000</div></div>
+    <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Follower Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#0a84ff,#3b82f6);width:0%;transition:width .5s" id="sm-follow-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-follow-pct">0</span>% of 5,000</div></div>
     <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Trial Signups Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#22c55e,#06b6d4);width:0%;transition:width .5s" id="sm-trial-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-trial-pct">0</span>% of 800</div></div>
-    <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Website Traffic Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#f59e0b,#ef4444);width:0%;transition:width .5s" id="sm-traffic-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-traffic-pct">0</span>% of 3,000</div></div>
+    <div><div style="font-size:11px;color:var(--t3);margin-bottom:4px">Website Traffic Goal</div><div style="background:var(--bg);border-radius:8px;height:8px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#ffd60a,#ff453a);width:0%;transition:width .5s" id="sm-traffic-bar"></div></div><div style="font-size:10px;color:var(--t2);margin-top:2px"><span id="sm-traffic-pct">0</span>% of 3,000</div></div>
   </div>
 </div>
 
@@ -1889,7 +1891,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
 <div class="card sm-panel" id="sm-strategy" style="display:none">
   <h3 style="margin-bottom:16px">Growth & Engagement Strategy</h3>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
-    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #6366f1">
+    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #0a84ff">
       <h4 style="font-size:13px;margin-bottom:8px">Organic Growth</h4>
       <ul style="font-size:12px;color:var(--t2);line-height:1.8;padding-left:16px">
         <li>Comment on 10-15 relevant trading posts daily</li>
@@ -1909,7 +1911,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         <li>Feature community wins in social proof posts</li>
       </ul>
     </div>
-    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #f59e0b">
+    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #ffd60a">
       <h4 style="font-size:13px;margin-bottom:8px">Paid Amplification</h4>
       <ul style="font-size:12px;color:var(--t2);line-height:1.8;padding-left:16px">
         <li>Week 2: $50/week testing top 2 posts from Week 1</li>
@@ -1919,7 +1921,7 @@ tbody tr:hover{background:rgba(99,102,241,.04)}
         <li>Refresh creative every 2-4 weeks</li>
       </ul>
     </div>
-    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #ef4444">
+    <div style="padding:14px;background:var(--bg);border-radius:10px;border-left:3px solid #ff453a">
       <h4 style="font-size:13px;margin-bottom:8px">Cross-Promotion</h4>
       <ul style="font-size:12px;color:var(--t2);line-height:1.8;padding-left:16px">
         <li>Repurpose Reels to TikTok (same format)</li>
@@ -2353,7 +2355,7 @@ function renderUsers(users) {
   if (!users.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">No users found</td></tr>'; return; }
   tbody.innerHTML = users.map(function(u) {
     var planBadge = u.plan==='elite'?'badge-green':u.plan==='pro'?'badge-indigo':'badge-yellow';
-    return '<tr data-uid="'+u.id+'" onclick="openUserModal(\''+u.id+'\')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'rgba(99,102,241,.06)\'" onmouseout="this.style.background=\'\'">'+
+    return '<tr data-uid="'+u.id+'" onclick="openUserModal(\''+u.id+'\')" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'rgba(10,132,255,.06)\'" onmouseout="this.style.background=\'\'">'+
       '<td style="font-size:13px">'+(u.email||'\u2014')+'</td>'+
       '<td style="font-size:13px;color:var(--t2)">'+(u.displayName||u.name||'\u2014')+'</td>'+
       '<td><span class="badge '+planBadge+'">'+(u.plan||'free')+'</span></td>'+
@@ -2951,7 +2953,7 @@ function loadBizDash() {
   var funnel = document.getElementById('bd-funnel');
   var stages = [
     {l:'New',n:statuses.new,c:'var(--acc)'},{l:'Contacted',n:statuses.contacted,c:'var(--ylw)'},
-    {l:'Interested',n:statuses.interested,c:'var(--grn)'},{l:'Converted',n:statuses.converted,c:'#10b981'}
+    {l:'Interested',n:statuses.interested,c:'var(--grn)'},{l:'Converted',n:statuses.converted,c:'#30d158'}
   ];
   var maxN = Math.max.apply(null, stages.map(function(x){return x.n;}))||1;
   funnel.innerHTML = stages.map(function(st){
@@ -2977,7 +2979,7 @@ function loadBizDash() {
   var top5 = (window._allLeads||SEED_LEADS).filter(function(l){return l.score>=80;}).slice(0,8);
   document.getElementById('bd-top-leads').innerHTML = top5.map(function(l,i){
     var lid = l.id||('seed_'+i);
-    return '<tr onclick="openLeadPanel(\''+lid+'\')" style="cursor:pointer" onmouseover="this.style.background=\'rgba(99,102,241,.06)\'" onmouseout="this.style.background=\'\'">'+
+    return '<tr onclick="openLeadPanel(\''+lid+'\')" style="cursor:pointer" onmouseover="this.style.background=\'rgba(10,132,255,.06)\'" onmouseout="this.style.background=\'\'">'+
       '<td style="font-weight:600;font-size:13px">'+(l.name||'')+'</td>'+
       '<td><span style="font-weight:700;color:var(--grn)">'+(l.score||0)+'</span></td>'+
       '<td style="font-size:12px;color:var(--t2)">'+(l.type||'')+'</td>'+
@@ -3880,11 +3882,11 @@ function smRenderCal(week) {
     var saved = JSON.parse(localStorage.getItem('tc_sm_cal_status')||'{}');
     var key = week+'-'+r.day+'-'+r.topic;
     var st = saved[key]||r.status;
-    var colors = {draft:'rgba(245,158,11,.15);color:#f59e0b',published:'rgba(34,197,94,.15);color:#22c55e',planned:'rgba(99,102,241,.15);color:#6366f1',scheduled:'rgba(59,130,246,.15);color:#3b82f6'};
-    var typeColors = {Post:'#3b82f6',Reel:'#ef4444',Carousel:'#f59e0b',Stories:'#a855f7',Theme:'#6366f1'};
+    var colors = {draft:'rgba(255,214,10,.15);color:#ffd60a',published:'rgba(34,197,94,.15);color:#22c55e',planned:'rgba(10,132,255,.15);color:#0a84ff',scheduled:'rgba(59,130,246,.15);color:#3b82f6'};
+    var typeColors = {Post:'#3b82f6',Reel:'#ff453a',Carousel:'#ffd60a',Stories:'#a855f7',Theme:'#0a84ff'};
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,.04)">';
     html += '<td style="padding:10px 8px;font-weight:600;white-space:nowrap">'+r.day+'</td>';
-    html += '<td style="padding:10px 8px"><span style="background:'+(typeColors[r.type]||'#6366f1')+';color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600">'+r.type+'</span></td>';
+    html += '<td style="padding:10px 8px"><span style="background:'+(typeColors[r.type]||'#0a84ff')+';color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600">'+r.type+'</span></td>';
     html += '<td style="padding:10px 8px;max-width:300px">'+r.topic+'</td>';
     html += '<td style="padding:10px 8px;color:var(--t2);font-size:11px">'+r.cta+'</td>';
     html += '<td style="padding:10px 8px;text-align:center"><select onchange="smSaveStatus(\''+week+'\',\''+key.replace(/'/g,"\\'")+'\',this.value)" style="background:'+colors[st].split(';')[0]+';'+colors[st].split(';')[1]+';border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:600;cursor:pointer">';
@@ -3919,10 +3921,10 @@ function smRenderPosts() {
 function smRenderReels() {
   var html = '';
   smReels.forEach(function(r){
-    html += '<div style="background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid #ef4444">';
+    html += '<div style="background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid #ff453a">';
     html += '<div style="display:flex;justify-content:space-between;align-items:flex-start">';
     html += '<div><div style="font-weight:700;font-size:13px">#'+r.id+' '+r.title+'</div>';
-    html += '<div style="font-size:11px;color:#ef4444;margin-top:4px;font-style:italic">Hook: "'+r.hook+'"</div></div>';
+    html += '<div style="font-size:11px;color:#ff453a;margin-top:4px;font-style:italic">Hook: "'+r.hook+'"</div></div>';
     html += '<span style="font-size:10px;color:var(--t3);white-space:nowrap">'+r.audio+'</span></div>';
     html += '<div style="font-size:12px;color:var(--t2);margin-top:8px;line-height:1.5">'+r.outline+'</div>';
     html += '<div style="margin-top:8px;font-size:11px;color:var(--acc)">CTA: '+r.cta+'</div></div>';
@@ -3932,7 +3934,7 @@ function smRenderReels() {
 
 function smRenderStories() {
   var html = '';
-  var colors = ['#6366f1','#22c55e','#f59e0b','#3b82f6','#a855f7'];
+  var colors = ['#0a84ff','#22c55e','#ffd60a','#3b82f6','#a855f7'];
   smStories.forEach(function(s,i){
     html += '<div style="background:var(--bg);border-radius:10px;padding:14px;border-left:3px solid '+colors[i%5]+'">';
     html += '<div style="font-weight:700;font-size:13px;margin-bottom:6px">'+s.title+'</div>';
@@ -3946,7 +3948,7 @@ function smRenderStories() {
 function smRenderHashtags() {
   var bHtml = '';
   smBrandedTags.forEach(function(t){
-    bHtml += '<span style="background:rgba(99,102,241,.15);color:#6366f1;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="navigator.clipboard.writeText(\''+t+'\');toast(\'Copied!\',\'grn\')">'+t+'</span>';
+    bHtml += '<span style="background:rgba(10,132,255,.15);color:#0a84ff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="navigator.clipboard.writeText(\''+t+'\');toast(\'Copied!\',\'grn\')">'+t+'</span>';
   });
   document.getElementById('sm-branded-tags').innerHTML = bHtml;
   var cHtml = '';
@@ -4663,7 +4665,7 @@ function aiAdvise(q) {
       '4. Export leads to CSV for offline follow-up';
   }
 
-  chat.innerHTML = '<div style="margin-bottom:12px;padding:10px 14px;background:rgba(99,102,241,.1);border-radius:8px;color:var(--acc);font-weight:600">You: '+q+'</div>'+
+  chat.innerHTML = '<div style="margin-bottom:12px;padding:10px 14px;background:rgba(10,132,255,.1);border-radius:8px;color:var(--acc);font-weight:600">You: '+q+'</div>'+
     '<div style="white-space:pre-line;line-height:1.7;padding:12px 14px;background:rgba(255,255,255,.03);border-radius:8px;border-left:3px solid var(--acc)">'+answer+'</div>';
   document.getElementById('ai-input').value = '';
 }
@@ -4717,7 +4719,7 @@ function renderLeadsTable(leads) {
   var tbody = document.getElementById('leads-tbody');
   if (!tbody) return;
   if (!leads||!leads.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty-msg">No leads match your filters</td></tr>'; return; }
-  var sc = function(s){return s>=80?'#10b981':s>=50?'#f59e0b':'#ef4444';};
+  var sc = function(s){return s>=80?'#30d158':s>=50?'#ffd60a':'#ff453a';};
   var chIcon = function(ch){
     var map = {LinkedIn:'🔗',Email:'📧','Twitter':'🐦',Reddit:'🟠',Instagram:'📸',Discord:'💬',University:'🏫','Cold Call':'📞',Referral:'🤝'};
     return map[ch]||'📨';
@@ -4731,14 +4733,14 @@ function renderLeadsTable(leads) {
     var tier = typeof getTier==='function'?getTier(lead):'?';
     var cb=[];if(lead.email)cb.push('📧');if(lead.phone)cb.push('📱');if(lead.instagram)cb.push('📸');if(lead.linkedIn)cb.push('🔗');
     var cs=cb.length?'<div style="font-size:10px;margin-top:2px">'+cb.join(' ')+'</div>':'';
-    return '<tr data-id="'+id+'" onclick="openLeadPanel(\''+id+'\')" style="border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'rgba(99,102,241,.08)\'" onmouseout="this.style.background=\'\'">'+
+    return '<tr data-id="'+id+'" onclick="openLeadPanel(\''+id+'\')" style="border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .15s" onmouseover="this.style.background=\'rgba(10,132,255,.08)\'" onmouseout="this.style.background=\'\'">'+
       '<td style="padding:10px 12px;text-align:center;font-size:14px" title="Tier '+tier+'">'+tierIcon(tier)+'</td>'+
       '<td style="padding:10px 12px"><span style="font-weight:700;color:'+sc(lead.score||0)+';font-size:15px">'+(lead.score||0)+'</span></td>'+
       '<td style="padding:10px 12px"><div style="font-size:13px;color:#f1f5f9;font-weight:600">'+(lead.name||'\u2014')+'</div><div style="font-size:11px;color:#64748b;margin-top:2px">'+(lead.location||'')+'</div>'+cs+'</td>'+
       '<td style="padding:10px 12px;font-size:12px;color:#94a3b8">'+(lead.role||lead.company||'\u2014')+'</td>'+
       '<td style="padding:10px 12px"><span class="badge '+stBadge+'">'+st+'</span></td>'+
       '<td style="padding:10px 12px;font-size:11px;color:#64748b">'+(lead.type||'\u2014')+'</td>'+
-      '<td style="padding:10px 12px"><button onclick="event.stopPropagation();openLeadPanel(\''+id+'\')" style="background:#6366f1;color:#fff;border:none;border-radius:5px;padding:4px 12px;font-size:11px;cursor:pointer">Open \u2192</button></td>'+
+      '<td style="padding:10px 12px"><button onclick="event.stopPropagation();openLeadPanel(\''+id+'\')" style="background:#0a84ff;color:#fff;border:none;border-radius:5px;padding:4px 12px;font-size:11px;cursor:pointer">Open \u2192</button></td>'+
     '</tr>';
   }).join('');
 }
@@ -4848,7 +4850,7 @@ function openLeadPanel(id) {
   currentLead = id;
 
   // Header
-  const sc = s => s>=80?'#10b981':s>=50?'#f59e0b':'#ef4444';
+  const sc = s => s>=80?'#30d158':s>=50?'#ffd60a':'#ff453a';
   document.getElementById('lp-score').innerHTML = '<span style="color:'+sc(lead.score||0)+'">'+(lead.score||0)+'</span>';
   document.getElementById('lp-name').textContent = lead.name || '';
   document.getElementById('lp-role').textContent = (lead.role||'') + (lead.company ? ' · '+lead.company : '');
@@ -4873,9 +4875,9 @@ function openLeadPanel(id) {
   var tierLabels = {'1':'🔥 Tier 1 — Friends & Family','2':'⚡ Tier 2 — Acquaintances','3':'🌐 Tier 3 — Network','prospect':'🎯 Prospect'};
   document.getElementById('lp-tier').textContent = tierLabels[tier]||tier;
   document.getElementById('lp-source').textContent = lead.source || '—';
-  document.getElementById('lp-email').innerHTML = lead.email ? '<a href="mailto:'+lead.email+'" style="color:#6366f1">'+lead.email+'</a>' : '—';
-  document.getElementById('lp-phone').innerHTML = lead.phone ? '<a href="tel:'+lead.phone+'" style="color:#6366f1">'+lead.phone+'</a>' : '—';
-  document.getElementById('lp-insta').innerHTML = lead.instagram ? '<a href="https://instagram.com/'+lead.instagram.replace('@','')+'" target="_blank" style="color:#6366f1">'+lead.instagram+'</a>' : '—';
+  document.getElementById('lp-email').innerHTML = lead.email ? '<a href="mailto:'+lead.email+'" style="color:#0a84ff">'+lead.email+'</a>' : '—';
+  document.getElementById('lp-phone').innerHTML = lead.phone ? '<a href="tel:'+lead.phone+'" style="color:#0a84ff">'+lead.phone+'</a>' : '—';
+  document.getElementById('lp-insta').innerHTML = lead.instagram ? '<a href="https://instagram.com/'+lead.instagram.replace('@','')+'" target="_blank" style="color:#0a84ff">'+lead.instagram+'</a>' : '—';
   document.getElementById('lp-tmpl').textContent = lead.template || '—';
   document.getElementById('lp-date').value = lead.outreachDate || '';
   document.getElementById('lp-reply').value = lead.reply || '';
@@ -5017,7 +5019,7 @@ function renderFollowups(id) {
     var statusBadge = sent ?
       '<span class="badge badge-green">Sent '+sent+'</span>' :
       '<span class="badge badge-yellow">Day '+fu.day+'</span>';
-    return '<div class="lp-field" style="border-left:3px solid '+(sent?'#10b981':'var(--acc)')+';padding-left:12px">'+
+    return '<div class="lp-field" style="border-left:3px solid '+(sent?'#30d158':'var(--acc)')+';padding-left:12px">'+
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
         '<span style="font-size:12px;font-weight:700">Follow-up #'+(i+1)+'</span>'+statusBadge+
       '</div>'+
@@ -5092,7 +5094,7 @@ function scheduleAllFollowups() {
 function toast(msg, color) {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.style.background = color==='grn'?'#10b981':color==='red'?'#ef4444':'#6366f1';
+  el.style.background = color==='grn'?'#30d158':color==='red'?'#ff453a':'#0a84ff';
   el.style.display = 'block';
   setTimeout(()=>el.style.display='none', 2500);
 }

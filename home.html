@@ -27,26 +27,26 @@
    Dark + Minimal + Premium
    ══════════════════════════════════════════════════════════════ */
 :root {
-  --bg:     #080b12;
-  --bg2:    #0d1117;
-  --card:   #111a2e;
-  --card2:  #162036;
-  --border: #1e2d4a;
-  --t1:     #e8ecf4;
-  --t2:     #8892a4;
-  --t3:     #505a6e;
-  --accent: #3b82f6;
-  --accent2:rgba(59,130,246,.12);
-  --green:  #10b981;
-  --green2: rgba(16,185,129,.1);
-  --red:    #ef4444;
-  --red2:   rgba(239,68,68,.1);
-  --yellow: #f59e0b;
-  --yellow2:rgba(245,158,11,.1);
-  --purple: #8b5cf6;
-  --purple2:rgba(139,92,246,.1);
-  --cyan:   #06b6d4;
-  --radius: 12px;
+  --bg: #08080d;
+  --bg2: #0e0e16;
+  --card: rgba(255,255,255,.04);
+  --card2: rgba(255,255,255,.06);
+  --border: rgba(255,255,255,.07);
+  --t1: #f5f5f7;
+  --t2: #86868b;
+  --t3: #48484a;
+  --accent: #0a84ff;
+  --accent2: rgba(10,132,255,.1);
+  --green: #30d158;
+  --green2: rgba(48,209,88,.1);
+  --red: #ff453a;
+  --red2: rgba(255,69,58,.1);
+  --yellow: #ffd60a;
+  --yellow2: rgba(255,214,10,.1);
+  --purple: #bf5af2;
+  --purple2: rgba(191,90,242,.1);
+  --cyan: #64d2ff;
+  --radius: 14px;
   --sidebar-w: 64px;
   --sidebar-exp: 220px;
   --topbar-h: 56px;
@@ -58,12 +58,26 @@ body {
   background: var(--bg);
   color: var(--t1);
   -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 30%, rgba(10, 132, 255, 0.15) 0%, transparent 40%),
+              radial-gradient(circle at 80% 70%, rgba(191, 90, 242, 0.15) 0%, transparent 40%),
+              radial-gradient(circle at 50% 50%, rgba(100, 210, 255, 0.1) 0%, transparent 50%);
+  z-index: -1;
 }
 a { color: var(--accent); text-decoration: none; }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--t3); }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .08); border-radius: 3px; transition: background .2s; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, .12); }
 input, select, button { font-family: inherit; }
 .hidden { display: none !important; }
 
@@ -80,8 +94,10 @@ input, select, button { font-family: inherit; }
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
   height: 100vh;
-  background: var(--bg2);
-  border-right: 1px solid var(--border);
+  background: rgba(14, 14, 22, .88);
+  backdrop-filter: blur(40px) saturate(1.6) brightness(1.05);
+  border-right: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), inset 0 -1px 0 rgba(0, 0, 0, .3);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -111,7 +127,7 @@ input, select, button { font-family: inherit; }
   color: var(--t1);
   opacity: 0;
   transition: opacity .2s ease;
-  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  background: linear-gradient(135deg, #0a84ff, #64d2ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -134,8 +150,9 @@ input, select, button { font-family: inherit; }
 .nav-item:hover { color: var(--t2); background: rgba(255,255,255,.02); }
 .nav-item.active {
   color: var(--accent);
-  background: var(--accent2);
+  background: rgba(10, 132, 255, .1);
   border-left-color: var(--accent);
+  box-shadow: inset 0 0 12px rgba(10, 132, 255, .15);
 }
 .nav-item .icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
 .nav-item .label {
@@ -167,8 +184,10 @@ input, select, button { font-family: inherit; }
 #topbar {
   height: var(--topbar-h);
   min-height: var(--topbar-h);
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
+  background: rgba(14, 14, 22, .88);
+  backdrop-filter: blur(40px) saturate(1.6) brightness(1.05);
+  border-bottom: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), inset 0 -1px 0 rgba(0, 0, 0, .3);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -298,10 +317,17 @@ input, select, button { font-family: inherit; }
 
 /* ── CARDS ── */
 .card {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .04);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, .07);
   border-radius: var(--radius);
   padding: 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 4px 24px rgba(0, 0, 0, .15);
+  transition: all .2s ease;
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 8px 32px rgba(0, 0, 0, .25);
 }
 .card-header {
   display: flex;
@@ -334,12 +360,44 @@ input, select, button { font-family: inherit; }
   cursor: pointer;
   transition: all .15s;
 }
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: #2563eb; }
-.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--t2); }
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-.btn-success { background: var(--green); color: #fff; }
-.btn-danger { background: var(--red); color: #fff; }
+.btn-primary {
+  background: linear-gradient(135deg, #0a84ff, #3a9fff);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(10, 132, 255, 0.2);
+}
+.btn-primary:hover {
+  box-shadow: 0 8px 24px rgba(10, 132, 255, 0.4);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: rgba(255, 255, 255, .04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, .07);
+  color: var(--t2);
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 4px 16px rgba(10, 132, 255, 0.15);
+}
+.btn-success {
+  background: linear-gradient(135deg, #30d158, #52d273);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(48, 209, 88, 0.2);
+}
+.btn-success:hover {
+  box-shadow: 0 8px 24px rgba(48, 209, 88, 0.4);
+  transform: translateY(-1px);
+}
+.btn-danger {
+  background: linear-gradient(135deg, #ff453a, #ff6b5a);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(255, 69, 58, 0.2);
+}
+.btn-danger:hover {
+  box-shadow: 0 8px 24px rgba(255, 69, 58, 0.4);
+  transform: translateY(-1px);
+}
 .btn-sm { padding: 5px 10px; font-size: 11px; }
 
 /* ── GRID LAYOUTS ── */
@@ -375,15 +433,24 @@ input, select, button { font-family: inherit; }
   font-size: 13px;
   outline: none;
 }
-.watchlist-search input:focus { border-color: var(--accent); }
+.watchlist-search input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+}
 .watchlist-search button {
   padding: 10px 14px;
-  background: var(--accent);
+  background: linear-gradient(135deg, #0a84ff, #3a9fff);
   color: #fff;
   border: none;
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 4px 16px rgba(10, 132, 255, 0.2);
+  transition: all .15s ease;
+}
+.watchlist-search button:hover {
+  box-shadow: 0 8px 24px rgba(10, 132, 255, 0.4);
+  transform: translateY(-1px);
 }
 .watchlist-filters {
   display: flex;
@@ -547,10 +614,17 @@ input, select, button { font-family: inherit; }
   margin-bottom: 24px;
 }
 .summary-card {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .04);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, .07);
   border-radius: var(--radius);
   padding: 18px 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 4px 24px rgba(0, 0, 0, .15);
+  transition: all .2s ease;
+}
+.summary-card:hover {
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 8px 32px rgba(0, 0, 0, .25);
 }
 .summary-label { font-size: 11px; color: var(--t3); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
 .summary-value { font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -847,6 +921,7 @@ input, select, button { font-family: inherit; }
   inset: 0;
   z-index: 9999;
   background: var(--bg);
+  backdrop-filter: blur(40px) saturate(1.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -855,10 +930,12 @@ input, select, button { font-family: inherit; }
 .auth-box {
   max-width: 400px;
   width: 100%;
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .04);
+  backdrop-filter: blur(40px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, .07);
   border-radius: 16px;
   padding: 36px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 8px 32px rgba(0, 0, 0, .25);
 }
 .auth-header { text-align: center; margin-bottom: 28px; }
 .auth-logo { font-size: 40px; margin-bottom: 12px; }
@@ -905,11 +982,14 @@ input, select, button { font-family: inherit; }
   outline: none;
   transition: border-color .2s;
 }
-.auth-field input:focus { border-color: var(--accent); }
+.auth-field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+}
 .auth-submit {
   width: 100%;
   padding: 14px;
-  background: var(--accent);
+  background: linear-gradient(135deg, #0a84ff, #3a9fff);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -917,9 +997,13 @@ input, select, button { font-family: inherit; }
   font-weight: 700;
   cursor: pointer;
   margin-top: 8px;
-  transition: background .2s;
+  transition: all .2s;
+  box-shadow: 0 4px 16px rgba(10, 132, 255, 0.2);
 }
-.auth-submit:hover { background: #2563eb; }
+.auth-submit:hover {
+  box-shadow: 0 8px 24px rgba(10, 132, 255, 0.4);
+  transform: translateY(-1px);
+}
 .auth-google {
   width: 100%;
   padding: 12px;
@@ -956,8 +1040,8 @@ input, select, button { font-family: inherit; }
   position: fixed;
   inset: 0;
   z-index: 5000;
-  background: rgba(0,0,0,.7);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, .6);
+  backdrop-filter: blur(40px) saturate(1.6);
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -968,9 +1052,11 @@ input, select, button { font-family: inherit; }
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .04);
+  backdrop-filter: blur(40px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, .07);
   border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 8px 32px rgba(0, 0, 0, .25);
 }
 .modal-head {
   display: flex;
@@ -1572,7 +1658,10 @@ input, select, button { font-family: inherit; }
   font-size: 13px;
   outline: none;
 }
-.stg-input:focus { border-color: var(--accent); }
+.stg-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+}
 .stg-val { font-size: 13px; font-weight: 600; color: var(--t1); }
 .stg-msg { font-size: 12px; min-height: 18px; margin-top: 8px; }
 
@@ -1805,7 +1894,7 @@ input, select, button { font-family: inherit; }
             <div style="font-size:12px;color:var(--t2);line-height:1.6;max-width:500px">AI is actively monitoring your watchlist for momentum breakouts, RSI extremes, volume spikes, and trend confirmations. When a setup is found, it sizes the position and queues the trade for execution.</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
-            <button class="btn btn-primary" onclick="runBotNow()" style="font-size:14px;padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#06b6d4)">⚡ Run AI Scan Now</button>
+            <button class="btn btn-primary" onclick="runBotNow()" style="font-size:14px;padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,#0a84ff,#64d2ff)">⚡ Run AI Scan Now</button>
             <div style="font-size:10px;color:var(--t3)" id="bot-last-scan">Last scan: Never</div>
           </div>
         </div>
@@ -1828,7 +1917,7 @@ input, select, button { font-family: inherit; }
       <!-- ── STEP 1: WATCHLIST ── -->
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">1</div>
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0a84ff,#64d2ff);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">1</div>
           <div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--t1)">Your Watchlist</div><div style="font-size:11px;color:var(--t3)">Click any stock for full analysis, chart, AI summary, and trade setup.</div></div>
           <div style="display:flex;align-items:center;gap:8px">
             <div style="display:flex;align-items:center;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:4px 8px">
@@ -1880,7 +1969,7 @@ input, select, button { font-family: inherit; }
       <!-- ── STEP 2: DISCOVER STOCKS ── -->
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#a855f7);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">2</div>
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#bf5af2,#a855f7);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">2</div>
           <div><div style="font-size:15px;font-weight:800;color:var(--t1)">Discover New Opportunities</div><div style="font-size:11px;color:var(--t3)">AI-ranked stocks, ETFs, and trade ideas. Click any row to analyze, hit + to add to watchlist.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('discover')" style="margin-left:auto;font-size:11px">View Full Page &rarr;</button>
         </div>
@@ -1912,7 +2001,7 @@ input, select, button { font-family: inherit; }
       <!-- ── STEP 3: AI PREDICTIONS ── -->
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">3</div>
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ffd60a,#ff453a);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">3</div>
           <div><div style="font-size:15px;font-weight:800;color:var(--t1)">AI Predictions & Signals</div><div style="font-size:11px;color:var(--t3)">Entry/stop/target strategies generated from 8-factor analysis on your watchlist.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('predictions')" style="margin-left:auto;font-size:11px">View All &rarr;</button>
         </div>
@@ -1924,7 +2013,7 @@ input, select, button { font-family: inherit; }
       <!-- ── STEP 4: HOLDINGS ── -->
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">4</div>
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#30d158,#059669);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">4</div>
           <div><div style="font-size:15px;font-weight:800;color:var(--t1)">Your Holdings</div><div style="font-size:11px;color:var(--t3)">Active positions and P&L tracking.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('holdings')" style="margin-left:auto;font-size:11px">Manage &rarr;</button>
         </div>
@@ -1939,7 +2028,7 @@ input, select, button { font-family: inherit; }
       <!-- ── STEP 5: GAME PLAN ── -->
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#06b6d4,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">5</div>
+          <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#64d2ff,#0a84ff);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">5</div>
           <div><div style="font-size:15px;font-weight:800;color:var(--t1)">Today's Game Plan</div><div style="font-size:11px;color:var(--t3)">Your autopilot queue — trades the bot will execute when conditions are met.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('autopilot')" style="margin-left:auto;font-size:11px">Autopilot &rarr;</button>
         </div>
@@ -2084,7 +2173,7 @@ input, select, button { font-family: inherit; }
       <div class="card" style="margin-bottom:20px;border:1px solid rgba(59,130,246,.3);background:linear-gradient(135deg,rgba(59,130,246,.05),rgba(6,182,212,.03))">
         <div style="padding:20px">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:20px">🎯</div>
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#0a84ff,#64d2ff);display:flex;align-items:center;justify-content:center;font-size:20px">🎯</div>
             <div>
               <div style="font-size:18px;font-weight:800;color:var(--t1)">Goal Mode</div>
               <div style="font-size:12px;color:var(--t2)">Tell AI your capital and profit target — it builds your trade plan automatically</div>
@@ -2126,7 +2215,7 @@ input, select, button { font-family: inherit; }
                 <button class="btn btn-sm goal-risk-btn" onclick="setGoalRisk('aggressive',this)" style="flex:1;padding:10px;border:1px solid var(--border);background:transparent;color:var(--t2);border-radius:8px;cursor:pointer;font-size:12px">🔥 Aggressive<br><span style="font-size:10px;color:var(--t3)">More trades, higher upside</span></button>
               </div>
             </div>
-            <button class="btn btn-primary" onclick="launchGoalMode()" style="width:100%;padding:14px;font-size:15px;font-weight:800;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#06b6d4);border:none;cursor:pointer">⚡ Launch AI Trade Plan — Build My Portfolio</button>
+            <button class="btn btn-primary" onclick="launchGoalMode()" style="width:100%;padding:14px;font-size:15px;font-weight:800;border-radius:10px;background:linear-gradient(135deg,#0a84ff,#64d2ff);border:none;cursor:pointer">⚡ Launch AI Trade Plan — Build My Portfolio</button>
             <div style="font-size:10px;color:var(--t3);text-align:center;margin-top:8px">AI will scan 100+ stocks, find the best setups, and build a diversified plan to reach your target. Not financial advice.</div>
           </div>
 
@@ -2139,7 +2228,7 @@ input, select, button { font-family: inherit; }
                   <svg viewBox="0 0 140 140" style="transform:rotate(-90deg)">
                     <circle cx="70" cy="70" r="60" fill="none" stroke="var(--bg2)" stroke-width="10"/>
                     <circle cx="70" cy="70" r="60" fill="none" stroke="url(#goalGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="377" id="goal-progress-ring" stroke-dashoffset="377"/>
-                    <defs><linearGradient id="goalGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#3b82f6"/><stop offset="100%" style="stop-color:#10b981"/></linearGradient></defs>
+                    <defs><linearGradient id="goalGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#0a84ff"/><stop offset="100%" style="stop-color:#30d158"/></linearGradient></defs>
                   </svg>
                   <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
                     <div style="font-size:24px;font-weight:900;color:var(--t1)" id="goal-progress-pct">0%</div>
@@ -4098,9 +4187,9 @@ function modalTab(tab, btn) {
           <svg viewBox="0 0 200 120" width="200" height="120">
             <defs>
               <linearGradient id="gauge-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#ef4444"/><stop offset="25%" style="stop-color:#f97316"/>
+                <stop offset="0%" style="stop-color:#ff453a"/><stop offset="25%" style="stop-color:#f97316"/>
                 <stop offset="50%" style="stop-color:#eab308"/><stop offset="75%" style="stop-color:#4ade80"/>
-                <stop offset="100%" style="stop-color:#10b981"/>
+                <stop offset="100%" style="stop-color:#30d158"/>
               </linearGradient>
             </defs>
             <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gauge-grad)" stroke-width="12" stroke-linecap="round"/>
@@ -4653,8 +4742,8 @@ async function fetchTreasury() {
 // ═══ HEATMAP ═══
 function renderHeatmap() {
   const sectorDefs = [
-    {n:'Tech',c:'#3b82f6',full:'Technology'},{n:'Energy',c:'#f97316',full:'Energy'},{n:'Biotech',c:'#8b5cf6',full:'Biotech'},{n:'Finance',c:'#06b6d4',full:'Financials'},
-    {n:'Crypto',c:'#f59e0b',full:'Crypto / Digital'},{n:'Aerospace',c:'#ec4899',full:'Aerospace'},{n:'EV',c:'#10b981',full:'EV / Auto'},{n:'Industrials',c:'#6366f1',full:'Industrials'},
+    {n:'Tech',c:'#0a84ff',full:'Technology'},{n:'Energy',c:'#f97316',full:'Energy'},{n:'Biotech',c:'#bf5af2',full:'Biotech'},{n:'Finance',c:'#64d2ff',full:'Financials'},
+    {n:'Crypto',c:'#ffd60a',full:'Crypto / Digital'},{n:'Aerospace',c:'#ec4899',full:'Aerospace'},{n:'EV',c:'#30d158',full:'EV / Auto'},{n:'Industrials',c:'#0a84ff',full:'Industrials'},
     {n:'Consumer',c:'#14b8a6',full:'Consumer'},{n:'Healthcare',c:'#f43f5e',full:'Healthcare'},{n:'Real Estate',c:'#a855f7',full:'Real Estate'},{n:'Materials',c:'#84cc16',full:'Materials'}
   ];
   const grid = document.getElementById('heatmap-grid');
@@ -8320,13 +8409,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 <!-- Financial Disclaimer Footer -->
 <div id="financial-disclaimer" style="position:fixed;bottom:0;left:0;right:0;z-index:9998;background:rgba(15,17,25,.95);backdrop-filter:blur(8px);border-top:1px solid rgba(239,68,68,.2);padding:8px 16px;text-align:center;font-size:10px;color:rgba(255,255,255,.4);line-height:1.4">
-  TradeCommand Pro is for informational and educational purposes only. Nothing on this platform constitutes financial, investment, or trading advice. Trading involves substantial risk of loss. You are solely responsible for your own trading decisions. <a href="terms.html" style="color:#f59e0b;text-decoration:underline">Full Disclaimer</a>
+  TradeCommand Pro is for informational and educational purposes only. Nothing on this platform constitutes financial, investment, or trading advice. Trading involves substantial risk of loss. You are solely responsible for your own trading decisions. <a href="terms.html" style="color:#ffd60a;text-decoration:underline">Full Disclaimer</a>
 </div>
 
 <!-- Cookie Consent Banner -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:36px;left:50%;transform:translateX(-50%);z-index:9999;background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 20px;max-width:520px;width:90%;text-align:center;font-size:12px;color:rgba(255,255,255,.6);box-shadow:0 8px 32px rgba(0,0,0,.4)">
-  We use essential cookies for authentication only. No advertising or tracking cookies. See our <a href="privacy.html" style="color:#f59e0b;text-decoration:underline">Privacy Policy</a>.
-  <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('tcp_cookie_ok','1')" style="margin-left:12px;padding:6px 16px;background:linear-gradient(135deg,#3b82f6,#06b6d4);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">Got it</button>
+  We use essential cookies for authentication only. No advertising or tracking cookies. See our <a href="privacy.html" style="color:#ffd60a;text-decoration:underline">Privacy Policy</a>.
+  <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('tcp_cookie_ok','1')" style="margin-left:12px;padding:6px 16px;background:linear-gradient(135deg,#0a84ff,#64d2ff);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">Got it</button>
 </div>
 <script>if(!localStorage.getItem('tcp_cookie_ok'))document.getElementById('cookie-banner').style.display='block';</script>
 
