@@ -3555,14 +3555,14 @@ function getCampaignData(id) {
       description:'Three-phase Instagram campaign: organic story + feed post → carousel → paid sponsored post. Target: finance/trading audience ages 18-35.',
       actions:[
         {text:'Post Launch Announcement to feed',resources:[
-          {type:'file',label:'Preview Launch Post',action:"previewFile('ad_instagram_launch','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Instagram Launch Post','1080x1080 launch announcement')"},
+          {type:'file',label:'Preview Launch Post',action:"previewFile('ad_instagram_launch','📸 Instagram Launch Post','1080x1080 launch announcement')"},
           {type:'link',label:'Open Instagram',action:"window.open('https://www.instagram.com/','_blank')"}
         ]},
         {text:'Post Student Story (ad_instagram_story_free.html)',resources:[
-          {type:'file',label:'Preview Story',action:"previewFile('ad_instagram_story','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Student Story','1080x1920 student offer')"}
+          {type:'file',label:'Preview Story',action:"previewFile('ad_instagram_story','📸 Student Story','1080x1920 student offer')"}
         ]},
         {text:'Post Carousel Slide 1 (ad_instagram_carousel_1.html)',resources:[
-          {type:'file',label:'Preview Carousel',action:"previewFile('ad_instagram_carousel','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Carousel','1080x1080 carousel slide')"}
+          {type:'file',label:'Preview Carousel',action:"previewFile('ad_instagram_carousel','📸 Carousel','1080x1080 carousel slide')"}
         ]},
         {text:'Add link in bio to tradecommandpro.com',resources:[
           {type:'copy',label:'Copy Link',action:"navigator.clipboard.writeText('https://maxmcdonough.github.io/tradecommand-pro/');toast('Link copied!','grn')"}
@@ -3616,7 +3616,7 @@ function getCampaignData(id) {
       description:'Physical + digital campus outreach. Print flyers with tear-off tabs for bulletin boards, partner with finance clubs, reach professors who teach trading/investing courses.',
       actions:[
         {text:'Print 20 university flyers',resources:[
-          {type:'file',label:'Preview Flyer',action:"previewFile('flyer_university','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> University Flyer','8.5×11 tear-off tabs')"},
+          {type:'file',label:'Preview Flyer',action:"previewFile('flyer_university','🎓 University Flyer','8.5×11 tear-off tabs')"},
           {type:'link',label:'Open FedEx Print',action:"window.open('https://www.fedex.com/en-us/printing.html','_blank')"},
           {type:'info',label:'Color, 8.5×11, 20 copies ≈ $12-15'}
         ]},
@@ -3625,7 +3625,7 @@ function getCampaignData(id) {
           {type:'info',label:'Color, 8.5×11, 10 copies ≈ $6-8'}
         ]},
         {text:'Print 50 business cards',resources:[
-          {type:'file',label:'Preview Card',action:"previewFile('business_card','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Business Card','3.5×2 front+back')"},
+          {type:'file',label:'Preview Card',action:"previewFile('business_card','💼 Business Card','3.5×2 front+back')"},
           {type:'link',label:'Order from Vistaprint',action:"window.open('https://www.vistaprint.com/business-cards','_blank')"},
           {type:'info',label:'50 cards ≈ $12-20, arrives in 3-5 days'}
         ]},
@@ -3660,17 +3660,17 @@ function getCampaignData(id) {
           {type:'info',label:'Both have free tier for <500 subscribers — Mailchimp is easier to start, ConvertKit is better long-term'}
         ]},
         {text:'Upload Welcome Email as Day 0',resources:[
-          {type:'file',label:'Preview Welcome Email',action:"previewFile('newsletter_welcome','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg> Welcome Email','Day 0 — onboarding + features')"},
+          {type:'file',label:'Preview Welcome Email',action:"previewFile('newsletter_welcome','✉️ Welcome Email','Day 0 — onboarding + features')"},
           {type:'action',label:'Open Email Templates',action:"document.querySelector('[data-page=biz-newsletters]').click()"}
         ]},
         {text:'Upload Trading Tips as Day 3',resources:[
-          {type:'file',label:'Preview Trading Tips',action:"previewFile('newsletter_tips','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg> Trading Tips','Day 3 — 5 Rules')"}
+          {type:'file',label:'Preview Trading Tips',action:"previewFile('newsletter_tips','✉️ Trading Tips','Day 3 — 5 Rules')"}
         ]},
         {text:'Upload Weekly Signals as Day 7',resources:[
-          {type:'file',label:'Preview Signals Email',action:"previewFile('newsletter_signals','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg> Weekly Signals','Day 7 — trade setups')"}
+          {type:'file',label:'Preview Signals Email',action:"previewFile('newsletter_signals','✉️ Weekly Signals','Day 7 — trade setups')"}
         ]},
         {text:'Upload Elite Upgrade as Day 14',resources:[
-          {type:'file',label:'Preview Upgrade Email',action:"previewFile('newsletter_upgrade','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg> Pro → Elite','Day 14 — upsell')"}
+          {type:'file',label:'Preview Upgrade Email',action:"previewFile('newsletter_upgrade','✉️ Pro → Elite','Day 14 — upsell')"}
         ]},
         {text:'Set up automation triggers',resources:[
           {type:'info',label:'Trigger: "Subscribed to list" → Wait 3 days → Send Tips → Wait 4 days → Send Signals → Wait 7 days → Send Upgrade'}
@@ -3682,7 +3682,7 @@ function getCampaignData(id) {
           {type:'info',label:'Subscribe yourself, verify all 4 emails arrive on schedule'}
         ]},
         {text:'Upload Student Offer for campus leads segment',resources:[
-          {type:'file',label:'Preview Student Offer',action:"previewFile('newsletter_student','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg> Student Offer','$9/mo student pricing')"}
+          {type:'file',label:'Preview Student Offer',action:"previewFile('newsletter_student','✉️ Student Offer','$9/mo student pricing')"}
         ]}
       ],
       template:null},
@@ -4093,7 +4093,7 @@ function getBetaDays() {
         {type:'campaign',label:'Open Friends Campaign',action:"document.querySelector('[data-page=biz-campaigns]').click();setTimeout(function(){openCampaign('friends_family')},200)"}
       ]},
       {text:'Post Instagram Story with link — beta testers wanted',resources:[
-        {type:'file',label:'Preview Story Ad',action:"previewFile('ad_instagram_story','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> IG Story','1080x1920 student offer')"},
+        {type:'file',label:'Preview Story Ad',action:"previewFile('ad_instagram_story','📸 IG Story','1080x1920 student offer')"},
         {type:'link',label:'Open Instagram',action:"window.open('https://www.instagram.com/','_blank')"},
         {type:'copy',label:'Copy Link',action:"navigator.clipboard.writeText('https://maxmcdonough.github.io/tradecommand-pro/');toast('Link copied!','grn')"}
       ]},
@@ -4156,7 +4156,7 @@ function getBetaDays() {
     ]},
     {day:'Day 3',date:'Tue Mar 17',label:'',color:'#ffab40',goal:10,theme:'Campus & University Push',tasks:[
       {text:'Print 20 university flyers → post at bulletin boards',resources:[
-        {type:'file',label:'Preview Flyer',action:"previewFile('flyer_university','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> University Flyer','8.5×11 tear-off tabs')"},
+          {type:'file',label:'Preview Flyer',action:"previewFile('flyer_university','🎓 University Flyer','8.5×11 tear-off tabs')"},
         {type:'link',label:'Open FedEx Print',action:"window.open('https://www.fedex.com/en-us/printing.html','_blank')"},
         {type:'info',label:'Best spots: business school lobby, library entrance, student union, gym bulletin board'}
       ]},
@@ -4191,10 +4191,10 @@ function getBetaDays() {
       ]},
       {text:'Post Day 3 update on Twitter/X showing signup progress',resources:[
         {type:'link',label:'Open Twitter',action:"window.open('https://twitter.com/compose/tweet','_blank')"},
-        {type:'template',label:'Copy Update Tweet',action:"navigator.clipboard.writeText('Day 3 of launching TradeCommand Pro beta <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/></svg>\\n\\n<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> [X] beta testers signed up\\n<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Getting amazing feedback\\n<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> [50-X] spots left\\n\\nFree lifetime Pro access for early testers:\\nhttps://maxmcdonough.github.io/tradecommand-pro/\\n\\n#buildinpublic #fintech #trading');toast('Copied!','grn')"}
+        {type:'template',label:'Copy Update Tweet',action:"navigator.clipboard.writeText('Day 3 of launching TradeCommand Pro beta 🚀\\n\\n📊 [X] beta testers signed up\\n📈 Getting amazing feedback\\n🎯 [50-X] spots left\\n\\nFree lifetime Pro access for early testers:\\nhttps://maxmcdonough.github.io/tradecommand-pro/\\n\\n#buildinpublic #fintech #trading');toast('Copied!','grn')"}
       ]},
       {text:'Send student newsletter to collected emails',resources:[
-        {type:'file',label:'Preview Student Email',action:"previewFile('newsletter_student','<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Student Offer','$9/mo student pricing')"},
+        {type:'file',label:'Preview Student Email',action:"previewFile('newsletter_student','🎓 Student Offer','$9/mo student pricing')"},
         {type:'campaign',label:'Open Email Campaign',action:"document.querySelector('[data-page=biz-campaigns]').click();setTimeout(function(){openCampaign('email_sequence')},200)"}
       ]},
       {text:'Live walkthrough on Instagram Stories or TikTok',resources:[
