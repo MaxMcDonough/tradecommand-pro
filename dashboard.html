@@ -2494,6 +2494,83 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
   border-radius: 980px !important;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   TYPOGRAPHY & SPACING — Professional breathing room
+   ══════════════════════════════════════════════════════════════ */
+
+/* Global line-height for readability */
+body { line-height: 1.5 !important; }
+
+/* Card padding — more generous */
+.card { padding: 20px !important; }
+.card-header { margin-bottom: 18px !important; }
+.card-title { font-size: 15px !important; letter-spacing: -.01em !important; }
+
+/* Section headings with subtitle spacing */
+#main-content [style*="font-size:15px"][style*="font-weight:8"] { line-height: 1.4 !important; }
+#main-content [style*="font-size:11px"][style*="color:var(--t3)"] { margin-top: 4px !important; line-height: 1.5 !important; }
+
+/* Step number badges — slightly larger with more margin */
+#main-content [style*="border-radius:50%"][style*="font-weight:900"] { margin-right: 4px !important; }
+
+/* Watchlist items — more padding */
+#watchlist-container > div { padding: 14px 16px !important; }
+
+/* Settings sections — more spacing */
+.settings-section { padding: 24px !important; }
+.settings-section h3 { margin-bottom: 16px !important; font-size: 16px !important; letter-spacing: -.02em !important; }
+.stg-row { padding: 10px 0 !important; }
+.stg-label { font-size: 13px !important; }
+
+/* Card descriptions */
+.card p, .card [style*="font-size:12px"], .card [style*="font-size:11px"] { line-height: 1.6 !important; }
+
+/* Signal cards */
+.signal-card { padding: 16px !important; }
+
+/* Holding cards */
+.holding-card { padding: 16px !important; }
+
+/* Page content area — add top padding */
+.page { padding: 24px !important; }
+
+/* Strategy cards */
+.strategy-card { padding: 20px !important; }
+
+/* Indicators row */
+.indicator { padding: 10px 14px !important; }
+
+/* Order entry spacing */
+.order-header { padding: 14px 16px !important; }
+.calc-item { padding: 10px 14px !important; margin-bottom: 6px !important; }
+
+/* Filter chips */
+.wl-filter, .tf-btn { padding: 6px 14px !important; font-size: 12px !important; }
+
+/* Condition items */
+.condition { padding: 10px 14px !important; margin-bottom: 6px !important; }
+
+/* News items */
+.news-item { padding: 12px 0 !important; }
+
+/* Toast */
+.toast { padding: 14px 20px !important; }
+
+/* Badges */
+.topbar-badge { padding: 5px 12px !important; }
+
+/* Auth form spacing */
+.auth-field { margin-bottom: 14px !important; }
+.auth-field label { margin-bottom: 6px !important; display: block !important; font-size: 12px !important; font-weight: 600 !important; letter-spacing: .01em !important; }
+.auth-field input { padding: 12px 14px !important; }
+.auth-submit, .auth-google { padding: 12px !important; margin-top: 6px !important; }
+
+/* Plan cards in upgrade modal */
+.plan-card { padding: 24px !important; }
+.plan-name { font-size: 16px !important; margin-bottom: 4px !important; }
+.plan-price { font-size: 28px !important; margin-bottom: 12px !important; }
+.plan-features li { padding: 6px 0 !important; line-height: 1.5 !important; }
+
 /* ── DUAL CLOCK / TIMEZONE SELECTOR ── */
 .clock-group {
   display: flex;
@@ -2743,7 +2820,7 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
           <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">1</div>
-          <div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--t1)">Your Watchlist</div><div style="font-size:11px;color:var(--t3)">Click any stock for full analysis, chart, AI summary, and trade setup.</div></div>
+          <div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--t1);letter-spacing:-.02em">Your Watchlist</div><div style="font-size:12px;color:var(--t3);margin-top:3px;line-height:1.4">Click any stock for full analysis, chart, AI summary, and trade setup.</div></div>
           <div style="display:flex;align-items:center;gap:8px">
             <div style="display:flex;align-items:center;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:4px 8px">
               <input id="add-ticker-input" placeholder="Add ticker..." style="background:transparent;border:none;color:var(--t1);font-size:12px;width:90px;outline:none" onkeypress="if(event.key==='Enter')addTicker()">
@@ -2795,7 +2872,7 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
           <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#a855f7);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">2</div>
-          <div><div style="font-size:15px;font-weight:800;color:var(--t1)">Discover New Opportunities</div><div style="font-size:11px;color:var(--t3)">AI-ranked stocks, ETFs, and trade ideas. Click any row to analyze, hit + to add to watchlist.</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:var(--t1);letter-spacing:-.02em">Discover New Opportunities</div><div style="font-size:12px;color:var(--t3);margin-top:3px;line-height:1.4">AI-ranked stocks, ETFs, and trade ideas. Click any row to analyze, hit + to add to watchlist.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('discover')" style="margin-left:auto;font-size:11px">View Full Page &rarr;</button>
         </div>
         <div class="card" style="padding:0;overflow:hidden">
@@ -2827,7 +2904,7 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
           <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">3</div>
-          <div><div style="font-size:15px;font-weight:800;color:var(--t1)">AI Predictions & Signals</div><div style="font-size:11px;color:var(--t3)">Entry/stop/target strategies generated from 8-factor analysis on your watchlist.</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:var(--t1);letter-spacing:-.02em">AI Predictions & Signals</div><div style="font-size:12px;color:var(--t3);margin-top:3px;line-height:1.4">Entry/stop/target strategies generated from 8-factor analysis on your watchlist.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('predictions')" style="margin-left:auto;font-size:11px">View All &rarr;</button>
         </div>
         <div id="home-signals-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px">
@@ -2839,7 +2916,7 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
           <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#10b981,#059669);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">4</div>
-          <div><div style="font-size:15px;font-weight:800;color:var(--t1)">Your Holdings</div><div style="font-size:11px;color:var(--t3)">Active positions and P&L tracking.</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:var(--t1);letter-spacing:-.02em">Your Holdings</div><div style="font-size:12px;color:var(--t3);margin-top:3px;line-height:1.4">Active positions and P&L tracking.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('holdings')" style="margin-left:auto;font-size:11px">Manage &rarr;</button>
         </div>
         <div id="home-holdings-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">
@@ -2854,7 +2931,7 @@ tr:hover td { background: rgba(255,255,255,.02) !important; }
       <div style="margin-bottom:24px">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
           <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#06b6d4,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0">5</div>
-          <div><div style="font-size:15px;font-weight:800;color:var(--t1)">Today's Game Plan</div><div style="font-size:11px;color:var(--t3)">Your autopilot queue — trades the bot will execute when conditions are met.</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:var(--t1);letter-spacing:-.02em">Today's Game Plan</div><div style="font-size:12px;color:var(--t3);margin-top:3px;line-height:1.4">Your autopilot queue — trades the bot will execute when conditions are met.</div></div>
           <button class="btn btn-sm btn-ghost" onclick="navigate('autopilot')" style="margin-left:auto;font-size:11px">Autopilot &rarr;</button>
         </div>
         <div id="home-gameplan" class="card" style="padding:0;overflow:hidden">
