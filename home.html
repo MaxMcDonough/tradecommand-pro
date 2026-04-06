@@ -1750,7 +1750,7 @@ input, select, button { font-family: inherit; }
 .plan-price small { font-size: 14px; font-weight: 500; color: var(--t3); }
 .plan-features { list-style: none; margin-top: 14px; text-align: left; font-size: 12px; color: var(--t2); }
 .plan-features li { padding: 4px 0; }
-.plan-features li::before { content: '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> '; color: var(--green); font-weight: 700; }
+.plan-features li::before { content:'✓'; color: var(--green); font-weight: 700; }
 .icon{display:inline-block;vertical-align:middle;flex-shrink:0}.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}</style>
 </head>
 <body>
@@ -4566,7 +4566,7 @@ function calcModalOrder(val) {
   // Confirm button
   const btn = document.getElementById('modal-confirm-btn');
   const canAfford = dollars <= sessionRemaining();
-  btn.textContent = `${isBuy?'<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> BUY':'<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff453a" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> SELL'} ${shares>=1?shares:shares.toFixed(4)} ${sym} — $${(shares*price).toFixed(2)}`;
+  btn.innerHTML = `${isBuy?'<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> BUY':'<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff453a" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg> SELL'} ${shares>=1?shares:shares.toFixed(4)} ${sym} — $${(shares*price).toFixed(2)}`;
   btn.style.background = canAfford ? (isBuy?'var(--green)':'var(--red)') : '#555';
   btn.style.display = 'block';
   btn.disabled = !canAfford;
@@ -5330,7 +5330,7 @@ async function launchGoalMode() {
   ])];
 
   // <!-- -- -->- STEP 2: Fetch live quotes <!-- -- -->-
-  btn.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Fetching live data... (0/' + scanList.length + ')';
+  btn.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Fetching live data... (0/' + scanList.length + ')';
   let fetched = 0;
 
   for(let i = 0; i < scanList.length; i += 5) {
@@ -5356,12 +5356,12 @@ async function launchGoalMode() {
         .catch(() => { fetched++; });
     });
     await Promise.all(promises);
-    btn.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Fetching live data... (' + Math.min(fetched, scanList.length) + '/' + scanList.length + ')';
+    btn.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Fetching live data... (' + Math.min(fetched, scanList.length) + '/' + scanList.length + ')';
     if(i + 5 < scanList.length) await new Promise(r => setTimeout(r, 1100));
   }
 
   // <!-- -- -->- STEP 3: Score ALL stocks — NO hard filters, just rank them <!-- -- -->-
-  btn.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Analyzing ' + scanList.length + ' stocks...';
+  btn.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Analyzing ' + scanList.length + ' stocks...';
   await new Promise(r => setTimeout(r, 50));
 
   const candidates = [];
@@ -5466,7 +5466,7 @@ async function launchGoalMode() {
   }
 
   // <!-- -- -->- STEP 4: Pick diversified portfolio — GUARANTEED min picks <!-- -- -->-
-  btn.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Building portfolio from ' + candidates.length + ' candidates...';
+  btn.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 00-.586-1.414L12 12l-4.414 4.414A2 2 0 007 17.828V22"/><path d="M7 2v4.172a2 2 0 00.586 1.414L12 12l4.414-4.414A2 2 0 0017 6.172V2"/></svg> Building portfolio from ' + candidates.length + ' candidates...';
   await new Promise(r => setTimeout(r, 50));
 
   candidates.sort((a, b) => b.composite - a.composite);
@@ -5507,7 +5507,7 @@ async function launchGoalMode() {
   }
 
   if(picks.length === 0) {
-    btn.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Launch AI Trade Plan — Build My Portfolio';
+    btn.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Launch AI Trade Plan — Build My Portfolio';
     btn.disabled = false;
     showToast('No data available. Check your internet connection and try again.');
     return;
@@ -5584,7 +5584,7 @@ async function launchGoalMode() {
   document.getElementById('goal-target-display').textContent = '$' + target;
   document.getElementById('goal-remaining').textContent = '$' + target;
 
-  btn.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Launch AI Trade Plan — Build My Portfolio';
+  btn.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Launch AI Trade Plan — Build My Portfolio';
   btn.disabled = false;
 
   renderGoalPlan();
@@ -6998,7 +6998,7 @@ async function stgSaveProfile() {
 function stgShowMsg(id, msg, color) {
   const el = document.getElementById(id);
   if(!el) return;
-  el.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ' + msg;
+  el.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> ' + msg;
   el.style.color = color || 'var(--green)';
   clearTimeout(el._t);
   el._t = setTimeout(()=>el.textContent='', 3000);
@@ -8283,7 +8283,7 @@ function renderAlertsPage() {
           ${a.recurring ? '<span style="font-size:9px;color:var(--purple);background:var(--purple2);padding:2px 6px;border-radius:4px">↻</span>' : ''}
           ${isTriggered ? '<span style="font-size:10px;color:var(--green);font-weight:700">TRIGGERED</span>' : ''}
           <div class="alert-actions">
-            ${!isTriggered ? `<button onclick="togglePauseAlert('${a.id}')" title="${isPaused?'Resume':'Pause'}">${isPaused?'<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>':'⏸'}</button>` : ''}
+            ${!isTriggered ? `<button onclick="togglePauseAlert('${a.id}')" title="${isPaused?'Resume':'Pause'}">${isPaused?'<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>':'▐▐'}</button>` : ''}
             <button class="del" onclick="deletePriceAlert('${a.id}')" title="Delete"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           </div>
         </div>`;

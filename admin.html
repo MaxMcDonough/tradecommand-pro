@@ -314,7 +314,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 <div id="user-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;width:620px;max-width:95vw;z-index:9998;max-height:85vh;overflow-y:auto">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
     <h3 id="um-title" style="font-size:16px;font-weight:700;margin:0">User Profile</h3>
-    <button onclick="closeUserModal()" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">✕</button>
+    <button onclick="closeUserModal()" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">×</button>
   </div>
   <!-- Profile Header -->
   <div id="um-profile-header" style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg);border-radius:12px;margin-bottom:16px">
@@ -507,7 +507,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 <div id="promo-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;width:440px;max-width:90vw;z-index:9998;max-height:80vh;overflow-y:auto">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
     <h3 id="pm-modal-title" style="font-size:16px;font-weight:700;margin:0">Create Promo Code</h3>
-    <button onclick="closePromoModal()" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">✕</button>
+    <button onclick="closePromoModal()" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">×</button>
   </div>
   <input type="hidden" id="pm-id">
   <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:4px">Promo Code</label>
@@ -960,7 +960,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         <option value="Personal Network">👤 Personal Network</option>
         <option value="Seed">🌱 Seed / Prospects</option>
       </select>
-      <button class="btn btn-ghost" onclick="clearLeadFilters()" style="font-size:11px;padding:5px 10px">✕ Clear</button>
+      <button class="btn btn-ghost" onclick="clearLeadFilters()" style="font-size:11px;padding:5px 10px">× Clear</button>
       <span id="filter-count" style="font-size:11px;color:var(--t3);margin-left:auto"></span>
     </div>
   </div>
@@ -1503,7 +1503,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 <div id="file-preview-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:28px;max-width:900px;width:95%;z-index:1000;max-height:90vh;overflow-y:auto">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
     <h3 id="fp-title" style="margin:0;font-size:18px"></h3>
-    <button onclick="closeFilePreview()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px">✕</button>
+    <button onclick="closeFilePreview()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:14px">×</button>
   </div>
   <div id="fp-desc" style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:16px"></div>
   <div id="fp-actions" style="display:flex;gap:8px;flex-wrap:wrap"></div>
@@ -2008,7 +2008,7 @@ tradecommandpro.com</div>
         <span id="lp-type" class="badge badge-indigo"></span>
       </div>
     </div>
-    <button onclick="closeLeadPanel()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;flex-shrink:0;margin-left:8px">✕</button>
+    <button onclick="closeLeadPanel()" style="background:rgba(255,255,255,.06);border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:14px;flex-shrink:0;margin-left:8px">×</button>
   </div>
   <div class="lp-tabs">
     <button class="lp-tab active" data-t="overview" onclick="switchTab('overview',this)">Overview</button>
@@ -2084,7 +2084,7 @@ tradecommandpro.com</div>
 <div id="user-panel">
   <div style="padding:20px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center">
     <h3 id="up-title" style="font-size:16px;font-weight:700">User Details</h3>
-    <button onclick="document.getElementById('user-panel').style.transform='translateX(100%)'" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">✕</button>
+    <button onclick="document.getElementById('user-panel').style.transform='translateX(100%)'" style="background:none;border:1px solid var(--brd);color:var(--t2);border-radius:6px;padding:4px 8px;cursor:pointer">×</button>
   </div>
   <div id="up-body" style="padding:20px"></div>
 </div>
@@ -2147,7 +2147,7 @@ function doResetPassword() {
   auth.sendPasswordResetEmail(email)
     .then(function() {
       errEl.style.color = 'var(--grn)';
-      errEl.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Password reset email sent to ' + email + '. Check your inbox!';
+      errEl.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Password reset email sent to ' + email + '. Check your inbox!';
       setTimeout(function(){ errEl.style.color = 'var(--red)'; }, 8000);
     })
     .catch(function(e) {
@@ -2183,7 +2183,7 @@ async function changeAdminPassword() {
     }
     await user.updatePassword(newPw);
     statusEl.style.color = 'var(--grn)';
-    statusEl.textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Password updated successfully!';
+    statusEl.innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30d158" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Password updated successfully!';
     document.getElementById('pw-current').value = '';
     document.getElementById('pw-new').value = '';
     document.getElementById('pw-confirm').value = '';
@@ -2450,7 +2450,7 @@ function renderUserHoldings() {
       '<div style="flex:1"><div style="font-size:11px;color:var(--t2)">'+(h.name||'')+'</div></div>'+
       '<div style="text-align:right"><div style="font-size:13px;font-weight:600">'+h.shares+' shares</div>'+
       '<div style="font-size:11px;color:var(--t3)">@ $'+((h.entry||0).toFixed(2))+' '+(h.currency||'USD')+' · $'+val+'</div></div>'+
-      '<button onclick="removeUserHolding('+i+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:4px" title="Remove">✕</button></div>';
+      '<button onclick="removeUserHolding('+i+')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:4px" title="Remove">×</button></div>';
   }).join('');
 }
 function addUserHolding() {
@@ -2482,7 +2482,7 @@ function renderUserWatchlist() {
   el.innerHTML = wl.map(function(sym,i){
     return '<div style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg);border:1px solid var(--brd);border-radius:8px">'+
       '<span style="font-size:13px;font-weight:600">'+sym+'</span>'+
-      '<button onclick="removeUserWatchlistItem('+i+')" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px" title="Remove">✕</button></div>';
+      '<button onclick="removeUserWatchlistItem('+i+')" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px" title="Remove">×</button></div>';
   }).join('');
 }
 function addUserWatchlistItem() {
@@ -3244,7 +3244,7 @@ function loadScheduled() {
   var dateStr = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   document.getElementById('sched-date').textContent = dateStr;
   var dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('sched-header').textContent = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Today\'s Game Plan — ' + dayNames[day] + ', ' + now.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+  document.getElementById('sched-header').innerHTML = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Today\'s Game Plan — ' + dayNames[day] + ', ' + now.toLocaleDateString('en-US',{month:'long',day:'numeric'});
 
   var betaState = JSON.parse(localStorage.getItem('tc_beta_state') || '{"count":0}');
   document.getElementById('sched-beta').textContent = (betaState.count||0) + ' / 50';
@@ -4965,7 +4965,7 @@ function renderActivity(id) {
   if (!acts.length) { el.innerHTML = '<div class="empty-msg">No activity yet. Log your first outreach!</div>'; return; }
   el.innerHTML = acts.map((a,i) => {
     const d = new Date(a.date);
-    return '<div class="lp-field" style="display:flex;gap:10px;position:relative"><div style="font-size:16px;flex-shrink:0">'+a.icon+'</div><div style="flex:1"><div style="font-size:12px;font-weight:600;text-transform:capitalize">'+(a.type||'').replace(/_/g,' ')+'</div>'+(a.note?'<div style="font-size:12px;color:var(--t2);margin-top:2px">'+a.note+'</div>':'')+'<div style="font-size:10px;color:var(--t3);margin-top:3px">'+d.toLocaleDateString()+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div></div><button onclick="delAct(\''+id+'\','+i+')" style="position:absolute;top:4px;right:4px;background:none;border:none;color:var(--t3);cursor:pointer;font-size:11px">✕</button></div>';
+    return '<div class="lp-field" style="display:flex;gap:10px;position:relative"><div style="font-size:16px;flex-shrink:0">'+a.icon+'</div><div style="flex:1"><div style="font-size:12px;font-weight:600;text-transform:capitalize">'+(a.type||'').replace(/_/g,' ')+'</div>'+(a.note?'<div style="font-size:12px;color:var(--t2);margin-top:2px">'+a.note+'</div>':'')+'<div style="font-size:10px;color:var(--t3);margin-top:3px">'+d.toLocaleDateString()+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div></div><button onclick="delAct(\''+id+'\','+i+')" style="position:absolute;top:4px;right:4px;background:none;border:none;color:var(--t3);cursor:pointer;font-size:11px">×</button></div>';
   }).join('');
 }
 function delAct(id,i) { const a=getActs(id); a.splice(i,1); localStorage.setItem('tc_act_'+id,JSON.stringify(a)); renderActivity(id); }
@@ -4983,7 +4983,7 @@ function renderSched(id) {
   const el = document.getElementById('lp-sched');
   const scheds = getScheds(id);
   if (!scheds.length) { el.innerHTML = '<div class="empty-msg">No scheduled actions</div>'; return; }
-  el.innerHTML = scheds.map((s,i) => '<div class="lp-field" style="display:flex;gap:10px;position:relative"><div style="flex:1"><div style="font-size:12px;font-weight:600;text-transform:capitalize">'+(s.type||'').replace(/_/g,' ')+'</div><div style="font-size:11px;color:var(--acc);margin-top:2px">'+s.date+'</div>'+(s.note?'<div style="font-size:12px;color:var(--t2);margin-top:2px">'+s.note+'</div>':'')+'</div><button onclick="delSched(\''+id+'\','+i+')" style="position:absolute;top:4px;right:4px;background:none;border:none;color:var(--t3);cursor:pointer;font-size:11px">✕</button></div>').join('');
+  el.innerHTML = scheds.map((s,i) => '<div class="lp-field" style="display:flex;gap:10px;position:relative"><div style="flex:1"><div style="font-size:12px;font-weight:600;text-transform:capitalize">'+(s.type||'').replace(/_/g,' ')+'</div><div style="font-size:11px;color:var(--acc);margin-top:2px">'+s.date+'</div>'+(s.note?'<div style="font-size:12px;color:var(--t2);margin-top:2px">'+s.note+'</div>':'')+'</div><button onclick="delSched(\''+id+'\','+i+')" style="position:absolute;top:4px;right:4px;background:none;border:none;color:var(--t3);cursor:pointer;font-size:11px">×</button></div>').join('');
 }
 function delSched(id,i) { const s=getScheds(id); s.splice(i,1); localStorage.setItem('tc_sched_'+id,JSON.stringify(s)); renderSched(id); }
 function addSched() {

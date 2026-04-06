@@ -1,4 +1,21 @@
 {
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "functions/**",
+      "Contacts*/**",
+      "TradeCommand Marketing/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/dashboard.html"
+      }
+    ]
+  },
   "functions": [
     {
       "source": "functions",

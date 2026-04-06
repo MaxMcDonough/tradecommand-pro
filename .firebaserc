@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "tradecommand-pro"
-  }
+  },
+  "targets": {
+    "indie-hat-dashboard": {
+      "hosting": {
+        "indie-hat-dashboard": [
+          "indie-hat-dashboard"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
