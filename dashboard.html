@@ -265,17 +265,17 @@ input, select, button { font-family: inherit; }
 .notif-panel-clear { font-size: 11px; color: var(--accent); cursor: pointer; background: none; border: none; padding: 4px 8px; border-radius: 6px; }
 .notif-panel-clear:hover { background: rgba(59,130,246,.1); }
 .notif-list { flex: 1; overflow-y: auto; max-height: 360px; }
-.notif-item { display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.03); transition: background .1s; cursor: default; }
-.notif-item:hover { background: rgba(255,255,255,.02); }
-.notif-item.unread { background: rgba(59,130,246,.04); border-left: 3px solid var(--accent); }
-.notif-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.notif-item { display: flex; gap: 12px; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.04); transition: background .15s; cursor: default; }
+.notif-item:hover { background: rgba(255,255,255,.03); }
+.notif-item.unread { background: rgba(59,130,246,.05); border-left: 3px solid var(--accent); }
+.notif-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
 .notif-icon.trade { background: var(--green2); }
 .notif-icon.alert { background: var(--yellow2); }
 .notif-icon.info { background: rgba(59,130,246,.15); }
 .notif-icon.error { background: var(--red2); }
 .notif-body { flex: 1; min-width: 0; }
-.notif-msg { font-size: 12px; color: var(--t1); line-height: 1.4; word-wrap: break-word; }
-.notif-time { font-size: 10px; color: var(--t3); margin-top: 2px; }
+.notif-msg { font-size: 13px; color: var(--t1); line-height: 1.5; word-wrap: break-word; }
+.notif-time { font-size: 11px; color: var(--t3); margin-top: 4px; }
 .notif-empty { text-align: center; padding: 40px 20px; color: var(--t3); font-size: 13px; }
 .topbar-badge {
   font-size: 11px;
@@ -1633,14 +1633,14 @@ input, select, button { font-family: inherit; }
    ══════════════════════════════════════════════════════════════ */
 .settings-layout { max-width: 720px; }
 .settings-section {
-  background: rgba(12,15,30,.5);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 24px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 16px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 4px 24px rgba(0,0,0,.2);
 }
 .settings-section h3 {
   font-size: 15px;
@@ -1653,9 +1653,11 @@ input, select, button { font-family: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255,255,255,.03);
 }
-.stg-row:last-child { margin-bottom: 0; }
+.stg-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
 .stg-label { font-size: 13px; color: var(--t2); min-width: 120px; }
 .stg-input {
   flex: 1;
@@ -1670,6 +1672,15 @@ input, select, button { font-family: inherit; }
 }
 .stg-input:focus { border-color: rgba(59,130,246,.4); box-shadow: 0 0 16px rgba(59,130,246,.1); }
 .stg-val { font-size: 13px; font-weight: 600; color: var(--t1); }
+.changelog-entry { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+.changelog-entry:last-child { border-bottom: none; padding-bottom: 0; }
+.changelog-entry:first-child { padding-top: 0; }
+.cl-date { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.cl-items { display: flex; flex-direction: column; gap: 6px; }
+.cl-item { font-size: 13px; color: var(--t2); line-height: 1.5; padding-left: 20px; position: relative; }
+.cl-item::before { position: absolute; left: 0; font-size: 11px; font-weight: 700; border-radius: 3px; }
+.cl-feat::before { content: '+'; color: var(--green); }
+.cl-fix::before { content: '\2713'; color: var(--cyan); }
 .stg-msg { font-size: 12px; min-height: 18px; margin-top: 8px; }
 
 /* ══════════════════════════════════════════════════════════════
@@ -3003,12 +3014,32 @@ body { line-height: 1.5 !important; }
         <div class="summary-card"><div class="summary-label">Open Positions</div><div class="summary-value" id="h-position-count">0</div></div>
         <div class="summary-card"><div class="summary-label">Cash Available</div><div class="summary-value" id="h-cash">$0</div></div>
       </div>
+      <div id="holdings-toolbar" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn btn-sm btn-ghost" onclick="toggleClosedPositions()" id="toggle-closed-btn" style="font-size:12px;padding:6px 14px">
+            <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            Show Closed
+          </button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button class="btn btn-sm btn-ghost" onclick="exportTrades()" style="font-size:12px;padding:6px 14px">
+            <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <button class="btn btn-sm" onclick="clearAllTrades()" style="font-size:12px;padding:6px 14px;background:rgba(255,69,58,.08);color:var(--red);border:1px solid rgba(255,69,58,.15)">
+            <svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Clear All
+          </button>
+        </div>
+      </div>
       <div class="holdings-grid" id="holdings-grid">
         <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--t3)">
           <div style="font-size:40px;margin-bottom:12px"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
           <div style="font-size:15px;font-weight:600;color:var(--t2);margin-bottom:6px">No positions yet</div>
           <div style="font-size:13px">Go to Trading, find a setup, and add it to your plan.</div>
         </div>
+      </div>
+      <div class="holdings-grid" id="closed-holdings-grid" style="display:none;margin-top:16px">
       </div>
     </div>
 
@@ -3584,6 +3615,76 @@ body { line-height: 1.5 !important; }
           </div>
           <div class="stg-msg" id="stg-promo-msg"></div>
         </div>
+        <!-- ═══ TRADING PREFERENCES ═══ -->
+        <div class="settings-section">
+          <h3><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Trading Preferences</h3>
+          <p style="font-size:12px;color:var(--t3);margin-bottom:14px">Advanced settings for how signals, risk, and execution behave. These persist across sessions.</p>
+
+          <div class="stg-row">
+            <div style="flex:1">
+              <span class="stg-label">Default Position Size</span>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px">Percentage of available cash per trade</div>
+            </div>
+            <select class="stg-input" id="stg-pos-size" style="flex:0 0 120px" onchange="saveTradingPrefs()">
+              <option value="5">5% (Conservative)</option>
+              <option value="10" selected>10% (Balanced)</option>
+              <option value="15">15% (Moderate)</option>
+              <option value="20">20% (Aggressive)</option>
+              <option value="25">25% (Max Risk)</option>
+            </select>
+          </div>
+
+          <div class="stg-row">
+            <div style="flex:1">
+              <span class="stg-label">Stop Loss Default</span>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px">Auto-set stop loss distance on new positions</div>
+            </div>
+            <select class="stg-input" id="stg-stop-pct" style="flex:0 0 120px" onchange="saveTradingPrefs()">
+              <option value="2">2% (Tight)</option>
+              <option value="3" selected>3% (Standard)</option>
+              <option value="5">5% (Wide)</option>
+              <option value="8">8% (Swing)</option>
+            </select>
+          </div>
+
+          <div class="stg-row">
+            <div style="flex:1">
+              <span class="stg-label">Signal Confidence Threshold</span>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px">Minimum AI confidence to show signals</div>
+            </div>
+            <select class="stg-input" id="stg-sig-thresh" style="flex:0 0 120px" onchange="saveTradingPrefs()">
+              <option value="50">50% (Show all)</option>
+              <option value="65">65% (Moderate)</option>
+              <option value="75" selected>75% (High only)</option>
+              <option value="85">85% (Very high)</option>
+            </select>
+          </div>
+
+          <div class="stg-row">
+            <div style="flex:1">
+              <span class="stg-label">Market Hours Only</span>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px">Only show signals during market hours (9:30a–4p ET)</div>
+            </div>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" id="stg-market-hours" checked onchange="saveTradingPrefs()">
+              <span style="font-size:12px;color:var(--t2)">Enabled</span>
+            </label>
+          </div>
+
+          <div class="stg-row" style="border-bottom:none;margin-bottom:0;padding-bottom:0">
+            <div style="flex:1">
+              <span class="stg-label">Auto-refresh Interval</span>
+              <div style="font-size:11px;color:var(--t3);margin-top:2px">How often quotes and signals update</div>
+            </div>
+            <select class="stg-input" id="stg-refresh-rate" style="flex:0 0 120px" onchange="saveTradingPrefs()">
+              <option value="15">15 seconds</option>
+              <option value="30" selected>30 seconds</option>
+              <option value="60">1 minute</option>
+              <option value="120">2 minutes</option>
+            </select>
+          </div>
+        </div>
+
         <!-- ═══ NOTIFICATION SETTINGS ═══ -->
         <div class="settings-section">
           <h3>Trade Notifications</h3>
@@ -3671,6 +3772,47 @@ body { line-height: 1.5 !important; }
           </div>
         </div>
       </div>
+
+      <!-- ═══ WHAT'S NEW ═══ -->
+      <div class="settings-section" id="changelog-section">
+        <h3><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> What's New</h3>
+        <div style="display:flex;flex-direction:column;gap:0">
+
+          <div class="changelog-entry">
+            <div class="cl-date">April 8, 2026</div>
+            <div class="cl-items">
+              <div class="cl-item cl-feat">Social share overlays — copy pre-written posts for X, LinkedIn, and Reddit directly from the homepage</div>
+              <div class="cl-item cl-feat">Clear all trades — reset your portfolio from the Holdings page with one click, plus export trades to CSV</div>
+              <div class="cl-item cl-feat">View closed positions — toggle to see your trade history alongside open holdings</div>
+              <div class="cl-item cl-fix">Glass morphism consistency — unified frosted glass effects across all pages</div>
+              <div class="cl-item cl-fix">Notification panel spacing improved for better readability</div>
+            </div>
+          </div>
+
+          <div class="changelog-entry">
+            <div class="cl-date">April 7, 2026</div>
+            <div class="cl-items">
+              <div class="cl-item cl-feat">On-device AES-256-GCM encryption for sensitive localStorage data</div>
+              <div class="cl-item cl-fix">Fixed onboarding redirect loop for new users</div>
+              <div class="cl-item cl-fix">Holdings "Today's P&L" now uses actual previous close, not entry price</div>
+              <div class="cl-item cl-feat">Cleaner plan tier cards with specific feature breakdowns (Trial / Pro / Elite)</div>
+              <div class="cl-item cl-fix">Removed aggressive "Try it live" CTA buttons</div>
+              <div class="cl-item cl-fix">Fixed hero badge overlap on homepage</div>
+            </div>
+          </div>
+
+          <div class="changelog-entry">
+            <div class="cl-date">April 6, 2026</div>
+            <div class="cl-items">
+              <div class="cl-item cl-fix">Fixed critical auth/dashboard JS errors caused by SVG injection in regex patterns</div>
+              <div class="cl-item cl-feat">Privacy policy updated to reflect actual encryption practices</div>
+              <div class="cl-item cl-fix">Restored 14 broken admin panel file preview actions</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
   </div><!-- /main-content -->
@@ -5033,6 +5175,77 @@ function closePosition(sym) {
   renderHoldings();
   buildOrderAmounts();
   showToast(`Closed ${sym} - P&L: ${pos.pnl>=0?'+':''}$${pos.pnl.toFixed(2)}`);
+}
+
+// ═══ CLEAR TRADES ═══
+function clearAllTrades() {
+  const total = D.session.positions.length;
+  if(!total) { showToast('No trades to clear'); return; }
+  const open = D.session.positions.filter(p=>p.status==='open').length;
+  const closed = D.session.positions.filter(p=>p.status==='closed').length;
+  const msg = `Clear all ${total} trade${total>1?'s':''}? (${open} open, ${closed} closed)\n\nThis will reset your portfolio to starting cash. This action cannot be undone.`;
+  if(!confirm(msg)) return;
+  // Delete from Firestore
+  const user = auth.currentUser;
+  if(user) {
+    const batch = db.batch();
+    D.session.positions.forEach(p => {
+      const docId = p.sym+'_'+p.timestamp;
+      batch.delete(db.collection('users').doc(user.uid).collection('holdings').doc(docId));
+    });
+    batch.commit().catch(e=>console.warn('Clear trades Firestore error:',e));
+  }
+  // Reset local state
+  D.session.positions = [];
+  D.session.deployed = 0;
+  D.session.realized = 0;
+  D.session.tradeCount = 0;
+  renderHoldings();
+  buildOrderAmounts();
+  showToast('All trades cleared — portfolio reset');
+}
+function toggleClosedPositions() {
+  const grid = document.getElementById('closed-holdings-grid');
+  const btn = document.getElementById('toggle-closed-btn');
+  const showing = grid.style.display !== 'none';
+  if(showing) {
+    grid.style.display = 'none';
+    btn.innerHTML = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Show Closed';
+    return;
+  }
+  const closed = D.session.positions.filter(p=>p.status==='closed');
+  if(!closed.length) { showToast('No closed positions yet'); return; }
+  grid.style.display = 'grid';
+  btn.innerHTML = '<svg class="icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.73 21a2 2 0 0 1-3.46 0"/><path d="M18.63 13A17.89 17.89 0 0 1 18 8"/><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"/><path d="M18 8a6 6 0 0 0-9.33-5"/><line x1="1" y1="1" x2="23" y2="23"/></svg> Hide Closed';
+  grid.innerHTML = '<div style="grid-column:1/-1;font-size:13px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:4px 0">Closed Positions</div>' +
+    closed.map(p => {
+      const col = (p.pnl||0)>=0?'var(--green)':'var(--red)';
+      return `<div class="holding-card" style="opacity:.7" onclick="openStock('${p.sym}')">
+        <div class="holding-top">
+          <div><div class="holding-sym">${p.sym}</div><div class="holding-shares">${p.shares>=1?p.shares:p.shares.toFixed(4)} shares · closed</div></div>
+          <div class="holding-pnl"><div class="holding-pnl-val" style="color:${col}">${(p.pnl||0)>=0?'+':'-'}$${Math.abs(p.pnl||0).toFixed(2)}</div></div>
+        </div>
+        <div class="holding-levels">
+          <div class="level-item"><div class="level-label">Entry</div><div class="level-value">$${p.entry.toFixed(2)}</div></div>
+          <div class="level-item"><div class="level-label">Exit</div><div class="level-value" style="color:${col}">$${(p.exitPrice||p.entry).toFixed(2)}</div></div>
+        </div>
+      </div>`;
+    }).join('');
+}
+function exportTrades() {
+  const all = D.session.positions;
+  if(!all.length) { showToast('No trades to export'); return; }
+  const rows = [['Symbol','Status','Shares','Entry','Exit','P&L','Date']];
+  all.forEach(p => {
+    rows.push([p.sym, p.status, p.shares, p.entry.toFixed(2), (p.exitPrice||'').toString(), (p.pnl||'').toString(), new Date(p.timestamp).toLocaleDateString()]);
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tradecommand-trades-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+  showToast('Trades exported to CSV');
 }
 
 // ═══ PREDICTIONS ═══
@@ -7530,6 +7743,7 @@ function goalAlert(sym, type, message, priority) {
 
 // Load settings on startup
 loadNotifSettings();
+loadTradingPrefs();
 
 async function goalScanNewOpportunities() {
   if(!_goalActive) return;
@@ -8346,6 +8560,36 @@ async function stgSaveProfile() {
   stgShowMsg('stg-saved-msg','Profile saved','var(--green)');
   buildOrderAmounts(); updateOrderPanel();
 }
+// ═══ TRADING PREFERENCES ═══
+function saveTradingPrefs() {
+  const prefs = {
+    posSize: parseInt(document.getElementById('stg-pos-size')?.value) || 10,
+    stopPct: parseInt(document.getElementById('stg-stop-pct')?.value) || 3,
+    sigThresh: parseInt(document.getElementById('stg-sig-thresh')?.value) || 75,
+    marketHoursOnly: document.getElementById('stg-market-hours')?.checked ?? true,
+    refreshRate: parseInt(document.getElementById('stg-refresh-rate')?.value) || 30
+  };
+  localStorage.setItem('tc_trading_prefs', JSON.stringify(prefs));
+  // Apply refresh rate change
+  if(window._refreshInterval) clearInterval(window._refreshInterval);
+  window._refreshInterval = setInterval(()=>{ if(typeof fetchAllData==='function') fetchAllData(); }, prefs.refreshRate * 1000);
+  showToast('Trading preferences saved');
+  // Also save to Firestore
+  const user = auth.currentUser;
+  if(user) db.collection('users').doc(user.uid).update({'tradingPrefs': prefs}).catch(()=>{});
+}
+function loadTradingPrefs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('tc_trading_prefs'));
+    if(!saved) return;
+    if(saved.posSize) { const el = document.getElementById('stg-pos-size'); if(el) el.value = saved.posSize; }
+    if(saved.stopPct) { const el = document.getElementById('stg-stop-pct'); if(el) el.value = saved.stopPct; }
+    if(saved.sigThresh) { const el = document.getElementById('stg-sig-thresh'); if(el) el.value = saved.sigThresh; }
+    if(saved.marketHoursOnly !== undefined) { const el = document.getElementById('stg-market-hours'); if(el) el.checked = saved.marketHoursOnly; }
+    if(saved.refreshRate) { const el = document.getElementById('stg-refresh-rate'); if(el) el.value = saved.refreshRate; }
+  } catch(e) {}
+}
+
 function stgShowMsg(id, msg, color) {
   const el = document.getElementById(id);
   if(!el) return;
