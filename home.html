@@ -2707,9 +2707,18 @@ input, select, button { font-family: inherit; }
           </div>
         </div>
 
-        <div class="settings-section">
-          <h3>Danger Zone</h3>
-          <button class="btn btn-sm btn-danger" onclick="authSignOut()">Sign Out</button>
+        <div class="settings-section" style="border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:20px">
+          <h3 style="color:var(--t2);font-size:14px;font-weight:600;margin-bottom:14px">Account Actions</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div><div style="font-size:13px;font-weight:600;color:var(--t1)">Sign out</div><div style="font-size:12px;color:var(--t3)">You'll need to sign in again next time</div></div>
+              <button class="btn btn-sm btn-ghost" onclick="authSignOut()">Sign Out</button>
+            </div>
+            <div style="border-top:1px solid rgba(255,255,255,.04);padding-top:10px;display:flex;align-items:center;justify-content:space-between">
+              <div><div style="font-size:13px;font-weight:600;color:var(--t1)">Clear local data</div><div style="font-size:12px;color:var(--t3)">Resets cached preferences on this device only</div></div>
+              <button class="btn btn-sm btn-ghost" onclick="if(confirm('Clear local cache? Your account data in the cloud is safe.')){localStorage.clear();showToast('Local cache cleared');}" style="color:var(--t2)">Clear</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -7200,7 +7209,7 @@ async function finishOnboarding() {
   if(user) {
     try {
       await db.collection('users').doc(user.uid).set({
-        onboarded:true,
+        onboardingComplete:true, onboarded:true,
         traderProfile:{ name:D.name, balance:D.bal, riskMultiplier:D.risk, watchlist:D.wl, focus:_obFocus }
       }, { merge: true });
     } catch(e) { console.error('Onboarding save error:', e); }

@@ -3657,9 +3657,18 @@ body { line-height: 1.5 !important; }
           </div>
         </div>
 
-        <div class="settings-section">
-          <h3>Danger Zone</h3>
-          <button class="btn btn-sm btn-danger" onclick="authSignOut()">Sign Out</button>
+        <div class="settings-section" style="border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:20px">
+          <h3 style="color:var(--t2);font-size:14px;font-weight:600;margin-bottom:14px">Account Actions</h3>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div><div style="font-size:13px;font-weight:600;color:var(--t1)">Sign out</div><div style="font-size:12px;color:var(--t3)">You'll need to sign in again next time</div></div>
+              <button class="btn btn-sm btn-ghost" onclick="authSignOut()">Sign Out</button>
+            </div>
+            <div style="border-top:1px solid rgba(255,255,255,.04);padding-top:10px;display:flex;align-items:center;justify-content:space-between">
+              <div><div style="font-size:13px;font-weight:600;color:var(--t1)">Clear local data</div><div style="font-size:12px;color:var(--t3)">Resets cached preferences on this device only</div></div>
+              <button class="btn btn-sm btn-ghost" onclick="if(confirm('Clear local cache? Your account data in the cloud is safe.')){localStorage.clear();showToast('Local cache cleared');}" style="color:var(--t2)">Clear</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -3892,16 +3901,18 @@ body { line-height: 1.5 !important; }
     <div class="plan-cards">
       <div class="plan-card current">
         <span class="current-badge">Current Plan</span>
-        <div class="plan-name">Free</div>
-        <div class="plan-price">$0<small>/mo</small></div>
+        <div class="plan-name">Trial</div>
+        <div class="plan-price">$0<small> / 7 days</small></div>
         <ul class="plan-features">
-          <li>Delayed quotes</li>
-          <li>Basic watchlist (5 stocks)</li>
-          <li>Limited news feed</li>
-          <li class="disabled">AI signal engine</li>
-          <li class="disabled">Technical indicators</li>
-          <li class="disabled">Autopilot strategies</li>
-          <li class="disabled">Priority data feeds</li>
+          <li>15-min delayed quotes</li>
+          <li>5-stock watchlist</li>
+          <li>Basic news feed (10 articles/day)</li>
+          <li>3 AI signals per session</li>
+          <li class="disabled">Real-time market data</li>
+          <li class="disabled">Autopilot / Goal Mode</li>
+          <li class="disabled">Price alerts</li>
+          <li class="disabled">Social sentiment radar</li>
+          <li class="disabled">Sector heatmap</li>
         </ul>
         <button class="btn btn-sm" style="width:100%;margin-top:14px;background:var(--bg2);color:var(--t3);border:1px solid var(--border);cursor:default" disabled>Your Plan</button>
       </div>
@@ -3909,13 +3920,16 @@ body { line-height: 1.5 !important; }
         <div class="plan-name">Pro</div>
         <div class="plan-price">$29<small>/mo</small></div>
         <ul class="plan-features">
-          <li>Real-time quotes</li>
-          <li>AI signal engine</li>
+          <li>Real-time quotes via Finnhub</li>
           <li>Unlimited watchlist</li>
-          <li>Technical indicators</li>
-          <li>Market news feed</li>
-          <li class="disabled">Autopilot strategies</li>
-          <li class="disabled">Priority data feeds</li>
+          <li>Full AI signal engine (all stocks)</li>
+          <li>RSI, MACD, VWAP, Bollinger analysis</li>
+          <li>Unlimited news + social sentiment</li>
+          <li>Sector heatmap + Fear &amp; Greed</li>
+          <li>20 price alerts</li>
+          <li>Session portfolio tracker</li>
+          <li class="disabled">Autopilot / Goal Mode</li>
+          <li class="disabled">Priority data refresh</li>
         </ul>
         <button class="btn btn-primary" style="width:100%;margin-top:14px">Choose Pro</button>
       </div>
@@ -3923,13 +3937,16 @@ body { line-height: 1.5 !important; }
         <div class="plan-name" style="color:var(--purple)">Elite</div>
         <div class="plan-price" style="color:var(--purple)">$79<small>/mo</small></div>
         <ul class="plan-features">
-          <li>Everything in Pro</li>
-          <li>Autopilot strategies</li>
-          <li>Priority data feeds</li>
-          <li>Advanced AI analysis</li>
-          <li>Premium support</li>
-          <li>Early access to features</li>
-          <li>Dedicated support</li>
+          <li>Everything in Pro, plus:</li>
+          <li>Autopilot AI Goal Mode</li>
+          <li>4 automated trading strategies</li>
+          <li>Priority data feeds (5s refresh)</li>
+          <li>AI portfolio builder</li>
+          <li>Push + Telegram + email alerts</li>
+          <li>Advanced pattern recognition</li>
+          <li>Discover AI stock rankings</li>
+          <li>Early access to new features</li>
+          <li>Priority support</li>
         </ul>
         <button class="btn btn-primary" style="width:100%;margin-top:14px;background:var(--purple)">Choose Elite</button>
       </div>
@@ -4945,12 +4962,16 @@ function sessionRemaining() { return D.session.start + D.session.realized - D.se
 function renderHoldings() {
   const open = D.session.positions.filter(p=>p.status==='open');
   // Summary
-  let totalVal=0, totalPnl=0;
+  let totalVal=0, totalPnl=0, todayPnl=0;
   open.forEach(p => {
-    const cur = D.sd[p.sym]?.price || p.entry;
+    const s = D.sd[p.sym];
+    const cur = s?.price || p.entry;
     const pnl = (cur-p.entry)*p.shares;
     totalVal += p.shares*cur;
     totalPnl += pnl;
+    // Today's P&L: use previous close from quote data, or fall back to entry
+    const prevClose = s?.pc || s?.prevClose || p.entry;
+    todayPnl += (cur - prevClose) * p.shares;
   });
   const cashAvail = sessionRemaining();
   const totalPortfolioVal = cashAvail + totalVal;
@@ -4958,7 +4979,7 @@ function renderHoldings() {
   document.getElementById('h-total-pnl').textContent = (totalPnl>=0?'+':'-')+'$'+Math.abs(totalPnl).toFixed(2);
   document.getElementById('h-total-pnl').style.color = totalPnl>=0?'var(--green)':'var(--red)';
   const todayPnlEl = document.getElementById('h-today-pnl');
-  if(todayPnlEl) { todayPnlEl.textContent = (totalPnl>=0?'+':'-')+'$'+Math.abs(totalPnl).toFixed(2); todayPnlEl.style.color = totalPnl>=0?'var(--green)':'var(--red)'; }
+  if(todayPnlEl) { todayPnlEl.textContent = (todayPnl>=0?'+':'-')+'$'+Math.abs(todayPnl).toFixed(2); todayPnlEl.style.color = todayPnl>=0?'var(--green)':'var(--red)'; }
   document.getElementById('h-position-count').textContent = open.length;
   document.getElementById('h-cash').textContent = '$'+cashAvail.toFixed(2);
   // Grid
@@ -8483,7 +8504,7 @@ async function finishOnboarding() {
   if(user) {
     try {
       await db.collection('users').doc(user.uid).set({
-        onboarded:true,
+        onboardingComplete:true, onboarded:true,
         traderProfile:{ name:D.name, balance:D.bal, riskMultiplier:D.risk, watchlist:D.wl, focus:_obFocus }
       }, { merge: true });
     } catch(e) { console.error('Onboarding save error:', e); }
