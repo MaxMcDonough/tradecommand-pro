@@ -18,7 +18,7 @@
 <meta property="og:site_name" content="TradeCommand Pro">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://tradecommandpro.com/social-preview.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -9635,7 +9635,7 @@ function showToast(msg) {
   const ct = document.getElementById('toast-container');
   const t = document.createElement('div');
   t.className = 'toast';
-  t.textContent = msg;
+  t.innerHTML = msg;
   ct.appendChild(t);
   setTimeout(()=>t.remove(), 4000);
   // Also log to notification center
