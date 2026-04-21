@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TradeCommand">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#08080d">
 
 <title>TradeCommand Pro</title>
 <meta property="og:type" content="website">
@@ -2788,12 +2793,6 @@ body::before {
     radial-gradient(ellipse 80% 50% at 30% 20%, rgba(10,132,255,.06) 0%, transparent 60%),
     radial-gradient(ellipse 60% 40% at 70% 30%, rgba(191,90,242,.04) 0%, transparent 50%) !important;
 }
-  border-radius: 18px !important;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.05) inset,
-    0 16px 48px rgba(0,0,0,.4),
-    0 0 0 1px rgba(0,0,0,.2) !important;
-}
 .auth-logo {
   color: #0071e3 !important;
 }
@@ -3219,6 +3218,151 @@ body { line-height: 1.5 !important; }
 .tz-option .tz-offset { font-size: 11px; color: var(--t3); font-variant-numeric: tabular-nums; }
 .tz-option.active .tz-offset { color: rgba(0,113,227,.6); }
 .topbar-center { position: relative; }
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE & TABLET (iPad/iPhone) OPTIMIZATION
+   ══════════════════════════════════════════════════════════════ */
+
+/* iPad landscape & portrait (744–1024px) */
+@media(max-width:1024px) {
+  .card { border-radius: 14px; padding: 16px; }
+  .signal-card { padding: 14px; }
+  .modal-content { max-width: 95vw; }
+  .stg-grid { grid-template-columns: 1fr; }
+  /* Larger touch targets */
+  .btn, button { min-height: 44px; }
+  .wl-filter { padding: 8px 14px; min-height: 36px; }
+  .nav-item { padding: 10px 14px; }
+}
+
+/* iPad mini & small tablets (600–768px) */
+@media(max-width:768px) {
+  /* Auth page mobile */
+  .auth-split { flex-direction: column; }
+  .auth-hero-side { display: none; }
+  .auth-form-side { padding: 28px 20px; }
+  .auth-heading { font-size: 24px; }
+  .auth-subheading { font-size: 13px; margin-bottom: 24px; }
+  .auth-brand { margin-bottom: 28px; }
+
+  /* Top bar compact */
+  #topbar { padding: 10px 14px; }
+  #page-title { font-size: 18px; }
+
+  /* Cards tighter */
+  .card { margin-bottom: 12px; border-radius: 12px; }
+  .card-header { flex-wrap: wrap; gap: 8px; }
+
+  /* Holdings grid single column on narrow */
+  .holdings-grid { grid-template-columns: 1fr !important; }
+
+  /* Stock modal full screen on mobile */
+  #stock-modal { padding: 0; align-items: stretch; }
+  .modal-content {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    height: 100%;
+  }
+  .modal-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .modal-tabs::-webkit-scrollbar { display: none; }
+
+  /* Settings page */
+  .stg-grid { grid-template-columns: 1fr !important; }
+
+  /* Insights layout */
+  .insights-layout { grid-template-columns: 1fr !important; }
+  .insights-full { grid-column: 1 !important; }
+
+  /* Activity log compact */
+  .activity-log-header { flex-direction: column; align-items: stretch; gap: 10px; }
+  .activity-log-tools { justify-content: space-between; }
+  .al-search input { width: 100%; flex: 1; }
+  .al-search { flex: 1; }
+  .al-sym { min-width: 44px; font-size: 12px; }
+  .al-badge { font-size: 10px; padding: 2px 8px; }
+  .al-msg { font-size: 12px; }
+  .al-detail { padding: 14px 14px 14px 14px; }
+  .al-detail-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Alert form responsive */
+  .alert-form-row { flex-direction: column; }
+  .alert-field { min-width: 100%; }
+
+  /* Predictions cards */
+  .pred-grid { grid-template-columns: 1fr !important; }
+}
+
+/* iPhone (max 480px) */
+@media(max-width:480px) {
+  /* Auth even tighter */
+  .auth-form-side { padding: 24px 16px; }
+  .auth-heading { font-size: 22px; }
+  .auth-field input { padding: 12px 14px; font-size: 16px; } /* 16px prevents iOS zoom */
+  .auth-submit { padding: 14px; font-size: 16px; }
+
+  /* Top bar */
+  #topbar { padding: 8px 12px; gap: 8px; }
+  #page-title { font-size: 16px; }
+
+  /* Pages */
+  .page { padding: 12px; padding-bottom: 72px; }
+
+  /* Holdings summary */
+  .holdings-summary { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+
+  /* Cards */
+  .card { padding: 14px; border-radius: 12px; }
+  .card-title { font-size: 13px; }
+
+  /* Signal cards */
+  .signal-card { padding: 12px; }
+  .signal-card .signal-sym { font-size: 16px; }
+
+  /* Order panel */
+  .order-calc { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .order-calc button { font-size: 13px; padding: 10px; }
+
+  /* Settings */
+  .stg-section { padding: 14px; }
+  .stg-row { flex-direction: column; align-items: stretch; gap: 8px; }
+
+  /* Activity log ultra-compact */
+  .al-row { flex-wrap: wrap; padding: 10px 12px; }
+  .al-amount { font-size: 12px; }
+  .al-filters.open { width: 100%; position: absolute; z-index: 10; }
+  .al-body { position: relative; }
+
+  /* Mobile nav larger touch */
+  .mob-nav-item { padding: 8px 6px; }
+  .mob-nav-item .icon svg { width: 22px; height: 22px; }
+
+  /* Notifications */
+  .notif-panel { width: calc(100vw - 20px); right: -60px; }
+
+  /* Alerts compact */
+  .alert-row { flex-wrap: wrap; gap: 8px; padding: 12px; }
+}
+
+/* Safe area for iPhone with notch/dynamic island */
+@supports(padding: max(0px)) {
+  #topbar { padding-top: max(10px, env(safe-area-inset-top)); }
+  #mobile-nav { padding-bottom: max(8px, env(safe-area-inset-bottom)); height: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  .page { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  .auth-form-side { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+}
+
+/* Prevent iOS input zoom (inputs must be >=16px) */
+@media(max-width:768px) {
+  input, select, textarea { font-size: 16px !important; }
+}
+
+/* Smooth scrolling & touch optimization */
+* { -webkit-tap-highlight-color: transparent; }
+.page, .al-list, #reddit-feed, #news-feed, #mentions-feed {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
 </style>
 </head>
 <body>
