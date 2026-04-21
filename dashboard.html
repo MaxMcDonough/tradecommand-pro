@@ -1174,115 +1174,180 @@ input, select, button { font-family: inherit; }
   line-height: 1.6;
 }
 
-/* RIGHT — HERO SIDE */
+/* RIGHT — RADAR HERO SIDE */
 .auth-hero-side {
   flex: 1;
   position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 48px;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   border-left: 1px solid var(--glass-border);
-  background:
-    linear-gradient(180deg, rgba(8,8,13,0) 0%, rgba(8,8,13,.7) 70%, rgba(8,8,13,.95) 100%),
-    url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=900&q=80') center/cover no-repeat;
+  background: #050510;
   animation: authSlideRightIn .7s ease-out;
 }
 @keyframes authSlideRightIn {
   from { opacity: 0; transform: translateX(30px); }
   to   { opacity: 1; transform: translateX(0); }
 }
-.auth-hero-content {
+
+/* Radar container */
+.radar-wrap {
   position: relative;
-  z-index: 2;
-}
-.auth-hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: rgba(10,132,255,.12);
-  border: 1px solid rgba(10,132,255,.2);
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #5ac8fa;
-  margin-bottom: 20px;
-}
-.auth-hero-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--t1);
-  line-height: 1.2;
-  letter-spacing: -.03em;
-  margin-bottom: 12px;
-}
-.auth-hero-desc {
-  font-size: 14px;
-  color: var(--t2);
-  line-height: 1.6;
-  margin-bottom: 28px;
-  max-width: 400px;
-}
-.auth-testimonials {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.auth-testimonial {
-  background: rgba(255,255,255,.04);
-  backdrop-filter: blur(40px) saturate(1.6);
-  -webkit-backdrop-filter: blur(40px) saturate(1.6);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 16px;
-  padding: 16px 20px;
-  animation: authFadeSlideIn .6s ease-out;
-}
-.auth-testimonial-text {
-  font-size: 13px;
-  color: var(--t1);
-  line-height: 1.5;
-  margin-bottom: 10px;
-  font-style: italic;
-}
-.auth-testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.auth-testimonial-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #5ac8fa);
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
 }
-.auth-testimonial-name { font-size: 13px; font-weight: 600; color: var(--t1); }
-.auth-testimonial-role { font-size: 11px; color: var(--t3); margin-top: 1px; }
-.auth-stats-row {
+.radar-center {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+}
+
+/* Concentric circles */
+.radar-circle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(71,85,105,.35);
+  transform: translate(-50%,-50%);
+  opacity: 0;
+  animation: radarCircleFade .4s ease-out forwards;
+}
+.radar-circle:nth-child(1) { width: 5rem; height: 5rem; animation-delay: .1s; border-color: rgba(71,85,105,.5); }
+.radar-circle:nth-child(2) { width: 10rem; height: 10rem; animation-delay: .2s; border-color: rgba(71,85,105,.45); }
+.radar-circle:nth-child(3) { width: 15rem; height: 15rem; animation-delay: .3s; border-color: rgba(71,85,105,.38); }
+.radar-circle:nth-child(4) { width: 20rem; height: 20rem; animation-delay: .4s; border-color: rgba(71,85,105,.3); }
+.radar-circle:nth-child(5) { width: 25rem; height: 25rem; animation-delay: .5s; border-color: rgba(71,85,105,.22); }
+.radar-circle:nth-child(6) { width: 30rem; height: 30rem; animation-delay: .6s; border-color: rgba(71,85,105,.16); }
+.radar-circle:nth-child(7) { width: 35rem; height: 35rem; animation-delay: .7s; border-color: rgba(71,85,105,.1); }
+.radar-circle:nth-child(8) { width: 40rem; height: 40rem; animation-delay: .8s; border-color: rgba(71,85,105,.06); }
+@keyframes radarCircleFade {
+  from { opacity: 0; transform: translate(-50%,-50%) scale(.95); }
+  to   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+}
+
+/* Sweep line */
+.radar-sweep {
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  width: 400px;
+  height: 5px;
+  transform-origin: right center;
+  animation: radarSpin 10s linear infinite;
   display: flex;
-  gap: 24px;
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,.06);
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 40;
 }
-.auth-stat-item {}
-.auth-stat-value {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--t1);
-  letter-spacing: -.02em;
+@keyframes radarSpin {
+  from { transform: rotate(20deg); }
+  to   { transform: rotate(380deg); }
 }
-.auth-stat-label {
+.radar-sweep-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent 0%, rgba(14,165,233,.6) 40%, rgba(56,189,248,.8) 60%, transparent 100%);
+}
+/* Glow cone behind sweep */
+.radar-sweep::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(-12deg);
+  width: 400px;
+  height: 80px;
+  background: linear-gradient(to left, rgba(14,165,233,.06) 0%, transparent 80%);
+  transform-origin: right center;
+  pointer-events: none;
+}
+
+/* Bottom gradient line */
+.radar-bottom-line {
+  position: absolute;
+  bottom: 12%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(71,85,105,.5), transparent);
+  z-index: 41;
+}
+
+/* Icon containers floating around radar */
+.radar-icon {
+  position: absolute;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: radarIconIn .4s ease-out forwards;
+}
+@keyframes radarIconIn {
+  from { opacity: 0; transform: scale(.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.radar-icon-box {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(71,85,105,.5);
+  background: rgba(15,23,42,.9);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 4px 16px rgba(0,0,0,.4);
+}
+.radar-icon-box svg { width: 22px; height: 22px; color: rgba(100,116,139,.7); }
+.radar-icon-label {
   font-size: 11px;
-  color: var(--t3);
-  margin-top: 2px;
+  font-weight: 700;
+  color: rgba(148,163,184,.6);
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: .02em;
+}
+
+/* Positions for each icon — spread around the radar */
+.radar-icon-1 { left: 8%; top: 18%; animation-delay: .2s; }
+.radar-icon-2 { right: 8%; top: 18%; animation-delay: .4s; }
+.radar-icon-3 { left: 50%; top: 10%; transform: translateX(-50%); animation-delay: .3s; }
+.radar-icon-4 { left: 14%; top: 46%; animation-delay: .5s; }
+.radar-icon-5 { right: 14%; top: 46%; animation-delay: .8s; }
+.radar-icon-6 { left: 26%; top: 68%; animation-delay: .6s; }
+.radar-icon-7 { right: 26%; top: 68%; animation-delay: .7s; }
+
+/* Pulse dots on certain icons */
+.radar-icon-box::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0ea5e9;
+  box-shadow: 0 0 8px rgba(14,165,233,.6);
+  animation: radarPulse 2s ease-in-out infinite;
+  opacity: 0;
+}
+.radar-icon-1 .radar-icon-box::after,
+.radar-icon-3 .radar-icon-box::after,
+.radar-icon-5 .radar-icon-box::after {
+  opacity: 1;
+}
+@keyframes radarPulse {
+  0%, 100% { transform: scale(1); opacity: .8; }
+  50% { transform: scale(1.4); opacity: .3; }
 }
 
 /* Mobile responsive — stack vertically */
@@ -3464,53 +3529,79 @@ body { line-height: 1.5 !important; }
       </div>
     </div>
 
-    <!-- RIGHT: HERO -->
+    <!-- RIGHT: RADAR HERO -->
     <div class="auth-hero-side">
-      <div class="auth-hero-content">
-        <div class="auth-hero-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Trusted by active traders
-        </div>
-        <div class="auth-hero-title">Your edge in the market</div>
-        <div class="auth-hero-desc">AI-powered trade signals, real-time portfolio tracking, and institutional-grade analytics — all in one command center.</div>
+      <div class="radar-wrap">
 
-        <div class="auth-testimonials">
-          <div class="auth-testimonial">
-            <div class="auth-testimonial-text">"TradeCommand changed how I approach the market. The signals are incredibly accurate and the interface is unmatched."</div>
-            <div class="auth-testimonial-author">
-              <div class="auth-testimonial-avatar">S</div>
-              <div>
-                <div class="auth-testimonial-name">Steve R.</div>
-                <div class="auth-testimonial-role">Day Trader</div>
-              </div>
-            </div>
+        <!-- Icon: Real-Time Signals -->
+        <div class="radar-icon radar-icon-1">
+          <div class="radar-icon-box" style="position:relative">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </div>
-          <div class="auth-testimonial">
-            <div class="auth-testimonial-text">"The autopilot feature and real-time alerts save me hours. Best trading tool I've used."</div>
-            <div class="auth-testimonial-author">
-              <div class="auth-testimonial-avatar">M</div>
-              <div>
-                <div class="auth-testimonial-name">Marcus T.</div>
-                <div class="auth-testimonial-role">Swing Trader</div>
-              </div>
-            </div>
-          </div>
+          <span class="radar-icon-label">Real-Time Signals</span>
         </div>
 
-        <div class="auth-stats-row">
-          <div class="auth-stat-item">
-            <div class="auth-stat-value">12K+</div>
-            <div class="auth-stat-label">Active Traders</div>
+        <!-- Icon: Price Alerts -->
+        <div class="radar-icon radar-icon-2">
+          <div class="radar-icon-box" style="position:relative">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           </div>
-          <div class="auth-stat-item">
-            <div class="auth-stat-value">98.2%</div>
-            <div class="auth-stat-label">Uptime</div>
-          </div>
-          <div class="auth-stat-item">
-            <div class="auth-stat-value">500+</div>
-            <div class="auth-stat-label">Stocks Tracked</div>
-          </div>
+          <span class="radar-icon-label">Price Alerts</span>
         </div>
+
+        <!-- Icon: AI Scanner -->
+        <div class="radar-icon radar-icon-3">
+          <div class="radar-icon-box" style="position:relative">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </div>
+          <span class="radar-icon-label">AI Scanner</span>
+        </div>
+
+        <!-- Icon: Portfolio Tracking -->
+        <div class="radar-icon radar-icon-4">
+          <div class="radar-icon-box" style="position:relative">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+          </div>
+          <span class="radar-icon-label">Portfolio Tracking</span>
+        </div>
+
+        <!-- Icon: Social Sentiment -->
+        <div class="radar-icon radar-icon-5">
+          <div class="radar-icon-box" style="position:relative">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <span class="radar-icon-label">Social Sentiment</span>
+        </div>
+
+        <!-- Icon: Risk Analysis -->
+        <div class="radar-icon radar-icon-6">
+          <div class="radar-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span class="radar-icon-label">Risk Analysis</span>
+        </div>
+
+        <!-- Icon: Market Data -->
+        <div class="radar-icon radar-icon-7">
+          <div class="radar-icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <span class="radar-icon-label">Market Data</span>
+        </div>
+
+        <!-- Radar circles + sweep -->
+        <div class="radar-center">
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-circle"></div>
+          <div class="radar-sweep"><div class="radar-sweep-line"></div></div>
+        </div>
+        <div class="radar-bottom-line"></div>
       </div>
     </div>
   </div>
