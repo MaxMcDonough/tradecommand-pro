@@ -5254,13 +5254,11 @@ async function authSignUp() {
 async function authGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
-    // Try popup first
     const r = await auth.signInWithPopup(provider);
     await _handleGoogleResult(r);
   } catch(e) {
-    // If popup blocked or closed, fall back to redirect
     if(e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
-      try { await auth.signInWithRedirect(provider); } catch(re) { showAuthError('signin', re.message); }
+      showAuthError('signin', 'Popup was blocked. Please allow popups for this site and try again.');
       return;
     }
     if(e.code === 'auth/account-exists-with-different-credential') {
