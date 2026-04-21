@@ -5075,7 +5075,7 @@ body { line-height: 1.5 !important; }
 // ═══ FIREBASE CONFIG ═══
 const firebaseConfig = {
   apiKey: "AIzaSyAwFPWCs-gryIaIZa7Jznunhvxx0uiJ36A",
-  authDomain: "tradecommand-pro.firebaseapp.com",
+  authDomain: "tradecommand-pro.web.app",
   projectId: "tradecommand-pro",
   storageBucket: "tradecommand-pro.firebasestorage.app",
   messagingSenderId: "1068820115443",
@@ -5252,19 +5252,17 @@ async function authSignUp() {
   finally { const b=document.getElementById('btn-signup'); if(b) b.textContent='Create Account'; }
 }
 async function authGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
   try {
-    const provider = new firebase.auth.GoogleAuthProvider();
+    // Try popup first
     const r = await auth.signInWithPopup(provider);
-    const snap = await db.collection('users').doc(r.user.uid).get();
-    if(!snap.exists) {
-      await db.collection('users').doc(r.user.uid).set({
-        email:r.user.email, displayName:r.user.displayName||r.user.email,
-        createdAt:firebase.firestore.FieldValue.serverTimestamp(),
-        trialStart:Date.now(), trialEnds:Date.now()+7*24*60*60*1000,
-        plan:'trial', apiKeys:{fh:'',av:'',na:''}, lastActive:Date.now(), loginCount:1, disabled:false
-      });
-    }
+    await _handleGoogleResult(r);
   } catch(e) {
+    // If popup blocked or closed, fall back to redirect
+    if(e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+      try { await auth.signInWithRedirect(provider); } catch(re) { showAuthError('signin', re.message); }
+      return;
+    }
     if(e.code === 'auth/account-exists-with-different-credential') {
       const pendingCred = e.credential || (e.customData && e.customData._tokenResponse
         ? firebase.auth.GoogleAuthProvider.credential(e.customData._tokenResponse.oauthIdToken)
@@ -5284,10 +5282,26 @@ async function authGoogle() {
         showAuthError('signin', 'This email already has a password account. Please sign in with your password, or contact support.');
       }
     } else {
-      showAuthError('signin', e.message);
+      console.error('Google auth error:', e);
+      showAuthError('signin', e.message || 'Google sign-in failed. Try again.');
     }
   }
 }
+async function _handleGoogleResult(r) {
+  if(!r || !r.user) return;
+  const snap = await db.collection('users').doc(r.user.uid).get();
+  if(!snap.exists) {
+    await db.collection('users').doc(r.user.uid).set({
+      email:r.user.email, displayName:r.user.displayName||r.user.email,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+      trialStart:Date.now(), trialEnds:Date.now()+7*24*60*60*1000,
+      plan:'trial', apiKeys:{fh:'',av:'',na:''}, lastActive:Date.now(), loginCount:1, disabled:false
+    });
+  }
+}
+// Handle redirect result on page load
+auth.getRedirectResult().then(r => { if(r && r.user) _handleGoogleResult(r); }).catch(()=>{});
+
 async function authForgot() {
   const email = document.getElementById('forgot-email').value.trim();
   if(!email) { showAuthError('forgot','Email required'); return; }
