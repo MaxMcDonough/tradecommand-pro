@@ -623,15 +623,15 @@ input, select, button { font-family: inherit; }
   gap: 12px;
 }
 .holding-card {
-  background: rgba(12,15,30,.5);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 18px;
   transition: border-color .25s, box-shadow .25s;
   cursor: pointer;
-  box-shadow: 0 2px 16px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 4px 24px rgba(0,0,0,.2);
 }
 .holding-card:hover { border-color: rgba(59,130,246,.2); box-shadow: 0 8px 32px rgba(0,0,0,.25), 0 0 16px rgba(59,130,246,.06); }
 .holding-top {
@@ -645,18 +645,34 @@ input, select, button { font-family: inherit; }
 .holding-pnl { text-align: right; }
 .holding-pnl-val { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .holding-pnl-pct { font-size: 12px; font-weight: 600; }
+.holding-dollars {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.04);
+}
+.hd-block { }
+.hd-block.right { text-align: right; }
+.hd-label { font-size: 10px; color: var(--t3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+.hd-val { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.hd-arrow { color: var(--t3); font-size: 16px; }
 .holding-levels {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  padding: 12px 0;
+  padding: 10px 0;
   border-top: 1px solid var(--glass-border);
   border-bottom: 1px solid var(--glass-border);
   margin-bottom: 12px;
 }
 .level-item { text-align: center; }
 .level-label { font-size: 10px; color: var(--t3); }
-.level-value { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.level-value { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--t2); }
 .holding-action {
   font-size: 11px;
   font-weight: 600;
@@ -5141,15 +5157,22 @@ function renderHoldings() {
     else if(hitTarget) action = '<svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> TARGET HIT - take profit';
     else if(pnlPct<=-5) action = 'Down 5%+ - review risk';
     else if(pnlPct>=8) action = 'Up 8%+ - consider partial take';
+    const invested = p.shares * p.entry;
+    const curVal = p.shares * cur;
     return `<div class="holding-card" onclick="openStock('${p.sym}')">
       <div class="holding-top">
-        <div><div class="holding-sym">${p.sym}</div><div class="holding-shares">${p.shares>=1?p.shares:p.shares.toFixed(4)} shares</div></div>
-        <div class="holding-pnl"><div class="holding-pnl-val" style="color:${col}">${pnl>=0?'+':'-'}$${Math.abs(pnl).toFixed(2)}</div><div class="holding-pnl-pct" style="color:${col}">${pnlPct>=0?'+':''}${pnlPct.toFixed(2)}%</div></div>
+        <div><div class="holding-sym">${p.sym}</div><div class="holding-shares">${p.shares>=1?p.shares:p.shares.toFixed(4)} shares · ${pnl>=0?'+':'-'}$${Math.abs(pnl).toFixed(2)} (${pnlPct>=0?'+':''}${pnlPct.toFixed(1)}%)</div></div>
+        <div class="holding-pnl"><div class="holding-pnl-val" style="color:${col}">$${curVal.toFixed(2)}</div><div class="holding-pnl-pct" style="color:var(--t3)">current value</div></div>
+      </div>
+      <div class="holding-dollars">
+        <div class="hd-block"><div class="hd-label">Invested</div><div class="hd-val" style="color:var(--t2)">$${invested.toFixed(2)}</div></div>
+        <div class="hd-arrow">→</div>
+        <div class="hd-block right"><div class="hd-label">Now Worth</div><div class="hd-val" style="color:${col}">$${curVal.toFixed(2)}</div></div>
       </div>
       <div class="holding-levels">
-        <div class="level-item"><div class="level-label">Entry</div><div class="level-value">$${p.entry.toFixed(2)}</div></div>
-        <div class="level-item"><div class="level-label">Current</div><div class="level-value" style="color:${col}">$${cur.toFixed(2)}</div></div>
-        <div class="level-item"><div class="level-label">Stop / Target</div><div class="level-value"><span style="color:var(--red)">$${p.stop?p.stop.toFixed(2):'--'}</span> / <span style="color:var(--green)">$${p.target?p.target.toFixed(2):'--'}</span></div></div>
+        <div class="level-item"><div class="level-label">Per Share</div><div class="level-value">$${p.entry.toFixed(2)} → $${cur.toFixed(2)}</div></div>
+        <div class="level-item"><div class="level-label">Stop</div><div class="level-value"><span style="color:var(--red)">${p.stop?'$'+p.stop.toFixed(2):'--'}</span></div></div>
+        <div class="level-item"><div class="level-label">Target</div><div class="level-value"><span style="color:var(--green)">${p.target?'$'+p.target.toFixed(2):'--'}</span></div></div>
       </div>
       <div class="holding-action" style="color:${hitStop?'var(--red)':hitTarget?'var(--green)':'var(--t2)'}">→ ${action}</div>
       <div class="holding-btns">
@@ -5219,14 +5242,17 @@ function toggleClosedPositions() {
   grid.innerHTML = '<div style="grid-column:1/-1;font-size:13px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:4px 0">Closed Positions</div>' +
     closed.map(p => {
       const col = (p.pnl||0)>=0?'var(--green)':'var(--red)';
+      const invested = p.shares * p.entry;
+      const exitVal = p.shares * (p.exitPrice||p.entry);
       return `<div class="holding-card" style="opacity:.7" onclick="openStock('${p.sym}')">
         <div class="holding-top">
-          <div><div class="holding-sym">${p.sym}</div><div class="holding-shares">${p.shares>=1?p.shares:p.shares.toFixed(4)} shares · closed</div></div>
-          <div class="holding-pnl"><div class="holding-pnl-val" style="color:${col}">${(p.pnl||0)>=0?'+':'-'}$${Math.abs(p.pnl||0).toFixed(2)}</div></div>
+          <div><div class="holding-sym">${p.sym}</div><div class="holding-shares">${p.shares>=1?p.shares:p.shares.toFixed(4)} shares · closed · ${(p.pnl||0)>=0?'+':'-'}$${Math.abs(p.pnl||0).toFixed(2)}</div></div>
+          <div class="holding-pnl"><div class="holding-pnl-val" style="color:${col}">$${exitVal.toFixed(2)}</div><div class="holding-pnl-pct" style="color:var(--t3)">exit value</div></div>
         </div>
-        <div class="holding-levels">
-          <div class="level-item"><div class="level-label">Entry</div><div class="level-value">$${p.entry.toFixed(2)}</div></div>
-          <div class="level-item"><div class="level-label">Exit</div><div class="level-value" style="color:${col}">$${(p.exitPrice||p.entry).toFixed(2)}</div></div>
+        <div class="holding-dollars">
+          <div class="hd-block"><div class="hd-label">Invested</div><div class="hd-val" style="color:var(--t2)">$${invested.toFixed(2)}</div></div>
+          <div class="hd-arrow">→</div>
+          <div class="hd-block right"><div class="hd-label">Sold For</div><div class="hd-val" style="color:${col}">$${exitVal.toFixed(2)}</div></div>
         </div>
       </div>`;
     }).join('');
@@ -9240,14 +9266,17 @@ function renderHomeHoldings() {
     grid.innerHTML = '<div class="card" style="padding:30px;text-align:center;grid-column:1/-1"><div style="font-size:28px;margin-bottom:8px"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div><div style="font-size:13px;color:var(--t2)">No positions yet. Use the signals above to find and execute your first trade.</div></div>';
     return;
   }
-  grid.innerHTML = D.session.positions.slice(0,6).map(pos => {
+  grid.innerHTML = D.session.positions.filter(p=>p.status==='open').slice(0,6).map(pos => {
     const s = D.sd[pos.sym];
     const cur = s?.price||pos.entry;
     const pnl = (cur-pos.entry)*pos.shares;
     const pnlPct = ((cur-pos.entry)/pos.entry*100);
+    const invested = pos.shares * pos.entry;
+    const curVal = pos.shares * cur;
     return `<div class="card" style="cursor:pointer;padding:14px" onclick="openStock('${pos.sym}')">
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:800">${pos.sym}</span><span style="font-size:11px;color:var(--t3)">${pos.shares} shares</span></div>
-      <div style="display:flex;justify-content:space-between"><span style="font-size:13px">$${cur.toFixed(2)}</span><span style="font-weight:700;color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pnlPct>=0?'+':''}${pnlPct.toFixed(1)}%)</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:800">${pos.sym}</span><span style="font-size:11px;color:var(--t3)">${pos.shares} shares · $${cur.toFixed(2)}/sh</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:15px;font-weight:700">$${curVal.toFixed(2)}</span><span style="font-weight:700;font-size:12px;color:${pnl>=0?'var(--green)':'var(--red)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)} (${pnlPct>=0?'+':''}${pnlPct.toFixed(1)}%)</span></div>
+      <div style="font-size:10px;color:var(--t3);margin-top:4px">Invested $${invested.toFixed(2)}</div>
     </div>`;
   }).join('');
 }
