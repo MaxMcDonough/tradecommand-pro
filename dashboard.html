@@ -6287,7 +6287,8 @@ function renderHoldings() {
         <div class="hd-block right"><div class="hd-label">Now Worth</div><div class="hd-val" style="color:${col}">$${curVal.toFixed(2)}</div></div>
       </div>
       <div class="holding-levels">
-        <div class="level-item"><div class="level-label">Per Share</div><div class="level-value">$${p.entry.toFixed(2)} → $${cur.toFixed(2)}</div></div>
+        <div class="level-item"><div class="level-label">Entry</div><div class="level-value">$${p.entry.toFixed(2)}</div></div>
+        <div class="level-item"><div class="level-label">Current</div><div class="level-value"><span style="color:${col};font-weight:700">$${cur.toFixed(2)}</span></div></div>
         <div class="level-item"><div class="level-label">Stop</div><div class="level-value"><span style="color:var(--red)">${p.stop?'$'+p.stop.toFixed(2):'--'}</span></div></div>
         <div class="level-item"><div class="level-label">Target</div><div class="level-value"><span style="color:var(--green)">${p.target?'$'+p.target.toFixed(2):'--'}</span></div></div>
       </div>
