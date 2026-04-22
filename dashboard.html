@@ -3285,141 +3285,295 @@ body { line-height: 1.5 !important; }
 .topbar-center { position: relative; }
 
 /* ══════════════════════════════════════════════════════════════
-   MOBILE & TABLET (iPad/iPhone) OPTIMIZATION
+   MOBILE & TABLET OPTIMIZATION
    ══════════════════════════════════════════════════════════════ */
 
-/* iPad landscape & portrait (744–1024px) */
+/* iPad (744–1024px) */
 @media(max-width:1024px) {
   .card { border-radius: 14px; padding: 16px; }
   .signal-card { padding: 14px; }
   .modal-content { max-width: 95vw; }
   .stg-grid { grid-template-columns: 1fr; }
-  /* Larger touch targets */
   .btn, button { min-height: 44px; }
   .wl-filter { padding: 8px 14px; min-height: 36px; }
   .nav-item { padding: 10px 14px; }
 }
 
-/* iPad mini & small tablets (600–768px) */
+/* ══════════════════════════════════════════════════════════════
+   PHONE-ONLY APP MODE (≤768px)
+   Complete mobile-app experience — single column, bottom nav,
+   no horizontal overflow, touch-optimized
+   ══════════════════════════════════════════════════════════════ */
 @media(max-width:768px) {
-  /* Auth page mobile */
-  .auth-split { flex-direction: column; }
-  .auth-hero-side { display: none; }
-  .auth-form-side { padding: 28px 20px; }
-  .auth-heading { font-size: 24px; }
-  .auth-subheading { font-size: 13px; margin-bottom: 24px; }
-  .auth-brand { margin-bottom: 28px; }
 
-  /* Top bar compact */
-  #topbar { padding: 10px 14px; }
-  #page-title { font-size: 18px; }
-
-  /* Cards tighter */
-  .card { margin-bottom: 12px; border-radius: 12px; }
-  .card-header { flex-wrap: wrap; gap: 8px; }
-
-  /* Holdings grid single column on narrow */
-  .holdings-grid { grid-template-columns: 1fr !important; }
-
-  /* Stock modal full screen on mobile */
-  #stock-modal { padding: 0; align-items: stretch; }
-  .modal-content {
-    max-width: 100%;
-    max-height: 100vh;
-    border-radius: 0;
-    height: 100%;
+  /* ── GLOBAL CONTAINMENT ── */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
   }
-  .modal-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .modal-tabs::-webkit-scrollbar { display: none; }
+  #app-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  #main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  /* Kill ALL horizontal overflow from any child */
+  .page, .card, [class*="layout"], [class*="grid"] {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  /* Force every div with inline style widths to respect viewport */
+  .page * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .page img, .page svg:not(.icon):not(.logo-icon) {
+    max-width: 100% !important;
+    height: auto !important;
+  }
 
-  /* Settings page */
-  .stg-grid { grid-template-columns: 1fr !important; }
+  /* ── SIDEBAR GONE ── */
+  #sidebar { display: none !important; }
 
-  /* Insights layout */
-  .insights-layout { grid-template-columns: 1fr !important; }
+  /* ── BOTTOM NAV BAR (iOS-style) ── */
+  #mobile-nav {
+    display: flex !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 64px !important;
+    background: rgba(8,10,18,.92) !important;
+    backdrop-filter: blur(40px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(1.8) !important;
+    border-top: 1px solid rgba(255,255,255,.1) !important;
+    z-index: 9999 !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    padding: 0 4px !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+  .mob-nav-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 3px !important;
+    font-size: 9px !important;
+    color: var(--t3) !important;
+    cursor: pointer !important;
+    padding: 6px 4px !important;
+    border-radius: 8px !important;
+    transition: color .15s !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+    text-align: center !important;
+  }
+  .mob-nav-item.active { color: var(--accent) !important; }
+  .mob-nav-item .icon { font-size: 20px !important; }
+  .mob-nav-item .icon svg { width: 22px !important; height: 22px !important; }
+
+  /* ── TOPBAR (compact, phone-friendly) ── */
+  #topbar {
+    padding: 10px 12px !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+  #page-title { font-size: 16px !important; flex-shrink: 0 !important; }
+  .topbar-center { display: none !important; }
+  /* Hide "Max McDonough" text on phone, keep avatar */
+  .topbar-right .user-name,
+  #topbar [style*="font-weight:600"][style*="font-size:13"],
+  #topbar [style*="font-weight:600"][style*="font-size: 13"] { display: none !important; }
+  /* Compact sign out button */
+  #topbar .btn-signout,
+  #topbar [onclick*="signOut"] {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    white-space: nowrap !important;
+  }
+  /* Hide admin badge on phone */
+  .admin-badge, [onclick*="adminPanel"] { display: none !important; }
+  .notif-bell { margin-left: auto !important; }
+
+  /* ── PAGE CONTENT ── */
+  .page {
+    padding: 12px !important;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* ── ALL GRIDS → SINGLE COLUMN ── */
+  .trading-layout,
+  .insights-layout,
+  .holdings-grid,
+  .stg-grid,
+  .pred-grid,
+  .grid-2, .grid-3, .grid-4,
+  [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
   .insights-full { grid-column: 1 !important; }
+  .holdings-summary { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+  .signal-metrics { grid-template-columns: 1fr 1fr !important; }
+  .heatmap-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .trading-layout { height: auto !important; }
 
-  /* Activity log compact */
-  .activity-log-header { flex-direction: column; align-items: stretch; gap: 10px; }
-  .activity-log-tools { justify-content: space-between; }
-  .al-search input { width: 100%; flex: 1; }
-  .al-search { flex: 1; }
-  .al-sym { min-width: 44px; font-size: 12px; }
-  .al-badge { font-size: 10px; padding: 2px 8px; }
-  .al-msg { font-size: 12px; }
-  .al-detail { padding: 14px 14px 14px 14px; }
-  .al-detail-grid { grid-template-columns: 1fr 1fr; }
+  /* ── CARDS ── */
+  .card {
+    margin-bottom: 12px !important;
+    border-radius: 12px !important;
+    padding: 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .card-header { flex-wrap: wrap !important; gap: 8px !important; }
+  .card-title { font-size: 14px !important; }
 
-  /* Alert form responsive */
-  .alert-form-row { flex-direction: column; }
-  .alert-field { min-width: 100%; }
+  /* ── SIGNAL CARDS (horizontal scroll instead of overflow) ── */
+  .signal-cards-row,
+  [style*="display:flex"][style*="gap"] .signal-card:first-child {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .signal-card {
+    padding: 12px !important;
+    min-width: 140px !important;
+    flex-shrink: 0 !important;
+  }
 
-  /* Predictions cards */
-  .pred-grid { grid-template-columns: 1fr !important; }
-}
+  /* ── WATCHLIST CARDS (horizontal scroll) ── */
+  #wl-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 10px !important;
+    padding-bottom: 4px !important;
+  }
+  #wl-grid::-webkit-scrollbar { display: none !important; }
+  #wl-grid > div {
+    min-width: 150px !important;
+    max-width: 180px !important;
+    flex-shrink: 0 !important;
+  }
 
-/* iPhone (max 480px) */
-@media(max-width:480px) {
-  /* Auth even tighter */
-  .auth-form-side { padding: 24px 16px; }
-  .auth-heading { font-size: 22px; }
-  .auth-field input { padding: 12px 14px; font-size: 16px; } /* 16px prevents iOS zoom */
-  .auth-submit { padding: 14px; font-size: 16px; }
+  /* ── AI BOT CARD ── */
+  .ai-bot-card, [style*="AI Trading Engine"] {
+    flex-direction: column !important;
+  }
 
-  /* Top bar */
-  #topbar { padding: 8px 12px; gap: 8px; }
-  #page-title { font-size: 16px; }
+  /* ── AUTH PAGE ── */
+  .auth-split { flex-direction: column !important; }
+  .auth-hero-side { display: none !important; }
+  .auth-form-side { padding: 24px 16px !important; }
+  .auth-heading { font-size: 22px !important; }
+  .auth-subheading { font-size: 13px !important; margin-bottom: 24px !important; }
+  .auth-brand { margin-bottom: 28px !important; }
+  .auth-field input { padding: 12px 14px !important; font-size: 16px !important; }
+  .auth-submit { padding: 14px !important; font-size: 16px !important; }
 
-  /* Pages */
-  .page { padding: 12px; padding-bottom: 72px; }
+  /* ── STOCK MODAL (full screen) ── */
+  #stock-modal { padding: 0 !important; align-items: stretch !important; }
+  .modal-content {
+    max-width: 100% !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+  .modal-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .modal-tabs::-webkit-scrollbar { display: none !important; }
 
-  /* Holdings summary */
-  .holdings-summary { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+  /* ── ORDER PANEL ── */
+  .order-calc { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+  .order-calc button { font-size: 13px !important; padding: 10px !important; }
 
-  /* Cards */
-  .card { padding: 14px; border-radius: 12px; }
-  .card-title { font-size: 13px; }
+  /* ── ACTIVITY LOG ── */
+  .activity-log-header { flex-direction: column !important; align-items: stretch !important; gap: 10px !important; }
+  .activity-log-tools { justify-content: space-between !important; }
+  .al-search input { width: 100% !important; }
+  .al-search { flex: 1 !important; }
+  .al-sym { min-width: 44px !important; font-size: 12px !important; }
+  .al-badge { font-size: 10px !important; padding: 2px 8px !important; }
+  .al-msg { font-size: 12px !important; }
+  .al-row { flex-wrap: wrap !important; padding: 10px 12px !important; }
+  .al-detail { padding: 14px !important; }
+  .al-detail-grid { grid-template-columns: 1fr 1fr !important; }
+  .al-filters.open { width: 100% !important; position: absolute !important; z-index: 10 !important; }
+  .al-body { position: relative !important; }
 
-  /* Signal cards */
-  .signal-card { padding: 12px; }
-  .signal-card .signal-sym { font-size: 16px; }
+  /* ── ALERTS ── */
+  .alert-form-row { flex-direction: column !important; }
+  .alert-field { min-width: 100% !important; }
+  .alert-row { flex-wrap: wrap !important; gap: 8px !important; padding: 12px !important; }
 
-  /* Order panel */
-  .order-calc { grid-template-columns: 1fr 1fr; gap: 6px; }
-  .order-calc button { font-size: 13px; padding: 10px; }
+  /* ── SETTINGS ── */
+  .stg-section { padding: 14px !important; }
+  .stg-row { flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
 
-  /* Settings */
-  .stg-section { padding: 14px; }
-  .stg-row { flex-direction: column; align-items: stretch; gap: 8px; }
+  /* ── NOTIFICATIONS ── */
+  .notif-panel {
+    width: calc(100vw - 16px) !important;
+    right: -10px !important;
+    max-height: 70vh !important;
+  }
+  #notif-fullpage > div {
+    margin: 0 !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+    max-width: 100% !important;
+  }
 
-  /* Activity log ultra-compact */
-  .al-row { flex-wrap: wrap; padding: 10px 12px; }
-  .al-amount { font-size: 12px; }
-  .al-filters.open { width: 100%; position: absolute; z-index: 10; }
-  .al-body { position: relative; }
+  /* ── INLINE-STYLED FLEX ROWS → WRAP ── */
+  .page [style*="display:flex"][style*="gap"] {
+    flex-wrap: wrap !important;
+  }
+  /* Force tables to scroll horizontally in a container */
+  table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
 
-  /* Mobile nav larger touch */
-  .mob-nav-item { padding: 8px 6px; }
-  .mob-nav-item .icon svg { width: 22px; height: 22px; }
+  /* ── FOOTER DISCLAIMER ── */
+  .footer-disclaimer, [style*="Full Disclaimer"] {
+    font-size: 10px !important;
+    padding: 8px 12px !important;
+  }
 
-  /* Notifications */
-  .notif-panel { width: calc(100vw - 20px); right: -60px; }
-
-  /* Alerts compact */
-  .alert-row { flex-wrap: wrap; gap: 8px; padding: 12px; }
-}
-
-/* Safe area for iPhone with notch/dynamic island */
-@supports(padding: max(0px)) {
-  #topbar { padding-top: max(10px, env(safe-area-inset-top)); }
-  #mobile-nav { padding-bottom: max(8px, env(safe-area-inset-bottom)); height: calc(56px + env(safe-area-inset-bottom, 0px)); }
-  .page { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
-  .auth-form-side { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
-}
-
-/* Prevent iOS input zoom (inputs must be >=16px) */
-@media(max-width:768px) {
+  /* ── INPUTS (16px prevents iOS zoom) ── */
   input, select, textarea { font-size: 16px !important; }
+
+  /* ── TOUCH OPTIMIZATIONS ── */
+  * { -webkit-tap-highlight-color: transparent !important; }
+  .page, .al-list, #reddit-feed, #news-feed, #mentions-feed {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+}
+
+/* ── SAFE AREA (notch / Dynamic Island) ── */
+@supports(padding: max(0px)) {
+  @media(max-width:768px) {
+    #topbar { padding-top: max(10px, env(safe-area-inset-top)) !important; }
+    #mobile-nav {
+      padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+      height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    .page { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important; }
+    .auth-form-side { padding-bottom: max(24px, env(safe-area-inset-bottom)) !important; }
+  }
 }
 
 /* Smooth scrolling & touch optimization */
