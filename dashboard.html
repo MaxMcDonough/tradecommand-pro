@@ -3579,8 +3579,18 @@ body { line-height: 1.5 !important; }
     bottom: 0 !important;
     width: 100vw !important;
     max-height: 100vh !important;
+    height: 100vh !important;
     border-radius: 0 !important;
     z-index: 10000 !important;
+    flex-direction: column !important;
+    background: rgba(10,12,22,.98) !important;
+  }
+  .notif-panel.open { display: flex !important; }
+  .notif-list {
+    flex: 1 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
   #notif-fullpage > div {
     margin: 0 !important;
