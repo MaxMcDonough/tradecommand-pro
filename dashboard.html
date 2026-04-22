@@ -3486,20 +3486,57 @@ body { line-height: 1.5 !important; }
   .auth-submit { padding: 14px !important; font-size: 16px !important; }
 
   /* ── STOCK MODAL (full screen) ── */
-  #stock-modal { padding: 0 !important; align-items: stretch !important; }
+  #stock-modal {
+    padding: 0 !important;
+    align-items: stretch !important;
+    z-index: 10001 !important;
+  }
   .modal-content {
     max-width: 100% !important;
     max-height: 100vh !important;
     border-radius: 0 !important;
     height: 100% !important;
     width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
+  .modal-head {
+    padding: 12px 16px !important;
+    flex-shrink: 0 !important;
+  }
+  .modal-sym { font-size: 18px !important; }
+  .modal-price-lg { font-size: 20px !important; }
   .modal-tabs {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
+    flex-shrink: 0 !important;
+    padding: 0 12px !important;
   }
   .modal-tabs::-webkit-scrollbar { display: none !important; }
+  .modal-tab { padding: 10px 12px !important; font-size: 11px !important; }
+  .modal-body {
+    padding: 14px !important;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  /* On mobile: move trade section to top of overview via flexbox order */
+  #mp-overview { display: flex !important; flex-direction: column !important; }
+  #modal-trade-section { order: -1 !important; margin-bottom: 16px !important; border-top: none !important; padding-top: 0 !important; border-bottom: 1px solid var(--border) !important; padding-bottom: 16px !important; }
+  /* Condense fundamentals grid on mobile */
+  #profile-fundamentals { grid-template-columns: 1fr 1fr 1fr !important; }
+  /* Hide quick links on mobile to reduce clutter */
+  #mp-overview [href*="yahoo"],
+  #mp-overview [href*="stockanalysis"],
+  #mp-overview [href*="finviz"],
+  #mp-overview [href*="simplywall"],
+  #mp-overview [href*="unusualwhales"],
+  #mp-overview [href*="tradingview"] { display: none !important; }
+  #mp-overview [href*="yahoo"] ~ *, #mp-overview .quick-links-wrap { }
+  /* Hide the Quick Links header and grid on mobile */
+  #modal-quick-links { display: none !important; }
 
   /* ── ORDER PANEL ── */
   .order-calc { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
@@ -7012,7 +7049,7 @@ function modalTab(tab, btn) {
         <div style="background:var(--card);padding:12px;text-align:center"><div style="font-size:10px;color:var(--t3);text-transform:uppercase">ATR (14)</div><div style="font-size:14px;font-weight:700">$${(s._atr||0).toFixed(2)}</div></div>
       </div>
       ${!cachedProfile ? '<div id="profile-loading" style="text-align:center;font-size:11px;color:var(--t3);margin-bottom:10px">Loading company profile...</div>' : ''}
-      <div style="margin-bottom:16px">
+      <div style="margin-bottom:16px" id="modal-quick-links">
         <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:8px;text-transform:uppercase">Quick Links</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
           <a href="https://finance.yahoo.com/quote/${sym}" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg2);border-radius:8px;color:var(--accent);font-size:12px;font-weight:600;text-decoration:none;border:1px solid var(--border)"><svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Yahoo Finance - Financials & Options</a>
