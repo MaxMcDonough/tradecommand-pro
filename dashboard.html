@@ -6237,10 +6237,19 @@ function renderHoldings() {
     else if(pnlPct>=8) action = 'Up 8%+ - consider partial take';
     const invested = p.shares * p.entry;
     const curVal = p.shares * cur;
+    // Buy date & hold duration
+    const buyDate = p.timestamp ? new Date(p.timestamp) : null;
+    const buyDateStr = buyDate ? buyDate.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : '--';
+    const daysHeld = buyDate ? Math.floor((Date.now() - p.timestamp) / 86400000) : 0;
+    const daysStr = daysHeld === 0 ? 'Today' : daysHeld === 1 ? '1 day' : daysHeld + ' days';
     return `<div class="holding-card" onclick="openStock('${p.sym}')">
       <div class="holding-top">
         <div><div class="holding-sym">${p.sym}</div><div class="holding-shares">${p.shares>=1?p.shares:p.shares.toFixed(4)} shares · ${pnl>=0?'+':'-'}$${Math.abs(pnl).toFixed(2)} (${pnlPct>=0?'+':''}${pnlPct.toFixed(1)}%)</div></div>
         <div class="holding-pnl"><div class="holding-pnl-val" style="color:${col}">$${curVal.toFixed(2)}</div><div class="holding-pnl-pct" style="color:var(--t3)">current value</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 12px;margin:-2px 0 6px;background:rgba(255,255,255,.03);border-radius:8px;font-size:11px">
+        <span style="color:var(--t3)">Bought <span style="color:var(--t2);font-weight:600">${buyDateStr}</span></span>
+        <span style="color:var(--t3)">Holding <span style="color:${daysHeld>=7?'var(--accent)':'var(--t2)'};font-weight:600">${daysStr}</span></span>
       </div>
       <div class="holding-dollars">
         <div class="hd-block"><div class="hd-label">Invested</div><div class="hd-val" style="color:var(--t2)">$${invested.toFixed(2)}</div></div>
